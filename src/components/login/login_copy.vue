@@ -39,7 +39,6 @@
 </template>
 <script>
 import "@/assets/js/canvas.js";
-var c = document.getElementById('c')
 export default {
     name: 'login_copy',
     data(){
