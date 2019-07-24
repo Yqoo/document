@@ -9,12 +9,15 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false;
 Vue.prototype.axios = axios;
 router.beforeEach((to,from,next) => {
-  if( to.meta.requireAuth ){
-    next({
-      path: '/login'
-    })
-  } else {
+  if(to.path === '/login'){
     next()
+  } else {
+    let token = localStorage.getItem('loginToken');
+    if( token === 'null' || token === ''){
+      next({path: '/login'})
+    } else{
+      next();
+    }
   }
 })
 new Vue({

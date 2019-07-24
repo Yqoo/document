@@ -4,6 +4,7 @@ import Home from "./views/Home.vue";
 
 Vue.use(Router);
 
+
 export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
@@ -17,8 +18,7 @@ export default new Router({
     {
       path: "/login",
       name: "login",
-      component: () =>
-        import("./components/login/login.vue")
+      component: () => import("./components/login/login.vue")
     }
   ]
 });
