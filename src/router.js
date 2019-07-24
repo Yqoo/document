@@ -12,13 +12,17 @@ export default new Router({
     {
       path: "/",
       name: "home",
-      meta: { requireAuth: true },
       component: Home
     },
     {
       path: "/login",
       name: "login",
       component: () => import("./components/login/login.vue")
+    },
+    {
+      path: "/login_copy",
+      name: "login_copy",
+      component: () => import("./components/login/login_copy.vue")
     }
   ]
 });
