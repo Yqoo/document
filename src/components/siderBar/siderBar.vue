@@ -34,7 +34,7 @@ export default {
     },
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
     .el-row {
         height: 400px;
         background: transparent;
