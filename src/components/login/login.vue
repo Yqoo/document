@@ -9,34 +9,34 @@
                 <img src="@/assets/image/clound.png" class="imgIcon">
                 <span class="imgFont" style="color:#409EFF;font-size:40px;padding-left:3px;">挚友ICloud</span>
             </div>
-            <el-form ref="pwdform"  size="small" v-if="isPwd" label-width="20px">
-                <el-form-item label="">
-                    <el-input v-model="userName" clearable placeholder="请输入用户名">
+            <el-form ref="pwdform" :model="pwdform" :rules="pwdRules" size="small" v-show="isPwd" label-width="20px">
+                <el-form-item label="" prop="username">
+                    <el-input clearable placeholder="请输入用户名" v-model="pwdform.username">
                         <i slot="prefix" class="el-input__icon el-icon-user" style="color:#409EFF"></i>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="">
-                    <el-input  type="password" v-model="pwd" placeholder="请输入密码">
+                <el-form-item label="" prop="pwd">
+                    <el-input  type="password" v-model="pwdform.pwd" placeholder="请输入密码">
                          <i slot="prefix" class="el-input__icon el-icon-lock" style="color:#409EFF"></i>
-                        <el-button slot="append" style="color:#409EFF"><i class="el-icon-finished"></i> 登录</el-button> 
+                        <el-button slot="append" style="color:#409EFF" @click="submitForm('pwdform')"><i class="el-icon-finished"></i> 登录</el-button> 
                     </el-input>
                     <el-button type="text"><i class="el-icon-question" style="margin-top:5px"></i><span style="font-size:12px;">忘记密码</span></el-button>
                 </el-form-item>
             </el-form>
-            <el-form ref="phoneform"  size="small" v-else label-width="20px">
-                <el-form-item label="">
-                    <el-input v-model="userPhone" clearable placeholder="请输入手机号">
+            <el-form ref="phoneform" :model="phoneform" :rules="phoneRules" size="small" v-show="!isPwd" label-width="20px">
+                <el-form-item label="" prop="phone">
+                    <el-input clearable placeholder="请输入手机号" v-model="phoneform.phone">
                         <i slot="prefix" class="el-input__icon el-icon-mobile-phone" style="color:#409EFF"></i>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="">
-                    <el-input v-model="pwd" placeholder='请输入验证码'>
+                <el-form-item label="" prop="code">
+                    <el-input placeholder='请输入验证码' v-model="phoneform.code">
                         <i slot="prefix" class="el-input__icon el-icon-lock" style="color:#409EFF"></i>
                         <el-button slot="append" style="color:#409EFF">发送验证码</el-button>  
                     </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button  type="primary" style="width:100%">登录</el-button>
+                    <el-button  type="primary" style="width:100%" @click="submitForm('phoneform')">登录</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -47,16 +47,68 @@
 export default {
     name: 'login',
     data(){
+        let checkPhone = ( rule, value, callback ) => {
+           if( value === ''){
+               callback( new Error('请输入手机号') )
+           } else {
+               let reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+               if( reg.test( value )){
+                   callback()
+               } else{
+                   callback( new Error('请输入正确的手机号码'))
+               }
+           }
+        };
+        let checkCode = ( rule, value, callback ) => {
+            if( value === '' ){
+                callback( new Error('请输入验证码'))
+            } else {
+                //...check后端返回的code
+            }
+        };
         return {
-            userName:'',
-            pwd:'',
-            userPhone:'',
-            code:'',
+            pwdform:{
+                username:'',
+                pwd:'',
+            },
+            phoneform:{
+                phone:'',
+                code:''
+            },
+            pwdRules:{
+                username:[
+                    { required: true, message: '请输入用户名', trigger: 'blur' }
+                ],
+                pwd:[
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                    { min: 6, message: '长度需大于6个字符', trigger: 'blur' }
+                ]
+            },
+            phoneRules:{
+                phone:[
+                    { validator: checkPhone,trigger:'blur' },
+                ],
+                code:[
+                    { validator: checkCode,trigger:'blur' },
+                ]
+            },
             isPwd: true,
             screenHeight: window.innerHeight // 屏幕高度
         }
     },
     methods:{
+        submitForm( formName ){
+             this.$refs[formName].validate( valid => {
+                 if( valid ){
+                     //...
+                 } else {
+                    this.$message({
+                        message: '请填写完整登录信息',
+                        type: 'error'
+                    });
+                 }
+             })
+        },
         changeLoginStyle(){
             this.isPwd = !this.isPwd;
         },
