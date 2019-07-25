@@ -5,10 +5,12 @@ import store from "./store";
 import ElementUI, { TabPane } from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import axios from "axios";
+import _ from "lodash";
 import "@/assets/css/common.css";
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 Vue.prototype.axios = axios;
+Vue.prototype._ = _;
 /* router.beforeEach((to,from,next) => {
   if(to.path === '/login'){
     next()
