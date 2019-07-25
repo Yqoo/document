@@ -6,7 +6,7 @@
                 <el-button  v-else size="mini" plain @click="changeLoginStyle"><i class="el-icon-user"></i> 用户登录</el-button>
             </div>
             <div>
-                <img src="@/assets/image/log_copy.png" class="imgIcon">
+                <img src="@/assets/image/icons/log_copy.png" class="imgIcon">
                 <span class="imgFont" style="color:#fff;font-size:40px;padding-left:3px;">挚友ICloud</span>
             </div>
             <el-form ref="pwdform"  size="medium" v-if="isPwd" label-width="20px">
