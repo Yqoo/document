@@ -1,5 +1,5 @@
 <template>
-    <el-row>
+    <el-row class="fadeInLeftBig animated">
         <el-col :span="4">
             <el-menu :collapse="isCollapse" background-color="transparent">
                 <el-menu-item>
@@ -23,7 +23,7 @@
                     <span slot="title">我的设置</span>
                 </el-menu-item>
                 <el-menu-item>
-                    <i class="el-icon-circle-close"></i>
+                    <i class="el-icon-switch-button"></i>
                     <span slot="title">退出云端</span>
                 </el-menu-item>
             </el-menu>

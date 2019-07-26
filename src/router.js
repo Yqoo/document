@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
-
+import system from "./components/system/system"
 Vue.use(Router);
 
 
@@ -12,7 +12,10 @@ export default new Router({
     {
       path: "/",
       name: "home",
-      component: Home
+      component: Home,
+      children:[
+        {path:'/system',name:'system',component:system}
+      ]
     },
     {
       path: "/login",
@@ -23,6 +26,6 @@ export default new Router({
       path: "/login_copy",
       name: "login_copy",
       component: () => import("./components/login/login_copy.vue")
-    }
+    },
   ]
 });

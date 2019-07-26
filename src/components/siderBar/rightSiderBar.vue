@@ -1,5 +1,5 @@
 <template>
-    <div class="rightSiderBox">
+    <div class="rightSiderBox zoomIn animated">
         123
     </div>
 </template>
