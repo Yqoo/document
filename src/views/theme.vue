@@ -44,7 +44,7 @@ export default {
     data() {
         return {
           themeForm:{
-            type:'图片'
+            type:'imgUrl',
           },
           current:'imgUrl'
         };
