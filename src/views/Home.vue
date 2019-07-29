@@ -55,13 +55,6 @@ export default {
         left: e.clientX,
         top: e.clientY
       });
-      // this.position = {
-      //   // left:`${e.clientX}px`,
-      //   // top:`${e.clientY}px`,
-      //   // position:'absolute'
-      //   left: e.clientX,
-      //   top: e.clientY,
-      // }
     },
     hideRightMenus(){
       this.isRightMouseClick = false;
