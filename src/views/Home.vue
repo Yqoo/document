@@ -1,6 +1,6 @@
 <template>
   <el-container :style="bg">
-    <el-main>
+    <el-main ref="main">
       <div @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
         <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
       </div>
@@ -36,8 +36,12 @@ export default {
       },
       isRightMouseClick:false,
       rules:'',//右键菜单规则
-      position:{},//弹出框定位
-     
+      position:{
+        left: '',  //鼠标点击的位置
+        right: '',
+        mainHeight: '',  //主页面的宽高
+        mainWidth: '',
+      },
     };
   },
   methods: {
@@ -45,11 +49,12 @@ export default {
       //右键事件
       this.isRightMouseClick = true;
       this.rules = 'desktop';//桌面下右键弹出层 desktop 应用下右键弹出层 app  设置|| 我的电脑等下弹出层 protogenesis 回收站下弹出层 recycle
-      this.position = {
-        left:`${e.clientX}px`,
-        top:`${e.clientY}px`,
-        position:'absolute'
-      }
+      this.position = Object.assign({
+        mainHeight: this.$refs.main.$el.clientHeight,
+        mainWidth: this.$refs.main.$el.clientWidth,
+        left: e.clientX,
+        top: e.clientY
+      });
     },
     hideRightMenus(){
       this.isRightMouseClick = false;
@@ -61,7 +66,9 @@ export default {
   watch:{
    
   },
-
+  mounted(){
+    
+  }
 };
 </script>
 <style lang="less">
@@ -78,6 +85,7 @@ body,
   color: #333;
   text-align: center;
   background: transparent;
+  padding: 0 !important;
   & .desktop{
     height: 100%;
     width: 100%;
