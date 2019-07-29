@@ -27,5 +27,10 @@ export default new Router({
       name: "login_copy",
       component: () => import("./components/login/login_copy.vue")
     },
+    {
+      path: '/theme',
+      name: 'theme',
+      component: () => import("./views/theme")
+    },
   ]
 });
