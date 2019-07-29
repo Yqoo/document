@@ -1,6 +1,6 @@
 <template>
   <div class='' @contextmenu.stop.prevent @click.stop>
-    <ul class="menus pulse animated" :style="position">
+    <ul class="menus pulse animated" :style="menuPosition" ref="ulMenu">
       <li v-for="(item,index) in menus[rules]" :key="index" @click="item.fn($event)" class="fadeInUp animated">
         <i :class="item.icon"></i>
         {{item.title}}
@@ -17,9 +17,34 @@ export default {
       rules:String,
       position:Object,
     },
+    computed: {
+      menuPosition() {  // 计算菜单在最下边和最右边点击
+        let top = 0, left = 0;
+        if(this.position.top + this.menuSize.mHeight > this.position.mainHeight){
+          top = this.position.top - (this.position.top + this.menuSize.mHeight - this.position.mainHeight);
+        } else {
+          top = this.position.top;
+        }
+        if(this.position.left + this.menuSize.mWidth > this.position.mainWidth){
+          left = this.position.left - (this.position.left + this.menuSize.mWidth - this.position.mainWidth);
+        } else {
+          left = this.position.left;
+        }
+        this._position = {
+          top: top + 'px',
+          position: 'absolute',
+          left: left + 'px'
+        };
+        return this._position;
+      }
+    },
     data() {
         return {
-          
+          _position: Object.assign({}, this.position),
+          menuSize: {  //菜单的宽高
+            mWidth: '',
+            mHeight: ''
+          },
           menus:{
             desktop:[
               {title:'刷新',icon:'el-icon-refresh',fn:() => {
@@ -83,6 +108,12 @@ export default {
     methods:{
       
     },
+    mounted() {
+      Object.assign(this.menuSize, {
+        mWidth: this.$refs.ulMenu.offsetWidth,
+        mHeight: this.$refs.ulMenu.offsetHeight
+      });
+    }
   
 }
 </script>
