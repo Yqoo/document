@@ -1,5 +1,5 @@
 <template>
-  <div class='themeBox bounceInDown animated' >
+  <div class='themeBox bounceInDown animated'>
     <div class="fadeInLeftBig animated">
       <el-row>
         <el-col :span="6">
@@ -35,6 +35,11 @@
           </el-menu>
         </el-col>
         <el-col :span="18">
+          <div class="boxTools">
+            <i class="el-icon-minus"></i>
+            <i class="el-icon-copy-document"></i>
+            <i class="el-icon-close" @click="closeSystem"></i>
+          </div>
           <component :is="current"></component>
         </el-col>
       </el-row>
@@ -57,12 +62,16 @@ export default {
           defaultActive:this.$route.params.index,
           isRouter:true,
           current:this.$route.params.index,
+        
         };
     },
     methods:{
       selectNav( index ){
         this.current = index;
       },
+      closeSystem(){
+        this.$router.push('/')
+      }
     },
 }
 </script>
@@ -80,5 +89,13 @@ export default {
     transition: box-shadow 0.5s, transform 0.5s;
     background-color: #fff;
     text-align: left;
+  }
+  .boxTools{
+    text-align: right;
+    border-bottom:1px solid #ddd;
+    & i{
+      padding:0px 10px;
+      cursor:pointer;
+    }
   }
 </style>

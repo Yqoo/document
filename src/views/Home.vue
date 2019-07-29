@@ -4,7 +4,9 @@
       <div @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
         <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
       </div>
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </el-main>
     <el-footer :style="groundGlass">
       <bottomBar></bottomBar>
@@ -61,7 +63,7 @@ export default {
     },
     closeMenus( params){
       this.isRightMouseClick = !params;
-    }
+    },
   },
   watch:{
    
