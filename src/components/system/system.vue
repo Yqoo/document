@@ -1,5 +1,5 @@
 <template>
-  <div class='themeBox bounceInDown animated'>
+  <div class='themeBox bounceInDown animated' >
     <div class="fadeInLeftBig animated">
       <el-row>
         <el-col :span="6">

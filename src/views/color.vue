@@ -1,5 +1,5 @@
 <template>
-  <div class=''>
+  <div class='' >
     <el-input v-model="startColor">
       <template slot="prepend">开始颜色</template>
       <colorPicker slot="append" v-model="startColor" style="cursor:pointer"></colorPicker>
@@ -33,9 +33,11 @@ export default {
           max:360,
         };
     },
+   
 }
 </script>
-<style lang='less' scoped>
+<style lang='less'>
+  @import '../style/theme.less';
   .el-input{
     padding: 10px 0px;
   }
