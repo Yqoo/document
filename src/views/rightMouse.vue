@@ -15,25 +15,47 @@ export default {
     name: 'rightMenus',
     props:{
       rules:String,
-      position:Object
+      position:Object,
     },
     data() {
         return {
+          
           menus:{
             desktop:[
-              {title:'刷新',icon:'el-icon-refresh',fn:() => {console.log(1)}},
-              {title:'上传',icon:'el-icon-upload',fn:() => {console.log(2)}},
-              {title:'新建文件夹',icon:'el-icon-folder-add',fn:() => {console.log(3)}},
-              {title:'新建文件',icon:'el-icon-document-add',fn:() => {console.log(4)}},
-              {title:'粘贴',icon:'el-icon-files',fn:() => {console.log(5)}},
-              {title:'查看剪贴板',icon:'el-icon-crop',fn:() => {console.log(6)}},
-              {title:'排序方式',icon:'el-icon-s-fold',fn:() => {console.log(7)}},
-              {title:'轻应用',icon:'el-icon-menu',fn:() => {console.log(8)}},
-              {title:'壁纸设置',icon:'el-icon-picture-outline',fn:() => {console.log(9)}},
-              {title:'主题设置',icon:'el-icon-s-home',fn:() => {
-                this.$router.push('/system');
+              {title:'刷新',icon:'el-icon-refresh',fn:() => {
+                this.$emit('closeMenus',true);
               }},
-              {title:'系统设置',icon:'el-icon-s-tools',fn:() => {console.log(11)}},
+              {title:'上传',icon:'el-icon-upload',fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'新建文件夹',icon:'el-icon-folder-add',fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'新建文件',icon:'el-icon-document-add',fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'粘贴',icon:'el-icon-files',fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'查看剪贴板',icon:'el-icon-crop',fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'排序方式',icon:'el-icon-s-fold',fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'轻应用',icon:'el-icon-menu',fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'壁纸设置',icon:'el-icon-picture-outline',fn:() => {
+                 this.$emit('closeMenus',true);
+              }},
+              {title:'主题设置',icon:'el-icon-s-home',fn:() => {
+                this.$router.push({name:'system',params:{index:'theme'}});
+                this.$emit('closeMenus',true);
+              }},
+              {title:'系统设置',icon:'el-icon-s-tools',fn:() => {
+                this.$emit('closeMenus',true);
+              }},
             ],
             app:[
               {title:'打开',fn:() => {console.log(1)}},
@@ -55,9 +77,13 @@ export default {
           
         };
     },
+    watch:{
+     
+    },
     methods:{
       
     },
+  
 }
 </script>
 <style lang='less' scoped>
