@@ -72,7 +72,7 @@ export default {
     width: 60%;
     border: 1px solid #ddd;
     position: absolute;
-    top:20%;
+    top:10%;
     left: 20%;
     transform: translate(-50%,-50%);
     border-radius: 5px;

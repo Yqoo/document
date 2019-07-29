@@ -7,7 +7,9 @@ import "element-ui/lib/theme-chalk/index.css";
 import axios from "axios";
 import _ from "lodash";
 import "@/assets/css/common.css";
-import "@/assets/css/animate.css"
+import "@/assets/css/animate.css";
+import vcolorpicker from 'vcolorpicker';
+Vue.use(vcolorpicker);
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 Vue.prototype.axios = axios;
