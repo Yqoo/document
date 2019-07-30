@@ -26,6 +26,31 @@ Vue.prototype._ = _;
     }
   }
 }) */
+Vue.directive('drag',{
+  inserted:function( el,bilding ){
+    let op = el;
+    let self = this;
+    op.onmousedown = function( e ){
+      let disX = e.clientX - op.offsetLeft;
+      let disY = e.clientY - op.offsetTop;
+      document.onmousemove = function( e ){
+        let l = e.clientX - disX;
+        let t = e.clientY - disY;
+        op.style.left = l + 'px';
+        op.style.top = t + 'px';
+        try {
+          bilding.value({ x:e.pageX,y:e.pageY });
+        } catch (error) {
+          
+        }
+        document.onmouseup = function (e) {
+          document.onmousemove = null;
+          document.onmouseup = null;
+        };
+      }
+    }
+  }
+});
 new Vue({
   router,
   store,
