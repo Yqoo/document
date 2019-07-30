@@ -1,6 +1,9 @@
-.theme(@backcolor:#eee,@fcolor:#fff){
-  div{
-    background: @backcolor;
-    color:@fcolor;
+.theme(@adeg, @backcolorS, @backcolorE, @fcolor){
+  span, ul{
+    background: -webkit-linear-gradient(@adeg, @backcolorS, @backcolorE);
+    background: -o-linear-gradient(@adeg, @backcolorS, @backcolorE);
+    background: -moz-linear-gradient(@adeg, @backcolorS, @backcolorE);
+    background: linear-gradient(@adeg, @backcolorS, @backcolorE);
+    color: @fcolor;
   }
 }

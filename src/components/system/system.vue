@@ -2,8 +2,8 @@
   <div class='themeBox bounceInDown animated'>
     <div class="fadeInLeftBig animated">
       <el-row>
-        <el-col :span="6">
-          <el-menu class="el-menu-vertical-demo" :default-active="defaultActive"  @select="selectNav">
+        <el-col :span="6" :class="themeColorName" >
+          <el-menu class="el-menu-vertical-demo" :default-active="defaultActive"  @select="selectNav" :style="themeColorStyle">
             <el-menu-item index='sysem'>
               <i class="el-icon-setting"></i>
               <span slot="title">系统设置</span>
@@ -62,8 +62,14 @@ export default {
           defaultActive:this.$route.params.index,
           isRouter:true,
           current:this.$route.params.index,
-        
+          themeColorName: '',
+          themeColorStyle: {},
         };
+    },
+    computed: {
+      storeChange() {
+        return this.$store.state.themeColor;
+      }
     },
     methods:{
       selectNav( index ){
@@ -73,9 +79,43 @@ export default {
         this.$router.push('/')
       }
     },
+    watch: {
+      storeChange( val ) {
+        let themeColor = this.$store.state.themeColor;
+        if( typeof themeColor == 'string' && (themeColor.constructor == String) ){
+          this.themeColorName = themeColor;
+        } else {
+          this.themeColorName = '';
+          this.themeColorStyle = {
+            background: `-webkit-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+            background: `-o-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+            background: `-moz-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+            background: `linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+            color: themeColor.fontColor
+          }
+        }
+      }
+    },
+    created(){
+      let themeColor = this.$store.state.themeColor;
+      if( typeof themeColor == 'string' && (themeColor.constructor == String) ){
+        this.themeColorName = themeColor;
+      } else {
+        this.themeColorName = '';
+        this.themeColorStyle = {
+          background: `-webkit-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+          background: `-o-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+          background: `-moz-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+          background: `linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+          color: themeColor.fontColor
+        }
+      }
+    }
 }
 </script>
 <style lang='less' scoped>
+  @import url('../../style/theme.less');
+  @import url('../../style/defaultColor.less');
   .themeBox {
     height: 60%;
     width: 60%;
