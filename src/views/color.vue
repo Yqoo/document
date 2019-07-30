@@ -2,15 +2,15 @@
   <div class='' >
     <el-input v-model="startColor">
       <template slot="prepend">开始颜色</template>
-      <colorPicker slot="append" v-model="startColor" style="cursor:pointer"></colorPicker>
+      <colorPicker slot="append" v-model="startColor" style="cursor:pointer;z-index=1000001"></colorPicker>
     </el-input>
     <el-input  v-model="endColor">
       <template slot="prepend">结束颜色</template>
-      <colorPicker slot="append" v-model="endColor" style="cursor:pointer"></colorPicker>
+      <colorPicker slot="append" v-model="endColor" style="cursor:pointer;z-index=10000001"></colorPicker>
     </el-input>
     <el-input  v-model="fontColor">
       <template slot="prepend">字体颜色</template>
-      <colorPicker slot="append" v-model="fontColor" style="cursor:pointer"></colorPicker>
+      <colorPicker slot="append" v-model="fontColor" style="cursor:pointer;z-index=10000001"></colorPicker>
     </el-input>
     <el-row>
       <el-col :span="3">
@@ -90,11 +90,12 @@ export default {
       }
     },
     mounted(){
-      console.log(this.$store.state.themeColor)
+      // console.log(this.$store.state.themeColor)
     }
    
 }
 </script>
+
 <style lang='less' scoped>
   @import '../style/theme.less';
   @import '../style/defaultColor.less';
@@ -103,9 +104,6 @@ export default {
   }
   .el-slider {
     margin-top: -5px;
-  }
-  .m-colorPicker .box.open {
-    z-index: 10;
   }
   .el-tag {
     width: 100%;
