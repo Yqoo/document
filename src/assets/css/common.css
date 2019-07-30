@@ -168,3 +168,6 @@ ol {
   margin: 0px;
   height: 100%;
 }
+.m-colorPicker .box.open{
+  z-index: 100;
+}
