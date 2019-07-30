@@ -1,5 +1,5 @@
 <template>
-  <div class='themeBox bounceInDown animated'>
+  <div class='themeBox bounceInDown animated' v-drag>
     <div class="fadeInLeftBig animated">
       <el-row>
         <el-col :span="6" :class="themeColorName" >
@@ -77,7 +77,8 @@ export default {
           minWidth:'',
           minHeight:'',
           themeColorName: '',
-          themeColorStyle: {}
+          themeColorStyle: {},
+          
         };
     },
     computed: {
