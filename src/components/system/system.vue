@@ -76,6 +76,8 @@ export default {
           max:true,
           minWidth:'',
           minHeight:'',
+          themeColorName: '',
+          themeColorStyle: {}
         };
     },
     computed: {
