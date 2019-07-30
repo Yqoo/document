@@ -79,6 +79,7 @@ export default {
   .themeBox {
     height: 60%;
     width: 60%;
+    min-height: 480px;
     border: 1px solid #ddd;
     position: absolute;
     top:10%;
@@ -89,6 +90,9 @@ export default {
     transition: box-shadow 0.5s, transform 0.5s;
     background-color: #fff;
     text-align: left;
+    & > div, & .el-row, & .el-col, & .el-menu{
+      height: 100%;
+    }
   }
   .boxTools{
     text-align: right;

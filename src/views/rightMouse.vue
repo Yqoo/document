@@ -1,6 +1,6 @@
 <template>
   <div class='' @contextmenu.stop.prevent @click.stop>
-    <ul class="menus pulse animated" :style="menuPosition" ref="ulMenu">
+    <ul class="menus pulse animated" :style="menuPosition" ref="ulMenu" @mouseleave="leaveMenus">
       <li v-for="(item,index) in menus[rules]" :key="index" @click="item.fn($event)" class="fadeInUp animated">
         <i :class="item.icon"></i>
         {{item.title}}
@@ -105,7 +105,9 @@ export default {
      
     },
     methods:{
-      
+      leaveMenus() {
+        this.$emit('closeMenus', true);
+      }
     },
     mounted() {
       Object.assign(this.menuSize, {
