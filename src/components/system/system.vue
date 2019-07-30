@@ -162,6 +162,9 @@ export default {
     & > div, & .el-row, & .el-col, & .el-menu{
       height: 100%;
     }
+    & .el-menu-item:hover{
+      background: red;
+    }
   }
   .boxTools{
     text-align: right;
