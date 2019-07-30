@@ -53,6 +53,7 @@ import personal from "@/views/personal";
 
 export default {
     name: 'system',
+    props:['index'],
     components:{
       theme,
       personal
@@ -61,8 +62,7 @@ export default {
         return {
           defaultActive:this.$route.params.index,
           isRouter:true,
-          current:this.$route.params.index,
-        
+          current:this.index,
         };
     },
     methods:{
@@ -70,7 +70,7 @@ export default {
         this.current = index;
       },
       closeSystem(){
-        this.$router.push('/')
+        this.$emit('closeSystem',true);
       }
     },
 }

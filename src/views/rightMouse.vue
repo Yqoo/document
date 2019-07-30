@@ -75,8 +75,7 @@ export default {
                  this.$emit('closeMenus',true);
               }},
               {title:'主题设置',icon:'el-icon-s-home',fn:() => {
-                this.$router.push({name:'system',params:{index:'theme'}});
-                this.$emit('closeMenus',true);
+                this.$emit('closeMenus',{index:'theme'});
               }},
               {title:'系统设置',icon:'el-icon-s-tools',fn:() => {
                 this.$emit('closeMenus',true);

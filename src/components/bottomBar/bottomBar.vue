@@ -3,7 +3,7 @@
         <el-col :span="1">
             <div class="grid-content1">
                 <el-popover placement="top" width="600" trigger="click" transition="fade-in-linear" popper-class="alertLeftSideBar">
-                    <siderBar></siderBar>
+                    <siderBar  @openChild="open"></siderBar>
                     <el-image slot="reference" :src="url" fit="cover"></el-image>
                 </el-popover>
             </div>
@@ -19,7 +19,7 @@
         </el-col>  
         <el-col :span='15'>
             <div class="grid-content3">
-                3
+                
             </div>    
         </el-col>  
         <el-col :span='3'>
@@ -47,6 +47,9 @@ export default {
         siderBar,
         rightSiderBar
     },
+    props:{
+        tabs:Object,
+    },
     data(){
         return {
             url: require('@/assets/image/icons/icon_cloudAdmin.png'),
@@ -71,6 +74,9 @@ export default {
                     })
                 }
             })
+        },
+        open( params ){
+            this.$emit( 'open',params );
         },
     },
 }

@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import system from "./components/system/system"
+import myCloud from "./components/leftMenus/myCloud"
 Vue.use(Router);
 
 
@@ -14,7 +15,8 @@ export default new Router({
       name: "home",
       component: Home,
       children:[
-        {path:'/system',name:'system',component:system}
+        {path:'/system',name:'system',component:system},
+        {path:'/myCloud',name:'myCloud',component:myCloud},
       ]
     },
     {
