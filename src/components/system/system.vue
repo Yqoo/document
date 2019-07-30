@@ -36,9 +36,18 @@
         </el-col>
         <el-col :span="18">
           <div class="boxTools">
-            <i class="el-icon-minus"></i>
-            <i class="el-icon-copy-document"></i>
-            <i class="el-icon-close" @click="closeSystem"></i>
+            <el-tooltip class="item" effect="light" content="最小化" placement="bottom">
+              <i class="el-icon-minus" @click="minSize"></i>
+            </el-tooltip>
+            <el-tooltip v-if="max" class="item" effect="light" content="最大化" placement="bottom">
+              <i class="el-icon-full-screen" @click="maxSize" ></i>             
+            </el-tooltip>
+            <el-tooltip v-else class="item" effect="light" content="还原" placement="bottom">
+              <i class="el-icon-copy-document" @click="restore"></i>             
+            </el-tooltip>
+            <el-tooltip class="item" effect="light" content="关闭" placement="bottom">
+              <i class="el-icon-close" @click="closeSystem"></i>
+            </el-tooltip>
           </div>
           <component :is="current"></component>
         </el-col>
@@ -48,11 +57,13 @@
 </template>
 
 <script>
+import tools from  "@/assets/js/utils/tools.js";
 import theme from "@/views/theme";
 import personal from "@/views/personal";
 
 export default {
     name: 'system',
+    props:['index'],
     components:{
       theme,
       personal
@@ -61,9 +72,10 @@ export default {
         return {
           defaultActive:this.$route.params.index,
           isRouter:true,
-          current:this.$route.params.index,
-          themeColorName: '',
-          themeColorStyle: {},
+          current:this.index,
+          max:true,
+          minWidth:'',
+          minHeight:'',
         };
     },
     computed: {
@@ -75,9 +87,20 @@ export default {
       selectNav( index ){
         this.current = index;
       },
-      closeSystem(){
-        this.$router.push('/')
-      }
+      closeSystem(){//关闭system
+        this.$emit('closeSystem',true);
+      },
+      minSize(){//最小化
+        this.$emit('displaySystem',false)
+      },
+      maxSize(){//最大化
+        tools._maxSize(document.querySelector('.themeBox'))
+        this.max = false;
+      },
+      restore(){//还原
+        tools._restore( document.querySelector('.themeBox'),this.minHeight,this.minWidth)
+        this.max = true;
+      },
     },
     watch: {
       storeChange( val ) {
@@ -110,6 +133,10 @@ export default {
           color: themeColor.fontColor
         }
       }
+    },
+    mounted(){
+      this.minWidth = document.querySelector('.themeBox').offsetWidth;
+      this.minHeight = document.querySelector('.themeBox').offsetHeight;
     }
 }
 </script>
@@ -119,7 +146,7 @@ export default {
   .themeBox {
     height: 60%;
     width: 60%;
-    min-height: 480px;
+    //min-height: 480px;
     border: 1px solid #ddd;
     position: absolute;
     top:10%;
@@ -136,9 +163,10 @@ export default {
   }
   .boxTools{
     text-align: right;
-    border-bottom:1px solid #ddd;
+    float: right;
+    margin-right: 15px;
     & i{
-      padding:0px 10px;
+      padding:0px 5px;
       cursor:pointer;
     }
   }

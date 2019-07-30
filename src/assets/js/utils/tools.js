@@ -10,7 +10,18 @@ let tools = {
     /**
      * 判断显示主题
      */
-    getThemeColor: () => {}
+    getThemeColor: () => {},
+    _restore: (tagName,minHeight,minWidth)  => {//还原
+        tagName.style.width = minWidth + "px";
+        tagName.style.height = minHeight + "px";
+        tagName.style.left = (document.documentElement.clientWidth - tagName.offsetWidth) / 2 + "px";
+        tagName.style.top = (document.documentElement.clientHeight - tagName.offsetHeight) / 2 + "px";
+    },
+    _maxSize:tagName => {//最大化
+        tagName.style.top = tagName.style.left = 0;
+        tagName.style.width = document.documentElement.clientWidth - 2 + "px";
+        tagName.style.height = document.documentElement.clientHeight - 43 + "px";
+    },
     
 }
 export default tools;

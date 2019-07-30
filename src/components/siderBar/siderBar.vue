@@ -1,7 +1,7 @@
 <template>
     <el-row class="fadeInLeftBig animated">
         <el-col :span="4">
-            <el-menu :collapse="isCollapse" background-color="transparent">
+            <el-menu :collapse="isCollapse" background-color="transparent" router>
                 <el-menu-item>
                     <i class="el-icon-s-operation"></i>
                     <span slot="title">开始</span>
@@ -10,7 +10,7 @@
                     <i class="el-icon-eleme"></i>
                     <span slot="title">我的桌面</span>
                 </el-menu-item>
-                <el-menu-item>
+                <el-menu-item @click="openChild('myCloud')">
                     <i class="el-icon-cloudy"></i>
                     <span slot="title">我的云端</span>
                 </el-menu-item>
@@ -52,6 +52,11 @@ export default {
     data(){
         return {
            isCollapse:true,
+        }
+    },
+    methods:{
+        openChild( p ){
+            this.$emit( 'openChild',p );
         }
     },
     mounted(){
