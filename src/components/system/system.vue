@@ -107,8 +107,8 @@ export default {
     },
     watch: {
       storeChange( val ) {
-        this.themeColorName = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).className;
-        this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
+        this.themeColorName = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).className;
+        this.themeColorStyle = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).style;
       }
     },
     created(){
