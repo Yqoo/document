@@ -1,6 +1,6 @@
 <template>
   <div class='theme'>
-    <div>
+    <div class="dragDiv">
       <i class="el-icon-eleme"></i> 主题设置
     </div>
     <div>
@@ -54,6 +54,9 @@ export default {
         this.current = type;
       }
     },
+    mounted(){
+    
+    }
 }
 </script>
 <style lang='less' scoped>
@@ -92,5 +95,9 @@ export default {
   }
   .el-form{
     padding:0px 100px;
+  }
+  .dragDiv{
+    cursor: all-scroll;
+    background: linear-gradient(#eee,#ddd);   
   }
 </style>

@@ -11,7 +11,7 @@
         <el-col :span='4'>
             <div class="grid-content2">
                 <el-tooltip class="item" effect="light" content="请输入搜索关键词" placement="top-start">
-                   <el-input placeholder="搜索" v-model="searchText">
+                   <el-input placeholder="搜索" v-model="searchText" style="top:-10px">
                       <i slot="suffix" @click="search" class="el-input__icon el-icon-search" style="cursor:pointer"></i> 
                    </el-input>
                 </el-tooltip>
@@ -19,7 +19,8 @@
         </el-col>  
         <el-col :span='15'>
             <div class="grid-content3">
-                
+                <i class="el-icon-location-outline"></i>
+                <el-tag v-for="(tab,index) in tabsFilter" :key="index" closable effect="plain" type="info" @close="closeTab(index)" @click="showTab(index)">{{tab.name}}</el-tag>
             </div>    
         </el-col>  
         <el-col :span='3'>
@@ -78,6 +79,23 @@ export default {
         open( params ){
             this.$emit( 'open',params );
         },
+        closeTab( tab ){//控制弹出层某一项的关闭
+            this.$emit('closeTab',tab);
+        },
+        showTab( tab ){
+            this.$emit('showTab',tab)
+        }
+    },
+    computed:{
+        tabsFilter(){
+            let tabs = {};
+            for( let key in this.tabs ){
+                if( this.tabs[key].show){
+                 tabs[key] = this.tabs[key]
+                }
+            }
+            return tabs;
+        }
     },
 }
 </script>
@@ -99,7 +117,15 @@ export default {
             .grid-content5{
                 cursor:pointer;
             }
+            .grid-content3{
+                & .el-tag{
+                    margin-left:3px;
+                }
+            }
         }
+    }
+    .el-tag {
+        cursor: pointer;
     }
     .alertLeftSideBar{
         background:hsla(0,0%,100%,.25) border-box!important;

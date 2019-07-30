@@ -5,14 +5,14 @@
         <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
       </div>
       <keep-alive>
-        <system @closeSystem="closeSystem" v-if="isShowBox.system.show" :index="index"></system>
+        <system @closeSystem="closeSystem" @displaySystem="displaySystem" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
       </keep-alive>
       <keep-alive>
         <myCloud v-if='isShowBox.myCloud.show'></myCloud>
       </keep-alive>
     </el-main>
     <el-footer :style="groundGlass">
-      <bottomBar :tabs="isShowBox" @open="openChild"></bottomBar>
+      <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild"></bottomBar>
     </el-footer>
   </el-container>
 </template>
@@ -52,7 +52,7 @@ export default {
         mainWidth: '',
       },
       isShowBox:{
-        system: { show:false,name:'系统设置' },
+        system: { show:false,name:'系统设置',display:true },
         myCloud: { show:false,name:'我的云端' },
       },
       index:'',
@@ -75,15 +75,27 @@ export default {
     },
     closeMenus( params ){
       this.isRightMouseClick = false;//关闭右键菜单
-      this.isShowBox.system.show = true;//开启系统设置
-      this.index = params.index;//选中系统设置具体项
+      if( params.index){
+        this.isShowBox[params.path].show = true;//开启系统设置
+        this.isShowBox[params.path].display = true;//最小化状态下为隐藏，还原显示
+        this.index = params.index;//选中系统设置具体项
+      }
     },
     closeSystem( ){
       this.isShowBox.system.show = false;
     },
+    displaySystem( param ){
+      this.isShowBox.system.display = param;
+    },
     openChild( payload ){//左下侧菜单点击打开具体某一项
       this.isShowBox[payload].show = true;
     },
+    closeChild( tab ){
+      this.isShowBox[tab].show = false;
+    },
+    showChild( tab ){
+       this.isShowBox[tab].display = !this.isShowBox[tab].display;
+    }
   },
   watch:{
    
