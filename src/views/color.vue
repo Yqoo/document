@@ -20,7 +20,7 @@
         <el-slider v-model="edg" :min="min" :max="max"></el-slider>
       </el-col>
     </el-row>
-    <div :class="themeColorName"><el-tag :style="themeColorStyle">颜色展示</el-tag></div>
+    <div :class="themeColorName"><el-tag class='theme-color' :style="themeColorStyle">颜色展示</el-tag></div>
     <el-button @click="saveCustomTheme">保存</el-button>
   </div>
 </template>
