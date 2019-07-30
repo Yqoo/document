@@ -11,7 +11,7 @@
         <el-col :span='4'>
             <div class="grid-content2">
                 <el-tooltip class="item" effect="light" content="请输入搜索关键词" placement="top-start">
-                   <el-input placeholder="搜索" v-model="searchText" style="top:-10px">
+                   <el-input placeholder="搜索" v-model="searchText">
                       <i slot="suffix" @click="search" class="el-input__icon el-icon-search" style="cursor:pointer"></i> 
                    </el-input>
                 </el-tooltip>
