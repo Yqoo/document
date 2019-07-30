@@ -90,7 +90,7 @@ export default {
       }
     },
     mounted(){
-      // console.log(this.$store.state.themeColor)
+      console.log(this.$store.state.themeColor)
     }
    
 }
