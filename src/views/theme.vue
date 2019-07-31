@@ -1,6 +1,6 @@
 <template>
-  <div class='theme' :class="themeColorName">
-    <div class="dragDiv theme-color" :style="themeColorStyle">
+  <div class='theme'>
+    <div class="dragDiv">
       <i class="el-icon-eleme"></i> 主题设置
     </div>
     <div>
@@ -44,9 +44,9 @@ export default {
     data() {
         return {
           themeForm:{
-            type:'imgUrl',
+            type:'color',
           },
-          current:'imgUrl',
+          current:'color',
           themeColorName: '',
           themeColorStyle: {},
           defaultThemeColor: [
@@ -162,4 +162,5 @@ export default {
     background: -webkit-linear-gradient(290deg, #696464, #e9e5dd);
     color: #3b3b3b;
   }
+</style>
 </style>
