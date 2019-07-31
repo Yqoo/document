@@ -40,17 +40,17 @@ Vue.directive('drag',{
         let t = e.clientY - disY;
         op.style.left = l + 'px';
         op.style.top = t + 'px';
-        try {
-          bilding.value({ x:e.pageX,y:e.pageY });
-        } catch (error) {
-            
-        }
+        if( bilding.value ) bilding.value({ x:e.pageX,y:e.pageY });
         document.onmouseup = function (e) {
           document.onmousemove = null;
           document.onmouseup = null;
         };
       }
     }
+    op.onmouseup = function (e) {
+      document.onmousemove = null;
+      document.onmouseup = null;
+    };
   }
 });
 new Vue({
