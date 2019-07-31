@@ -4,8 +4,8 @@
       <div @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
         <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
       </div>
-      <system @closeSystem="closeSystem" @displaySystem="displaySystem" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
-      <myCloud v-if='isShowBox.myCloud.show'></myCloud>
+      <system @closeItem="closeItem" @minSize="minSize" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
+      <myCloud v-if='isShowBox.myCloud.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.myCloud.display"></myCloud>
     </el-main>
     <el-footer :style="groundGlass">
       <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild"></bottomBar>
@@ -49,7 +49,7 @@ export default {
       },
       isShowBox:{
         system: { show:false,name:'系统设置',display:true },
-        myCloud: { show:false,name:'我的云端' },
+        myCloud: { show:false,name:'我的云端',display:true },
       },
       index:'',
     };
@@ -77,11 +77,12 @@ export default {
         this.index = params.index;//选中系统设置具体项
       }
     },
-    closeSystem( ){
-      this.isShowBox.system.show = false;
+    closeItem( param ){
+      this.isShowBox[param].show = false;
     },
-    displaySystem( param ){
-      this.isShowBox.system.display = param;
+    minSize( param ){
+      console.log( param )
+      this.isShowBox[param].display = false;
     },
     openChild( payload ){//左下侧菜单点击打开具体某一项
       this.isShowBox[payload].show = true;
@@ -94,7 +95,7 @@ export default {
     }
   },
   watch:{
-   
+    
   },
   mounted(){
     

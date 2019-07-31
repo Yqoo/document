@@ -1,6 +1,6 @@
 <template>
-  <div class='theme' :class="themeColorName">
-    <div class="dragDiv theme-color" :style="themeColorStyle">
+  <div class='theme'>
+    <div class="dragDiv">
       <i class="el-icon-eleme"></i> 主题设置
     </div>
     <div>
@@ -44,9 +44,9 @@ export default {
     data() {
         return {
           themeForm:{
-            type:'imgUrl',
+            type:'color',
           },
-          current:'imgUrl',
+          current:'color',
           themeColorName: '',
           themeColorStyle: {}
         };
@@ -109,9 +109,5 @@ export default {
   }
   .el-form{
     padding:0px 100px;
-  }
-  .dragDiv{
-    cursor: all-scroll;
-    background: linear-gradient(#eee,#ddd);   
   }
 </style>

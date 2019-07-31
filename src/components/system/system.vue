@@ -1,8 +1,9 @@
 <template>
   <div class='themeBox bounceInDown animated' v-drag>
     <div class="fadeInLeftBig animated">
+      <boxTools :info="info" @windowsTools="windowsTools"></boxTools>
       <el-row>
-        <el-col :span="6" :class="themeColorName" >
+        <el-col :span="6" :class="themeColorName">
           <el-menu class="el-menu-vertical-demo theme-color" :default-active="defaultActive"  @select="selectNav" :style="themeColorStyle">
             <el-menu-item index='sysem'>
               <i class="el-icon-setting"></i>
@@ -35,20 +36,6 @@
           </el-menu>
         </el-col>
         <el-col :span="18">
-          <div class="boxTools">
-            <el-tooltip class="item" effect="light" content="最小化" placement="bottom">
-              <i class="el-icon-minus" @click="minSize"></i>
-            </el-tooltip>
-            <el-tooltip v-if="max" class="item" effect="light" content="最大化" placement="bottom">
-              <i class="el-icon-full-screen" @click="maxSize" ></i>             
-            </el-tooltip>
-            <el-tooltip v-else class="item" effect="light" content="还原" placement="bottom">
-              <i class="el-icon-copy-document" @click="restore"></i>             
-            </el-tooltip>
-            <el-tooltip class="item" effect="light" content="关闭" placement="bottom">
-              <i class="el-icon-close" @click="closeSystem"></i>
-            </el-tooltip>
-          </div>
           <component :is="current"></component>
         </el-col>
       </el-row>
@@ -60,25 +47,26 @@
 import tools from  "@/assets/js/utils/tools.js";
 import theme from "@/views/theme";
 import personal from "@/views/personal";
-
+import boxTools from "@/views/boxTools";
 export default {
     name: 'system',
     props:['index'],
     components:{
       theme,
-      personal
+      personal,
+      boxTools,
     },
     data() {
         return {
           defaultActive:this.$route.params.index,
           isRouter:true,
           current:this.index,
-          max:true,
           minWidth:'',
           minHeight:'',
           themeColorName: '',
           themeColorStyle: {},
           zIndex:this.$store.state.zIndex,
+          info:{className:'.themeBox',name:'system'},
         };
     },
     computed: {
@@ -90,19 +78,14 @@ export default {
       selectNav( index ){
         this.current = index;
       },
-      closeSystem(){//关闭system
-        this.$emit('closeSystem',true);
-      },
-      minSize(){//最小化
-        this.$emit('displaySystem',false)
-      },
-      maxSize(){//最大化
-        tools._maxSize(document.querySelector('.themeBox'))
-        this.max = false;
-      },
-      restore(){//还原
-        tools._restore( document.querySelector('.themeBox'),this.minHeight,this.minWidth)
-        this.max = true;
+      windowsTools( obj ){  
+        let _s = {
+          minSize:   ( param ) => this.$emit( 'minSize',param ),
+          maxSize:   ( param ) => tools._maxSize(document.querySelector( param )),
+          restore:   ( param ) => tools._restore( document.querySelector(param),this.minHeight,this.minWidth),
+          closeItem: ( param ) => this.$emit( 'closeItem',param )
+        };
+        _s[obj.type](obj.param);
       },
       
     },
@@ -119,16 +102,15 @@ export default {
     mounted(){
       this.minWidth = document.querySelector('.themeBox').offsetWidth;
       this.minHeight = document.querySelector('.themeBox').offsetHeight;
-
     }
 }
 </script>
 <style lang='less' scoped>
+  .el-menu-vertical-demo{
+    min-height: 600px;
+  }
   .themeBox {
-    height: 60%;
     width: 60%;
-    //min-height: 480px;
-    border: 1px solid #ddd;
     position: absolute;
     top:10%;
     left: 20%;
@@ -143,15 +125,6 @@ export default {
     }
     & .el-menu-item:hover{
       background: rgba(0,0,0,.09);
-    }
-  }
-  .boxTools{
-    text-align: right;
-    float: right;
-    margin-right: 15px;
-    & i{
-      padding:0px 5px;
-      cursor:pointer;
     }
   }
 </style>
