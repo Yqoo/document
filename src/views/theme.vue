@@ -49,11 +49,11 @@ export default {
           current:'color',
           themeColorName: '',
           themeColorStyle: {},
-          defaultThemeColor: [
+          defaultThemeColor: [//默认的4套主题颜色
             {name: 'colorA', themeName: '天空蓝'}, 
             {name: 'colorB', themeName: '青草绿'}, 
             {name: 'colorC', themeName: '渐变粉'}, 
-            {name: 'colorD', themeName: '酷炫黑'}]//默认的4套主题颜色
+            {name: 'colorD', themeName: '酷炫黑'}]
         };
     },
     computed: {
@@ -141,10 +141,6 @@ export default {
   }
   .el-form{
     padding:0px 100px;
-  }
-  .dragDiv{
-    cursor: all-scroll;
-    background: linear-gradient(#eee,#ddd);   
   }
   .colorA{
     background: -webkit-linear-gradient(160deg, #ecfcff, #5edfff);
