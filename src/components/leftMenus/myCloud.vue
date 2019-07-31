@@ -8,7 +8,7 @@
         </div>
       </el-col>
       <el-col :span="18">
-        <el-collapse v-model="activeCollapse">
+        <el-collapse v-model="activeCollapse" accordion>
           <el-collapse-item name='1'>
             <template slot="title">
               <i class="el-icon-cloudy"></i>挚友云
