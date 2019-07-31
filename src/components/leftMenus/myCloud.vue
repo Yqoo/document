@@ -1,6 +1,6 @@
 <template>
   <div class='myCloud' v-drag >
-    <boxTools class="theme-color" :style="themeColorStyle" :info="info" @windowsTools="windowsTools"></boxTools>
+    <boxTools class="theme-color" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
   </div>
 </template>
 
@@ -19,6 +19,7 @@ export default {
           minHeight:'',
           themeColorName:'',
           themeColorStyle: {},
+          componentTitle:'我的云端',
         };
     },
     methods:{

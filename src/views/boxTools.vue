@@ -1,5 +1,6 @@
 <template>
   <div class='boxTools'>
+    <span class="title">{{title}}</span>
     <el-tooltip class="item" effect="light" content="最小化" placement="bottom">
       <i class="el-icon-minus"  @click="windowsTools('minSize')"></i>
     </el-tooltip>
@@ -18,7 +19,7 @@
 
 export default {
     name:'boxTools',
-    props:['info'],
+    props:['info','title'],
     data() {
         return {
           msg:Object.assign({},this.info),
@@ -66,5 +67,10 @@ export default {
       padding:0px 5px;
       cursor:pointer;
     }
+  }
+  .title{
+    position: absolute;
+    left:10px;
+    font-size: 14px;
   }
 </style>
