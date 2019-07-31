@@ -119,6 +119,7 @@ export default {
     mounted(){
       this.minWidth = document.querySelector('.themeBox').offsetWidth;
       this.minHeight = document.querySelector('.themeBox').offsetHeight;
+      
     }
 }
 </script>
