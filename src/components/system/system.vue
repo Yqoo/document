@@ -126,5 +126,11 @@ export default {
     & .el-menu-item:hover{
       background: rgba(0,0,0,.09);
     }
+    & .el-menu-item:focus{
+      background: rgba(0,0,0,.09);
+    }
+    & .el-menu{
+      height: calc(100% - 24px);
+    }
   }
 </style>
