@@ -106,9 +106,6 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-  .el-menu-vertical-demo{
-    min-height: 600px;
-  }
   .themeBox {
     width: 60%;
     position: absolute;
