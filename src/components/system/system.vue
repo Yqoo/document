@@ -45,10 +45,12 @@
 
 <script>
 import tools from  "@/assets/js/utils/tools.js";
+import { themeMixin}  from '@/assets/js/themeMixin.js';
 import theme from "@/views/theme";
 import personal from "@/views/personal";
 import boxTools from "@/views/boxTools";
 export default {
+    mixins: [themeMixin],
     name: 'system',
     props:['index'],
     components:{
@@ -63,18 +65,11 @@ export default {
           current:this.index,
           minWidth:'',
           minHeight:'',
-          themeColorName: '',
-          themeColorStyle: {},
           zIndex:this.$store.state.zIndex,
           info:{className:'.themeBox',name:'system'},
           componentName:'系统设置',
           rightContentHeight: 0,
         };
-    },
-    computed: {
-      storeChange() {
-        return this.$store.state.themeColor;
-      }
     },
     methods:{
       selectNav( index ){
@@ -97,16 +92,6 @@ export default {
         let rightContentHeight = this.$refs.rightContent.$el.offsetHeight - diffVal;
         document.querySelector('.el-menu').style.height = rightContentHeight +'px';
       }
-    },
-    watch: {
-      storeChange( val ) {
-        this.themeColorName = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).className;
-        this.themeColorStyle = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).style;
-      }
-    },
-    created(){
-      this.themeColorName = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).className;
-      this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
     },
     mounted(){
       this.minWidth = document.querySelector('.themeBox').offsetWidth;
