@@ -78,7 +78,6 @@ export default {
           minHeight:'',
           themeColorName: '',
           themeColorStyle: {},
-          
         };
     },
     computed: {
