@@ -35,7 +35,7 @@
             </el-menu-item>
           </el-menu>
         </el-col>
-        <el-col :span="18">
+        <el-col :span="18" ref="rightContent">
           <component :is="current"></component>
         </el-col>
       </el-row>
@@ -67,7 +67,8 @@ export default {
           themeColorStyle: {},
           zIndex:this.$store.state.zIndex,
           info:{className:'.themeBox',name:'system'},
-          componentName:'系统设置'
+          componentName:'系统设置',
+          rightContentHeight: 0,
         };
     },
     computed: {
@@ -87,8 +88,15 @@ export default {
           closeItem: ( param ) => this.$emit( 'closeItem',param )
         };
         _s[obj.type](obj.param);
+        if(obj.type === 'maxSize' || obj.type === 'restore') {
+          let titleHeight = document.querySelector('.boxTools').offsetHeight;
+          this.setLeftHeight( titleHeight );
+        }
       },
-      
+      setLeftHeight( diffVal ) {
+        let rightContentHeight = this.$refs.rightContent.$el.offsetHeight - diffVal;
+        document.querySelector('.el-menu').style.height = rightContentHeight +'px';
+      }
     },
     watch: {
       storeChange( val ) {
@@ -103,6 +111,7 @@ export default {
     mounted(){
       this.minWidth = document.querySelector('.themeBox').offsetWidth;
       this.minHeight = document.querySelector('.themeBox').offsetHeight;
+      this.setLeftHeight( 0 );
     }
 }
 </script>
@@ -126,9 +135,6 @@ export default {
     }
     & .el-menu-item:focus{
       background: rgba(0,0,0,.09);
-    }
-    & .el-menu{
-      height: calc(100% - 24px);
     }
   }
 </style>
