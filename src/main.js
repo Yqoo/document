@@ -31,8 +31,11 @@ Vue.prototype._getThemeColor = tools.getThemeColor;
 Vue.directive('drag',{
   inserted:function( el,bilding ){
     let op = el;
-    let self = this;
+    op.style.zIndex = store.state.zIndex;
+    store.commit('addzIndex');//弹出或点击时容器变为最顶层
     op.onmousedown = function( e ){
+      op.style.zIndex = store.state.zIndex;
+      store.commit('addzIndex');
       let disX = e.clientX - op.offsetLeft;
       let disY = e.clientY - op.offsetTop;
       document.onmousemove = function( e ){
