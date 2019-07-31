@@ -8,7 +8,7 @@
       <div class="defaultTheme">
         <el-card v-for="(card,index) in 4 " :key="index" :offset="index > 0 ? 4 : 0">
           <div>
-            {{ card }}
+            {{card}}
           </div>
         </el-card>
       </div>
