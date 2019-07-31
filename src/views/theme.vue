@@ -70,9 +70,6 @@ export default {
     created(){
       this.themeColorName = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).className;
       this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
-    },
-    mounted(){
-    
     }
 }
 </script>
