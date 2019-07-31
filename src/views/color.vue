@@ -13,11 +13,11 @@
       <colorPicker slot="append" v-model="fontColor" style="cursor:pointer;z-index=10000001"></colorPicker>
     </el-input>
     <el-row>
-      <el-col :span="3">
-        <span>渐变角度</span>
+      <el-col :span="6">
+        <span>渐变角度：</span>
       </el-col>
-      <el-col :span="21">
-        <el-slider v-model="edg" :min="min" :max="max"></el-slider>
+      <el-col :span="18">
+        <el-input-number size="mini" v-model="edg" :min="min" :max="max"></el-input-number>
       </el-col>
     </el-row>
     <div :class="themeColorName"><el-tag class='theme-color' :style="themeColorStyle">颜色展示</el-tag></div>
@@ -67,7 +67,7 @@ export default {
     methods: {
       saveCustomTheme() {
         this.$store.commit('changeThemeColor', this.colorInfo);
-      }
+      },
     },
     created() {
       //设置默认的主题颜色
@@ -102,11 +102,8 @@ export default {
   .el-input{
     padding: 10px 0px;
   }
-  .el-slider {
-    margin-top: -5px;
-  }
   .el-tag {
     width: 100%;
-    margin-bottom: 5px;
+    margin: 10px 0;
   }
 </style>
