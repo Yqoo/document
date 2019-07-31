@@ -43,7 +43,7 @@ Vue.directive('drag',{
         try {
           bilding.value({ x:e.pageX,y:e.pageY });
         } catch (error) {
-          
+            
         }
         document.onmouseup = function (e) {
           document.onmousemove = null;
