@@ -172,3 +172,6 @@ ol {
 .m-colorPicker .box.open{
   z-index: 100;
 }
+.el-tree-node__label{
+  font-size: 12px;
+}
