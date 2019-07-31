@@ -4,12 +4,8 @@
       <div @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
         <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
       </div>
-      <keep-alive>
-        <system @closeSystem="closeSystem" @displaySystem="displaySystem" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
-      </keep-alive>
-      <keep-alive>
-        <myCloud v-if='isShowBox.myCloud.show'></myCloud>
-      </keep-alive>
+      <system @closeSystem="closeSystem" @displaySystem="displaySystem" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
+      <myCloud v-if='isShowBox.myCloud.show'></myCloud>
     </el-main>
     <el-footer :style="groundGlass">
       <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild"></bottomBar>

@@ -78,6 +78,7 @@ export default {
           minHeight:'',
           themeColorName: '',
           themeColorStyle: {},
+          zIndex:this.$store.state.zIndex,
         };
     },
     computed: {
@@ -103,6 +104,7 @@ export default {
         tools._restore( document.querySelector('.themeBox'),this.minHeight,this.minWidth)
         this.max = true;
       },
+      
     },
     watch: {
       storeChange( val ) {
