@@ -172,3 +172,9 @@ ol {
 .m-colorPicker .box.open{
   z-index: 100;
 }
+.el-tree-node__label{
+  font-size: 12px;
+}
+.el-card__body{
+  padding:5px 20px;
+}
