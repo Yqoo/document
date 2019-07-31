@@ -116,6 +116,8 @@ body,
   color: #333;
   text-align: center;
   background: transparent;
+  height: 100%;
+  width: 100%;
   padding: 0 !important;
   & .desktop{
     height: 100%;

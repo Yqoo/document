@@ -1,7 +1,7 @@
 <template>
   <div class='themeBox bounceInDown animated' v-drag>
     <div class="fadeInLeftBig animated">
-      <boxTools :info="info" @windowsTools="windowsTools"></boxTools>
+      <boxTools :info="info" @windowsTools="windowsTools" :title="componentName"></boxTools>
       <el-row>
         <el-col :span="6" :class="themeColorName">
           <el-menu class="el-menu-vertical-demo theme-color" :default-active="defaultActive"  @select="selectNav" :style="themeColorStyle">
@@ -67,6 +67,7 @@ export default {
           themeColorStyle: {},
           zIndex:this.$store.state.zIndex,
           info:{className:'.themeBox',name:'system'},
+          componentName:'系统设置'
         };
     },
     computed: {
