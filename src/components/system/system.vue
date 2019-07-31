@@ -119,13 +119,11 @@ export default {
     mounted(){
       this.minWidth = document.querySelector('.themeBox').offsetWidth;
       this.minHeight = document.querySelector('.themeBox').offsetHeight;
-      
+
     }
 }
 </script>
 <style lang='less' scoped>
-  @import url('../../style/theme.less');
-  @import url('../../style/defaultColor.less');
   .themeBox {
     height: 60%;
     width: 60%;

@@ -97,8 +97,6 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  @import '../style/theme.less';
-  @import '../style/defaultColor.less';
   .el-input{
     padding: 10px 0px;
   }
