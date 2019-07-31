@@ -6,9 +6,9 @@
     <div>
       <i class="el-icon-star-on"></i> 默认主题
       <div class="defaultTheme">
-        <el-card v-for="(card,index) in 4 " :key="index" :offset="index > 0 ? 4 : 0">
-          <div>
-            {{card}}
+        <el-card v-for="(item,index) in defaultThemeColor " :key="item.name" :class="item.name" :offset="index > 0 ? 4 : 0">
+          <div @click="changeDefaultTheme(item.name)">
+            <span>{{item.themeName}}</span>
           </div>
         </el-card>
       </div>
@@ -48,7 +48,12 @@ export default {
           },
           current:'imgUrl',
           themeColorName: '',
-          themeColorStyle: {}
+          themeColorStyle: {},
+          defaultThemeColor: [
+            {name: 'colorA', themeName: '天空蓝'}, 
+            {name: 'colorB', themeName: '青草绿'}, 
+            {name: 'colorC', themeName: '渐变粉'}, 
+            {name: 'colorD', themeName: '酷炫黑'}]//默认的4套主题颜色
         };
     },
     computed: {
@@ -59,6 +64,20 @@ export default {
     methods:{
       changeType( type ){
         this.current = type;
+      },
+      changeDefaultTheme( name ) {
+        let themename = '';
+        switch (name) {
+          case 'colorA':
+            themename = 'themea';break;
+          case 'colorB':
+            themename = 'themeb';break;
+          case 'colorC':
+            themename = 'themec';break;
+          case 'colorD':
+            themename = 'themed';break;
+        }
+        this.$store.commit('changeThemeColor', themename);
       }
     },
     watch: {
@@ -106,6 +125,19 @@ export default {
     width:100px;
     height:100px;
     margin: 10px;
+    cursor: pointer;
+    & /deep/ .el-card__body{
+      padding: 0px;
+      text-align: center;
+      & > div {
+        position: relative;
+        height: 100px;
+        & span{
+          position: relative;
+          top: 80%;
+        }
+      }
+    }
   }
   .el-form{
     padding:0px 100px;
@@ -113,5 +145,21 @@ export default {
   .dragDiv{
     cursor: all-scroll;
     background: linear-gradient(#eee,#ddd);   
+  }
+  .colorA{
+    background: -webkit-linear-gradient(160deg, #ecfcff, #5edfff);
+    color: #696969;
+  }
+  .colorB{
+    background: -webkit-linear-gradient(120deg, #60a9a6, #caf2d7);
+    color: #eeece1;
+  }
+  .colorC{
+    background: -webkit-linear-gradient(190deg, #ffb6b9, #bbded6);
+    color: #525252;
+  }
+  .colorD{
+    background: -webkit-linear-gradient(290deg, #696464, #e9e5dd);
+    color: #3b3b3b;
   }
 </style>

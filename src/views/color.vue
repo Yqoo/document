@@ -32,10 +32,10 @@ export default {
     name:'color',
     data() {
         return {
-          startColor:'#fff',
-          endColor:'#409EFF',
-          fontColor: '#adadad',
-          edg:80,
+          startColor:'#ecfcff',
+          endColor:'#5edfff',
+          fontColor: '#696969',
+          edg:160,
           min:0,
           max:360,
           themeColorName: 'themea',
