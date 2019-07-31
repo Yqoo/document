@@ -10,7 +10,23 @@ let tools = {
     /**
      * 判断显示主题
      */
-    getThemeColor: () => {},
+    getThemeColor: (_this) => {
+        let themeColor = _this.$store.state.themeColor;
+        let className = '', style = {};
+        if( typeof themeColor == 'string' && (themeColor.constructor == String) ){
+            className = themeColor;
+        } else {
+            className = '';
+            style = {
+            background: `-webkit-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+            background: `-o-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+            background: `-moz-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+            background: `linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
+            color: themeColor.fontColor
+            }
+        }
+        return {className, style};
+    },
     _restore: (tagName,minHeight,minWidth)  => {//还原
         tagName.style.width = minWidth + "px";
         tagName.style.height = minHeight + "px";

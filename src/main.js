@@ -9,11 +9,13 @@ import _ from "lodash";
 import "@/assets/css/common.css";
 import "@/assets/css/animate.css";
 import vcolorpicker from 'vcolorpicker';
+import tools from '@/assets/js/utils/tools.js';
 Vue.use(vcolorpicker);
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 Vue.prototype.axios = axios;
 Vue.prototype._ = _;
+Vue.prototype._getThemeColor = tools.getThemeColor;
 /* router.beforeEach((to,from,next) => {
   if(to.path === '/login'){
     next()

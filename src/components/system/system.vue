@@ -3,7 +3,7 @@
     <div class="fadeInLeftBig animated">
       <el-row>
         <el-col :span="6" :class="themeColorName" >
-          <el-menu class="el-menu-vertical-demo" :default-active="defaultActive"  @select="selectNav" :style="themeColorStyle">
+          <el-menu class="el-menu-vertical-demo theme-color" :default-active="defaultActive"  @select="selectNav" :style="themeColorStyle">
             <el-menu-item index='sysem'>
               <i class="el-icon-setting"></i>
               <span slot="title">系统设置</span>
@@ -107,35 +107,13 @@ export default {
     },
     watch: {
       storeChange( val ) {
-        let themeColor = this.$store.state.themeColor;
-        if( typeof themeColor == 'string' && (themeColor.constructor == String) ){
-          this.themeColorName = themeColor;
-        } else {
-          this.themeColorName = '';
-          this.themeColorStyle = {
-            background: `-webkit-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
-            background: `-o-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
-            background: `-moz-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
-            background: `linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
-            color: themeColor.fontColor
-          }
-        }
+        this.themeColorName = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).className;
+        this.themeColorStyle = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).style;
       }
     },
     created(){
-      let themeColor = this.$store.state.themeColor;
-      if( typeof themeColor == 'string' && (themeColor.constructor == String) ){
-        this.themeColorName = themeColor;
-      } else {
-        this.themeColorName = '';
-        this.themeColorStyle = {
-          background: `-webkit-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
-          background: `-o-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
-          background: `-moz-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
-          background: `linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
-          color: themeColor.fontColor
-        }
-      }
+      this.themeColorName = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).className;
+      this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
     },
     mounted(){
       this.minWidth = document.querySelector('.themeBox').offsetWidth;
@@ -164,7 +142,7 @@ export default {
       height: 100%;
     }
     & .el-menu-item:hover{
-      background: red;
+      background: rgba(0,0,0,.09);
     }
   }
   .boxTools{

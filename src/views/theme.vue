@@ -1,6 +1,6 @@
 <template>
-  <div class='theme'>
-    <div class="dragDiv">
+  <div class='theme' :class="themeColorName">
+    <div class="dragDiv theme-color" :style="themeColorStyle">
       <i class="el-icon-eleme"></i> 主题设置
     </div>
     <div>
@@ -46,13 +46,30 @@ export default {
           themeForm:{
             type:'imgUrl',
           },
-          current:'imgUrl'
+          current:'imgUrl',
+          themeColorName: '',
+          themeColorStyle: {}
         };
+    },
+    computed: {
+      storeChange() {
+        return this.$store.state.themeColor;
+      }
     },
     methods:{
       changeType( type ){
         this.current = type;
       }
+    },
+    watch: {
+      storeChange( val ) {
+        this.themeColorName = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).className;
+        this.themeColorStyle = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).style;
+      }
+    },
+    created(){
+      this.themeColorName = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).className;
+      this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
     },
     mounted(){
     
@@ -60,6 +77,8 @@ export default {
 }
 </script>
 <style lang='less' scoped>
+@import url('../style/theme.less');
+@import url('../style/defaultColor.less');
   .theme{
     & div {
       font-size: 12px;
