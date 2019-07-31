@@ -3,7 +3,9 @@
     <boxTools class="theme-color" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
     <el-row>
       <el-col :span="6">
-        <el-tree :data="treeData"></el-tree>
+        <div>
+          <el-tree :data="treeData"></el-tree>
+        </div>
       </el-col>
       <el-col :span="18">
         <el-collapse v-model="activeCollapse">
@@ -11,10 +13,10 @@
             <template slot="title">
               <i class="el-icon-cloudy"></i>挚友云
             </template>
-            <div class="cards">
+            <div class="cards slideInRight animated">
               <el-card v-for="(c,index) in zyCloud" :key="index" shadow="hover">
                 <i :class="c.imgurl"></i>
-                <div class="bottom clearfix">{{c.name}}</div>
+                <div class="bottom">{{c.name}}</div>
               </el-card>
             </div>
           </el-collapse-item>
@@ -22,19 +24,34 @@
             <template slot="title">
               <i class="el-icon-s-custom"></i>我的云端
             </template>
-            <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
+            <div class="cards slideInLeft animated">
+              <el-card v-for="(c,index) in myCloud" :key="index" shadow="hover">
+                <i :class="c.imgurl"></i>
+                <div class="bottom1">{{c.name}}</div>
+              </el-card>
+            </div>
           </el-collapse-item>
            <el-collapse-item>
             <template slot="title">
               <i class="el-icon-cloudy-and-sunny"></i>共享云端
             </template>
-            <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
+            <div class="cards slideInDown animated">
+              <el-card v-for="(c,index) in shareCloud" :key="index" shadow="hover">
+                <i :class="c.imgurl"></i>
+                <div class="bottom1">{{c.name}}</div>
+              </el-card>
+            </div>
           </el-collapse-item>
            <el-collapse-item>
             <template slot="title">
               <i class="el-icon-partly-cloudy"></i>组织云端
             </template>
-            <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
+            <div class="cards slideInUp animated">
+              <el-card v-for="(c,index) in organizationCloud" :key="index" shadow="hover">
+                <i :class="c.imgurl"></i>
+                <div class="bottom1">{{c.name}}</div>
+              </el-card>
+            </div>
           </el-collapse-item>
         </el-collapse>
       </el-col>
@@ -85,12 +102,24 @@ export default {
           ],
           activeCollapse:['1'],
           zyCloud:[
-            {name:'桌面',imgurl:'el-icon-s-platform'},
+            {name:'我的桌面',imgurl:'el-icon-s-platform'},
             {name:'我的文档',imgurl:'el-icon-folder'},
             {name:'我的共享',imgurl:'el-icon-user'},
             {name:'接收共享',imgurl:'el-icon-sort'},
             {name:'我的分享',imgurl:'el-icon-share'},
-            {name:'接收分享',imgurl:'el-icon-chicken'},
+            {name:'接收分享',imgurl:'el-icon-folder-checked'},
+          ],
+          myCloud:[
+            {name:'软件区',imgurl:'el-icon-mobile'},
+            {name:'文档区',imgurl:'el-icon-mobile'},
+            {name:'娱乐区',imgurl:'el-icon-mobile'},
+          ],
+          shareCloud:[
+            {name:'开发部',imgurl:'el-icon-mobile'},
+            {name:'学习区',imgurl:'el-icon-mobile'},
+          ],
+          organizationCloud:[
+            {name:'挚友',imgurl:'el-icon-office-building'}
           ],
         };
     },
@@ -148,14 +177,19 @@ export default {
       cursor: pointer;
       width:80px;
       height: 80px;
+      & i{
+        font-size: 40px;
+      }
     }
   }
-  .el-card__body{
-    padding:0px!important;
+  .bottom {
+    font-size: 10px;
+    width: 50px;
+    text-align: left;
   }
-   .bottom {
-    margin-top: 13px;
-    line-height: 12px;
+  .bottom1 {
+    font-size:10px;
+    text-align:center
   }
   .clearfix:before,
   .clearfix:after {
