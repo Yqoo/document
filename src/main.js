@@ -8,6 +8,8 @@ import axios from "axios";
 import _ from "lodash";
 import "@/assets/css/common.css";
 import "@/assets/css/animate.css";
+import "@/style/defaultColor.less";
+import "@/style/theme.less";
 import vcolorpicker from 'vcolorpicker';
 import tools from '@/assets/js/utils/tools.js';
 Vue.use(vcolorpicker);

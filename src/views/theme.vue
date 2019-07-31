@@ -74,8 +74,6 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-@import url('../style/theme.less');
-@import url('../style/defaultColor.less');
   .theme{
     & div {
       font-size: 12px;
