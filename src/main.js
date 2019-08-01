@@ -36,22 +36,26 @@ Vue.directive('drag',{
     op.style.zIndex = store.state.zIndex;
     store.commit('addzIndex');//弹出或点击时容器变为最顶层
     op.onmousedown = function( e ){
+      let target = e.target.getAttribute('class');
       op.style.zIndex = store.state.zIndex;
       store.commit('addzIndex');
-      let disX = e.clientX - op.offsetLeft;
-      let disY = e.clientY - op.offsetTop;
-      document.onmousemove = function( e ){
-        let l = e.clientX - disX;
-        let t = e.clientY - disY;
-        op.style.left = l + 'px';
-        op.style.top = t + 'px';
-        if( bilding.value ) bilding.value({ x:e.pageX,y:e.pageY });
-        document.onmouseup = function (e) {
-          document.onmousemove = null;
-          document.onmouseup = null;
-        };
+      let reg = /moveBox/gi;
+      if( reg.test( target ) ){
+        let disX = e.clientX - op.offsetLeft;
+        let disY = e.clientY - op.offsetTop;
+        document.onmousemove = function( e ){
+          let l = e.clientX - disX;
+          let t = e.clientY - disY;
+          op.style.left = l + 'px';
+          op.style.top = t + 'px';
+          if( bilding.value ) bilding.value({ x:e.pageX,y:e.pageY });
+          document.onmouseup = function (e) {
+            document.onmousemove = null;
+            document.onmouseup = null;
+          };
+        }
       }
-    }
+    };
     op.onmouseup = function (e) {
       document.onmousemove = null;
       document.onmouseup = null;

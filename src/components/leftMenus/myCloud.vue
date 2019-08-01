@@ -1,6 +1,6 @@
 <template>
   <div class='myCloud' v-drag :class="themeColorName">
-    <boxTools class="theme-color" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
+    <boxTools class="theme-color moveBox" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
     <el-row>
       <el-col :span="6">
         <div>
