@@ -37,7 +37,8 @@ export default {
         overflow: `hidden`,
         boxShadow: `0 0 0 1px hsla(0,0%,100%,.3) inset,0 .5em 1em rgba(0,0,0,0.6)`,
         textShadow: `0 1px 1px hsla(0,0%,100%,.3)`,
-        color: `#fff`
+        color: `#fff`,
+        width:`100%`,
       },
       isRightMouseClick:false,
       rules:'',//右键菜单规则
