@@ -1,7 +1,7 @@
 <template>
-  <div class='themeBox bounceInDown animated' v-drag>
+  <div class='themeBox bounceInDown animated' v-drag:themeBox>
     <div class="fadeInLeftBig animated" :class="themeColorName">
-      <boxTools class="theme-color"  :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentName"></boxTools>
+      <boxTools class="theme-color moveBox"  :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentName"></boxTools>
       <el-row>
         <el-col :span="6" :class="themeColorName">
           <el-menu class="el-menu-vertical-demo theme-color" :default-active="defaultActive"  @select="selectNav" :style="themeColorStyle">
