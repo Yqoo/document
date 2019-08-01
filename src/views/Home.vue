@@ -132,6 +132,10 @@ body,
   height: 40px !important;
   line-height: 40px;
   background: transparent;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 </style>
 

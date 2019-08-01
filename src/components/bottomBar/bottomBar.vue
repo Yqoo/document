@@ -21,7 +21,7 @@
             <div class="grid-content3" @contextmenu.prevent.stop="taskBarMenus" style="position:relation">
                 <span style="opacity:0">.</span>
                 <el-tag v-for="(tab,index) in tabsFilter" :key="index" closable effect="plain" type="info" @close="closeTab(index)" @click="showTab(index)">{{tab.name}}</el-tag>
-                <el-popover  placement="top-start" width="200" trigger="click">
+                <el-popover placement="top-start" width="200" trigger="click" popper-class="taskMenuPop">
                     <taskBarMenus></taskBarMenus>
                     <i slot="reference" class="el-icon-location-outline taskBarPosition" style="position:absolute;opacity:0;"></i>
                 </el-popover>
@@ -47,6 +47,7 @@ import tools from  "@/assets/js/utils/tools.js";
 import siderBar from "@/components/siderBar/siderBar.vue"
 import rightSiderBar from "@/components/siderBar/rightSiderBar.vue";
 import taskBarMenus from "@/components/bottomBar/taskBarMenus";
+import { setTimeout } from 'timers';
 export default {
     name:'bottomBar',
     components:{
@@ -62,7 +63,6 @@ export default {
             url: require('@/assets/image/icons/icon_cloudAdmin.png'),
             searchText: '',
             localTime:'',
-            isTaskBarClick:false,
             position:{},
         }
     },

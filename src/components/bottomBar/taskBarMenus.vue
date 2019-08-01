@@ -1,6 +1,6 @@
 <template>
   <div class='taskBarMenus'>
-    <ul :style="position">
+    <ul :style="position" ref="taskBarMenu">
       <li v-for="(menu,index) in menus" :key="index">
         {{menu.name}}
       </li>
@@ -25,9 +25,9 @@ export default {
             { name:'固定到任务栏',callback:''},
             { name:'从任务栏取消固定',callback:''},
             { name:'关闭窗口',callback:''},
-          ],
+          ]
         };
-    },
+    }
 }
 </script>
 <style lang='less' scoped>
