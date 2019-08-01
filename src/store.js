@@ -8,6 +8,7 @@ export default new Vuex.Store({
     isLogin: localStorage.getItem('loginToken') ? localStorage.getItem('loginToken') : '',
     themeColor: localStorage.getItem('themeColor') ? JSON.parse(localStorage.getItem('themeColor')) : 'themea',
     zIndex:99,
+    desktopImg: localStorage.getItem('desktopImg')? localStorage.getItem('desktopImg'):'',
   },
   mutations: {
     changeThemeColor( state, curColor) {
@@ -17,6 +18,10 @@ export default new Vuex.Store({
     addzIndex( state ){
       this.state.zIndex++;
     },
+    changeDesktopImg ( state, curImg) {
+      this.state.desktopImg = curImg;
+      localStorage.setItem('desktopImg', curImg);
+    }
   },
   actions: {},
   getters:{},
