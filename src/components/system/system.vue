@@ -5,7 +5,7 @@
       <el-row>
         <el-col :span="6" :class="themeColorName">
           <el-menu class="el-menu-vertical-demo theme-color" :default-active="defaultActive"  @select="selectNav" :style="themeColorStyle">
-            <el-menu-item index='sysem'>
+            <el-menu-item index='config'>
               <i class="el-icon-setting"></i>
               <span slot="title">系统设置</span>
             </el-menu-item>
@@ -47,6 +47,7 @@
 import tools from  "@/assets/js/utils/tools.js";
 import { themeMixin}  from '@/assets/js/themeMixin.js';
 import theme from "@/views/theme";
+import wallpaper from "@/views/wallpaper";
 import personal from "@/views/personal";
 import boxTools from "@/views/boxTools";
 export default {
@@ -57,6 +58,7 @@ export default {
       theme,
       personal,
       boxTools,
+      wallpaper
     },
     data() {
         return {

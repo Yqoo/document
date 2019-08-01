@@ -48,6 +48,7 @@ export default {
           menus:{
             desktop:[
               {title:'刷新',icon:'el-icon-refresh',fn:() => {
+                location.reload();
                 this.$emit('closeMenus',true);
               }},
               {title:'上传',icon:'el-icon-upload',fn:() => {
@@ -72,13 +73,15 @@ export default {
                 this.$emit('closeMenus',true);
               }},
               {title:'壁纸设置',icon:'el-icon-picture-outline',fn:() => {
-                 this.$emit('closeMenus',true);
+                this.$emit('closeMenus',true);
+                this.$emit('closeMenus',{index:'wallpaper',path:'system'});
               }},
               {title:'主题设置',icon:'el-icon-s-home',fn:() => {
                 this.$emit('closeMenus',{index:'theme',path:'system'});
               }},
               {title:'系统设置',icon:'el-icon-s-tools',fn:() => {
                 this.$emit('closeMenus',true);
+                this.$emit('closeMenus',{index:'config',path:'system'});
               }},
             ],
             app:[
