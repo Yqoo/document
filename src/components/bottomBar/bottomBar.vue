@@ -91,11 +91,11 @@ export default {
             this.$emit('showTab',tab)
         },
         taskBarMenus( e ){
+            this.isTaskBarClick = true;
             Object.assign(this.position,{
                 left: e.clientX,
                 top: e.clientY
             });
-            this.isTaskBarClick = true;
         },
     },
     computed:{

@@ -21,12 +21,14 @@ export default {
       menuPosition() {  // 计算菜单在最下边和最右边点击
         let top = 0, left = 0;
         if(this.position.top + this.menuSize.mHeight > this.position.mainHeight){
-          top = this.position.top - (this.position.top + this.menuSize.mHeight - this.position.mainHeight);
+          // top = this.position.top - (this.position.top + this.menuSize.mHeight - this.position.mainHeight);
+          top = this.position.mainHeight - this.menuSize.mHeight;
         } else {
           top = this.position.top;
         }
         if(this.position.left + this.menuSize.mWidth > this.position.mainWidth){
-          left = this.position.left - (this.position.left + this.menuSize.mWidth - this.position.mainWidth);
+          // left = this.position.left - (this.position.left + this.menuSize.mWidth - this.position.mainWidth);
+          left = this.position.mainWidth - this.menuSize.mWidth;
         } else {
           left = this.position.left;
         }
