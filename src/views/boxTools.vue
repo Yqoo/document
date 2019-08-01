@@ -17,15 +17,15 @@
 </template>
 <script>
 
+import { themeMixin}  from '@/assets/js/themeMixin.js';
 export default {
+    mixins: [themeMixin],
     name:'boxTools',
     props:['info','title'],
     data() {
         return {
           msg:Object.assign({},this.info),
           max:true,
-          themeColorName:'',
-          themeColorStyle: {},
           tools:{
             minSize: () => this.$emit('windowsTools',{param:this.msg.name,type:'minSize'}),//最小化
             maxSize: () =>{ this.$emit( 'windowsTools',{param:this.msg.className,type:'maxSize'} );this.max = false; },//最大化
@@ -38,23 +38,7 @@ export default {
       windowsTools( fn ){
         this.tools[fn]();
       },
-    },
-    created(){
-      this.themeColorName = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).className;
-      this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
-    },
-    watch:{
-      storeChange( val ){
-        this.themeColorName = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).className;
-        this.themeColorStyle = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).style;
-      }
-    },
-    computed:{
-      storeChange(){
-        return this.$store.state.themeColor;
-      }
-    },
-    
+    }
 }
 </script>
 <style lang='less' scoped>
