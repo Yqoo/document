@@ -19,9 +19,12 @@
         </el-col>  
         <el-col :span='15'>
             <div class="grid-content3" @contextmenu.prevent.stop="taskBarMenus" ref="taskBar">
-                <i class="el-icon-location-outline"></i>
+                
                 <el-tag v-for="(tab,index) in tabsFilter" :key="index" closable effect="plain" type="info" @close="closeTab(index)" @click="showTab(index)">{{tab.name}}</el-tag>
-                <taskBarMenus v-if="isTaskBarClick" :position="position"></taskBarMenus>
+                <el-popover  placement="top-start" width="200" trigger="click">
+                    <taskBarMenus></taskBarMenus>
+                    <i slot="reference" class="el-icon-location-outline"></i>
+                </el-popover>
             </div>    
         </el-col>  
         <el-col :span='3'>
@@ -91,11 +94,7 @@ export default {
             this.$emit('showTab',tab)
         },
         taskBarMenus( e ){
-            Object.assign(this.position,{
-                left: e.clientX,
-                top: e.clientY
-            });
-            this.isTaskBarClick = true;
+            document.querySelector('.el-icon-location-outline').click();
         },
     },
     computed:{

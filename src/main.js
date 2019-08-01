@@ -37,10 +37,10 @@ Vue.directive('drag',{
     store.commit('addzIndex');//弹出或点击时容器变为最顶层
     op.onmousedown = function( e ){
       let target = e.target.getAttribute('class');
+      op.style.zIndex = store.state.zIndex;
+      store.commit('addzIndex');
       let reg = /moveBox/gi;
       if( reg.test( target ) ){
-        op.style.zIndex = store.state.zIndex;
-        store.commit('addzIndex');
         let disX = e.clientX - op.offsetLeft;
         let disY = e.clientY - op.offsetTop;
         document.onmousemove = function( e ){
