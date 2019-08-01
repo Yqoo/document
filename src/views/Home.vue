@@ -92,7 +92,7 @@ export default {
     },
     showChild( tab ){
        this.isShowBox[tab].display = !this.isShowBox[tab].display;
-    }
+    },
   },
   watch:{
     

@@ -18,9 +18,10 @@
             </div>    
         </el-col>  
         <el-col :span='15'>
-            <div class="grid-content3">
+            <div class="grid-content3" @contextmenu.prevent.stop="taskBarMenus" ref="taskBar">
                 <i class="el-icon-location-outline"></i>
                 <el-tag v-for="(tab,index) in tabsFilter" :key="index" closable effect="plain" type="info" @close="closeTab(index)" @click="showTab(index)">{{tab.name}}</el-tag>
+                <taskBarMenus v-if="isTaskBarClick" :position="position"></taskBarMenus>
             </div>    
         </el-col>  
         <el-col :span='3'>
@@ -41,12 +42,14 @@
 <script>
 import tools from  "@/assets/js/utils/tools.js";
 import siderBar from "@/components/siderBar/siderBar.vue"
-import rightSiderBar from "@/components/siderBar/rightSiderBar.vue"
+import rightSiderBar from "@/components/siderBar/rightSiderBar.vue";
+import taskBarMenus from "@/components/bottomBar/taskBarMenus";
 export default {
     name:'bottomBar',
     components:{
         siderBar,
-        rightSiderBar
+        rightSiderBar,
+        taskBarMenus
     },
     props:{
         tabs:Object,
@@ -56,6 +59,8 @@ export default {
             url: require('@/assets/image/icons/icon_cloudAdmin.png'),
             searchText: '',
             localTime:'',
+            isTaskBarClick:false,
+            position:{},
         }
     },
     created(){
@@ -84,7 +89,14 @@ export default {
         },
         showTab( tab ){
             this.$emit('showTab',tab)
-        }
+        },
+        taskBarMenus( e ){
+            Object.assign(this.position,{
+                left: e.clientX,
+                top: e.clientY
+            });
+            this.isTaskBarClick = true;
+        },
     },
     computed:{
         tabsFilter(){
