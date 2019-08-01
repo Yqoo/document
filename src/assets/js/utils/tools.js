@@ -32,11 +32,20 @@ let tools = {
         tagName.style.height = minHeight + "px";
         tagName.style.left = (document.documentElement.clientWidth - tagName.offsetWidth) / 2 + "px";
         tagName.style.top = (document.documentElement.clientHeight - tagName.offsetHeight) / 2 + "px";
+        if(tagName.querySelector('.el-menu')){  //判断左侧菜单栏的高度
+            let titleHeight = tagName.querySelector('.boxTools').offsetHeight;
+            tagName.querySelector('.el-menu').style.height = (minHeight - titleHeight) + 'px';
+        }
     },
     _maxSize:tagName => {//最大化
         tagName.style.top = tagName.style.left = 0;
         tagName.style.width = document.documentElement.clientWidth - 2 + "px";
         tagName.style.height = document.documentElement.clientHeight - 43 + "px";
+        if(tagName.querySelector('.el-menu')){  //判断左侧菜单栏的高度
+            let titleHeight = tagName.querySelector('.boxTools').offsetHeight;
+            let contentHeight = tagName.offsetHeight;
+            tagName.querySelector('.el-menu').style.height = (contentHeight - titleHeight)+'px';
+        }
     },
     
 }

@@ -20,4 +20,10 @@ export const themeMixin = {
         this.themeColorName = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).className;
         this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
     },
+    mounted() {
+        if(this.$refs.rightContent){
+            let rightContentHeight = this.$refs.rightContent.$el.offsetHeight;
+            document.querySelector('.el-menu').style.height = rightContentHeight + 'px';
+        }
+    }
 }

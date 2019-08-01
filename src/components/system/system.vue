@@ -83,20 +83,11 @@ export default {
           closeItem: ( param ) => this.$emit( 'closeItem',param )
         };
         _s[obj.type](obj.param);
-        if(obj.type === 'maxSize' || obj.type === 'restore') {
-          let titleHeight = document.querySelector('.boxTools').offsetHeight;
-          this.setLeftHeight( titleHeight );
-        }
       },
-      setLeftHeight( diffVal ) {
-        let rightContentHeight = this.$refs.rightContent.$el.offsetHeight - diffVal;
-        document.querySelector('.el-menu').style.height = rightContentHeight +'px';
-      }
     },
     mounted(){
       this.minWidth = document.querySelector('.themeBox').offsetWidth;
       this.minHeight = document.querySelector('.themeBox').offsetHeight;
-      this.setLeftHeight( 0 );
     }
 }
 </script>
@@ -112,9 +103,6 @@ export default {
     transition: box-shadow 0.5s, transform 0.5s;
     background-color: #fff;
     text-align: left;
-    & > div, & .el-row, & .el-col, & .el-menu{
-      height: 100%;
-    }
     & .el-menu-item:hover{
       background: rgba(0,0,0,.09);
     }
