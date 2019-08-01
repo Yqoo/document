@@ -18,12 +18,11 @@
             </div>    
         </el-col>  
         <el-col :span='15'>
-            <div class="grid-content3" @contextmenu.prevent.stop="taskBarMenus" ref="taskBar">
-                
+            <div class="grid-content3" @contextmenu.prevent.stop="taskBarMenus">
                 <el-tag v-for="(tab,index) in tabsFilter" :key="index" closable effect="plain" type="info" @close="closeTab(index)" @click="showTab(index)">{{tab.name}}</el-tag>
-                <el-popover  placement="top-start" width="200" trigger="click">
+                <el-popover placement="top-start" width="200" trigger="click" popper-class="taskMenuPop">
                     <taskBarMenus></taskBarMenus>
-                    <i slot="reference" class="el-icon-location-outline"></i>
+                    <i slot="reference" class="el-icon-location-outline taskBar-icon" style="opacity:0;"></i>
                 </el-popover>
             </div>    
         </el-col>  
@@ -47,6 +46,7 @@ import tools from  "@/assets/js/utils/tools.js";
 import siderBar from "@/components/siderBar/siderBar.vue"
 import rightSiderBar from "@/components/siderBar/rightSiderBar.vue";
 import taskBarMenus from "@/components/bottomBar/taskBarMenus";
+import { setTimeout } from 'timers';
 export default {
     name:'bottomBar',
     components:{
@@ -62,7 +62,6 @@ export default {
             url: require('@/assets/image/icons/icon_cloudAdmin.png'),
             searchText: '',
             localTime:'',
-            isTaskBarClick:false,
             position:{},
         }
     },
@@ -94,6 +93,7 @@ export default {
             this.$emit('showTab',tab)
         },
         taskBarMenus( e ){
+            document.querySelector('.taskMenuPop').setAttribute('style',`left:${e.clientX}px !important`);
             document.querySelector('.el-icon-location-outline').click();
         },
     },
