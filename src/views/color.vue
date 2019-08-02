@@ -45,7 +45,7 @@ export default {
     computed: {
       colorInfo () {
         const {startColor, endColor, edg, fontColor} = this;
-        return {startColor, endColor, edg, fontColor}
+        return {startColor, endColor, edg, fontColor, type: '1'}
       }
     },
     watch: {
@@ -74,7 +74,7 @@ export default {
       let themeColor = this.$store.state.themeColor;
       if( typeof themeColor == 'string' && (themeColor.constructor == String) ){
         this.themeColorName = themeColor;
-      } else {
+      } else if(themeColor.type === '1'){
         this.startColor = themeColor.startColor;
         this.endColor = themeColor.endColor;
         this.fontColor = themeColor.fontColor;

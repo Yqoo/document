@@ -15,7 +15,7 @@ let tools = {
         let className = '', style = {};
         if( typeof themeColor == 'string' && (themeColor.constructor == String) ){
             className = themeColor;
-        } else {
+        } else if(themeColor.type === '1'){
             className = '';
             style = {
             background: `-webkit-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
@@ -23,6 +23,11 @@ let tools = {
             background: `-moz-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
             background: `linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
             color: themeColor.fontColor
+            }
+        }else {
+            className = '';
+            style = {
+                background: `url(${themeColor.imgSrc}) 0% 0% /cover`,
             }
         }
         return {className, style};
