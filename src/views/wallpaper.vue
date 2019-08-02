@@ -66,7 +66,7 @@
       <span>自定义壁纸</span>
       <div>
         <el-input placeholder="" v-model="customImg" clearable size="small" :readonly="true">
-          <el-button @click="randomWallpaper" slot="append" icon="el-icon-search"></el-button>
+          <el-button @click="randomWallpaper" slot="append" icon="el-icon-loading"></el-button>
         </el-input>
       </div>
       <el-button size="small">保存</el-button>
