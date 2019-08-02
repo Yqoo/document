@@ -1,9 +1,14 @@
 <template>
   <el-container :style="bg">
     <el-main ref="main">
-      <div @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
-        <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
-      </div>
+      <vue-drawer-layout  ref="drawerLayout">
+         <div slot="content" @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
+          <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
+        </div>
+        <div class="drawer-content" slot="drawer">
+          12312414
+        </div>
+      </vue-drawer-layout>
       <system @closeItem="closeItem" @minSize="minSize" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
       <myCloud v-if='isShowBox.myCloud.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.myCloud.display"></myCloud>
     </el-main>

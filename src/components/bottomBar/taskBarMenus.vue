@@ -16,7 +16,6 @@
 </template>
 
 <script>
-
 export default {
     name:'taskBarMenus',
     props:['isFix'],
@@ -39,7 +38,7 @@ export default {
     },
     created(){
       if( this.isFix === null ){//控制显示固定 和 取消固定
-        this.menus.splice(3,2);
+        this.menus.splice(3,3);
       } else {
         if( this.isFix ) this.menus.splice(3,1);
         else this.menus.splice(4,1);
@@ -105,7 +104,7 @@ export default {
     position: absolute;
     width: 60%;
     left:100%;
-    top:0px;
+    top:-55px;
     background: #fff;
   }
 </style>
