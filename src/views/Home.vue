@@ -85,6 +85,7 @@ export default {
     },
     closeItem( param ){
       this.isShowBox[param].show = false;
+      this.isShowBox[param].display = false;
     },
     minSize( param ){
       console.log( param )
@@ -96,8 +97,11 @@ export default {
     closeChild( tab ){
       this.isShowBox[tab].show = false;
     },
-    showChild( tab ){
-       this.isShowBox[tab].display = !this.isShowBox[tab].display;
+    showChild( tab,type ){
+      if( type ){//如果是历史固定的任务栏应先加载注册组件
+        this.isShowBox[tab].show = true;
+      }
+      this.isShowBox[tab].display = !this.isShowBox[tab].display;
     },
   },
   watch:{

@@ -53,16 +53,18 @@ export default {
           bottom: () => console.log( 'bottom' ),
           fix: () => { 
             if( localStorage.getItem('fixTabs')  === null ){//在local里尚未存或已清除key => fixTabs
-              let arr = [this.$store.state.chooseTabName];
-              localStorage.setItem('fixTabs',JSON.stringify( arr ));
+              localStorage.setItem('fixTabs',JSON.stringify( this.$store.state.chooseTabName ));
+              this.$store.commit('addFixTabs');
             } else {
-              let old = JSON.parse(localStorage.getItem('fixTabs'));
-              old.push( this.$store.state.chooseTabName );
-              localStorage.setItem('fixTabs',JSON.stringify( old ));
-              console.log(23);
+              this.$store.commit('addFixTabs');
+              localStorage.setItem('fixTabs',JSON.stringify(this.$store.state.fixTabs))
             }
           },
-          unFix: () => console.log( 'unFix' ),
+          unFix: () => {
+            if( localStorage.getItem('fixTabs')  !== null ){
+              this.$store.commit('reduceFixTabs',JSON.stringify( this.$store.state.chooseTabName ))
+            } 
+          },
           close: () => { this.$emit('close',this.$store.state.chooseTabName) },
         });
         active[type]();
