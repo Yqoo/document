@@ -26,6 +26,8 @@
         <el-upload
           action="#"
           list-type="picture-card"
+          accept=".JPG,.JPEG,.PNG,.GIF,.SVG,.WEBP,.BMP"
+          :on-success="wallpaperSuccess"
           :auto-upload="false">
             <i slot="default" class="el-icon-plus"></i>
             <div slot="file" slot-scope="{file}">
@@ -57,9 +59,6 @@
               </span>
             </div>
         </el-upload>
-        <el-dialog :visible.sync="dialogVisible">
-          <img width="100%" :src="dialogImageUrl" alt="">
-        </el-dialog>
       </el-row>
     </div>
     <div>
@@ -81,8 +80,6 @@ export default {
   name:'wallpaper',
   data() {
       return {
-        dialogImageUrl: '',
-        dialogVisible: false,
         disabled: false,
         customImg: '',  //自定义壁纸的路径
         defaultWallpapers: [ //默认壁纸
@@ -99,24 +96,36 @@ export default {
             imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564663993195&di=e31cb7751985044fbcc7aa99b7959d17&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201410%2F24%2F20141024161607_niLhj.jpeg'
           },
           {
-            imgName: '光',
-            imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564663993348&di=b05045a00dfab03b88b89d709c7f341b&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fblog%2F201405%2F19%2F20140519122723_dseFH.jpeg'
+            imgName: '夕阳',
+            imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564726088741&di=b751fb3ace71c151936bb62013338667&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fblog%2F201405%2F28%2F20140528131055_erJvP.jpeg'
           }
-        ]
+        ],
+        selectWallpaper: [],  // 增加的壁纸
       };
   },
   methods: {
-    handleRemove(file) {
+    handleRemove(file) {  // 删除壁纸
         console.log(file);
     },
+    wallpaperSuccess(res, file) {  // 上传壁纸成功后
+      console.log(file)
+    },
     handlePictureCardPreview(file) {  //查看壁纸
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+      const h = this.$createElement;
+      this.$msgbox({
+        title:'壁纸查看',
+        message: h('div', {style: `background: url(${file.url}) 0% 0% /cover no-repeat;height: 300px;color: transparent;`},'1'),
+        showCancelButton: false,
+        showConfirmButton: false,
+        callback: action => {
+          return false;
+        }
+      });
     },
-    handleDownload(file) {
-      console.log(file);
+    handleDownload(file) {  // 设置壁纸
+      this.$store.commit('changeDesktopImg', file.url);
     },
-    changeDesktopImg( url ){
+    changeDesktopImg( url ){ // 设置默认壁纸
       this.$store.commit('changeDesktopImg', url);
     }
   }
@@ -138,7 +147,13 @@ export default {
     & > div:nth-of-type(3) {
       & /deep/ .el-upload-list{
         & > li{
-          margin: 0 8px 0 0;
+          margin: 0 8px -8px 0;
+          & > div{
+            height: 100%;
+            & > img{
+              object-fit: contain;
+            }
+          }
         }
       }
     }
