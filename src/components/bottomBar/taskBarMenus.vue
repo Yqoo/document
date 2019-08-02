@@ -19,10 +19,10 @@
 
 export default {
     name:'taskBarMenus',
+    props:['isFix'],
     data() {
         return {
           menus:[
-            { name:'显示桌面',icon:'el-icon-s-platform',type:'showDesk' },
             { name:'锁屏设置',icon:'el-icon-unlock',type:'lockScreen' },
             { name:'锁定任务栏',icon:'el-icon-lock',type:'lockTask' },
             { name:'任务栏设置',icon:'el-icon-setting',type:'position',children:[
@@ -37,14 +37,18 @@ export default {
           ],
         };
     },
+    created(){
+      if( this.isFix === null ){//控制显示固定 和 取消固定
+        this.menus.splice(3,2);
+      } else {
+        if( this.isFix ) this.menus.splice(3,1);
+        else this.menus.splice(4,1);
+      }
+    },
     methods:{
-      showRight( v ){
-        console.log(v)
-      },
       taskMethods( type ){
         let active = Object.assign({
           position: () => false,
-          showDesk: () => console.log( this.$store.state.chooseTabName ),
           lockScreen: () => console.log( 'lockScreen' ),
           lockTask: () => console.log( 'lockTask' ),
           top: () => console.log( 'top' ),
@@ -65,11 +69,12 @@ export default {
               this.$store.commit('reduceFixTabs',JSON.stringify( this.$store.state.chooseTabName ))
             } 
           },
-          close: () => { this.$emit('close',this.$store.state.chooseTabName) },
+          close: () => { this.$emit('close',Object.keys(this.$store.state.chooseTabName)) },
         });
         active[type]();
       }
     },
+   
 }
 </script>
 <style lang='less' scoped>

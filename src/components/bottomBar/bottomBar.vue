@@ -21,8 +21,8 @@
             <div class="grid-content3" @contextmenu.prevent.stop="taskBarMenus($event)" style="position:relation">
                 <span style="opacity:0">.</span>
                 <el-tag v-for="(tab,index) in tabsFilter" :key="index" :class="index"  effect="plain" type="info" @close="closeTab(index)" @click="showTab(index,tab.isLocal)">{{tab.name}}</el-tag>
-                <el-popover placement="top-start" width="100" trigger="click" popper-class="taskMenuPop">
-                    <taskBarMenus @close="closeTab"></taskBarMenus>
+                <el-popover placement="top-start" width="100" trigger="click" popper-class="taskMenuPop" @hide="hideTask">
+                    <taskBarMenus @close="closeTab" v-if="isShowTask" :isFix="isFix"></taskBarMenus>
                     <i slot="reference" class="el-icon-location-outline taskBarPosition" style="position:absolute;opacity:0;"></i>
                 </el-popover>
             </div>    
@@ -63,6 +63,8 @@ export default {
             url: require('@/assets/image/icons/icon_cloudAdmin.png'),
             searchText: '',
             localTime:'',
+            isFix:false,
+            isShowTask:false,
         }
     },
     created(){
@@ -102,9 +104,20 @@ export default {
                 obj[name] = {show:false,name:e.target.innerText,display:true,isLocal:true}; 
                 this.$store.commit('getTabName',obj);
             }
+            let keys = Object.keys(this.$store.state.fixTabs);
+            if( keys.indexOf( name ) > -1 ){
+                this.isFix = true
+            } else {
+                if( name ) this.isFix = false;
+                else this.isFix = null;
+            }
             document.querySelector('.taskBarPosition').style.left = e.clientX -25 + 'px';
+            this.isShowTask = true;
             document.querySelector('.el-icon-location-outline').click();
         },
+        hideTask(){//重新渲染taskBarMenus组件 计算下一个tab点击时时显示固定到任务栏还是取消固定
+            this.isShowTask = false;
+        }
     },
     computed:{
         tabsFilter(){
