@@ -22,7 +22,7 @@
                 <span style="opacity:0">.</span>
                 <el-tag v-for="(tab,index) in tabsFilter" :key="index" :class="index"  effect="plain" type="info" @close="closeTab(index)" @click="showTab(index,tab.isLocal)">{{tab.name}}</el-tag>
                 <el-popover placement="top-start" width="100" trigger="click" popper-class="taskMenuPop" @hide="hideTask">
-                    <taskBarMenus @close="closeTab" v-if="isShowTask" :isFix="isFix"></taskBarMenus>
+                    <taskBarMenus @close="closeTab" v-if="isShowTask" :isFix="isFix" @barChangePosition="barChangePosition"></taskBarMenus>
                     <i slot="reference" class="el-icon-location-outline taskBarPosition" style="position:absolute;opacity:0;"></i>
                 </el-popover>
             </div>    
@@ -117,6 +117,9 @@ export default {
         },
         hideTask(){//重新渲染taskBarMenus组件 计算下一个tab点击时时显示固定到任务栏还是取消固定
             this.isShowTask = false;
+        },
+        barChangePosition( position ){
+            this.$emit('barChangePosition', position);
         }
     },
     computed:{
