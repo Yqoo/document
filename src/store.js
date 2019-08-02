@@ -29,6 +29,7 @@ export default new Vuex.Store({
     reduceFixTabs( state,tab ){
       let index = this.state.fixTabs.indexOf( tab );
       if( index > -1 ) this.state.fixTabs.splice( index,1 );
+    },
     changeDesktopImg ( state, curImg) {
       this.state.desktopImg = curImg;
       localStorage.setItem('desktopImg', curImg);
