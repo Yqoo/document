@@ -64,11 +64,14 @@
     <div>
       <i class="el-icon-edit"></i>
       <span>自定义壁纸</span>
-      <div>
-        <el-input placeholder="" v-model="customImg" clearable size="small" :readonly="true">
+      <a href="javascript:void(0)" class="customIcon" @click="randomWallpaper">
+        <img :src="customIcon" alt="自定义图标">
+      </a>
+      <!-- <div>
+        <el-input placeholder="" clearable size="small" :readonly="true">
           <el-button @click="randomWallpaper" slot="append" icon="el-icon-loading"></el-button>
         </el-input>
-      </div>
+      </div> -->
       <el-button size="small">保存</el-button>
     </div>
   </div>
@@ -76,13 +79,13 @@
 
 <script>
 import { request } from 'http';
-
+import customIcon from '@/assets/image/icons/fengche.png';
 export default {
   name:'wallpaper',
   data() {
       return {
         disabled: false,
-        customImg: '',  //自定义壁纸的名称
+        customIcon: customIcon, //自定义壁纸图标
         defaultWallpapers: [ //默认壁纸
           {
             imgName: '哆啦A梦',
@@ -144,7 +147,7 @@ export default {
     },
     randomWallpaper() {
       let index = Math.floor(Math.random() * 10);
-      this.customImg = this.randomWallpaperImg[index].imgName;
+      // this.customImg = this.randomWallpaperImg[index].imgName;
       this.$store.commit('changeDesktopImg', this.randomWallpaperImg[index].imgUrl);
     }
   }
@@ -177,10 +180,20 @@ export default {
       }
     }
     & > div:nth-of-type(4){
-      width: 80%;
+      &>.customIcon{
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        vertical-align: middle;
+        animation: rotating 2s linear infinite;
+        margin-left: 10px;
+        & > img{
+          width: 100%;
+        }
+      }
       & > .el-button{
         margin: 2% 0 2% 0;
-        display: none;
+        opacity: 0;
       }
     }
   }
@@ -194,6 +207,14 @@ export default {
   .image {
     width: 100%;
     display: block;
+  }
+  @keyframes rotating{
+    from {
+      transform: rotate(0)
+    }
+    to {
+      transform: rotate(360deg)
+    }
   }
   
 </style>
