@@ -55,6 +55,7 @@ export default {
   computed:{
     bg() {
       let store = this.$store.state.desktopImg;
+      // console.log(store)
       if(store === '') {
         return {background: `url(${bg}) center center no-repeat`}
       } else {
