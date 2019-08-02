@@ -29,9 +29,6 @@ export default {
   },
   data() {
     return {
-      bg: {
-        background: `url(${bg}) center center no-repeat`
-      },
       groundGlass: {
         background: `hsla(0,0%,100%,.25) border-box`,
         overflow: `hidden`,
@@ -56,8 +53,13 @@ export default {
     };
   },
   computed:{
-    desktopImg () {
-      return this.$store.state.desktopImg
+    bg() {
+      let store = this.$store.state.desktopImg;
+      if(store === '') {
+        return {background: `url(${bg}) center center no-repeat`}
+      } else {
+        return {background: `url(${store}) 0% 0% /cover no-repeat`}
+      }
     }
   },
   methods: {
@@ -105,9 +107,6 @@ export default {
     },
   },
   watch:{
-    desktopImg( val ) {
-      this.bg = { background: `url(${val}) no-repeat`};
-    }
   }
 };
 </script>

@@ -38,21 +38,21 @@
                   class="el-upload-list__item-preview"
                   @click="handlePictureCardPreview(file)"
                 >
-                  <i class="el-icon-zoom-in"></i>
+                  <i class="el-icon-zoom-in" title="查看"></i>
                 </span>
                 <span
                   v-if="!disabled"
                   class="el-upload-list__item-delete"
                   @click="handleDownload(file)"
                 >
-                  <i class="el-icon-download"></i>
+                  <i class="el-icon-loading" title="设置"></i>
                 </span>
                 <span
                   v-if="!disabled"
                   class="el-upload-list__item-delete"
                   @click="handleRemove(file)"
                 >
-                  <i class="el-icon-delete"></i>
+                  <i class="el-icon-delete" title="删除"></i>
                 </span>
               </span>
             </div>
@@ -66,7 +66,7 @@
       <i class="el-icon-edit"></i>
       <span>自定义壁纸</span>
       <div>
-        <el-input placeholder="" v-model="customImg" clearable size="small">
+        <el-input placeholder="" v-model="customImg" clearable size="small" :readonly="true">
           <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
       </div>
@@ -109,7 +109,7 @@ export default {
     handleRemove(file) {
         console.log(file);
     },
-    handlePictureCardPreview(file) {
+    handlePictureCardPreview(file) {  //查看壁纸
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
@@ -145,7 +145,7 @@ export default {
     & > div:nth-of-type(4){
       width: 80%;
       & > .el-button{
-        margin-top: 2%;
+        margin: 2% 0 2% 0;
       }
     }
   }
