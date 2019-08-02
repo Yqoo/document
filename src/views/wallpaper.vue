@@ -123,6 +123,7 @@ export default {
       });
     },
     handleDownload(file) {  // 设置壁纸
+    // console.log(file.url)
       this.$store.commit('changeDesktopImg', file.url);
     },
     changeDesktopImg( url ){ // 设置默认壁纸
