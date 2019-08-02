@@ -12,8 +12,8 @@
       <system @closeItem="closeItem" @minSize="minSize" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
       <myCloud v-if='isShowBox.myCloud.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.myCloud.display"></myCloud>
     </el-main>
-    <el-footer :style="groundGlass">
-      <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild" @lockScreen="lockScreen"></bottomBar>
+    <el-footer :class="footerClass" :style="groundGlass" ref="footer">
+      <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></bottomBar>
     </el-footer>
   </el-container>
 </template>
@@ -56,6 +56,7 @@ export default {
       },
       index:'theme',
       isMoveDrawer:false,
+      footerClass: 'bottom',  // 底部类名
     };
   },
   computed:{
@@ -119,6 +120,25 @@ export default {
     },
     drawerEnd(){
       console.log( 'end' );
+    },
+    barChangePosition( position ) {
+      console.log(position)
+      let active = {
+        top: () => {
+          console.log(this.$refs.footer);
+          this.footerClass = 'top';
+        },
+        bottom: () => {
+          this.footerClass = 'bottom';
+        },
+        left: () => {
+          this.footerClass = 'left';
+        },
+        right: () => {
+          this.footerClass = 'right';
+        }
+      };
+      active[position]();
     }
   },
   watch:{
@@ -156,9 +176,23 @@ body,
   line-height: 40px;
   background: transparent;
   position: absolute;
-  bottom: 0;
-  left: 0;
   width: 100%;
+}
+.el-footer.bottom{
+  bottom: 0;
+  left:0;
+}
+.el-footer.top{
+  top: 0;
+  left: 0;
+}
+.el-footer.left{
+  transform: rotate(90deg);
+  left: -49%;
+}
+.el-footer.right{
+  transform: rotate(90deg);
+  right: -49%;
 }
 </style>
 

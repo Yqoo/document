@@ -50,10 +50,18 @@ export default {
           position: () => false,
           lockScreen: () => { this.$emit('lockScreen')},
           lockTask: () => console.log( 'lockTask' ),
-          top: () => console.log( 'top' ),
-          left: () => console.log( 'left' ),
-          right: () => console.log( 'right' ),
-          bottom: () => console.log( 'bottom' ),
+          top: () => {
+            this.$emit('barChangePosition', 'top');
+          },
+          left: () => {
+            this.$emit('barChangePosition', 'left');
+          },
+          right: () => {
+            this.$emit('barChangePosition', 'right');
+          },
+          bottom: () => {
+            this.$emit('barChangePosition', 'bottom');
+          },
           fix: () => { 
             if( localStorage.getItem('fixTabs')  === null ){//在local里尚未存或已清除key => fixTabs
               localStorage.setItem('fixTabs',JSON.stringify( this.$store.state.chooseTabName ));

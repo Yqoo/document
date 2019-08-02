@@ -22,7 +22,7 @@
                 <span style="opacity:0">.</span>
                 <el-tag v-for="(tab,index) in tabsFilter" :key="index" :class="index"  effect="plain" type="info" @close="closeTab(index)" @click="showTab(index,tab.isLocal)">{{tab.name}}</el-tag>
                 <el-popover placement="top-start" width="100" trigger="click" popper-class="taskMenuPop" @hide="hideTask">
-                    <taskBarMenus @close="closeTab" v-if="isShowTask" :isFix="isFix" @lockScreen="lockScreen"></taskBarMenus>
+                    <taskBarMenus @close="closeTab" v-if="isShowTask" :isFix="isFix" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></taskBarMenus>
                     <i slot="reference" class="el-icon-location-outline taskBarPosition" style="position:absolute;opacity:0;"></i>
                 </el-popover>
             </div>    
@@ -121,6 +121,9 @@ export default {
         lockScreen(){
             this.$emit('lockScreen');
         },
+        barChangePosition( position ){
+            this.$emit('barChangePosition', position);
+        }
     },
     computed:{
         tabsFilter(){
