@@ -1,19 +1,19 @@
 <template>
   <el-container :style="bg">
     <el-main ref="main">
-      <vue-drawer-layout  ref="drawerLayout">
-         <div slot="content" @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
+      <vue-drawer-layout  ref="drawerLayout" :drawer-width="400" :reverse="true" :enable="isMoveDrawer" @slide-end="drawerEnd" :backdrop="false">       
+        <div slot="content" @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
           <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
         </div>
-        <div class="drawer-content" slot="drawer">
-          12312414
+        <div class="drawer-content" slot="drawer"  style="background:#fff;height:100%">
+          锁屏设置（左滑开启 右滑关闭）
         </div>
       </vue-drawer-layout>
       <system @closeItem="closeItem" @minSize="minSize" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
       <myCloud v-if='isShowBox.myCloud.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.myCloud.display"></myCloud>
     </el-main>
     <el-footer :style="groundGlass">
-      <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild"></bottomBar>
+      <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild" @lockScreen="lockScreen"></bottomBar>
     </el-footer>
   </el-container>
 </template>
@@ -55,6 +55,7 @@ export default {
         myCloud: { show:false,name:'我的云端',display:false },
       },
       index:'theme',
+      isMoveDrawer:false,
     };
   },
   computed:{
@@ -112,6 +113,13 @@ export default {
       }
       this.isShowBox[tab].display = !this.isShowBox[tab].display;
     },
+    lockScreen(){
+      this.isMoveDrawer = true;
+      this.$refs.drawerLayout.toggle();
+    },
+    drawerEnd(){
+      console.log( 'end' );
+    }
   },
   watch:{
   }

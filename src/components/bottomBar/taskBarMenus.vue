@@ -48,7 +48,7 @@ export default {
       taskMethods( type ){
         let active = Object.assign({
           position: () => false,
-          lockScreen: () => console.log( 'lockScreen' ),
+          lockScreen: () => { this.$emit('lockScreen')},
           lockTask: () => console.log( 'lockTask' ),
           top: () => console.log( 'top' ),
           left: () => console.log( 'left' ),
