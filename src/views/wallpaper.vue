@@ -66,7 +66,7 @@
       <span>自定义壁纸</span>
       <div>
         <el-input placeholder="" v-model="customImg" clearable size="small" :readonly="true">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-button @click="randomWallpaper" slot="append" icon="el-icon-loading"></el-button>
         </el-input>
       </div>
       <el-button size="small">保存</el-button>
@@ -75,32 +75,45 @@
 </template>
 
 <script>
+import { request } from 'http';
 
 export default {
   name:'wallpaper',
   data() {
       return {
         disabled: false,
-        customImg: '',  //自定义壁纸的路径
+        customImg: '',  //自定义壁纸的名称
         defaultWallpapers: [ //默认壁纸
           {
             imgName: '哆啦A梦',
-            imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564663993200&di=c253bba59f5ecf3b940551af3246f3a7&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201506%2F17%2F20150617195505_Ykh5A.jpeg'
+            imgUrl: require('@/assets/image/bg/defaultImg/dlam.jpg')
           },
           {
             imgName: '埃菲尔铁塔',
-            imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564663993196&di=52b58bcae67ad2fa1f988ff3f55477ba&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fblog%2F201403%2F20%2F20140320120519_M2nYE.jpeg'
+            imgUrl: require('@/assets/image/bg/defaultImg/afe.jpg')
           },
           {
             imgName: 'Think',
-            imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564663993195&di=e31cb7751985044fbcc7aa99b7959d17&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201410%2F24%2F20141024161607_niLhj.jpeg'
+            imgUrl: require('@/assets/image/bg/defaultImg/think.jpg')
           },
           {
             imgName: '夕阳',
-            imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564726088741&di=b751fb3ace71c151936bb62013338667&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fblog%2F201405%2F28%2F20140528131055_erJvP.jpeg'
+            imgUrl: require('@/assets/image/bg/defaultImg/rl.jpg')
           }
         ],
         selectWallpaper: [],  // 增加的壁纸
+        randomWallpaperImg: [ // 随机壁纸
+          {imgName: '笑脸', imgUrl: require('@/assets/image/bg/randomImg/笑脸_1.jpg')},
+          {imgName: '灯塔', imgUrl: require('@/assets/image/bg/randomImg/灯塔_2.jpg')},
+          {imgName: '泡芙小姐', imgUrl: require('@/assets/image/bg/randomImg/泡芙小姐_3.jpg')},
+          {imgName: '晚安', imgUrl: require('@/assets/image/bg/randomImg/晚安_4.jpg')},
+          {imgName: '猫咪', imgUrl: require('@/assets/image/bg/randomImg/猫咪_5.jpg')},
+          {imgName: '星空', imgUrl: require('@/assets/image/bg/randomImg/星空_6.jpg')},
+          {imgName: '插画', imgUrl: require('@/assets/image/bg/randomImg/插画_7.jpg')},
+          {imgName: '兔子', imgUrl: require('@/assets/image/bg/randomImg/兔子_8.jpg')},
+          {imgName: '减肥', imgUrl: require('@/assets/image/bg/randomImg/减肥_9.jpg')},
+          {imgName: '光', imgUrl: require('@/assets/image/bg/randomImg/光_10.jpg')},
+        ],
       };
   },
   methods: {
@@ -128,6 +141,11 @@ export default {
     },
     changeDesktopImg( url ){ // 设置默认壁纸
       this.$store.commit('changeDesktopImg', url);
+    },
+    randomWallpaper() {
+      let index = Math.floor(Math.random() * 10);
+      this.customImg = this.randomWallpaperImg[index].imgName;
+      this.$store.commit('changeDesktopImg', this.randomWallpaperImg[index].imgUrl);
     }
   }
 }
@@ -162,6 +180,7 @@ export default {
       width: 80%;
       & > .el-button{
         margin: 2% 0 2% 0;
+        display: none;
       }
     }
   }
