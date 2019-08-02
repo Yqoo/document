@@ -86,20 +86,20 @@ export default {
         this.index = params.index;//选中系统设置具体项
       }
     },
-    closeItem( param ){
+    closeItem( param ){//右上角工具栏关闭弹出层组件
       this.isShowBox[param].show = false;
       this.isShowBox[param].display = false;
     },
     minSize( param ){
-      console.log( param )
       this.isShowBox[param].display = false;
     },
     openChild( payload ){//左下侧菜单点击打开具体某一项
       this.isShowBox[payload].show = !this.isShowBox[payload].show;
       this.isShowBox[payload].display = !this.isShowBox[payload].display;
     },
-    closeChild( tab ){
+    closeChild( tab ){//关闭tab项
       this.isShowBox[tab].show = false;
+      this.isShowBox[tab].display = false;
     },
     showChild( tab,type ){
       if( type ){//如果是历史固定的任务栏应先加载注册组件
