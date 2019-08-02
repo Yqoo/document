@@ -178,3 +178,6 @@ ol {
 .el-card__body{
   padding:5px 20px;
 }
+.el-popover{
+  padding: 0px;
+}

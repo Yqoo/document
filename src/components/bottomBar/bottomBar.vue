@@ -18,11 +18,11 @@
             </div>    
         </el-col>  
         <el-col :span='15'>
-            <div class="grid-content3" @contextmenu.prevent.stop="taskBarMenus" style="position:relation">
+            <div class="grid-content3" @contextmenu.prevent.stop="taskBarMenus($event)" style="position:relation">
                 <span style="opacity:0">.</span>
-                <el-tag v-for="(tab,index) in tabsFilter" :key="index" closable effect="plain" type="info" @close="closeTab(index)" @click="showTab(index)">{{tab.name}}</el-tag>
-                <el-popover placement="top-start" width="200" trigger="click" popper-class="taskMenuPop">
-                    <taskBarMenus></taskBarMenus>
+                <el-tag v-for="(tab,index) in tabsFilter" :key="index" :class="index" closable effect="plain" type="info" @close="closeTab(index)" @click="showTab(index)">{{tab.name}}</el-tag>
+                <el-popover placement="top-start" width="100" trigger="click" popper-class="taskMenuPop">
+                    <taskBarMenus @close="closeTab"></taskBarMenus>
                     <i slot="reference" class="el-icon-location-outline taskBarPosition" style="position:absolute;opacity:0;"></i>
                 </el-popover>
             </div>    
@@ -63,7 +63,7 @@ export default {
             url: require('@/assets/image/icons/icon_cloudAdmin.png'),
             searchText: '',
             localTime:'',
-            position:{},
+            fixTabs:this.$store.state.fixTabs,
         }
     },
     created(){
@@ -88,18 +88,22 @@ export default {
             this.$emit( 'open',params );
         },
         closeTab( tab ){//控制弹出层某一项的关闭
-            this.$emit('closeTab',tab);
+            if( tab ) this.$emit('closeTab',tab);
         },
         showTab( tab ){
             this.$emit('showTab',tab)
         },
         taskBarMenus( e ){
+            let name = e.target.classList[e.target.classList.length-1];//获取点击的tabs的name
+            if( name.indexOf('-') > -1 ) name = null;
+            this.$store.commit('getTabName',name);
             document.querySelector('.taskBarPosition').style.left = e.clientX -25 + 'px';
             document.querySelector('.el-icon-location-outline').click();
         },
     },
     computed:{
         tabsFilter(){
+            console.log( this.fixTabs );
             let tabs = {};
             for( let key in this.tabs ){
                 if( this.tabs[key].show){
