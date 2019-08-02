@@ -46,10 +46,10 @@ export default {
         mainWidth: '',
       },
       isShowBox:{
-        system: { show:false,name:'系统设置',display:true },
-        myCloud: { show:false,name:'我的云端',display:true },
+        system: { show:false,name:'系统设置',display:false },
+        myCloud: { show:false,name:'我的云端',display:false },
       },
-      index:'',
+      index:'theme',
     };
   },
   computed:{
@@ -94,7 +94,8 @@ export default {
       this.isShowBox[param].display = false;
     },
     openChild( payload ){//左下侧菜单点击打开具体某一项
-      this.isShowBox[payload].show = true;
+      this.isShowBox[payload].show = !this.isShowBox[payload].show;
+      this.isShowBox[payload].display = !this.isShowBox[payload].display;
     },
     closeChild( tab ){
       this.isShowBox[tab].show = false;
