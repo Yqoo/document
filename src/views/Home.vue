@@ -55,6 +55,11 @@ export default {
       index:'',
     };
   },
+  computed:{
+    desktopImg () {
+      return this.$store.state.desktopImg
+    }
+  },
   methods: {
     rightMouse( e ) {
       //右键事件
@@ -96,10 +101,9 @@ export default {
     },
   },
   watch:{
-    
-  },
-  mounted(){
-    
+    desktopImg( val ) {
+      this.bg = { background: `url(${val}) no-repeat`};
+    }
   }
 };
 </script>
@@ -111,6 +115,7 @@ body,
   padding: 0px;
   margin: 0px;
   height: 100%;
+  background-size: cover;
 }
 .el-main {
   background-color: #e9eef3;
