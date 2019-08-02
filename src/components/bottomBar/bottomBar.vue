@@ -20,7 +20,7 @@
         <el-col :span='15'>
             <div class="grid-content3" @contextmenu.prevent.stop="taskBarMenus($event)" style="position:relation">
                 <span style="opacity:0">.</span>
-                <el-tag v-for="(tab,index) in tabsFilter" :key="index" :class="index" closable effect="plain" type="info" @close="closeTab(index)" @click="showTab(index)">{{tab.name}}</el-tag>
+                <el-tag v-for="(tab,index) in tabsFilter" :key="index" :class="index"  effect="plain" type="info" @close="closeTab(index)" @click="showTab(index,tab.isLocal)">{{tab.name}}</el-tag>
                 <el-popover placement="top-start" width="100" trigger="click" popper-class="taskMenuPop">
                     <taskBarMenus @close="closeTab"></taskBarMenus>
                     <i slot="reference" class="el-icon-location-outline taskBarPosition" style="position:absolute;opacity:0;"></i>
@@ -63,7 +63,6 @@ export default {
             url: require('@/assets/image/icons/icon_cloudAdmin.png'),
             searchText: '',
             localTime:'',
-            fixTabs:this.$store.state.fixTabs,
         }
     },
     created(){
@@ -90,27 +89,40 @@ export default {
         closeTab( tab ){//控制弹出层某一项的关闭
             if( tab ) this.$emit('closeTab',tab);
         },
-        showTab( tab ){
-            this.$emit('showTab',tab)
+        showTab( tab,type ){
+            if( type ) this.$emit('showTab',tab,type);//历史固定任务栏
+            else this.$emit('showTab',tab)
+            
         },
         taskBarMenus( e ){
             let name = e.target.classList[e.target.classList.length-1];//获取点击的tabs的name
             if( name.indexOf('-') > -1 ) name = null;
-            this.$store.commit('getTabName',name);
+            let obj = {};
+            if( name ){
+                obj[name] = {show:false,name:e.target.innerText,display:true,isLocal:true}; 
+                this.$store.commit('getTabName',obj);
+            }
             document.querySelector('.taskBarPosition').style.left = e.clientX -25 + 'px';
             document.querySelector('.el-icon-location-outline').click();
         },
     },
     computed:{
         tabsFilter(){
-            console.log( this.fixTabs );
+            let fixTabs = this.$store.state.fixTabs;
             let tabs = {};
             for( let key in this.tabs ){
-                if( this.tabs[key].show){
-                 tabs[key] = this.tabs[key]
+                if( this.tabs[key].show  ){
+                    tabs[key] = this.tabs[key]
                 }
+            };
+            if( JSON.stringify(fixTabs) === "{}"  ){
+                return tabs;
+            } else {
+                for( let key in fixTabs ){
+                    tabs[key] = fixTabs[key]
+                }
+                return tabs
             }
-            return tabs;
         }
     },
 }

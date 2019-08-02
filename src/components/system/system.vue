@@ -47,6 +47,7 @@
 import tools from  "@/assets/js/utils/tools.js";
 import { themeMixin}  from '@/assets/js/themeMixin.js';
 import theme from "@/views/theme";
+import config from "@/views/config";
 import wallpaper from "@/views/wallpaper";
 import personal from "@/views/personal";
 import boxTools from "@/views/boxTools";
@@ -58,7 +59,8 @@ export default {
       theme,
       personal,
       boxTools,
-      wallpaper
+      wallpaper,
+      config
     },
     data() {
         return {
