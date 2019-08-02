@@ -14,6 +14,7 @@
     "style-resources-loader": "^1.2.1",
     "vcolorpicker": "^0.1.8",
     "vue": "^2.6.10",
+    "vue-drawer-layout": "^1.3.0",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },

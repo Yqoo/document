@@ -12,6 +12,8 @@ import "@/style/defaultColor.less";
 import "@/style/theme.less";
 import vcolorpicker from 'vcolorpicker';
 import tools from '@/assets/js/utils/tools.js';
+import DrawerLayout from 'vue-drawer-layout'
+Vue.use(DrawerLayout)
 Vue.use(vcolorpicker);
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
