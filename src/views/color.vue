@@ -13,11 +13,11 @@
       <colorPicker slot="append" v-model="fontColor" style="cursor:pointer;z-index=10000001"></colorPicker>
     </el-input>
     <el-row>
-      <el-col :span="6">
+      <el-col :span="3" style="line-height:38px;">
         <span>渐变角度：</span>
       </el-col>
-      <el-col :span="18">
-        <el-input-number size="mini" v-model="edg" :min="min" :max="max"></el-input-number>
+      <el-col :span="21">
+        <el-slider v-model="edg" show-input :min="min" :max="max"></el-slider>
       </el-col>
     </el-row>
     <div :class="themeColorName"><el-tag class='theme-color' :style="themeColorStyle">颜色展示</el-tag></div>
