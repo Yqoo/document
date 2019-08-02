@@ -9,7 +9,7 @@
       :on-remove="handleRemove">
       <i class="el-icon-plus"></i>
     </el-upload>
-    <el-button size="small">保存</el-button>
+    <el-button @click="saveImgUrl" size="small">保存</el-button>
   </div>
 </template>
 
@@ -23,13 +23,11 @@ export default {
         };
     },
     methods: {
-      handleSuccess(res, file){
-        console.log(res)
-      },
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
-      handlePictureCardPreview(file) {
+      handlePictureCardPreview(file) {  //查看壁纸
+        this.imgSrc = file.url;  // 临时：获得文件路径
         const h = this.$createElement;
         this.$msgbox({
           title:'壁纸查看',
@@ -40,6 +38,10 @@ export default {
             return false;
           }
         });
+      },
+      saveImgUrl() {
+        let style = {imgSrc: this.imgSrc, type: '0'};
+        this.$store.commit('changeThemeColor', style);
       }
     }
 }
