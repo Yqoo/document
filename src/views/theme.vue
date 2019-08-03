@@ -4,7 +4,7 @@
       <i class="el-icon-eleme"></i> 主题设置
     </div>
     <div>
-      <i class="el-icon-star-on"></i> 默认
+      <i class="el-icon-star-on"></i> 默认主题
       <div class="defaultTheme">
         <el-card v-for="(item,index) in defaultThemeColor " :key="item.name" :class="item.name" :offset="index > 0 ? 4 : 0">
           <div @click="changeDefaultTheme(item.name)">
