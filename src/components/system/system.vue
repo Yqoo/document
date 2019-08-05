@@ -106,6 +106,12 @@ export default {
     transition: box-shadow 0.5s, transform 0.5s;
     background-color: #fff;
     text-align: left;
+    & .el-col-6{
+      border-right: 1px solid #e6e6e6;
+      & .el-menu{
+        border-right: none; 
+      }
+    }
     & .el-menu-item:hover{
       background: rgba(0,0,0,.09);
     }
