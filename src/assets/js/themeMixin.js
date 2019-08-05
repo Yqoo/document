@@ -2,7 +2,7 @@ export const themeMixin = {
     data() {
         return {
             themeColorName: '',
-            themeColorStyle: {},
+            themeColorStyle: {}
         }
     },
     computed: {
@@ -23,7 +23,7 @@ export const themeMixin = {
     mounted() {
         if(this.$refs.rightContent){
             let rightContentHeight = this.$refs.rightContent.$el.offsetHeight;
-            document.querySelector('.el-menu').style.height = rightContentHeight + 'px';
+            this.$refs.rightContent.$el.previousSibling.style.height = rightContentHeight + 'px';
         }
     }
 }

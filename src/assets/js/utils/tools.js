@@ -22,12 +22,14 @@ let tools = {
             background: `-o-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
             background: `-moz-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
             background: `linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
-            color: themeColor.fontColor
+            color: themeColor.fontColor,
+            height: '100%'
             }
         }else {
             className = '';
             style = {
                 background: `url(${themeColor.imgSrc}) 0% 0% /cover`,
+                height: '100%'
             }
         }
         return {className, style};

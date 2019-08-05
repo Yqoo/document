@@ -20,7 +20,7 @@
       <system @closeItem="closeItem" @minSize="minSize" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
       <myCloud v-if='isShowBox.myCloud.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.myCloud.display"></myCloud>
     </el-main>
-    <el-footer :class="footerClass" :style="groundGlass" ref="footer">
+    <el-footer :class="footerClass" :style="groundGlass">
       <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></bottomBar>
     </el-footer>
   </el-container>
@@ -151,20 +151,22 @@ export default {
       console.log( 'end' );
     },
     barChangePosition( position ) {
-      console.log(position)
       let active = {
         top: () => {
-          console.log(this.$refs.footer);
           this.footerClass = 'top';
         },
         bottom: () => {
           this.footerClass = 'bottom';
         },
         left: () => {
+          let height = document.body.offsetHeight;
           this.footerClass = 'left';
+          this.groundGlass.width = height + 'px';
         },
         right: () => {
           this.footerClass = 'right';
+          let height = document.body.offsetHeight;
+          this.groundGlass.width = height + 'px';
         }
       };
       active[position]();
@@ -219,11 +221,15 @@ body,
 }
 .el-footer.left{
   transform: rotate(90deg);
-  left: -49%;
+  transform-origin: left bottom;
+  left: 0;
+  top: -40px;
 }
 .el-footer.right{
-  transform: rotate(90deg);
-  right: -49%;
+  transform: rotate(-90deg);
+  transform-origin: right bottom;
+  right: 0;
+  top:-40px;
 }
 .defaultApp{
   display: flex;
