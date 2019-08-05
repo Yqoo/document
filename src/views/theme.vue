@@ -47,19 +47,12 @@ export default {
             type:'color',
           },
           current:'color',
-          themeColorName: '',
-          themeColorStyle: {},
           defaultThemeColor: [//默认的4套主题颜色
             {name: 'colorA', themeName: '天空蓝'}, 
             {name: 'colorB', themeName: '青草绿'}, 
             {name: 'colorC', themeName: '渐变粉'}, 
             {name: 'colorD', themeName: '酷炫黑'}]
         };
-    },
-    computed: {
-      storeChange() {
-        return this.$store.state.themeColor;
-      }
     },
     methods:{
       changeType( type ){
@@ -79,16 +72,6 @@ export default {
         }
         this.$store.commit('changeThemeColor', themename);
       }
-    },
-    watch: {
-      storeChange( val ) {
-        this.themeColorName = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).className;
-        this.themeColorStyle = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).style;
-      }
-    },
-    created(){
-      this.themeColorName = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).className;
-      this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
     }
 }
 </script>

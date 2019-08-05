@@ -72,12 +72,13 @@ export default {
           zIndex:this.$store.state.zIndex,
           info:{className:'.themeBox',name:'system'},
           componentName:'系统设置',
-          rightContentHeight: 0,
         };
     },
     methods:{
       selectNav( index ){
         this.current = index;
+        // let rightContentHeight = this.$refs.rightContent.$el.offsetHeight;
+        // this.$refs.rightContent.$el.previousSibling.style.height = rightContentHeight + 'px';
       },
       windowsTools( obj ){  
         let _s = {
