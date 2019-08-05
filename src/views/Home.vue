@@ -202,13 +202,17 @@ export default {
       this.isMoveDrawer = true;
       this.$refs.drawerLayout.toggle();
     },
-    barChangePosition( position ) {
+    barChangePosition( position ) { //改变底部菜单的位置
       let active = {
         top: () => {
           this.footerClass = 'top';
+          let width = document.body.offsetWidth;
+          this.groundGlass.width = width + 'px';
         },
         bottom: () => {
           this.footerClass = 'bottom';
+          let width = document.body.offsetWidth;
+          this.groundGlass.width = width + 'px';
         },
         left: () => {
           let height = document.body.offsetHeight;
@@ -258,13 +262,14 @@ export default {
     }
   },
   mounted(){
+    this.footerClass = this.$store.state.footerPosition;
     this.checkLockImg = this.defaultLockWallpaper[0];
     let a = tools._time();
     this.lock_date = a.split(' ')[0] + ',星期' + "一二三四五六七".charAt( new Date().getDay()-1 );
     this.lock_time = a.split(' ')[1];
     if( this.$store.state.isLockScreen === 'true') document.onmouseup = () => this.countTime(this.alertLockScreen,10000);
-   
   }
+
 };
 </script>
 <style lang="less">

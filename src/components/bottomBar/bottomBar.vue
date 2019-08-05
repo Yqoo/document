@@ -111,7 +111,16 @@ export default {
                 if( name ) this.isFix = false;
                 else this.isFix = null;
             }
-            document.querySelector('.taskBarPosition').style.left = e.clientX -25 + 'px';
+            let footerPostion = this.$store.state.footerPosition;
+            let left = 0;
+            if(footerPostion === 'left') {
+                left = e.clientY;
+            }else if(footerPostion === 'right'){
+                left = document.body.clientHeight - e.clientY;
+            }else{
+                left = e.clientX;
+            }
+            document.querySelector('.taskBarPosition').style.left = left - 25 + 'px';
             this.isShowTask = true;
             document.querySelector('.el-icon-location-outline').click();
         },
@@ -121,8 +130,9 @@ export default {
         lockScreen(){
             this.$emit('lockScreen');
         },
-        barChangePosition( position ){
+        barChangePosition( position ){  //记录底部菜单的位置
             this.$emit('barChangePosition', position);
+            this.$store.commit('changeFooterPosition', position);
         }
     },
     computed:{
