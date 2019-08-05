@@ -4,6 +4,14 @@
       <li v-for="(item,index) in menus[rules]" :key="index" @click="item.fn($event)" class="fadeInUp animated">
         <i :class="item.icon"></i>
         {{item.title}}
+        <div style="display:none">
+          <ul v-if="item.children" class="childUl">
+            <li v-for="(child,key) in item.children" :key="key" @click="child.fn">
+              <i :class="child.icon"></i>
+              {{child.title}}
+            </li>
+          </ul>
+        </div>
       </li>
     </ul>
   </div>
@@ -65,12 +73,25 @@ export default {
               {title:'粘贴',icon:'el-icon-files',fn:() => {
                 this.$emit('closeMenus',true);
               }},
-              {title:'查看剪贴板',icon:'el-icon-crop',fn:() => {
+              {title:'复制',icon:'el-icon-crop',fn:() => {
                 this.$emit('closeMenus',true);
               }},
-              {title:'排序方式',icon:'el-icon-s-fold',fn:() => {
+               {title:'图标大小',icon:'el-icon-star-off',fn:() => {
                 this.$emit('closeMenus',true);
-              }},
+              },children:[
+                { title:'大图标',icon:'el-icon-circle-plus-outline',fn:() => {
+                  localStorage.setItem('iconSize','big');
+                  this.$store.commit('changeIconSize','big')
+                } },
+                { title:'中图标',icon:'el-icon-circle-check',fn:() => {
+                  localStorage.setItem('iconSize','normal');
+                  this.$store.commit('changeIconSize','normal')
+                }},
+                { title:'小图标',icon:'el-icon-remove-outline',fn:() => {
+                  localStorage.setItem('iconSize','small');
+                  this.$store.commit('changeIconSize','small')
+                }},
+              ]},
               {title:'轻应用',icon:'el-icon-menu',fn:() => {
                 this.$emit('closeMenus',true);
               }},
@@ -131,6 +152,7 @@ export default {
     border-radius: 5px;
     text-align: left;
     font-size: 12px;
+    width: 160px;
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     transition: box-shadow 0.5s, transform 0.5s;
     & li {
@@ -141,7 +163,18 @@ export default {
       background: @color;
       color: #fff;
       transition: all .4s linear;
+      & div {
+        display: block!important;
+      }
     }
     
+  }
+   .childUl{
+    position: absolute;
+    width: 60%;
+    left:100%;
+    top:0px;
+    background: #eee;
+    color: #000;
   }
 </style>

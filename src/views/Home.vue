@@ -3,6 +3,14 @@
     <el-main ref="main">
       <vue-drawer-layout  ref="drawerLayout" :drawer-width="400" :reverse="true" :enable="isMoveDrawer" @slide-end="drawerEnd" :backdrop="false">       
         <div slot="content" @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
+          <div class="appList">
+            <div class="defaultApp">
+              <div v-for="(item,index) in defaultAppStyle" :key="index" :style="item.style"  v-drag >
+                <img :src="item.img" :style="iconSize" class="moveBox">
+                <div>{{item.name}}</div>
+              </div>
+            </div>
+          </div>
           <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
         </div>
         <div class="drawer-content" slot="drawer"  style="background:#fff;height:100%">
@@ -57,17 +65,38 @@ export default {
       index:'theme',
       isMoveDrawer:false,
       footerClass: 'bottom',  // 底部类名
+      defaultAppStyle:[
+        { name:'浏览器',img:require('../assets/image/icons/icon-geogle.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
+        { name:'百度',img:require('../assets/image/icons/icon-baidu.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
+        { name:'微信',img:require('../assets/image/icons/icon-wx.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`190px`,left:`10px`} },
+        { name:'新闻',img:require('../assets/image/icons/icon-news.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`280px`,left:`10px`} },
+      ],
     };
   },
   computed:{
     bg() {
       let store = this.$store.state.desktopImg;
-      // console.log(store)
       if(store === '') {
         return {background: `url(${bg}) center center no-repeat`}
       } else {
         return {background: `url(${store}) 0% 0% /cover no-repeat`}
       }
+    },
+    iconSize(){//读取图标大小
+      let size = this.$store.state.iconSize;
+      let style = {};
+      switch (size) {
+        case 'small':
+          Object.assign( style,{ width:`30px` } );
+          break;
+        case 'big':
+          Object.assign( style,{ width:`70px` } );
+          break
+        default:
+          Object.assign( style,{ width:`50px` } );
+          break;
+      };
+      return style;
     }
   },
   methods: {
@@ -141,8 +170,6 @@ export default {
       active[position]();
     }
   },
-  watch:{
-  }
 };
 </script>
 <style lang="less">
@@ -166,6 +193,10 @@ body,
   & .desktop{
     height: 100%;
     width: 100%;
+    text-align: left;
+    & .appList {
+       color:#fff;
+    }
   }
 }
 .el-footer {
@@ -193,6 +224,18 @@ body,
 .el-footer.right{
   transform: rotate(90deg);
   right: -49%;
+}
+.defaultApp{
+  display: flex;
+  flex-flow: row wrap;
+  position: relative;
+  & div {
+    font-size: 10px;
+    text-align: center;
+  }
+  & img {
+    cursor: pointer;
+  }
 }
 </style>
 
