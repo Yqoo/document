@@ -109,7 +109,7 @@ export default {
     & .el-col-6{
       border-right: 1px solid #e6e6e6;
       & .el-menu{
-        border-right: none;
+        border-right: none; 
       }
     }
     & .el-menu-item:hover{
