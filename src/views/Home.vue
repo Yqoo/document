@@ -1,20 +1,53 @@
 <template>
   <el-container :style="bg">
     <el-main ref="main">
-      <vue-drawer-layout  ref="drawerLayout" :drawer-width="400" :reverse="true" :enable="isMoveDrawer" @slide-end="drawerEnd" :backdrop="false">       
+      <div class="screenImg"  :style="isOpenScreenLock">
+        <img :src="userSettingImg" alt="" class="fadeInDown animated">
+        <div class="lockDate_screen">
+          <div>{{lock_time}}</div>
+          <div>{{lock_date}}</div>
+        </div>
+      </div>
+      <vue-drawer-layout  ref="drawerLayout" :drawer-width="400" :reverse="true" :enable="isMoveDrawer" :backdrop="false">       
         <div slot="content" @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
           <div class="appList">
             <div class="defaultApp">
               <div v-for="(item,index) in defaultAppStyle" :key="index" :style="item.style"  v-drag >
-                <img :src="item.img" :style="iconSize" class="moveBox">
+                <img :src="item.img" :style="iconSize" class="moveBox" @dblclick="applicationHandle(item.title)">
                 <div>{{item.name}}</div>
               </div>
             </div>
           </div>
           <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
         </div>
-        <div class="drawer-content" slot="drawer"  style="background:#fff;height:100%">
-          锁屏设置（左滑开启 右滑关闭）
+        <div class="drawer-content lockSystem" slot="drawer">
+          <span class="myFont"><i class="el-icon-view"></i> 预览</span>
+          <div style="position:relative">
+            <img :src="checkLockImg" alt="" style="width:400px">
+            <div class="lockDate">
+              <div>{{lock_time}}</div>
+              <div>{{lock_date}}</div>
+            </div>
+          </div>
+          <span class="myFont"><i class="el-icon-picture"></i> 选择图片</span>
+          <div style="display:flex;flex-flow:row wrap;">
+            <el-card v-for="(img,index) in defaultLockWallpaper" :key="index" shadow="hover">
+              <img :src="img" alt="" style="width:150px;cursor:pointer;" @click="getShowimg(index,img)">
+            </el-card>
+          </div>
+          <span class="myFont"><i class="el-icon-upload2"></i> 浏览</span>
+          <el-upload action="#" list-type="picture-card" :auto-upload="false">
+            <i slot="default" class="el-icon-plus"></i>
+          </el-upload>
+          <div style="border:1px solid #ddd;padding:10px;margin:20px auto;border-radius:5px;">
+            <span class="myFont"><i class="el-icon-s-opportunity"></i> 是否开启锁屏</span>
+            <template>
+              <el-radio-group v-model="isOpenLockScreen" size="mini" style="margin-left:20px;" @change="openLockScreen">
+                <el-radio-button label="true">开启</el-radio-button>
+                <el-radio-button label="false">关闭</el-radio-button>
+              </el-radio-group>
+            </template>
+          </div>
         </div>
       </vue-drawer-layout>
       <system @closeItem="closeItem" @minSize="minSize" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
@@ -32,6 +65,7 @@ import bottomBar from "@/components/bottomBar/bottomBar.vue";
 import rightMenus from "@/views/rightMouse";
 import system from "@/components/system/system";
 import myCloud from "@/components/leftMenus/myCloud";
+import tools from  "@/assets/js/utils/tools.js";
 export default {
   name: "home",
   components: {
@@ -65,11 +99,29 @@ export default {
       index:'theme',
       isMoveDrawer:false,
       footerClass: 'bottom',  // 底部类名
-      defaultAppStyle:[
-        { name:'浏览器',img:require('../assets/image/icons/icon-geogle.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
-        { name:'百度',img:require('../assets/image/icons/icon-baidu.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
-        { name:'微信',img:require('../assets/image/icons/icon-wx.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`190px`,left:`10px`} },
-        { name:'新闻',img:require('../assets/image/icons/icon-news.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`280px`,left:`10px`} },
+      defaultLockWallpaper:[//默认锁屏界面壁纸
+        require('@/assets/image/bg/defaultLockScreen/defaultLockScreen_1.jpg'),
+        require('@/assets/image/bg/defaultLockScreen/defaultLockScreen_2.jpg'),
+        require('@/assets/image/bg/defaultLockScreen/defaultLockScreen_3.jpg'),
+        require('@/assets/image/bg/defaultLockScreen/defaultLockScreen_4.jpg'),
+      ],
+      checkLockImg:null,//默认放在预览位置的img
+      lock_time:null,//预览位置上的时间显示
+      lock_date:null,
+      isOpenLockScreen:localStorage.getItem('lockScreen') || 'false',
+      timer:null,//定时器触发锁屏
+      isOpenScreenLock:{
+        display:'none',
+        position:'absolute',
+        zIndex:'10000009',
+        width:'100%',
+        height:'100%',
+      },
+      defaultAppStyle:[//桌面默认展示的list
+        { name:'浏览器',title:'browser',img:require('../assets/image/icons/icon-geogle.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
+        { name:'百度',title:'baidu',img:require('../assets/image/icons/icon-baidu.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
+        { name:'微信',title:'wx',img:require('../assets/image/icons/icon-wx.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`190px`,left:`10px`} },
+        { name:'新闻',title:'news',img:require('../assets/image/icons/icon-news.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`280px`,left:`10px`} },
       ],
     };
   },
@@ -97,7 +149,10 @@ export default {
           break;
       };
       return style;
-    }
+    },
+    userSettingImg(){//获取缓存中的定义的锁屏壁纸
+      return this.$store.state.lockImg
+    },
   },
   methods: {
     rightMouse( e ) {
@@ -147,9 +202,6 @@ export default {
       this.isMoveDrawer = true;
       this.$refs.drawerLayout.toggle();
     },
-    drawerEnd(){
-      console.log( 'end' );
-    },
     barChangePosition( position ) {
       let active = {
         top: () => {
@@ -170,15 +222,53 @@ export default {
         }
       };
       active[position]();
+    },
+    applicationHandle( title ){//桌面应用
+      let active = {
+        browser: () =>  window.open("http://www.baidu.com"),
+        baidu: () =>  window.open("http://www.baidu.com"),
+        wx: () => window.open("https://wx.qq.com/"),
+        news: () => window.open("https://www.toutiao.com/"),
+      };
+      active[title]();
+    },
+    getShowimg( index,img ){//切换锁屏壁纸
+       this.checkLockImg = this.defaultLockWallpaper[index];
+       localStorage.setItem('lockImg',this.checkLockImg);//缓存壁纸
+       this.$store.commit('changelockImg',this.checkLockImg)
+    },
+    openLockScreen( val ){//是否开启锁屏
+      localStorage.setItem('lockScreen',val);
+      this.$store.commit('lockScreen',val);
+      if( val === 'true' ){
+        document.onmouseup = () => this.countTime(this.alertLockScreen,1000)
+      } else {
+        console.log('close')
+        document.onmouseup = null;
+      }
+    },
+    countTime( fn,wait ) {
+      if( this.timer ) clearTimeout( this.timer );
+      this.timer = setTimeout(() => {
+        fn()
+      }, wait);
+    },
+    alertLockScreen(){
+      this.isOpenScreenLock.display = 'block';
     }
   },
+  mounted(){
+    this.checkLockImg = this.defaultLockWallpaper[0];
+    let a = tools._time();
+    this.lock_date = a.split(' ')[0] + ',星期' + "一二三四五六七".charAt( new Date().getDay()-1 );
+    this.lock_time = a.split(' ')[1];
+    if( this.$store.state.isLockScreen === 'true') document.onmouseup = () => this.countTime(this.alertLockScreen,10000);
+   
+  }
 };
 </script>
 <style lang="less">
-html,
-body,
-#app,
-.el-container {
+html,body,#app,.el-container {
   padding: 0px;
   margin: 0px;
   height: 100%;
@@ -187,7 +277,7 @@ body,
 .el-main {
   background-color: #e9eef3;
   color: #333;
-  text-align: center;
+  //text-align: center;
   background: transparent;
   height: 100%;
   width: 100%;
@@ -242,6 +332,45 @@ body,
   & img {
     cursor: pointer;
   }
+}
+.lockSystem {
+  background:#fff;
+  height:100%;
+  padding: 0px 0px 0px 10px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  & i {
+    font-size: 18px;
+    vertical-align: sub;
+  }
+}
+.lockDate {
+  position:absolute;
+  bottom:40px;
+  left:10px;
+  font-size: 20px;
+  font-family: cursive;
+  color:#fff;
+}
+.lockDate_screen {
+  position:absolute;
+  bottom:40px;
+  left:10px;
+  font-size: 40px;
+  font-family: cursive;
+  color:#fff;
+}
+.myFont {
+  font-size: 12px;
+}
+.el-upload--picture-card {
+  width: 100px!important;
+  height: 100px!important;
+  line-height: 100px!important;
+}
+.el-upload-list--picture-card .el-upload-list__item{
+  width: 100px!important;
+  height: 100px!important;
 }
 </style>
 
