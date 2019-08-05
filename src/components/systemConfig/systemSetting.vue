@@ -1,15 +1,15 @@
 <!-- 系统设置： 系统设置表单 -->
 <template>
-  <el-form ref="form" :model="form" label-width="100px" size="small" active-value="0" inactive-value="1" label-position="left">
-    <el-form-item label="程序名称：">
+  <el-form ref="form" :model="form" label-width="120px" size="small" active-value="0" inactive-value="1" label-position="left">
+    <el-form-item label="程序名称:">
         <el-input v-model="form.name"></el-input>
         <label>程序logo图标</label>
         <el-button>更新</el-button>
     </el-form-item>
-    <el-form-item label="目录排除：">
+    <el-form-item label="目录排除:">
         <el-input v-model="form.catolog"></el-input>
     </el-form-item>
-    <el-form-item label="开启共享：">
+    <el-form-item label="开启共享:">
         <p>
             <el-switch v-model="form.enjoyTogether1" active-value="0" inactive-value="1"></el-switch>
             <label>开启用户之间文件共享功能</label>
@@ -19,7 +19,7 @@
             <label>开启用户自动接收共享功能</label>
         </p>
     </el-form-item>
-    <el-form-item label="开启分享：">
+    <el-form-item label="开启分享:">
         <p>
             <el-switch v-model="form.share1" active-value="0" inactive-value="1"></el-switch>
             <label>开启云盘分享功能</label>
@@ -31,31 +31,31 @@
             <el-input v-show="form.share2 === '0'" v-model="form.suffix" placeholder="设置限制后缀名，如：.exe,.msi"></el-input>
         </p>
     </el-form-item>
-    <el-form-item label="在线解压：">
+    <el-form-item label="在线解压:">
         <el-switch v-model="form.decompression" active-value="0" inactive-value="1"></el-switch>
         <label>开启在线解压与压缩功能</label>
     </el-form-item>
-    <el-form-item label="在线预览：">
+    <el-form-item label="在线预览:">
         <el-switch v-model="form.preview" active-value="0" inactive-value="1"></el-switch>
         <label>开启在线预览Office文件</label>
     </el-form-item>
-    <el-form-item label="在线编辑：">
+    <el-form-item label="在线编辑:">
         <el-switch v-model="form.edit" active-value="0" inactive-value="1"></el-switch>
         <label>开启在线编辑Office文件</label>
     </el-form-item>
-    <el-form-item label="协同编辑：">
+    <el-form-item label="协同编辑:">
         <el-switch v-model="form.editTogether" active-value="0" inactive-value="1"></el-switch>
         <label>开启协同编辑Office文件</label>
     </el-form-item>
-    <el-form-item label="短信功能：">
+    <el-form-item label="短信功能:">
         <el-switch v-model="form.shortLetter" active-value="0" inactive-value="1"></el-switch>
         <label>开启短信收发功能</label>
     </el-form-item>
-    <el-form-item label="即使通讯：">
+    <el-form-item label="即使通讯:">
         <el-switch v-model="form.instantMsg" active-value="0" inactive-value="1"></el-switch>
         <label>开启即使通讯功能</label>
     </el-form-item>
-    <el-form-item label="登陆后默认进入：">
+    <el-form-item label="登陆后默认进入:">
         <el-radio v-model="form.defaultPage" label="0">桌面</el-radio>
         <el-radio v-model="form.defaultPage" label="1">我的云端</el-radio>
         <el-radio v-model="form.defaultPage" label="2">共享云端</el-radio>
