@@ -4,7 +4,7 @@
       <li v-for="(menu,index) in menus" :key="index" @click="taskMethods(menu.type)">
         <i :class="menu.icon"></i> {{menu.name}}
         <div style="display:none">
-          <ul v-if="menu.children" class="childUl">
+          <ul v-if="menu.children" class="childUl" :class="rightChildUl">
             <li v-for="(child,key) in menu.children" :key="key" @click.stop="taskMethods(child.type)">
               <i :class="child.icon"></i>  {{child.name}}
             </li>
@@ -34,6 +34,7 @@ export default {
             { name:'从任务栏取消固定',icon:'el-icon-document-delete',type:'unFix' },
             { name:'关闭窗口',icon:'el-icon-switch-button',type:'close' },
           ],
+          rightChildUl: '',  //用于判断底部菜单在右边时，弹出框的位置
         };
     },
     created(){
@@ -81,7 +82,12 @@ export default {
         active[type]();
       }
     },
-   
+   mounted() {
+     let footerPosition = this.$store.state.footerPosition;
+     if(footerPosition === 'right'){  // 如果底部菜单在右侧时，弹出框二级菜单向左展示
+       this.rightChildUl = 'rightChildUl';
+     }
+   }
 }
 </script>
 <style lang='less' scoped>
@@ -106,5 +112,8 @@ export default {
     left:100%;
     top:-55px;
     background: #fff;
+  }
+  .rightChildUl{
+    left: -60%;
   }
 </style>

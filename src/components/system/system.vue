@@ -3,8 +3,8 @@
     <div class="fadeInLeftBig animated" :class="themeColorName">
       <boxTools class="theme-color moveBox"  :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentName"></boxTools>
       <el-row>
-        <el-col :span="6" :class="themeColorName">
-          <el-menu class="el-menu-vertical-demo theme-color" :default-active="defaultActive"  @select="selectNav" :style="themeColorStyle">
+        <el-col :span="6">
+          <el-menu class="el-menu-vertical-demo" :default-active="defaultActive"  @select="selectNav">
             <el-menu-item index='config'>
               <i class="el-icon-setting"></i>
               <span slot="title">系统设置</span>
@@ -77,8 +77,6 @@ export default {
     methods:{
       selectNav( index ){
         this.current = index;
-        // let rightContentHeight = this.$refs.rightContent.$el.offsetHeight;
-        // this.$refs.rightContent.$el.previousSibling.style.height = rightContentHeight + 'px';
       },
       windowsTools( obj ){  
         let _s = {

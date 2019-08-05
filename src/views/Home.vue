@@ -172,6 +172,9 @@ export default {
       active[position]();
     }
   },
+  mounted() {
+    this.footerClass = this.$store.state.footerPosition;
+  }
 };
 </script>
 <style lang="less">
