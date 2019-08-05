@@ -150,13 +150,17 @@ export default {
     drawerEnd(){
       console.log( 'end' );
     },
-    barChangePosition( position ) {
+    barChangePosition( position ) { //改变底部菜单的位置
       let active = {
         top: () => {
           this.footerClass = 'top';
+          let width = document.body.offsetWidth;
+          this.groundGlass.width = width + 'px';
         },
         bottom: () => {
           this.footerClass = 'bottom';
+          let width = document.body.offsetWidth;
+          this.groundGlass.width = width + 'px';
         },
         left: () => {
           let height = document.body.offsetHeight;
