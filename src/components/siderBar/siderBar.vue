@@ -6,7 +6,7 @@
                     <i class="el-icon-s-operation"></i>
                     <span slot="title">开始</span>
                 </el-menu-item>
-                <el-menu-item>
+                <el-menu-item @click="openChild('hidden')">
                     <i class="el-icon-eleme"></i>
                     <span slot="title">我的桌面</span>
                 </el-menu-item>
@@ -18,9 +18,9 @@
                     <i class="el-icon-share"></i>
                     <span slot="title">共享云端</span>
                 </el-menu-item>
-                <el-menu-item>
+                <el-menu-item @click="openChild('system')">
                     <i class="el-icon-user-solid"></i>
-                    <span slot="title">我的设置</span>
+                    <span slot="title">我的设置</span>  
                 </el-menu-item>
                 <el-menu-item>
                     <i class="el-icon-switch-button"></i>
