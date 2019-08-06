@@ -1,13 +1,13 @@
 <!-- 系统设置： 系统设置表单 -->
 <template>
-  <el-form ref="form" :model="form" label-width="120px" size="small" active-value="0" inactive-value="1" label-position="left">
+  <el-form ref="form" :model="form" label-width="100px" size="small" active-value="0" inactive-value="1" label-position="left">
     <el-form-item label="程序名称:">
-        <el-input v-model="form.name"></el-input>
+        <el-input v-model="form.name" size="mini"></el-input>
         <label>程序logo图标</label>
-        <el-button>更新</el-button>
+        <el-button size="mini">更新</el-button>
     </el-form-item>
     <el-form-item label="目录排除:">
-        <el-input v-model="form.catolog"></el-input>
+        <el-input v-model="form.catolog" size="mini"></el-input>
     </el-form-item>
     <el-form-item label="开启共享:">
         <p>
@@ -23,12 +23,12 @@
         <p>
             <el-switch v-model="form.share1" active-value="0" inactive-value="1"></el-switch>
             <label>开启云盘分享功能</label>
-            <el-input v-show="form.share1 === '0'" v-model="form.shareAddress" placeholder="输入外网分享地址，如：http://www.govnk.com"></el-input>
+            <el-input v-show="form.share1 === '0'" v-model="form.shareAddress" size="mini" placeholder="输入外网分享地址，如：http://www.govnk.com"></el-input>
         </p>
         <p>
             <el-switch v-model="form.share2" active-value="0" inactive-value="1"></el-switch>
             <label>开启分享上传功能</label>
-            <el-input v-show="form.share2 === '0'" v-model="form.suffix" placeholder="设置限制后缀名，如：.exe,.msi"></el-input>
+            <el-input v-show="form.share2 === '0'" v-model="form.suffix" size="mini" placeholder="设置限制后缀名，如：.exe,.msi"></el-input>
         </p>
     </el-form-item>
     <el-form-item label="在线解压:">
@@ -56,9 +56,11 @@
         <label>开启即使通讯功能</label>
     </el-form-item>
     <el-form-item label="登陆后默认进入:">
-        <el-radio v-model="form.defaultPage" label="0">桌面</el-radio>
-        <el-radio v-model="form.defaultPage" label="1">我的云端</el-radio>
-        <el-radio v-model="form.defaultPage" label="2">共享云端</el-radio>
+        <el-radio-group v-model="form.defaultPage">
+            <el-radio label="0">桌面</el-radio>
+            <el-radio label="1">我的云端</el-radio>
+            <el-radio label="2">共享云端</el-radio>
+        </el-radio-group>
     </el-form-item>
   </el-form>
 </template>
@@ -99,5 +101,8 @@ export default {
     color: #9e9e9e;
     font-size: 12px;
     margin: 0 4% 0 2%;
+}
+.el-radio-group{
+    width: 100%;
 }
 </style>

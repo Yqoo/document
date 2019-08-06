@@ -1,6 +1,6 @@
 <template>
   <div class='config'>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="系统设置" name="systemSetting">
         <SystemSetting></SystemSetting>
       </el-tab-pane>
@@ -42,5 +42,11 @@ export default {
 <style lang='less' scoped>
 .config{
   padding: 10px;
+  & /deep/ .el-tabs__item{
+    padding: 0 13px;
+    line-height: 35px;
+    height: 35px;
+    font-size: 12px;
+  }
 }
 </style>

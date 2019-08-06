@@ -1,7 +1,7 @@
 <!--系统设置： 后缀图标 -->
 <template>
   <div class="suffixIcon">
-      <el-col :span="2" v-for="(item, index) in iconList" :key="item.suffix" :offset="1">
+      <el-col :span="2" v-for="item in iconList" :key="item.suffix" :offset="1">
           <el-card :body-style="{ padding: '2px 0 0 0',textAlign: 'center',cursor:'pointer' }">
               <img :src="item.iconImg" :alt="item.suffix">
               <div style="padding:2px;text-align:center;">
@@ -9,7 +9,10 @@
               </div>
           </el-card>
       </el-col>
-    <el-button class="addIcon" icon="el-icon-plus" circle></el-button>
+    <div class="addBtn">
+        <input type="file">
+        <el-button class="addIcon" icon="el-icon-plus" circle></el-button>
+    </div>
   </div>
 </template>
 
@@ -36,7 +39,16 @@ export default {
         height:32px;
     }
 }
-.addClass{
-    margin: 2% 0 0 3%;
+.addBtn{
+    float: left;
+    position: relative;
+    padding: 2% 0 0 4%;
+    & input{
+        position: absolute;
+        width: 30px;
+        top: 35%;
+        left: 50%;
+        opacity: 0;
+    }
 }
 </style>
