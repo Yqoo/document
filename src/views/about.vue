@@ -3,7 +3,7 @@
  */
  <template>
   <div class="about">
-    <i class="el-icon-s-promotion"></i>关于作品
+    <i class="el-icon-s-promotion"></i><span class="myFont">关于作品</span>
     <el-collapse v-model="activeName" accordion>
       <el-collapse-item title="一致性 Consistency" name="1">
         <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
@@ -31,7 +31,7 @@ export default {
   name: "about",
   data() {
     return {
-      activeName:1,
+      activeName:'3',
     };
   }
 };
@@ -39,5 +39,9 @@ export default {
 <style lang='less' scoped>
   .about {
     padding:10px;
+  }
+  .myFont {
+    font-size: 12px;
+    padding-left: 10px;
   }
 </style>

@@ -103,6 +103,8 @@ export default {
 <style lang='less' scoped>
   .themeBox {
     width: 60%;
+    min-height: 50%;
+    
     position: absolute;
     top:10%;
     left: 20%;

@@ -181,3 +181,7 @@ ol {
 .el-popover{
   padding: 0px;
 }
+.el-menu-item {
+  height: 46px;
+  line-height: 46px;
+}
