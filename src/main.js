@@ -20,6 +20,7 @@ Vue.config.productionTip = false;
 Vue.prototype.axios = axios;
 Vue.prototype._ = _;
 Vue.prototype._getThemeColor = tools.getThemeColor;
+Vue.prototype._getPosition = tools.getPosition;
 /* router.beforeEach((to,from,next) => {
   if(to.path === '/login'){
     next()

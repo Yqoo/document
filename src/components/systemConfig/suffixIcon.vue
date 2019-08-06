@@ -2,12 +2,14 @@
 <template>
   <div class="suffixIcon">
       <el-col :span="2" v-for="item in iconList" :key="item.suffix" :offset="1">
-          <el-card @contextmenu.prevent.stop="operateSuffix" :body-style="{ padding: '2px 0 0 0',textAlign: 'center',cursor:'pointer' }">
-              <img :src="item.iconImg" :alt="item.suffix">
-              <div>
-                  <span>{{item.suffix}}</span>
-              </div>
-          </el-card>
+          <div @contextmenu.prevent.stop="operateSuffix">
+              <el-card :body-style="{ padding: '2px 0 0 0',textAlign: 'center',cursor:'pointer' }">
+                  <img :src="item.iconImg" :alt="item.suffix">
+                  <div>
+                      <span>{{item.suffix}}</span>
+                  </div>
+              </el-card>
+          </div>
       </el-col>
       <el-col v-if="fileUrl != ''" :span="2" :offset="1">
           <el-card :body-style="{ padding: '2px 0 0 0',textAlign: 'center',cursor:'pointer' }">
@@ -23,11 +25,16 @@
           <input type="file" @change="getImgFile" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
           <el-button class="addIcon" icon="el-icon-plus" circle></el-button>
       </div>
+      <SuffixOperate :position="position" v-show="isShowMenu"></SuffixOperate>
   </div>
 </template>
 
 <script>
+import SuffixOperate from './suffixIconOperate'
 export default {
+  components:{
+      SuffixOperate
+  },
   data () {
     return {
         iconList: [//默认文件及图标
@@ -37,6 +44,8 @@ export default {
         ],
         fileUrl: '', //选中的图片 
         newSuffix: '',  //新增的后缀名 
+        position: {top: 0, left: 0},  // 操作菜单的位置
+        isShowMenu: false,  //控制是否显示菜单
     };
   },
   methods: {
@@ -64,8 +73,12 @@ export default {
           this.fileUrl = '';
           this.newSuffix = '';
       },
-      operateSuffix() {  //对已有的后缀图标进行操作：修改删除
-        console.log(11)
+      operateSuffix(e) {  //对已有的后缀图标进行操作：修改删除
+        Object.assign(this.position, {
+            top: this._getPosition(e).top + 'px',
+            left: this._getPosition(e).left + 'px'
+        });
+        this.isShowMenu = true;
       }
   }
 }
@@ -86,13 +99,14 @@ export default {
         font-size:14px;
         & input {
             height: 21px;
+            padding: 0 0 0 2px;
         }
         & i{
             position: absolute;
             cursor: pointer;
             font-size: 16px;
             right: -16px;
-            z-index: 99;
+            z-index: 990;
         }
         & i.el-icon-circle-close{
             top: 0;
