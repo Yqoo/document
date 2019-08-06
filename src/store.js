@@ -13,6 +13,7 @@ export default new Vuex.Store({
     desktopImg: localStorage.getItem('desktopImg')? localStorage.getItem('desktopImg'):'',//桌面壁纸
     iconSize:localStorage.getItem('iconSize')?localStorage.getItem('iconSize'):'small',//桌面applist的图标大小 value => small normal big 
     footerPosition: localStorage.getItem('footerPosition')?localStorage.getItem('footerPosition'):'bottom',  //底部位置
+    isLockTask: localStorage.getItem('isLockTask')?localStorage.getItem('isLockTask'): true,  //判断是否锁定任务栏
   },
   mutations: {
     changeThemeColor( state, curColor) {//切换主题
@@ -43,6 +44,10 @@ export default new Vuex.Store({
     changeFooterPosition(state, curPosition) {  //改变底部的显示位置
       this.state.footerPosition = curPosition;
       localStorage.setItem('footerPosition', curPosition);
+    },
+    changeLockTaskStatus(state, status) {  // 改变任务栏是否锁定的状态  true:可锁定  false：可解锁
+      this.state.isLockTask = status;
+      localStorage.setItem('isLockTask', status);
     }
   },
   actions: {},

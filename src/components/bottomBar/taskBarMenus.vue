@@ -1,9 +1,9 @@
 <template>
   <div class='taskBarMenus fadeInUp animated'>
     <ul>
-      <li v-for="(menu,index) in menus" :key="index" @click="taskMethods(menu.type)">
+      <li v-for="(menu,index) in menus" :key="index" @click="taskMethods(menu.type)" :class="menu.type">
         <i :class="menu.icon"></i> {{menu.name}}
-        <div style="display:none">
+        <div style="display:none" v-if="showSecondMenu">
           <ul v-if="menu.children" class="childUl" :class="rightChildUl">
             <li v-for="(child,key) in menu.children" :key="key" @click.stop="taskMethods(child.type)">
               <i :class="child.icon"></i>  {{child.name}}
@@ -35,9 +35,14 @@ export default {
             { name:'关闭窗口',icon:'el-icon-switch-button',type:'close' },
           ],
           rightChildUl: '',  //用于判断底部菜单在右边时，弹出框的位置
+          showSecondMenu: true,  //用于判断二级菜单是否显示
         };
     },
     created(){
+      if(!this.$store.state.isLockTask){ //判断是否锁定任务栏
+        this.menus[1].name = '解锁任务栏';
+        this.showSecondMenu = false;
+      }
       if( this.isFix === null ){//控制显示固定 和 取消固定
         this.menus.splice(3,3);
       } else {
@@ -50,7 +55,18 @@ export default {
         let active = Object.assign({
           position: () => false,
           lockScreen: () => { this.$emit('lockScreen')},
-          lockTask: () => console.log( 'lockTask' ),
+          lockTask: () => {
+            let status = this.$store.state.isLockTask;
+            if(status){
+              document.querySelector('.lockTask').innerHTML = `<i class='el-icon-unlock'></i> 解锁任务栏`;
+              this.showSecondMenu = false;
+              this.$store.commit('changeLockTaskStatus', false);
+            } else {
+              document.querySelector('.lockTask').innerHTML = `<i class='el-icon-lock'></i> 锁定任务栏`;
+              this.showSecondMenu = true;
+              this.$store.commit('changeLockTaskStatus', true);
+            }
+          },
           top: () => {
             this.$emit('barChangePosition', 'top');
           },
