@@ -19,9 +19,9 @@
         <div slot="content" @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
           <div class="appList">
             <div class="defaultApp">
-              <div v-for="(item,index) in defaultAppStyle" :key="index" :style="item.style"  v-drag >
-                <img :src="item.img" :style="iconSize" class="moveBox" @dblclick="applicationHandle(item.title)">
-                <div>{{item.name}}</div>
+              <div v-for="(item,index) in defaultAppStyle" :key="index" :style="item.style"  v-drag class="myApp app hvr-grow" @dblclick="applicationHandle(item.title)">
+                <img :src="item.img" :style="iconSize" class="moveBox app">
+                <p class="app">{{item.name}}</p>
               </div>
             </div>
           </div>
@@ -134,10 +134,10 @@ export default {
       lockTips:'',//解锁密码错误时的提醒信息
       userSettingLockTime:this.$store.state.lockTime,//锁屏时间
       defaultAppStyle:[//桌面默认展示的list
-        { name:'浏览器',title:'browser',img:require('../assets/image/icons/icon-geogle.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
-        { name:'百度',title:'baidu',img:require('../assets/image/icons/icon-baidu.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
-        { name:'微信',title:'wx',img:require('../assets/image/icons/icon-wx.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`190px`,left:`10px`} },
-        { name:'新闻',title:'news',img:require('../assets/image/icons/icon-news.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`280px`,left:`10px`} },
+        { name:'浏览器',title:'browser',img:require('../assets/image/icons/icon-geogle.png'),style:{width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
+        { name:'百度',title:'baidu',img:require('../assets/image/icons/icon-baidu.png'),style:{width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
+        { name:'微信',title:'wx',img:require('../assets/image/icons/icon-wx.png'),style:{width:`80px`,position:`absolute`,top:`190px`,left:`10px`} },
+        { name:'新闻',title:'news',img:require('../assets/image/icons/icon-news.png'),style:{width:`80px`,position:`absolute`,top:`280px`,left:`10px`} },
       ],
     };
   },
@@ -174,7 +174,13 @@ export default {
     rightMouse( e ) {
       //右键事件
       this.isRightMouseClick = true;
-      this.rules = 'desktop';//桌面下右键弹出层 desktop 应用下右键弹出层 app  设置|| 我的电脑等下弹出层 protogenesis 回收站下弹出层 recycle
+      let className = e.target.getAttribute('class');
+      //桌面下右键弹出层 desktop 应用下右键弹出层 app  设置|| 我的电脑等下弹出层 protogenesis 回收站下弹出层 recycle
+      if( className.indexOf('app') > -1){
+        this.rules = 'app';
+      } else if( className.indexOf('desktop') > -1 ){
+        this.rules = 'desktop';
+      };
       this.position = Object.assign({
         mainHeight: this.$refs.main.$el.clientHeight,
         mainWidth: this.$refs.main.$el.clientWidth,
@@ -201,8 +207,14 @@ export default {
       this.isShowBox[param].display = false;
     },
     openChild( payload ){//左下侧菜单点击打开具体某一项
-      this.isShowBox[payload].show = !this.isShowBox[payload].show;
-      this.isShowBox[payload].display = !this.isShowBox[payload].display;
+      if( payload === 'hidden'){//我的桌面 其余弹出层组件均隐藏
+        for( let key in this.isShowBox){
+          this.isShowBox[key].display = false;
+        }
+      } else {
+        this.isShowBox[payload].show = !this.isShowBox[payload].show;
+        this.isShowBox[payload].display = !this.isShowBox[payload].display;
+      }   
     },
     closeChild( tab ){//关闭tab项
       this.isShowBox[tab].show = false;
@@ -410,6 +422,12 @@ html,body,#app,.el-container {
   top:50%;
   left:50%;
   transform: translate(-50%,-50%);
+}
+.myApp{
+  box-sizing: border-box;
+  &:hover{
+    cursor: pointer;
+  }
 }
 </style>
 
