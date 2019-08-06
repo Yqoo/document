@@ -54,6 +54,16 @@ let tools = {
             tagName.querySelector('.el-menu').style.height = (contentHeight - titleHeight)+'px';
         }
     },
-    
+    /*
+     *在弹框中获取点击的位置 
+     */
+    getPosition: ( e )=>{
+        let clientX = e.clientX;
+        let clientY = e.clientY;
+        let box = document.querySelector('.themeBox');
+        let top = clientY - box.offsetTop;
+        let left = clientX - box.offsetLeft;
+        return {top, left}
+    }
 }
 export default tools;
