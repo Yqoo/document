@@ -48,7 +48,6 @@ export default new Vuex.Store({
       state.isLockScreen = val;
     },
     changelockImg( state ,img ){
-      console.log(img)
       state.lockImg = img;
     },
     changeFooterPosition(state, curPosition) {  //改变底部的显示位置

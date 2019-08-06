@@ -36,7 +36,7 @@
           </el-menu>
         </el-col>
         <el-col :span="18" ref="rightContent">
-          <component :is="current"></component>
+          <component :is="current" ></component>
         </el-col>
       </el-row>
     </div>
@@ -51,6 +51,9 @@ import config from "@/views/config";
 import wallpaper from "@/views/wallpaper";
 import personal from "@/views/personal";
 import boxTools from "@/views/boxTools";
+import organization from "@/components/organization/organization";
+import help from "@/views/help";
+import about from "@/views/about";
 export default {
     mixins: [themeMixin],
     name: 'system',
@@ -60,7 +63,10 @@ export default {
       personal,
       boxTools,
       wallpaper,
-      config
+      config,
+      organization,
+      help,
+      about
     },
     data() {
         return {
@@ -70,7 +76,7 @@ export default {
           minWidth:'',
           minHeight:'',
           zIndex:this.$store.state.zIndex,
-          info:{className:'.themeBox',name:'system'},
+          info:{className:'.themeBox',name:'system'},//boxTools组件所需参数
           componentName:'系统设置',
         };
     },
