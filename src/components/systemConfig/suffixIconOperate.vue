@@ -1,6 +1,6 @@
 <!-- 后缀图标：操作菜单 -->
 <template>
-  <div class='suffixOperate' @contextmenu.stop.prevent @click.stop>
+  <div class='suffixOperate' @mouseleave="hideMenu" @contextmenu.stop.prevent @click.stop>
       <ul class="menu pulse animated" :style="position">
           <li v-for="item in list" :key="item.title" @click="item.fn">
               <i :class="item.icon"></i>
@@ -18,12 +18,22 @@ export default {
   data () {
     return {
         list: [ 
-            {icon: 'el-icon-edit', title: '修改图标', fn: ()=>console.log('修改')},
-            {icon: 'el-icon-scissors', title: '删除', fn: ()=>console.log('删除')}
+            {icon: 'el-icon-edit', title: '修改图标', fn: () => {
+                this.$emit('operateSuffix', 'edit');
+                this.hideMenu();
+            }},
+            {icon: 'el-icon-scissors', title: '删除', fn: ()=> {
+                this.$emit('operateSuffix', 'del');
+                this.hideMenu();
+            }}
         ],
     };
   },
-  methods: {}
+  methods: {
+      hideMenu() {
+          this.$emit('hideMenu', false);
+      }
+  }
 }
 
 </script>
