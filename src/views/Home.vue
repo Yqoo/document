@@ -7,6 +7,13 @@
           <div>{{lock_time}}</div>
           <div>{{lock_date}}</div>
         </div>
+        <div class="unlockPwd">
+          <el-input show-password placeholder="默认为用户登录密码" @keyup.enter.native="unlocking" v-model="lPwd" size="small">
+            <template slot="prepend"><i slot="prefix" class="el-icon-lock"></i></template>
+            <el-button slot="append" icon="el-icon-right" @click="unlocking"></el-button> 
+          </el-input>
+          <span style="font-size:12px;color:red">{{lockTips}}</span>
+        </div>
       </div>
       <vue-drawer-layout  ref="drawerLayout" :drawer-width="400" :reverse="true" :enable="isMoveDrawer" :backdrop="false">       
         <div slot="content" @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
@@ -47,6 +54,12 @@
                 <el-radio-button label="false">关闭</el-radio-button>
               </el-radio-group>
             </template>
+            <div style="margin-top:10px;border-top:1px solid #ddd;padding-top:5px">
+              <span class="myFont"><i class="el-icon-alarm-clock"></i> 锁屏时间（分）</span>
+              <template >
+                <el-input-number style="margin-left:10px;" size="mini"  :min="1" v-model="userSettingLockTime"></el-input-number>
+              </template>
+            </div>
           </div>
         </div>
       </vue-drawer-layout>
@@ -117,6 +130,9 @@ export default {
         width:'100%',
         height:'100%',
       },
+      lPwd:'',//锁屏密码
+      lockTips:'',//解锁密码错误时的提醒信息
+      userSettingLockTime:this.$store.state.lockTime,//锁屏时间
       defaultAppStyle:[//桌面默认展示的list
         { name:'浏览器',title:'browser',img:require('../assets/image/icons/icon-geogle.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
         { name:'百度',title:'baidu',img:require('../assets/image/icons/icon-baidu.png'),style:{height:`80px`,width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
@@ -245,21 +261,28 @@ export default {
       localStorage.setItem('lockScreen',val);
       this.$store.commit('lockScreen',val);
       if( val === 'true' ){
-        document.onmouseup = () => this.countTime(this.alertLockScreen,1000)
+        document.onmouseup = () => this.countTime(this.alertLockScreen,this.userSettingLockTime);//开启锁屏
       } else {
-        console.log('close')
-        document.onmouseup = null;
+        document.onmouseup = () => clearTimeout( this.timer );//关闭锁屏 清除定时器
       }
     },
     countTime( fn,wait ) {
       if( this.timer ) clearTimeout( this.timer );
       this.timer = setTimeout(() => {
         fn()
-      }, wait);
+      }, wait*60*1000);
     },
-    alertLockScreen(){
+    alertLockScreen(){//弹出锁屏
       this.isOpenScreenLock.display = 'block';
-    }
+    },
+    unlocking(){
+      if( this.lPwd === '123' ){
+        this.isOpenScreenLock.display = 'none';
+         this.lockTips = '';
+      } else {
+        this.lockTips = '密码错误，请重新输入'
+      }
+    },
   },
   mounted(){
     this.footerClass = this.$store.state.footerPosition;
@@ -267,9 +290,14 @@ export default {
     let a = tools._time();
     this.lock_date = a.split(' ')[0] + ',星期' + "一二三四五六七".charAt( new Date().getDay()-1 );
     this.lock_time = a.split(' ')[1];
-    if( this.$store.state.isLockScreen === 'true') document.onmouseup = () => this.countTime(this.alertLockScreen,10000);
-  }
-
+    if( this.$store.state.isLockScreen === 'true') document.onmouseup = () => this.countTime(this.alertLockScreen,this.userSettingLockTime);
+  },
+  watch:{
+    userSettingLockTime( val,oldval ){//监听锁屏时间的改变
+      localStorage.setItem( 'lockTime',val );
+      this.$store.commit( 'settingLockTime',val )
+    }
+  },
 };
 </script>
 <style lang="less">
@@ -376,6 +404,12 @@ html,body,#app,.el-container {
 .el-upload-list--picture-card .el-upload-list__item{
   width: 100px!important;
   height: 100px!important;
+}
+.unlockPwd{
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
 }
 </style>
 

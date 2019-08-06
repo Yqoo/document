@@ -14,6 +14,7 @@ export default new Vuex.Store({
     iconSize:localStorage.getItem('iconSize')?localStorage.getItem('iconSize'):'small',//桌面applist的图标大小 value => small normal big 
     isLockScreen:localStorage.getItem('lockScreen')?localStorage.getItem('lockScreen'):false,//是否开启了锁屏
     lockImg:localStorage.getItem('lockImg')?localStorage.getItem('lockImg'):null,//锁屏壁纸
+    lockTime:localStorage.getItem('lockTime')?localStorage.getItem('lockTime'):60,
     footerPosition: localStorage.getItem('footerPosition')?localStorage.getItem('footerPosition'):'bottom',  //底部位置
   },
   mutations: {
@@ -52,6 +53,9 @@ export default new Vuex.Store({
     changeFooterPosition(state, curPosition) {  //改变底部的显示位置
       this.state.footerPosition = curPosition;
       localStorage.setItem('footerPosition', curPosition);
+    },
+    settingLockTime( state,time ){//设置锁屏时间
+      state.lockTime = time;
     }
   },
   actions: {},
