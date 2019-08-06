@@ -51,9 +51,9 @@
         <el-switch v-model="form.shortLetter" active-value="0" inactive-value="1"></el-switch>
         <label>开启短信收发功能</label>
     </el-form-item>
-    <el-form-item label="即使通讯:">
+    <el-form-item label="即时通讯:">
         <el-switch v-model="form.instantMsg" active-value="0" inactive-value="1"></el-switch>
-        <label>开启即使通讯功能</label>
+        <label>开启即时通讯功能</label>
     </el-form-item>
     <el-form-item label="登陆后默认进入:">
         <el-radio-group v-model="form.defaultPage">
