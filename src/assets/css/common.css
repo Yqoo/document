@@ -181,11 +181,10 @@ ol {
 .el-popover{
   padding: 0px;
 }
-<<<<<<< HEAD
 .el-menu-item {
   height: 46px;
   line-height: 46px;
-=======
+}
 .el-form-item--small.el-form-item{
   margin-bottom: 3px;
 }
@@ -194,5 +193,4 @@ ol {
 }
 .el-radio__label{
   font-size: 12px;
->>>>>>> aa727ef9df5c37365ab6ddfdfc57df41e8d2b599
 }
