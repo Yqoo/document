@@ -2,8 +2,8 @@
   <div class='themeBox bounceInDown animated' v-drag:themeBox>
     <div class="fadeInLeftBig animated" :class="themeColorName">
       <boxTools class="theme-color moveBox"  :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentName"></boxTools>
-      <el-row>
-        <el-col :span="6">
+      <section>
+        <aside>
           <el-menu class="el-menu-vertical-demo" :default-active="defaultActive"  @select="selectNav">
             <el-menu-item index='config'>
               <i class="el-icon-setting"></i>
@@ -34,11 +34,11 @@
               <span slot="title">关于作品</span>
             </el-menu-item>
           </el-menu>
-        </el-col>
-        <el-col :span="18" ref="rightContent">
+        </aside>
+        <div ref="rightContent">
           <component :is="current" ></component>
-        </el-col>
-      </el-row>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -101,6 +101,38 @@ export default {
 }
 </script>
 <style lang='less' scoped>
+section{
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  background: #eee;
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+  & aside{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 25%;
+    height: calc(100% - 5px);
+    border-right: 5px solid #eee;
+    & .el-menu{
+      border-right: none;
+    }
+  }
+  & > div{
+    width: 100%;
+    height: 100%;
+    float: right;
+    background: #fff;
+    & > div{
+      margin-left: 25%;
+    }
+  }
+}
   .themeBox {
     width: 60%;
     min-height: 50%;
@@ -114,12 +146,6 @@ export default {
     transition: box-shadow 0.5s, transform 0.5s;
     background-color: #fff;
     text-align: left;
-    & .el-col-6{
-      border-right: 1px solid #e6e6e6;
-      & .el-menu{
-        border-right: none; 
-      }
-    }
     & .el-menu-item:hover{
       background: rgba(0,0,0,.09);
     }

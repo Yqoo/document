@@ -21,9 +21,9 @@ export const themeMixin = {
         this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
     },
     mounted() {
-        if(this.$refs.rightContent){
-            let rightContentHeight = this.$refs.rightContent.$el.offsetHeight;
-            this.$refs.rightContent.$el.previousSibling.style.height = rightContentHeight + 'px';
-        }
+        // if(this.$refs.rightContent){
+        //     let rightContentHeight = this.$refs.rightContent.$el.offsetHeight;
+        //     this.$refs.rightContent.$el.previousSibling.style.height = rightContentHeight + 'px';
+        // }
     }
 }
