@@ -1,13 +1,13 @@
 <template>
   <div class='myCloud' v-drag :class="themeColorName">
     <boxTools class="theme-color moveBox" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
-    <el-row>
-      <el-col :span="6">
+    <section class="clearfix">
+      <aside>
         <div>
           <el-tree :data="treeData"></el-tree>
         </div>
-      </el-col>
-      <el-col :span="18">
+      </aside>
+      <div class="rightContent">
         <el-collapse v-model="activeCollapse" accordion>
           <el-collapse-item name='1'>
             <template slot="title">
@@ -54,8 +54,8 @@
             </div>
           </el-collapse-item>
         </el-collapse>
-      </el-col>
-    </el-row>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -160,16 +160,41 @@ export default {
 </script>
 <style lang='less' scoped>
   .myCloud {
-    min-height: 60%;  
+    // min-height: 60%;  
     width: 60%;
     position: absolute;
     top: 10%;
     left: 20%;
-    background: #fff;
-    border-radius: 5px;
+    border-radius: 8px;
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     transition: box-shadow 0.5s, transform 0.5s;
     text-align: left;
+    border: 3px double #d1d0d0;
+    background: transparent;
+    & section{
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 0 0 5px 5px;
+      background: rgba(255,255,255,0.5);
+      padding:10px;
+      & aside{
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: calc(25% - 15px);
+        height: calc(100% - 20px);
+        background: #fff;
+        overflow: auto;
+      }
+      & > div.rightContent {
+        float: left;
+        height: 100%;
+        width: 100%;
+        padding-left: 25%;
+        box-sizing: border-box;
+      }
+    }
   }
   .cards{
     display:flex;
