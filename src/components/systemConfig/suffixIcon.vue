@@ -15,14 +15,17 @@
           <el-button class="addIcon" icon="el-icon-plus" circle></el-button>
       </div>
       <SuffixOperate :position="position" @operateSuffix="operateSuffix" @hideMenu="hideMenu" v-show="isShowMenu"></SuffixOperate>
+      <DefaultIcons :dialogVisible="dialogVisible" @closeDialog="closeDialog"></DefaultIcons>
   </div>
 </template>
 
 <script>
 import SuffixOperate from './suffixIconOperate'
+import DefaultIcons from '@/views/defaultIcons'
 export default {
   components:{
-      SuffixOperate
+      SuffixOperate,
+      DefaultIcons
   },
   data () {
     return {
@@ -31,17 +34,10 @@ export default {
             {iconImg:require('@/assets/image/icons/fileIcons/ppt.png'), suffix: '.pptx'},
             {iconImg:require('@/assets/image/icons/fileIcons/excel.png'), suffix: '.xlsx'},
         ],
-        defaultIconList: [  // 默认图标库
-            {iconImg:require('@/assets/image/icons/fileIcons/doc.png')},
-            {iconImg:require('@/assets/image/icons/fileIcons/ppt.png')},
-            {iconImg:require('@/assets/image/icons/fileIcons/excel.png')},
-            {iconImg:require('@/assets/image/icons/fileIcons/文件夹.png')},
-            {iconImg:require('@/assets/image/icons/fileIcons/zip.png')},
-            {iconImg:require('@/assets/image/icons/fileIcons/excel.png')},
-        ],
         position: {top: 0, left: 0},  // 操作菜单的位置
         isShowMenu: false,  //控制是否显示菜单
         selectIndex: 0,  //操作图标的下标
+        dialogVisible: false
     };
   },
   methods: {
@@ -61,6 +57,10 @@ export default {
           return url ;
       },
       showDefaultIcon() {
+          this.dialogVisible = true;
+      },
+      closeDialog() {
+          this.dialogVisible = false;
       },
       showOperateMenu( e, index ) {  //对已有的后缀图标进行操作：修改删除
         Object.assign(this.position, {
