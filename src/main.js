@@ -11,6 +11,7 @@ import "@/assets/css/hover.css";
 import "@/assets/css/animate.css";
 import "@/style/defaultColor.less";
 import "@/style/theme.less";
+import "@/assets/js/dialog.js"
 import vcolorpicker from 'vcolorpicker';
 import tools from '@/assets/js/utils/tools.js';
 import DrawerLayout from 'vue-drawer-layout'
