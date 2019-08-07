@@ -35,7 +35,7 @@
             </el-menu-item>
           </el-menu>
         </aside>
-        <div ref="rightContent">
+        <div class="rightContent">
           <component :is="current" ></component>
         </div>
       </section>
@@ -105,7 +105,8 @@ section{
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  padding: 5px;
+  padding: 10px;
+  border-radius: 0 0 5px 5px;
   background: #eee;
   &:after {
     content: '';
@@ -114,11 +115,11 @@ section{
   }
   & aside{
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 10px;
+    left: 10px;
     width: 25%;
-    height: calc(100% - 5px);
-    border-right: 5px solid #eee;
+    height: calc(100% - 10px);
+    border-right: 10px solid #eee;
     & .el-menu{
       border-right: none;
     }
@@ -129,7 +130,7 @@ section{
     float: right;
     background: #fff;
     & > div{
-      margin-left: 25%;
+      margin-left: calc(25% + 10px);
     }
   }
 }
