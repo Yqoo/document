@@ -4,7 +4,7 @@
             <div class="grid-content1">
                 <el-popover placement="top" width="600" trigger="click" transition="fade-in-linear" popper-class="alertLeftSideBar">
                     <siderBar  @openChild="open"></siderBar>
-                    <el-image slot="reference" :src="require('@/assets/image/icons/icon-admin.png')" fit="cover"></el-image>
+                    <el-image slot="reference" :src="require('@/assets/image/icons/deskIcons/icon-admin.png')" fit="cover"></el-image>
                 </el-popover>
             </div>
         </el-col>

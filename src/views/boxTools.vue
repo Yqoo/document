@@ -1,5 +1,6 @@
 <template>
   <div class='boxTools'>
+    <img :src="src" class="boxIcon">
     <span class="title">{{title}}</span>
     <el-tooltip class="item" effect="light" content="最小化" placement="bottom">
       <i class="el-icon-minus"  @click="windowsTools('minSize')"></i>
@@ -26,6 +27,7 @@ export default {
         return {
           msg:Object.assign({},this.info),
           max:true,
+          src:require('@/assets/image/icons/deskIcons/'+this.info.icon+'.png'),
           tools:{
             minSize: () => this.$emit('windowsTools',{param:this.msg.name,type:'minSize'}),//最小化
             maxSize: () =>{ this.$emit( 'windowsTools',{param:this.msg.className,type:'maxSize'} );this.max = false; },//最大化
@@ -57,7 +59,12 @@ export default {
   }
   .title{
     position: absolute;
-    left:10px;
+    left:40px;
     font-size: 14px;
+  }
+  .boxIcon{
+    position: absolute;
+    left:10px;
+    top: 4px;
   }
 </style>

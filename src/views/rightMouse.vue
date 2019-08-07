@@ -2,12 +2,12 @@
   <div class='' @contextmenu.stop.prevent @click.stop>
     <ul class="menus pulse animated" :style="menuPosition" ref="ulMenu" @mouseleave="leaveMenus">
       <li v-for="(item,index) in menus[rules]" :key="index" @click="item.fn($event)" class="fadeInUp animated">
-        <i :class="item.icon"></i>
+        <i :class="item.icon" :style="item.color"></i>
         {{item.title}}
         <div style="display:none">
           <ul v-if="item.children" class="childUl">
             <li v-for="(child,key) in item.children" :key="key" @click="child.fn">
-              <i :class="child.icon"></i>
+              <img :src="child.icon">
               {{child.title}}
             </li>
           </ul>
@@ -57,60 +57,65 @@ export default {
           },
           menus:{
             desktop:[
-              {title:'刷新',icon:'el-icon-refresh',fn:() => {
+              {title:'刷新',icon:'el-icon-refresh',color:{ color:'#f38181' },fn:() => {
                 location.reload();
                 this.$emit('closeMenus',true);
               }},
-              {title:'上传',icon:'el-icon-upload',fn:() => {
+              {title:'上传',icon:'el-icon-upload',color:{ color:'#f5c7f7' },fn:() => {
                 this.$emit('closeMenus',true);
               }},
-              {title:'新建文件夹',icon:'el-icon-folder-add',fn:() => {
+              {title:'新建文件夹',icon:'el-icon-folder-add',color:{ color:'#ff5722' },fn:() => {
                 this.$emit('closeMenus',true);
               }},
-              {title:'新建文件',icon:'el-icon-document-add',fn:() => {
-                this.$emit('closeMenus',true);
-              }},
-              {title:'粘贴',icon:'el-icon-files',fn:() => {
-                this.$emit('closeMenus',true);
-              }},
-              {title:'复制',icon:'el-icon-crop',fn:() => {
-                this.$emit('closeMenus',true);
-              }},
-               {title:'图标大小',icon:'el-icon-star-off',fn:() => {
+              {title:'新建文件',icon:'el-icon-document-add',color:{ color:'#95e1d3' },fn:() => {
                 this.$emit('closeMenus',true);
               },children:[
-                { title:'大图标',icon:'el-icon-circle-plus-outline',fn:() => {
+                { title:'word',icon:require('@/assets/image/icons/deskIcons/icon-word.png'),fn:() => { console.log('word')}},
+                { title:'excel',icon:require('@/assets/image/icons/deskIcons/icon-excel.png'),fn:() => { console.log('excel')}},
+                { title:'ppt',icon:require('@/assets/image/icons/deskIcons/icon-ppt.png'),fn:() => { console.log('ppt')}},
+                { title:'txt',icon:require('@/assets/image/icons/deskIcons/icon-txt.png'),fn:() => { console.log('txt')}},
+              ]},
+              {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'复制',icon:'el-icon-crop',color:{ color:'#08d9d6' },fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+               {title:'图标大小',icon:'el-icon-star-off',color:{ color:'#aa96da' },fn:() => {
+                this.$emit('closeMenus',true);
+              },children:[
+                { title:'大图标',icon:require('@/assets/image/icons/deskIcons/icon-big.png'),fn:() => {
                   localStorage.setItem('iconSize','big');
                   this.$store.commit('changeIconSize','big')
                 } },
-                { title:'中图标',icon:'el-icon-circle-check',fn:() => {
+                { title:'中图标',icon:require('@/assets/image/icons/deskIcons/icon-normal.png'),fn:() => {
                   localStorage.setItem('iconSize','normal');
                   this.$store.commit('changeIconSize','normal')
                 }},
-                { title:'小图标',icon:'el-icon-remove-outline',fn:() => {
+                { title:'小图标',icon:require('@/assets/image/icons/deskIcons/icon-small.png'),fn:() => {
                   localStorage.setItem('iconSize','small');
                   this.$store.commit('changeIconSize','small')
                 }},
               ]},
-              {title:'轻应用',icon:'el-icon-menu',fn:() => {
+              {title:'轻应用',icon:'el-icon-menu',color:{ color:'#ffc7c7' },fn:() => {
                 this.$emit('closeMenus',true);
               }},
-              {title:'壁纸设置',icon:'el-icon-picture-outline',fn:() => {
+              {title:'壁纸设置',icon:'el-icon-picture-outline',color:{ color:'#30e3ca' },fn:() => {
                 this.$emit('closeMenus',true);
                 this.$emit('closeMenus',{index:'wallpaper',path:'system'});
               }},
-              {title:'主题设置',icon:'el-icon-s-home',fn:() => {
+              {title:'主题设置',icon:'el-icon-s-home',color:{ color:'#7a08fa' },fn:() => {
                 this.$emit('closeMenus',{index:'theme',path:'system'});
               }},
-              {title:'系统设置',icon:'el-icon-s-tools',fn:() => {
+              {title:'系统设置',icon:'el-icon-s-tools',color:{ color:'#252a34' },fn:() => {
                 this.$emit('closeMenus',true);
                 this.$emit('closeMenus',{index:'config',path:'system'});
               }},
             ],
             app:[
-              {title:'打开',icon:'el-icon-open',fn:() => {console.log(1)}},
-              {title:'重命名',icon:'el-icon-edit',fn:() => {console.log(7)}},
-              {title:'删除',icon:'el-icon-delete',fn:() => {console.log(8)}},
+              {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
             ],
             protogenesis:[],
             recycle:[],
@@ -123,7 +128,7 @@ export default {
     },
     methods:{
       leaveMenus() {
-        this.$emit('closeMenus', true);
+        //this.$emit('closeMenus', true);
       }
     },
     mounted() {
@@ -163,10 +168,13 @@ export default {
   }
    .childUl{
     position: absolute;
-    width: 60%;
+    width: 70%;
     left:100%;
     top:0px;
     background: #eee;
     color: #000;
+    & li img {
+      vertical-align: sub;
+    }
   }
 </style>
