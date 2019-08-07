@@ -348,6 +348,7 @@ html,body,#app,.el-container {
   background: transparent;
   position: absolute;
   width: 100%;
+  padding: 0px 10px!important;
 }
 .el-footer.bottom{
   bottom: 0;
