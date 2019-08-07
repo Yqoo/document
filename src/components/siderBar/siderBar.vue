@@ -19,7 +19,7 @@
                     <span slot="title">共享云端</span>
                 </el-menu-item>
                 <el-menu-item @click="openChild('system')" class="hvr-wobble-horizontal">
-                    <i class="el-icon-user-solid" style="color:#08ffc8"></i>
+                    <i class="el-icon-setting" style="color:#6a65d8"></i>
                     <span slot="title">我的设置</span>  
                 </el-menu-item>
                 <el-menu-item class="hvr-wobble-horizontal">
