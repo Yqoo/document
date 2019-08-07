@@ -69,7 +69,7 @@ export default {
     },
     data() {
         return {
-          info:{ className:'.myCloud',name:'myCloud'},
+          info:{ className:'.myCloud',name:'myCloud',icon:'icon-cloud' },
           minWidth:'',
           minHeight:'',
           themeColorName:'',

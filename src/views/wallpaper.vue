@@ -79,7 +79,7 @@
 
 <script>
 import { request } from 'http';
-import customIcon from '@/assets/image/icons/fengche.png';
+import customIcon from '@/assets/image/icons/deskIcons/fengche.png';
 export default {
   name:'wallpaper',
   data() {

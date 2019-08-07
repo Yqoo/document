@@ -134,10 +134,10 @@ export default {
       lockTips:'',//解锁密码错误时的提醒信息
       userSettingLockTime:this.$store.state.lockTime,//锁屏时间
       defaultAppStyle:[//桌面默认展示的list
-        { name:'浏览器',title:'browser',img:require('../assets/image/icons/icon-geogle.png'),style:{width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
-        { name:'百度',title:'baidu',img:require('../assets/image/icons/icon-baidu.png'),style:{width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
-        { name:'微信',title:'wx',img:require('../assets/image/icons/icon-wx.png'),style:{width:`80px`,position:`absolute`,top:`190px`,left:`10px`} },
-        { name:'新闻',title:'news',img:require('../assets/image/icons/icon-news.png'),style:{width:`80px`,position:`absolute`,top:`280px`,left:`10px`} },
+        { name:'浏览器',title:'browser',img:require('../assets/image/icons/deskIcons/icon-geogle.png'),style:{width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
+        { name:'百度',title:'baidu',img:require('../assets/image/icons/deskIcons/icon-baidu.png'),style:{width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
+        { name:'微信',title:'wx',img:require('../assets/image/icons/deskIcons/icon-wx.png'),style:{width:`80px`,position:`absolute`,top:`190px`,left:`10px`} },
+        { name:'新闻',title:'news',img:require('../assets/image/icons/deskIcons/icon-news.png'),style:{width:`80px`,position:`absolute`,top:`280px`,left:`10px`} },
       ],
     };
   },

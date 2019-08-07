@@ -7,11 +7,11 @@
                     <span slot="title">开始</span>
                 </el-menu-item>
                 <el-menu-item @click="openChild('hidden')" class="hvr-wobble-horizontal">
-                    <img :src="require('@/assets/image/icons/icon-desktop.png')">
+                    <img :src="require('@/assets/image/icons/deskIcons/icon-desktop.png')">
                     <span slot="title">我的桌面</span>
                 </el-menu-item>
                 <el-menu-item @click="openChild('myCloud')" class="hvr-wobble-horizontal">
-                    <img :src="require('@/assets/image/icons/icon-cloud.png')">
+                    <img :src="require('@/assets/image/icons/deskIcons/icon-cloud.png')">
                     <span slot="title">我的云端</span>
                 </el-menu-item>
                 <el-menu-item class="hvr-wobble-horizontal">

@@ -76,7 +76,7 @@ export default {
           minWidth:'',
           minHeight:'',
           zIndex:this.$store.state.zIndex,
-          info:{className:'.themeBox',name:'system'},//boxTools组件所需参数
+          info:{className:'.themeBox',name:'system',icon:'icon-system'},//boxTools组件所需参数
           componentName:'系统设置',
         };
     },
