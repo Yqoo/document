@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     isLogin: localStorage.getItem('loginToken') ? localStorage.getItem('loginToken') : '',
     themeColor: localStorage.getItem('themeColor') ? JSON.parse(localStorage.getItem('themeColor')) : 'themea',  // 默认主题（颜色或者图片）
-    zIndex:99,
+    zIndex:1,
     chooseTabName:'',//任务栏右键被选中的tab
     fixTabs:localStorage.getItem('fixTabs')?JSON.parse(localStorage.getItem('fixTabs')) : {},//任务栏固定的tab
     desktopImg: localStorage.getItem('desktopImg')? localStorage.getItem('desktopImg'):'',//桌面壁纸

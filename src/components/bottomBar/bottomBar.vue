@@ -4,14 +4,14 @@
             <div class="grid-content1">
                 <el-popover placement="top" width="600" trigger="click" transition="fade-in-linear" popper-class="alertLeftSideBar">
                     <siderBar  @openChild="open"></siderBar>
-                    <el-image slot="reference" :src="url" fit="cover"></el-image>
+                    <el-image slot="reference" :src="require('@/assets/image/icons/icon-admin.png')" fit="cover"></el-image>
                 </el-popover>
             </div>
         </el-col>
         <el-col :span='4'>
             <div class="grid-content2">
                 <el-tooltip class="item" effect="light" content="请输入搜索关键词" placement="top-start">
-                   <el-input placeholder="搜索" v-model="searchText">
+                   <el-input placeholder="搜索" v-model="searchText" style="border-radius:0px;">
                       <i slot="suffix" @click="search" class="el-input__icon el-icon-search" style="cursor:pointer"></i> 
                    </el-input>
                 </el-tooltip>
@@ -60,7 +60,6 @@ export default {
     },
     data(){
         return {
-            url: require('@/assets/image/icons/icon_cloudAdmin.png'),
             searchText: '',
             localTime:'',
             isFix:false,
@@ -156,6 +155,7 @@ export default {
     },
 }
 </script>
+
 <style lang="less">
     .el-row{
         .el-col{
@@ -163,6 +163,15 @@ export default {
                 text-align: left;
                 .el-image{
                     cursor: pointer;
+                }
+            }
+            .grid-content1 .el-image__inner{
+                vertical-align: middle!important;
+            }
+            .grid-content2  .el-input__inner{
+                border-radius: 0px!important;
+                &:focus{
+                    border-color:transparent;
                 }
             }
             .grid-content4,.grid-content5{
@@ -191,6 +200,7 @@ export default {
         text-shadow:0 1px 1px hsla(0,0%,100%,.3)!important;
         color:#fff!important;
         border-color:transparent!important;
-        margin-bottom: 15px!important;
+        margin-bottom: 3px!important;
     }
+    
 </style>

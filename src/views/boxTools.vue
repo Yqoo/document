@@ -43,6 +43,8 @@ export default {
 </script>
 <style lang='less' scoped>
   .boxTools{
+    height: 35px;
+    line-height: 35px;
     cursor: move;
     text-align: right;
     border-radius: 5px 5px 0px 0px;

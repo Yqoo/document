@@ -2,28 +2,28 @@
     <el-row class="fadeInLeftBig animated">
         <el-col :span="4">
             <el-menu :collapse="isCollapse" background-color="transparent" router>
-                <el-menu-item>
-                    <i class="el-icon-s-operation"></i>
+                <el-menu-item class="hvr-wobble-horizontal">
+                    <i class="el-icon-s-operation" style="color:#44000d"></i>
                     <span slot="title">开始</span>
                 </el-menu-item>
-                <el-menu-item @click="openChild('hidden')">
-                    <i class="el-icon-eleme"></i>
+                <el-menu-item @click="openChild('hidden')" class="hvr-wobble-horizontal">
+                    <img :src="require('@/assets/image/icons/icon-desktop.png')">
                     <span slot="title">我的桌面</span>
                 </el-menu-item>
-                <el-menu-item @click="openChild('myCloud')">
-                    <i class="el-icon-cloudy"></i>
+                <el-menu-item @click="openChild('myCloud')" class="hvr-wobble-horizontal">
+                    <img :src="require('@/assets/image/icons/icon-cloud.png')">
                     <span slot="title">我的云端</span>
                 </el-menu-item>
-                <el-menu-item>
-                    <i class="el-icon-share"></i>
+                <el-menu-item class="hvr-wobble-horizontal">
+                    <i class="el-icon-share" style="color:#ff0000"></i>
                     <span slot="title">共享云端</span>
                 </el-menu-item>
-                <el-menu-item @click="openChild('system')">
-                    <i class="el-icon-user-solid"></i>
+                <el-menu-item @click="openChild('system')" class="hvr-wobble-horizontal">
+                    <i class="el-icon-user-solid" style="color:#08ffc8"></i>
                     <span slot="title">我的设置</span>  
                 </el-menu-item>
-                <el-menu-item>
-                    <i class="el-icon-switch-button"></i>
+                <el-menu-item class="hvr-wobble-horizontal">
+                    <i class="el-icon-switch-button" style="color:#252525"></i>
                     <span slot="title">退出云端</span>
                 </el-menu-item>
             </el-menu>
@@ -136,6 +136,9 @@ export default {
     .el-row {
         height: 400px;
         background: transparent;
+    }
+    .el-menu-item:hover{
+        background: transparent!important;
     }
     .el-menu-item i {
         color:#fff;
