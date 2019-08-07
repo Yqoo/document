@@ -105,9 +105,9 @@ section{
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  padding: 10px;
+  border: 10px solid rgba(255,255,255,0.5);
   border-radius: 0 0 5px 5px;
-  background: #eee;
+  background: rgba(255,255,255,0.75);
   &:after {
     content: '';
     display: block;
@@ -115,20 +115,20 @@ section{
   }
   & aside{
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 0px;
+    left: 0px;
     width: 25%;
-    height: calc(100% - 10px);
-    border-right: 10px solid #eee;
+    height: 100%;
+    border-right: 10px solid rgba(255,255,255,0.5);
     & .el-menu{
       border-right: none;
+      background: transparent;
     }
   }
   & > div{
     width: 100%;
     height: 100%;
     float: right;
-    background: #fff;
     & > div{
       margin-left: calc(25% + 10px);
     }
@@ -136,7 +136,8 @@ section{
 }
   .themeBox {
     width: 60%;
-    
+    background: transparent;
+    border: 3px double #b1b0b0;
     position: absolute;
     top:10%;
     left: 20%;
@@ -144,7 +145,6 @@ section{
     border-radius: 5px;
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     transition: box-shadow 0.5s, transform 0.5s;
-    background-color: #fff;
     text-align: left;
     & .el-menu-item:hover{
       background: rgba(0,0,0,.09);
