@@ -14,7 +14,7 @@
               <i class="el-icon-cloudy"></i>挚友云
             </template>
             <div class="cards slideInRight animated">
-              <el-card v-for="(c,index) in zyCloud" :key="index" shadow="hover">
+              <el-card v-for="(c,index) in zyCloud" :key="index" shadow="hover" class="hvr-backward">
                 <i :class="c.imgurl"></i>
                 <div class="bottom">{{c.name}}</div>
               </el-card>
@@ -25,7 +25,7 @@
               <i class="el-icon-s-custom"></i>我的云端
             </template>
             <div class="cards slideInLeft animated">
-              <el-card v-for="(c,index) in myCloud" :key="index" shadow="hover">
+              <el-card v-for="(c,index) in myCloud" :key="index" shadow="hover" class="hvr-float">
                 <i :class="c.imgurl"></i>
                 <div class="bottom1">{{c.name}}</div>
               </el-card>
@@ -36,7 +36,7 @@
               <i class="el-icon-cloudy-and-sunny"></i>共享云端
             </template>
             <div class="cards slideInDown animated">
-              <el-card v-for="(c,index) in shareCloud" :key="index" shadow="hover">
+              <el-card v-for="(c,index) in shareCloud" :key="index" shadow="hover" class="hvr-sink">
                 <i :class="c.imgurl"></i>
                 <div class="bottom1">{{c.name}}</div>
               </el-card>
@@ -47,7 +47,7 @@
               <i class="el-icon-partly-cloudy"></i>组织云端
             </template>
             <div class="cards slideInUp animated">
-              <el-card v-for="(c,index) in organizationCloud" :key="index" shadow="hover">
+              <el-card v-for="(c,index) in organizationCloud" :key="index" shadow="hover" class="hvr-forward">
                 <i :class="c.imgurl"></i>
                 <div class="bottom1">{{c.name}}</div>
               </el-card>
@@ -104,10 +104,12 @@ export default {
           zyCloud:[
             {name:'我的桌面',imgurl:'el-icon-s-platform'},
             {name:'我的文档',imgurl:'el-icon-folder'},
+            {name:'加密云端',imgurl:'el-icon-folder'},
             {name:'我的共享',imgurl:'el-icon-user'},
             {name:'接收共享',imgurl:'el-icon-sort'},
             {name:'我的分享',imgurl:'el-icon-share'},
             {name:'接收分享',imgurl:'el-icon-folder-checked'},
+            {name:'备份中心',imgurl:'el-icon-folder-checked'},
           ],
           myCloud:[
             {name:'软件区',imgurl:'el-icon-mobile'},
@@ -173,7 +175,7 @@ export default {
     display:flex;
     flex-flow: row wrap;
     & .el-card {
-      margin: 0px 10px;
+      margin: 5px 10px;
       cursor: pointer;
       width:80px;
       height: 80px;

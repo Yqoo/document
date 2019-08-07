@@ -2,11 +2,11 @@
   <div class='taskBarMenus fadeInUp animated'>
     <ul>
       <li v-for="(menu,index) in menus" :key="index" @click="taskMethods(menu.type)" :class="menu.type">
-        <i :class="menu.icon"></i> {{menu.name}}
+        <i :class="menu.icon" :style="menu.color"></i> {{menu.name}}
         <div style="display:none" v-if="showSecondMenu">
           <ul v-if="menu.children" class="childUl" :class="rightChildUl">
             <li v-for="(child,key) in menu.children" :key="key" @click.stop="taskMethods(child.type)">
-              <i :class="child.icon"></i>  {{child.name}}
+              <i :class="child.icon" :style="child.color"></i>  {{child.name}}
             </li>
           </ul>
         </div>
@@ -22,17 +22,17 @@ export default {
     data() {
         return {
           menus:[
-            { name:'锁屏设置',icon:'el-icon-unlock',type:'lockScreen' },
-            { name:'锁定任务栏',icon:'el-icon-lock',type:'lockTask' },
-            { name:'任务栏设置',icon:'el-icon-setting',type:'position',children:[
-              { name:'顶部',icon:'el-icon-caret-top',type:'top' },
-              { name:'左边',icon:'el-icon-caret-left',type:'left' },
-              { name:'右边',icon:'el-icon-caret-right',type:'right' },
-              { name:'底部',icon:'el-icon-caret-bottom',type:'bottom' },
+            { name:'锁屏设置',icon:'el-icon-unlock',color:{ color:'#29c6cd' },type:'lockScreen' },
+            { name:'锁定任务栏',icon:'el-icon-lock',color:{ color:'#ff89c0' },type:'lockTask' },
+            { name:'任务栏设置',icon:'el-icon-setting',color:{ color:'#fea386' },type:'position',children:[
+              { name:'顶部',icon:'el-icon-caret-top',color:{ color:'#f12b6b' },type:'top' },
+              { name:'左边',icon:'el-icon-caret-left',color:{ color:'#ff467e' },type:'left' },
+              { name:'右边',icon:'el-icon-caret-right',color:{ color:'#fd94b4' },type:'right' },
+              { name:'底部',icon:'el-icon-caret-bottom',color:{ color:'#f6c7c7' },type:'bottom' },
             ]},
-            { name:'固定到任务栏',icon:'el-icon-attract',type:'fix' },
-            { name:'从任务栏取消固定',icon:'el-icon-document-delete',type:'unFix' },
-            { name:'关闭窗口',icon:'el-icon-switch-button',type:'close' },
+            { name:'固定到任务栏',icon:'el-icon-attract',color:{ color:'#f67280' },type:'fix' },
+            { name:'从任务栏取消固定',icon:'el-icon-document-delete',color:{ color:'#c06c84' },type:'unFix' },
+            { name:'关闭窗口',icon:'el-icon-switch-button',color:{ color:'#8fbaf3' },type:'close' },
           ],
           rightChildUl: '',  //用于判断底部菜单在右边时，弹出框的位置
           showSecondMenu: true,  //用于判断二级菜单是否显示
