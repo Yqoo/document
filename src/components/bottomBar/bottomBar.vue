@@ -1,14 +1,17 @@
 <template>
     <el-row>
-        <el-col :span="1">
+        <el-col :span="2">
             <div class="grid-content1">
                 <el-popover placement="top" width="600" trigger="click" transition="fade-in-linear" popper-class="alertLeftSideBar">
                     <siderBar  @openChild="open"></siderBar>
-                    <el-image slot="reference" :src="require('@/assets/image/icons/deskIcons/icon-admin.png')" fit="cover"></el-image>
+                    <div slot="reference" class="imgDiv">
+                        <el-image :src="require('@/assets/image/icons/deskIcons/icon-admin.png')" fit="cover"></el-image>
+                    </div>
                 </el-popover>
             </div>
+            <span style="position: absolute;top: 0px;font-size: 12px;left: 40px;">挚友ICloud</span>
         </el-col>
-        <el-col :span='4'>
+        <el-col :span='3'>
             <div class="grid-content2">
                 <el-tooltip class="item" effect="light" content="请输入搜索关键词" placement="top-start">
                    <el-input placeholder="搜索" v-model="searchText" style="border-radius:0px;">
@@ -34,7 +37,7 @@
         </el-col> 
         <el-col :span='1'>
             <div class="grid-content5">
-                <i class="el-icon-s-promotion" @click="drawer = true "></i>
+                <i class="el-icon-chat-dot-square hvr-buzz" @click="drawer = true "></i>
             </div>  
             <el-drawer title='messageBox' :visible.sync="drawer" :direction="direction" size="400px"></el-drawer>  
         </el-col>
@@ -195,7 +198,7 @@ export default {
         cursor: pointer;
     }
     .alertLeftSideBar{
-        background:hsla(0,0%,100%,.25) border-box!important;
+        background:rgba(24, 21, 21, 0.25) border-box!important;
         overflow:hidden!important;
         box-shadow:0 0 0 1px hsla(0,0%,100%,.3) inset,0 .5em 1em rgba(0,0,0,0.6)!important;
         text-shadow:0 1px 1px hsla(0,0%,100%,.3)!important;
@@ -203,5 +206,13 @@ export default {
         border-color:transparent!important;
         margin-bottom: 3px!important;
     }
-    
+    .imgDiv {
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        height: 30px;
+        width: 30px;
+        line-height: 30px;
+        text-align: center;
+        margin-top: 4px;
+    }
 </style>

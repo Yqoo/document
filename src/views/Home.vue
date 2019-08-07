@@ -107,7 +107,7 @@ export default {
       },
       isShowBox:{
         system: { show:false,name:'系统设置',display:false,icon:require('@/assets/image/icons/deskIcons/icon-system.png') },
-        myCloud: { show:false,name:'我的云端',display:false,icon:require('@/assets/image/icons/deskIcons/icon-cloud.png') },
+        myCloud: { show:false,name:'我的云端',display:false,icon:require('@/assets/image/icons/deskIcons/icon-myCloud.png') },
       },
       index:'theme',
       isMoveDrawer:false,

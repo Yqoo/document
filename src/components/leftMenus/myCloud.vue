@@ -69,7 +69,7 @@ export default {
     },
     data() {
         return {
-          info:{ className:'.myCloud',name:'myCloud',icon:'icon-cloud' },
+          info:{ className:'.myCloud',name:'myCloud',icon:'icon-myCloud' },
           minWidth:'',
           minHeight:'',
           themeColorName:'',
@@ -133,7 +133,6 @@ export default {
           restore:   ( param ) => tools._restore( document.querySelector( param ),this.minHeight,this.minWidth),
           closeItem: ( param ) => this.$emit( 'closeItem',param )
         };
-        console.log( obj )
         _s[obj.type](obj.param);
       },
     },

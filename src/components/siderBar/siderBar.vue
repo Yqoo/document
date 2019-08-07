@@ -3,7 +3,7 @@
         <el-col :span="4">
             <el-menu :collapse="isCollapse" background-color="transparent" router>
                 <el-menu-item class="hvr-wobble-horizontal">
-                    <i class="el-icon-s-operation" style="color:#44000d"></i>
+                    <i class="el-icon-s-operation" style="color:#fff"></i>
                     <span slot="title">开始</span>
                 </el-menu-item>
                 <el-menu-item @click="openChild('hidden')" class="hvr-wobble-horizontal">
@@ -15,15 +15,15 @@
                     <span slot="title">我的云端</span>
                 </el-menu-item>
                 <el-menu-item class="hvr-wobble-horizontal">
-                    <i class="el-icon-share" style="color:#ff0000"></i>
+                    <i class="el-icon-share" style="color:#fff"></i>
                     <span slot="title">共享云端</span>
                 </el-menu-item>
                 <el-menu-item @click="openChild('system')" class="hvr-wobble-horizontal">
-                    <i class="el-icon-setting" style="color:#6a65d8"></i>
+                    <i class="el-icon-setting" style="color:#fff"></i>
                     <span slot="title">我的设置</span>  
                 </el-menu-item>
                 <el-menu-item class="hvr-wobble-horizontal">
-                    <i class="el-icon-switch-button" style="color:#252525"></i>
+                    <i class="el-icon-switch-button" style="color:#fff"></i>
                     <span slot="title">退出云端</span>
                 </el-menu-item>
             </el-menu>
