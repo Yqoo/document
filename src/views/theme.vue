@@ -6,7 +6,7 @@
     <div>
       <i class="el-icon-star-on"></i> 默认主题
       <div class="defaultTheme">
-        <el-card v-for="(item,index) in defaultThemeColor " :key="item.name" :class="item.name" :offset="index > 0 ? 4 : 0">
+        <el-card v-for="(item,index) in defaultThemeColor " :key="item.name" :class="item.name" class="hvr-float-shadow" :offset="index > 0 ? 4 : 0">
           <div @click="changeDefaultTheme(item.name)">
             <span>{{item.themeName}}</span>
           </div>
