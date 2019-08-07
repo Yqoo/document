@@ -1,5 +1,8 @@
 <template>
   <div class='config'>
+    <div class="top">
+      <i class="el-icon-setting"></i><span class="myFont">系统设置</span>
+    </div>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="系统设置" name="systemSetting">
         <SystemSetting></SystemSetting>
@@ -47,6 +50,14 @@ export default {
     line-height: 35px;
     height: 35px;
     font-size: 12px;
+  }
+  & .top{
+    box-sizing: border-box;
+    margin-bottom: 3px;
+    & .myFont {
+      font-size:12px;
+      padding-left:10px;
+    }
   }
 }
 </style>

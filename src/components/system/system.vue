@@ -6,31 +6,31 @@
         <aside>
           <el-menu class="el-menu-vertical-demo" :default-active="defaultActive"  @select="selectNav">
             <el-menu-item index='config'>
-              <i class="el-icon-setting"></i>
+              <i class="el-icon-setting" style="color:#696464"></i>
               <span slot="title">系统设置</span>
             </el-menu-item>
             <el-menu-item index='organization'>
-              <i class="el-icon-s-custom"></i>
+              <i class="el-icon-s-custom" style="color:#5edfff"></i>
               <span slot="title">组织与用户</span>
             </el-menu-item>
             <el-menu-item index='personal'>
-              <i class="el-icon-user"></i>
+              <i class="el-icon-user" style="color:#e16363"></i>
               <span slot="title">个人中心</span>
             </el-menu-item>
             <el-menu-item index='theme'>
-              <i class="el-icon-eleme"></i>
+              <i class="el-icon-eleme" style="color:#a0cc78"></i>
               <span slot="title">主题设置</span>
             </el-menu-item>
             <el-menu-item index='wallpaper'>
-              <i class="el-icon-picture"></i>
+              <i class="el-icon-picture" style="color:#6c7b95"></i>
               <span slot="title">更换壁纸</span>
             </el-menu-item>
             <el-menu-item index='help'>
-              <i class="el-icon-question"></i>
+              <i class="el-icon-question" style="color:#ffd692"></i>
               <span slot="title">使用帮助</span>
             </el-menu-item>
             <el-menu-item index='about'>
-              <i class="el-icon-info"></i>
+              <i class="el-icon-info" style="color:#e15249"></i>
               <span slot="title">关于作品</span>
             </el-menu-item>
           </el-menu>
@@ -136,7 +136,6 @@ section{
 }
   .themeBox {
     width: 60%;
-    min-height: 50%;
     
     position: absolute;
     top:10%;
