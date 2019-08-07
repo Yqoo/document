@@ -34,11 +34,9 @@
         </el-col> 
         <el-col :span='1'>
             <div class="grid-content5">
-                <el-popover placement="top" width="200" trigger="click" transition="fade-in-linear">
-                    <rightSiderBar></rightSiderBar>
-                    <i slot="reference" class="el-icon-s-promotion"></i>
-                </el-popover>
-            </div>    
+                <i class="el-icon-s-promotion" @click="drawer = true "></i>
+            </div>  
+            <el-drawer title='messageBox' :visible.sync="drawer" :direction="direction" size="400px"></el-drawer>  
         </el-col>
     </el-row> 
 </template>
@@ -64,6 +62,8 @@ export default {
             localTime:'',
             isFix:false,
             isShowTask:false,
+            drawer:false,
+            direction:'rtl'
         }
     },
     created(){

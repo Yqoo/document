@@ -302,6 +302,9 @@ export default {
     let a = tools._time();
     this.lock_date = a.split(' ')[0] + ',星期' + "一二三四五六七".charAt( new Date().getDay()-1 );
     this.lock_time = a.split(' ')[1];
+    setInterval(() => {
+      this.lock_time = tools._time().split(' ')[1];
+    }, 1000);
     if( this.$store.state.isLockScreen === 'true') document.onmouseup = () => this.countTime(this.alertLockScreen,this.userSettingLockTime);
   },
   watch:{
