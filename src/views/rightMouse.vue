@@ -138,6 +138,7 @@ export default {
 <style lang='less' scoped>
 @color:rgb(30, 191, 231);
   .menus {
+    padding: 5px 0px;
     background: #eee;
     float: left;
     border-radius: 5px;
