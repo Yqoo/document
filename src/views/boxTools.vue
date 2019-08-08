@@ -61,12 +61,12 @@ export default {
   .title{
     position: absolute;
     left:40px;
-    font-size: 14px;
+    font-size: 12px;
   }
   .boxIcon{
     position: absolute;
     left:10px;
-    top: 4px;
+    top: 5px;
     width:23px;
   }
 </style>
