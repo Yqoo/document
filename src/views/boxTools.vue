@@ -67,5 +67,6 @@ export default {
     position: absolute;
     left:10px;
     top: 4px;
+    width:23px;
   }
 </style>

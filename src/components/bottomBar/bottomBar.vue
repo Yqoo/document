@@ -35,7 +35,7 @@
         <el-col :span='14'>
             <div class="grid-content3" @contextmenu.prevent.stop="taskBarMenus($event)" style="position:relation">
                 <span style="opacity:0">.</span>
-                <el-tag v-for="(tab,index) in tabsFilter" :key="index" :class="index"  effect="plain" type="info" @close="closeTab(index)" @click="showTab(index,tab.isLocal)"> <img :src="tab.icon" style="vertical-align:middle;position:relative;top:-2px;">{{tab.name}}</el-tag>
+                <el-tag v-for="(tab,index) in tabsFilter" :key="index" :class="index"  effect="plain" type="info" @close="closeTab(index)" @click="showTab(index,tab.isLocal)"> <img :src="tab.icon" style="vertical-align:middle;position:relative;top:-2px;width:23px;">{{tab.name}}</el-tag>
                 <el-popover placement="top-start" width="100" trigger="click" popper-class="taskMenuPop" @hide="hideTask">
                     <taskBarMenus @close="closeTab" v-if="isShowTask" :isFix="isFix" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></taskBarMenus>
                     <i slot="reference" class="el-icon-location-outline taskBarPosition" style="position:absolute;opacity:0;"></i>

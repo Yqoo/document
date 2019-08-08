@@ -40,16 +40,24 @@ let tools = {
         tagName.style.left = (document.documentElement.clientWidth - tagName.offsetWidth) / 2 + "px";
         tagName.style.top = (document.documentElement.clientHeight - tagName.offsetHeight) / 2 + "px";
         // 弹框高度还原
-        let rightContent = tagName.querySelector('.rightContent');
-        rightContent.style.height = '100%';
+        try {//不是所有组件下都有 rightContent
+            let rightContent = tagName.querySelector('.rightContent');
+            rightContent.style.height = '100%';
+        } catch (error) {
+            //...
+        }
     },
     _maxSize:tagName => {//最大化
         tagName.style.top = tagName.style.left = 0;
         tagName.style.width = document.documentElement.clientWidth - 2 + "px";
         tagName.style.height = document.documentElement.clientHeight - 43 + "px";
         // 弹框高度变化
-        let rightContent = tagName.querySelector('.rightContent');
-        rightContent.style.height = document.documentElement.clientHeight - 98 + 'px';
+        try {
+            let rightContent = tagName.querySelector('.rightContent');
+            rightContent.style.height = document.documentElement.clientHeight - 98 + 'px';
+        } catch (error) {
+            //...
+        }
     },
     /*
      *在弹框中获取点击的位置 
