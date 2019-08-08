@@ -23,13 +23,17 @@ let tools = {
             background: `-moz-linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
             background: `linear-gradient(${themeColor.edg}deg, ${themeColor.startColor}, ${themeColor.endColor})`,
             color: themeColor.fontColor,
-            height: '100%'
             }
-        }else {
+        }else if(themeColor.type === '2'){
+            className = '';
+            style = {
+                background: themeColor.color,
+                color: themeColor.fontColor
+            }
+        } else {
             className = '';
             style = {
                 background: `url(${themeColor.imgSrc}) 0% 0% /cover`,
-                height: '100%'
             }
         }
         return {className, style};

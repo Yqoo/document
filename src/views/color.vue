@@ -13,10 +13,10 @@
       <colorPicker slot="append" v-model="fontColor" style="cursor:pointer;z-index=10000001"></colorPicker>
     </el-input>
     <el-row>
-      <el-col :span="3" style="line-height:38px;">
+      <el-col :span="4" style="line-height:38px;">
         <span>渐变角度：</span>
       </el-col>
-      <el-col :span="21">
+      <el-col :span="20">
         <el-slider v-model="edg" show-input :min="min" :max="max"></el-slider>
       </el-col>
     </el-row>
@@ -99,6 +99,9 @@ export default {
 <style lang='less' scoped>
   .el-input{
     padding: 10px 0px;
+    & /deep/ .el-input-group__prepend{
+      color: #666;
+    }
   }
   .el-tag {
     width: 100%;

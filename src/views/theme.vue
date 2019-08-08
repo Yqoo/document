@@ -21,6 +21,7 @@
             <el-radio-group v-model="themeForm.type" @change="changeType">
               <el-radio label="imgUrl">图片</el-radio>
               <el-radio label="color">渐变颜色</el-radio>
+              <el-radio label="opacity">玻璃效果</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item>
@@ -35,11 +36,13 @@
 <script>
 import imgUrl from "@/views/imgUrl";
 import color from "@/views/color";
+import opacity from "@/views/opacity";
 export default {
     name:'theme',
     components:{
       imgUrl,
-      color
+      color,
+      opacity
     },
     data() {
         return {
