@@ -51,7 +51,7 @@
             <div class="grid-content5">
                 <i class="el-icon-chat-dot-square hvr-buzz" @click="drawer = true "></i>
             </div>  
-            <el-drawer title='messageBox' :visible.sync="drawer" :direction="direction" size="400px"></el-drawer>  
+            <el-drawer title='messageBox' :visible.sync="drawer" :direction="direction" size="400px" custom-class="rightMessageBox"></el-drawer>  
         </el-col>
     </el-row> 
 </template>
