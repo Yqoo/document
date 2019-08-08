@@ -36,15 +36,17 @@
                 :is-draggable="true"
                 :is-resizable="true"
                 :vertical-compact="true"
-                :use-css-transforms="true"
+                :use-css-transforms="true" 
+                @layout-updated="layoutUpdatedEvent"
               >
-                <grid-item v-for="item in defaultApps" 
+                <grid-item v-for="item in defaultApps"
                   :key="item.i"
                   :i='item.i'
                   :x='item.x'
                   :y='item.y'
                   :w='item.w'
                   :h='item.h'
+                  @moved="movedEvent"
                 >
                 <div @dblclick="applicationHandle(item.title)">
                   <img :src="item.img" :alt="item.title" :style="iconStyle">
@@ -329,6 +331,12 @@ export default {
         this.lockTips = '密码错误，请重新输入'
       }
     },
+    movedEvent(i, newX, newY, e) {  // 移动图标成功
+      // console.log(i, newX, newY, e)
+    },
+    layoutUpdatedEvent( newLayout ){  // 移动成功后获取新的图标信息
+      // console.log(newLayout)
+    }
   },
   mounted(){
     this.footerClass = this.$store.state.footerPosition;
