@@ -85,15 +85,12 @@ export default {
                 this.$emit('closeMenus',true);
               },children:[
                 { title:'大图标',icon:require('@/assets/image/icons/deskIcons/icon-big.png'),fn:() => {
-                  localStorage.setItem('iconSize','big');
                   this.$store.commit('changeIconSize','big')
                 } },
                 { title:'中图标',icon:require('@/assets/image/icons/deskIcons/icon-normal.png'),fn:() => {
-                  localStorage.setItem('iconSize','normal');
                   this.$store.commit('changeIconSize','normal')
                 }},
                 { title:'小图标',icon:require('@/assets/image/icons/deskIcons/icon-small.png'),fn:() => {
-                  localStorage.setItem('iconSize','small');
                   this.$store.commit('changeIconSize','small')
                 }},
               ]},

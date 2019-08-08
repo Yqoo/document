@@ -19,10 +19,6 @@
         <div slot="content" @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
           <div class="appList">
             <div class="defaultApp">
-              <!-- <div v-for="(item,index) in defaultAppStyle" :key="index" :style="item.style"  v-drag class="myApp app hvr-grow" @dblclick="applicationHandle(item.title)">
-                <img :src="item.img" :style="iconSize" class="moveBox app">
-                <p class="app">{{item.name}}</p>
-              </div> -->
               <!-- 
                 auto-size: 表示容器高度是否应增大并收缩以适应内容
                 col-num：网格有多少列
@@ -35,8 +31,8 @@
               <grid-layout
                 :layout.sync="defaultApps"
                 :auto-size="false"
-                :col-num="18"
-                :row-height='80'   
+                :col-num="colNumber"
+                :row-height='rowHeight'   
                 :is-draggable="true"
                 :is-resizable="true"
                 :vertical-compact="true"
@@ -51,7 +47,7 @@
                   :h='item.h'
                 >
                 <div @dblclick="applicationHandle(item.title)">
-                  <img :src="item.img" :alt="item.title">
+                  <img :src="item.img" :alt="item.title" :style="iconStyle">
                   <p>{{item.name}}</p>
                 </div>
                 </grid-item>
@@ -200,21 +196,10 @@ export default {
         return {background: `url(${store}) 0% 0% /cover no-repeat`}
       }
     },
-    iconSize(){//读取图标大小
-      let size = this.$store.state.iconSize;
-      let style = {};
-      switch (size) {
-        case 'small':
-          Object.assign( style,{ width:`30px` } );
-          break;
-        case 'big':
-          Object.assign( style,{ width:`70px` } );
-          break
-        default:
-          Object.assign( style,{ width:`50px` } );
-          break;
-      };
-      return style;
+    iconStyle() { // 图标的宽度
+      let iconSize = this.$store.state.iconSize;
+      let size = iconSize === 'small' ? '30%':(iconSize === 'normal'?'50%':'80%');
+      return {width: size};
     },
     userSettingImg(){//获取缓存中的定义的锁屏壁纸
       return this.$store.state.lockImg
@@ -488,7 +473,9 @@ html,body,#app,.el-container {
     text-align: center;
     & img{
       display: inline-block;
-      width: 50%;
+    }
+    & .vue-resizable-handle{
+      display: none;
     }
   }
 }
