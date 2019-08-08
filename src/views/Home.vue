@@ -19,10 +19,43 @@
         <div slot="content" @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
           <div class="appList">
             <div class="defaultApp">
-              <div v-for="(item,index) in defaultAppStyle" :key="index" :style="item.style"  v-drag class="myApp app hvr-grow" @dblclick="applicationHandle(item.title)">
+              <!-- <div v-for="(item,index) in defaultAppStyle" :key="index" :style="item.style"  v-drag class="myApp app hvr-grow" @dblclick="applicationHandle(item.title)">
                 <img :src="item.img" :style="iconSize" class="moveBox app">
                 <p class="app">{{item.name}}</p>
-              </div>
+              </div> -->
+              <!-- 
+                auto-size: 表示容器高度是否应增大并收缩以适应内容
+                col-num：网格有多少列
+                row-height：单个行的高度（像素）
+                is-draggable： 表示网格是否可以拖动
+                is-resizable：表示网格的项是否可以调整大小
+                vertical-compact：布局为垂直布局
+                use-css-transforms： 表示是否应使用 CSS transition-property: transform,否则是postion定位
+               -->
+              <grid-layout
+                :layout.sync="defaultApps"
+                :auto-size="false"
+                :col-num="18"
+                :row-height='80'   
+                :is-draggable="true"
+                :is-resizable="true"
+                :vertical-compact="true"
+                :use-css-transforms="true"
+              >
+                <grid-item v-for="item in defaultApps" 
+                  :key="item.i"
+                  :i='item.i'
+                  :x='item.x'
+                  :y='item.y'
+                  :w='item.w'
+                  :h='item.h'
+                >
+                <div @dblclick="applicationHandle(item.title)">
+                  <img :src="item.img" :alt="item.title">
+                  <p>{{item.name}}</p>
+                </div>
+                </grid-item>
+              </grid-layout>
             </div>
           </div>
           <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
@@ -81,6 +114,7 @@ import system from "@/components/system/system";
 import myCloud from "@/components/leftMenus/myCloud";
 import recycle from "@/components/recycle/recycle"
 import tools from  "@/assets/js/utils/tools.js";
+import { GridLayout, GridItem } from 'vue-grid-layout';
 export default {
   name: "home",
   components: {
@@ -88,7 +122,9 @@ export default {
     rightMenus,
     system,
     myCloud,
-    recycle
+    recycle,
+    GridLayout,
+    GridItem,
   },
   data() {
     return {
@@ -137,14 +173,23 @@ export default {
       lPwd:'',//锁屏密码
       lockTips:'',//解锁密码错误时的提醒信息
       userSettingLockTime:this.$store.state.lockTime,//锁屏时间
-      defaultAppStyle:[//桌面默认展示的list
-        { name:'我的电脑',title:'computer',img:require('../assets/image/icons/deskIcons/icon-computer.png'),style:{width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
-        { name:'浏览器',title:'browser',img:require('../assets/image/icons/deskIcons/icon-geogle.png'),style:{width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
-        { name:'系统设置',title:'system',img:require('../assets/image/icons/deskIcons/icon-setting.png'),style:{width:`80px`,position:`absolute`,top:`190px`,left:`10px`} },
-        { name:'微信',title:'wx',img:require('../assets/image/icons/deskIcons/icon-wx.png'),style:{width:`80px`,position:`absolute`,top:`280px`,left:`10px`} },
-        { name:'新闻',title:'news',img:require('../assets/image/icons/deskIcons/icon-news.png'),style:{width:`80px`,position:`absolute`,top:`370px`,left:`10px`} },
-        { name:'回收站',title:'recycle',img:require('../assets/image/icons/deskIcons/icon-recycle.png'),style:{width:`80px`,position:`absolute`,top:`460px`,left:`10px`} },
+      // defaultAppStyle:[//桌面默认展示的list
+      //   { name:'我的电脑',title:'computer',img:require('../assets/image/icons/deskIcons/icon-computer.png'),style:{width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
+      //   { name:'浏览器',title:'browser',img:require('../assets/image/icons/deskIcons/icon-geogle.png'),style:{width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
+      //   { name:'系统设置',title:'system',img:require('../assets/image/icons/deskIcons/icon-setting.png'),style:{width:`80px`,position:`absolute`,top:`190px`,left:`10px`} },
+      //   { name:'微信',title:'wx',img:require('../assets/image/icons/deskIcons/icon-wx.png'),style:{width:`80px`,position:`absolute`,top:`280px`,left:`10px`} },
+      //   { name:'新闻',title:'news',img:require('../assets/image/icons/deskIcons/icon-news.png'),style:{width:`80px`,position:`absolute`,top:`370px`,left:`10px`} },
+      //   { name:'回收站',title:'recycle',img:require('../assets/image/icons/deskIcons/icon-recycle.png'),style:{width:`80px`,position:`absolute`,top:`460px`,left:`10px`} },
+      // ],
+      defaultApps:[  // 桌面默认展示的list
+        {"x":0,'y':0,'w':1,'h':1,'i':'1',name:'我的电脑',title:'computer',img:require('../assets/image/icons/deskIcons/icon-computer.png')},
+        {"x":0,'y':1,'w':1,'h':1,'i':'2',name:'浏览器',title:'browser',img:require('../assets/image/icons/deskIcons/icon-geogle.png')},
+        {"x":0,'y':2,'w':1,'h':1,'i':'3',name:'系统设置',title:'system',img:require('../assets/image/icons/deskIcons/icon-setting.png')},
+        {"x":0,'y':3,'w':1,'h':1,'i':'4',name:'微信',title:'wx',img:require('../assets/image/icons/deskIcons/icon-wx.png')},
+        {"x":0,'y':4,'w':1,'h':1,'i':'5',name:'新闻',title:'news',img:require('../assets/image/icons/deskIcons/icon-news.png')},
+        {"x":1,'y':0,'w':1,'h':1,'i':'6',name:'回收站',title:'recycle',img:require('../assets/image/icons/deskIcons/icon-recycle.png')},
       ],
+      rowHeight: 80,  //图标的高度
     };
   },
   computed:{
@@ -175,6 +220,10 @@ export default {
     userSettingImg(){//获取缓存中的定义的锁屏壁纸
       return this.$store.state.lockImg
     },
+    colNumber() { // 图标展示的列数
+      let clientWidth = document.body.clientWidth;
+      return Math.floor( clientWidth / this.rowHeight );
+    }
   },
   methods: {
     rightMouse( e ) {
@@ -262,6 +311,7 @@ export default {
       active[position]();
     },
     applicationHandle( title ){//桌面应用
+      console.log( title )
       let active = {
         browser: () =>  window.open("http://www.baidu.com"),
         wx: () => window.open("https://wx.qq.com/"),
@@ -438,6 +488,16 @@ html,body,#app,.el-container {
   box-sizing: border-box;
   &:hover{
     cursor: pointer;
+  }
+}
+.vue-grid-layout{
+  width: 100%;
+  & .vue-grid-item{
+    text-align: center;
+    & img{
+      display: inline-block;
+      width: 50%;
+    }
   }
 }
 </style>
