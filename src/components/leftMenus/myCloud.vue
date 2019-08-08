@@ -175,16 +175,17 @@ export default {
       width: 100%;
       box-sizing: border-box;
       border-radius: 0 0 5px 5px;
-      background: rgba(255,255,255,0.5);
-      padding:10px;
+      background: #fff;
+      border: 10px solid #f1f1f1;
       & aside{
         position: absolute;
-        top: 10px;
-        left: 10px;
-        width: calc(25% - 15px);
-        height: calc(100% - 20px);
+        top: 0px;
+        left: 0px;
+        width: calc(25% - 10px);
+        height: 100%;
         background: #fff;
         overflow: auto;
+        border-right: 10px solid #f1f1f1;
       }
       & > div.rightContent {
         float: left;

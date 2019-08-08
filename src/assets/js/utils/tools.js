@@ -41,7 +41,7 @@ let tools = {
         tagName.style.top = (document.documentElement.clientHeight - tagName.offsetHeight) / 2 + "px";
         // 弹框高度还原
         let rightContent = tagName.querySelector('.rightContent');
-        rightContent.style.height = '100%';
+        rightContent.style.height = minHeight - 58 + 'px';
     },
     _maxSize:tagName => {//最大化
         tagName.style.top = tagName.style.left = 0;
