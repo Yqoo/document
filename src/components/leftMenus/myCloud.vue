@@ -84,26 +84,35 @@ export default {
           treeData:[
             {
               label:'我的云端',
-              icon:require('@/assets/image/icons/deskIcons/icon-computer.png'),
+              icon:require('@/assets/image/icons/deskIcons/icon-myCloud.png'),
               children:[
                 {label:'桌面',icon:require('@/assets/image/icons/deskIcons/tree-computer.png')},
-                {label:'我的文档',icon:require('@/assets/image/icons/deskIcons/tree-folder.png'),},
-                {label:'软件区'},
-                {label:'文档区'},
-                {label:'娱乐区'},
+                {label:'我的文档',icon:require('@/assets/image/icons/deskIcons/tree-folder.png')},
+                {label:'软件区',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
+                {label:'文档区',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
+                {label:'娱乐区',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
               ],
             },
             {
               label:'共享云端',
+              icon:require('@/assets/image/icons/deskIcons/tree-share.png'),
               children:[
-                {label:'开发部'},
-                {label:'学习区'}
+                {label:'开发部',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')},
+                {label:'学习区',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')}
               ],
             },
             {
               label:'组织云端',
+              icon:require('@/assets/image/icons/deskIcons/tree-org.png'),
               children:[
-                {label:'四川挚友软件有限公司',children:[{label:'前端学习区'},{label:'后端学习区'}]}
+                {
+                  label:'四川挚友软件有限公司',
+                  icon:require('@/assets/image/icons/deskIcons/tree-disk.png'),
+                  children:[
+                    {label:'前端学习区',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')},
+                    {label:'后端学习区',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')}
+                  ]
+                }
               ],
             }
           ],
@@ -175,7 +184,7 @@ export default {
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     transition: box-shadow 0.5s, transform 0.5s;
     text-align: left;
-    border: 3px double #d1d0d0;
+    //border: 3px double #d1d0d0;
     background: transparent;
     & section{
       position: relative;

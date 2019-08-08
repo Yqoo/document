@@ -137,7 +137,7 @@ section{
   .themeBox {
     width: 60%;
     background: transparent;
-    border: 3px double #b1b0b0;
+    //border: 3px double #b1b0b0;
     position: absolute;
     top:10%;
     left: 20%;

@@ -52,7 +52,7 @@ export default {
     border-radius: 5px 5px 0px 0px;
     width: 100%;
     z-index: 10001;
-    border-bottom: 3px double #d1d0d0;
+    //border-bottom: 3px double #d1d0d0;
     & i{
       padding:0px 5px;
       cursor:pointer;
