@@ -126,8 +126,9 @@ section{
     }
   }
   & > div{
+    width: 100%;
     height: 100%;
-    float: right;
+    float: left;
     & > div{
       margin-left: calc(25% + 10px);
     }

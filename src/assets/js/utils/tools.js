@@ -42,10 +42,11 @@ let tools = {
         // 弹框高度还原
         try {//不是所有组件下都有 rightContent
             let rightContent = tagName.querySelector('.rightContent');
-            rightContent.style.height = '100%';
+            rightContent.style.height = minHeight - 58 + 'px';
         } catch (error) {
             //...
         }
+        
     },
     _maxSize:tagName => {//最大化
         tagName.style.top = tagName.style.left = 0;
