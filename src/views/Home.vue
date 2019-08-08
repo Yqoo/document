@@ -65,6 +65,7 @@
       </vue-drawer-layout>
       <system @closeItem="closeItem" @minSize="minSize" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
       <myCloud v-if='isShowBox.myCloud.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.myCloud.display"></myCloud>
+      <recycle v-if='isShowBox.recycle.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.recycle.display"></recycle>
     </el-main>
     <el-footer :class="footerClass" :style="groundGlass">
       <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></bottomBar>
@@ -78,6 +79,7 @@ import bottomBar from "@/components/bottomBar/bottomBar.vue";
 import rightMenus from "@/views/rightMouse";
 import system from "@/components/system/system";
 import myCloud from "@/components/leftMenus/myCloud";
+import recycle from "@/components/recycle/recycle"
 import tools from  "@/assets/js/utils/tools.js";
 export default {
   name: "home",
@@ -85,7 +87,8 @@ export default {
     bottomBar,
     rightMenus,
     system,
-    myCloud
+    myCloud,
+    recycle
   },
   data() {
     return {
@@ -108,6 +111,7 @@ export default {
       isShowBox:{
         system: { show:false,name:'系统设置',display:false,icon:require('@/assets/image/icons/deskIcons/icon-system.png') },
         myCloud: { show:false,name:'我的云端',display:false,icon:require('@/assets/image/icons/deskIcons/icon-myCloud.png') },
+        recycle: { show:false,name:'回收站',display:false,icon:require('../assets/image/icons/deskIcons/icon-recycle.png') }
       },
       index:'theme',
       isMoveDrawer:false,
@@ -134,10 +138,12 @@ export default {
       lockTips:'',//解锁密码错误时的提醒信息
       userSettingLockTime:this.$store.state.lockTime,//锁屏时间
       defaultAppStyle:[//桌面默认展示的list
-        { name:'浏览器',title:'browser',img:require('../assets/image/icons/deskIcons/icon-geogle.png'),style:{width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
-        { name:'百度',title:'baidu',img:require('../assets/image/icons/deskIcons/icon-baidu.png'),style:{width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
-        { name:'微信',title:'wx',img:require('../assets/image/icons/deskIcons/icon-wx.png'),style:{width:`80px`,position:`absolute`,top:`190px`,left:`10px`} },
-        { name:'新闻',title:'news',img:require('../assets/image/icons/deskIcons/icon-news.png'),style:{width:`80px`,position:`absolute`,top:`280px`,left:`10px`} },
+        { name:'我的电脑',title:'computer',img:require('../assets/image/icons/deskIcons/icon-computer.png'),style:{width:`80px`,position:`absolute`,top:`10px`,left:`10px`} },
+        { name:'浏览器',title:'browser',img:require('../assets/image/icons/deskIcons/icon-geogle.png'),style:{width:`80px`,position:`absolute`,top:`100px`,left:`10px`} },
+        { name:'系统设置',title:'system',img:require('../assets/image/icons/deskIcons/icon-setting.png'),style:{width:`80px`,position:`absolute`,top:`190px`,left:`10px`} },
+        { name:'微信',title:'wx',img:require('../assets/image/icons/deskIcons/icon-wx.png'),style:{width:`80px`,position:`absolute`,top:`280px`,left:`10px`} },
+        { name:'新闻',title:'news',img:require('../assets/image/icons/deskIcons/icon-news.png'),style:{width:`80px`,position:`absolute`,top:`370px`,left:`10px`} },
+        { name:'回收站',title:'recycle',img:require('../assets/image/icons/deskIcons/icon-recycle.png'),style:{width:`80px`,position:`absolute`,top:`460px`,left:`10px`} },
       ],
     };
   },
@@ -258,9 +264,10 @@ export default {
     applicationHandle( title ){//桌面应用
       let active = {
         browser: () =>  window.open("http://www.baidu.com"),
-        baidu: () =>  window.open("http://www.baidu.com"),
         wx: () => window.open("https://wx.qq.com/"),
         news: () => window.open("https://www.toutiao.com/"),
+        system: () => { this.isShowBox.system.show = true; this.isShowBox.system.display = true; },
+        recycle: () => { this.isShowBox.recycle.show = true; this.isShowBox.recycle.display = true;}
       };
       active[title]();
     },
