@@ -104,10 +104,10 @@ export default {
         height: 100%;
     }
     .tile {
-        height: 100px;
+        height: 80px;
         margin: 7px;
-        width: 100px;
-        line-height: 100px;
+        width: 80px;
+        line-height: 80px;
         text-align: center;
         cursor: pointer;
         &:hover{
@@ -134,7 +134,7 @@ export default {
         }
     }
     .el-row {
-        height: 400px;
+        height: 500px;
         background: transparent;
     }
     .el-menu-item:hover{

@@ -4,7 +4,13 @@
     <section class="clearfix">
       <aside>
         <div>
-          <el-tree :data="treeData"></el-tree>
+          <el-tree :data="treeData">
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+              <span>
+                <img :src="data.icon">{{ data.label }}
+              </span>
+            </span>
+          </el-tree>
         </div>
       </aside>
       <div class="rightContent">
@@ -78,9 +84,10 @@ export default {
           treeData:[
             {
               label:'我的云端',
+              icon:require('@/assets/image/icons/deskIcons/icon-computer.png'),
               children:[
-                {label:'桌面'},
-                {label:'我的文档'},
+                {label:'桌面',icon:require('@/assets/image/icons/deskIcons/tree-computer.png')},
+                {label:'我的文档',icon:require('@/assets/image/icons/deskIcons/tree-folder.png'),},
                 {label:'软件区'},
                 {label:'文档区'},
                 {label:'娱乐区'},
@@ -223,8 +230,15 @@ export default {
       display: table;
       content: "";
   }
-  
   .clearfix:after {
-      clear: both
+    clear: both
+  }
+  .custom-tree-node {
+    font-size: 12px;
+    & img {
+      padding-right: 3px;
+      width: 18px;
+      vertical-align: sub;
+    }
   }
 </style>

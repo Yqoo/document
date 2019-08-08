@@ -2,7 +2,7 @@
     <el-row>
         <el-col :span="2">
             <div class="grid-content1">
-                <el-popover placement="top" width="600" trigger="click" transition="fade-in-linear" popper-class="alertLeftSideBar">
+                <el-popover placement="top" width="700" trigger="click" transition="fade-in-linear" popper-class="alertLeftSideBar">
                     <siderBar  @openChild="open"></siderBar>
                     <div slot="reference" class="imgDiv">
                         <el-image :src="require('@/assets/image/icons/deskIcons/icon-admin.png')" fit="cover"></el-image>
@@ -51,7 +51,9 @@
             <div class="grid-content5">
                 <i class="el-icon-chat-dot-square hvr-buzz" @click="drawer = true "></i>
             </div>  
-            <el-drawer title='messageBox' :visible.sync="drawer" :direction="direction" size="400px" custom-class="rightMessageBox"></el-drawer>  
+            <el-drawer title='messageBox' :visible.sync="drawer" :direction="direction" size="400px" custom-class="rightMessageBox">
+                <div>messageBox</div>
+            </el-drawer>  
         </el-col>
     </el-row> 
 </template>
@@ -234,5 +236,12 @@ export default {
     }
     .el-select .el-input {
         width: 90px;
+    }
+    .rightMessageBox {
+        background:rgba(10, 8, 8, 0.45) border-box!important;
+        overflow:hidden!important;
+        box-shadow:0 0 0 1px hsla(0,0%,100%,.3) inset,0 .5em 1em rgba(0,0,0,0.6)!important;
+        text-shadow:0 1px 1px hsla(0,0%,100%,.3)!important;
+        color:#fff!important;
     }
 </style>
