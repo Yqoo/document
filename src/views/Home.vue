@@ -48,9 +48,9 @@
                   :h='item.h'
                   @moved="movedEvent"
                 >
-                <div @dblclick="applicationHandle(item.title)">
-                  <img :src="item.img" :alt="item.title" :style="iconStyle">
-                  <p>{{item.name}}</p>
+                <div :type="item.type" @dblclick="applicationHandle(item.title)">
+                  <img :type="item.type" :src="item.img" :alt="item.title" :style="iconStyle">
+                  <p :type="item.type">{{item.name}}</p>
                 </div>
                 </grid-item>
               </grid-layout>
@@ -180,11 +180,14 @@ export default {
       lockTips:'',//解锁密码错误时的提醒信息
       userSettingLockTime:this.$store.state.lockTime,//锁屏时间
       defaultApps:[  // 桌面默认展示的list
-        {"x":0,'y':0,'w':1,'h':1,'i':'1',name:'我的云端',title:'myCloud',img:require('../assets/image/icons/deskIcons/icon-computer.png')},
-        {"x":0,'y':1,'w':1,'h':1,'i':'2',name:'浏览器',title:'browser',img:require('../assets/image/icons/deskIcons/icon-geogle.png')},
-        {"x":0,'y':2,'w':1,'h':1,'i':'3',name:'系统设置',title:'system',img:require('../assets/image/icons/deskIcons/icon-setting.png')},
-        {"x":0,'y':4,'w':1,'h':1,'i':'5',name:'新闻',title:'news',img:require('../assets/image/icons/deskIcons/icon-news.png')},
-        {"x":1,'y':0,'w':1,'h':1,'i':'6',name:'回收站',title:'recycle',img:require('../assets/image/icons/deskIcons/icon-recycle.png')},
+        {"x":0,'y':0,'w':1,'h':1,'i':'1',type: '1',name:'我的云端',title:'myCloud',img:require('../assets/image/icons/deskIcons/icon-computer.png')},
+        {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',name:'浏览器',title:'browser',img:require('../assets/image/icons/deskIcons/icon-geogle.png')},
+        {"x":0,'y':2,'w':1,'h':1,'i':'3',type: '1',name:'系统设置',title:'system',img:require('../assets/image/icons/deskIcons/icon-setting.png')},
+        {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',name:'新闻',title:'news',img:require('../assets/image/icons/deskIcons/icon-news.png')},
+        {"x":1,'y':0,'w':1,'h':1,'i':'6',type: '1',name:'回收站',title:'recycle',img:require('../assets/image/icons/deskIcons/icon-recycle.png')},
+        {"x":1,'y':1,'w':1,'h':1,'i':'7',type: '0'},
+        {"x":1,'y':2,'w':1,'h':1,'i':'8',type: '0'},
+        {"x":1,'y':3,'w':1,'h':1,'i':'9',type: '0'},
       ],
       rowHeight: 80,  //图标的高度
     };
@@ -215,11 +218,11 @@ export default {
     rightMouse( e ) {
       //右键事件
       this.isRightMouseClick = true;
-      let className = e.target.getAttribute('class');
+      let type = e.target.getAttribute('type');
       //桌面下右键弹出层 desktop 应用下右键弹出层 app  设置|| 我的电脑等下弹出层 protogenesis 回收站下弹出层 recycle
-      if( className.indexOf('app') > -1){
+      if( type === '1'){
         this.rules = 'app';
-      } else if( className.indexOf('desktop') > -1 ){
+      } else {
         this.rules = 'desktop';
       };
       this.position = Object.assign({
