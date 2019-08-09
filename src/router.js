@@ -1,8 +1,13 @@
+/*
+ * @Date: 2019-07-23 17:42:48
+ * @LastEditors: OBKoro1
+ * @LastEditTime: 2019-08-09 09:39:17
+ */
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import system from "./components/system/system"
-import myCloud from "./components/leftMenus/myCloud"
+import myCloud from "./components/iCloud/myCloud"
 Vue.use(Router);
 
 

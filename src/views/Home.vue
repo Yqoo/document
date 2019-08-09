@@ -111,7 +111,7 @@ import bg from "@/assets/image/bg/window10.jpg";
 import bottomBar from "@/components/bottomBar/bottomBar.vue";
 import rightMenus from "@/views/rightMouse";
 import system from "@/components/system/system";
-import myCloud from "@/components/leftMenus/myCloud";
+import myCloud from "@/components/iCloud/myCloud";
 import recycle from "@/components/recycle/recycle";
 import browser from "@/views/browser";
 import news from "@/views/news";
