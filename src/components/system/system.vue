@@ -1,5 +1,10 @@
+<!--
+ * @Date: 2019-07-26 17:20:46
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-09 18:03:26
+ -->
 <template>
-  <div class='themeBox bounceInDown animated' v-drag:themeBox>
+  <div class='themeBox' v-drag:themeBox>
     <div class="fadeInLeftBig animated" :class="themeColorName">
       <boxTools class="theme-color moveBox"  :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentName"></boxTools>
       <section>
@@ -139,8 +144,8 @@ section{
     background: transparent;
     //border: 3px double #b1b0b0;
     position: absolute;
-    top:10%;
-    left: 20%;
+    top:50%;
+    left: 50%;
     transform: translate(-50%,-50%);
     border-radius: 8px;
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
