@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-24 11:37:02
- * @LastEditors: OBKoro1
- * @LastEditTime: 2019-08-09 17:41:23
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-09 18:04:25
  -->
 <template>
     <el-row>
@@ -379,7 +379,7 @@ export default {
         }
         & .searchTxt_list {
             height: 350px;
-            overflow-y: scroll;
+            //overflow-y: scroll;
         }
         & .el-input__inner{
             border-radius: 0px;
