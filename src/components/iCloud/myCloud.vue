@@ -6,6 +6,27 @@
 <template>
   <div class='myCloud' v-drag :class="themeColorName">
     <boxTools class="theme-color moveBox" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
+    <div class="topContent">
+        <i class="el-icon-arrow-down" v-show="isShowUtils" @click="utilCollapse" title="收起工具栏"></i>
+        <utilLists :utilName="utilName" :class="hideUtil"></utilLists>
+        <el-row class="searchContent">
+          <el-col :span="2">
+            <img class="addressImg" src="@/assets/image/icons/deskIcons/address.png"/>
+            <span>当前位置</span>
+          </el-col>
+          <el-col :span="17"  class="path">
+            <div>这里是路径</div>
+          </el-col>
+          <el-col :span="5" class="search">
+            <el-input
+              placeholder="搜索"
+              size="mini">
+              <i slot="suffix" class="el-input__icon el-icon-search"></i>
+            </el-input>
+            <i class="el-icon-arrow-up" v-show="!isShowUtils" @click="utilCollapse" title="展开工具栏"></i>
+          </el-col>
+        </el-row>
+    </div>
     <section class="clearfix">
       <aside>
         <div>
@@ -29,11 +50,13 @@
 import tools from  "@/assets/js/utils/tools.js";
 import boxTools from "@/views/boxTools";
 import iCloudIndex from "@/components/iCloud/iCloudIndex";
+import utilLists from "@/components/iCloud/utilLists"
 export default {
     name:'myCloud',
     components:{
       boxTools,
       iCloudIndex,
+      utilLists,
     },
     data() {
         return {
@@ -79,6 +102,9 @@ export default {
             }
           ],
           current:'iCloudIndex',//初始进入myCloud 默认右侧显示
+          utilName: 'myCloud',  //选中的模块名称
+          isShowUtils: true,  // 展开工具栏
+          hideUtil: '',  // 隐藏工具栏类名
         };
     },
     methods:{
@@ -91,6 +117,10 @@ export default {
         };
         _s[obj.type](obj.param);
       },
+      utilCollapse() { //收缩工具栏
+        this.isShowUtils = !this.isShowUtils;
+        this.hideUtil = this.isShowUtils === true ? '' : 'hide';
+      }
     },
     mounted(){
       this.minWidth = document.querySelector('.myCloud').offsetWidth;
@@ -126,6 +156,68 @@ export default {
     text-align: left;
     //border: 3px double #d1d0d0;
     background: transparent;
+    & .topContent{
+      position: relative;
+      background: #fff;
+      box-sizing: border-box;
+      border: 10px solid #f1f1f1;
+      border-bottom: none;
+      padding: 10px;
+      & > .utilLists{
+        height: 50px;
+        // transition: height 0.6s;
+        margin-bottom: 10px;
+      }
+      & > .utilLists.hide {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.6s;
+      }
+      & > i.el-icon-arrow-down{
+        position: absolute;
+        top: 0;
+        right: 3px;
+        cursor: pointer;
+      }
+      & .searchContent{
+        font-size: 12px;
+        line-height: 28px;
+        height: 28px;
+        & .addressImg{
+          display: inline-block;
+          width: 20px;
+          vertical-align: top;
+          margin-right: 2%;
+          position: relative;
+          top: 3px;
+        }
+        & .path {
+          & > div{
+            border: 1px solid #DCDFE6;
+            height: 26px;
+            line-height: 26px;
+            width: 97%;
+          }
+        }
+        & .search{
+          position: relative;
+          & .el-input{
+            width: 95%;
+          }
+          & > i{
+            position: absolute;
+            height: 28px;
+            display: inline-block;
+            line-height: 28px;
+            right: -8px;
+            cursor: pointer;
+          }
+          & /deep/ input{
+            border-radius: 0;
+          }
+        }
+      }
+    }
     & section{
       position: relative;
       width: 100%;
