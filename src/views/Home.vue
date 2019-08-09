@@ -482,6 +482,7 @@ html,body,#app,.el-container {
   width: 100%;
   & .vue-grid-item{
     text-align: center;
+    cursor: default;
     & img{
       display: inline-block;
     }
