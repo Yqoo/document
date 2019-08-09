@@ -75,7 +75,11 @@ export default {
                     isRightBorder: true,
                     flag: false,
                     secondMenu: [
-                        {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '压缩压缩'},
+                        {iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},
+                        {iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},
+                        {iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},
+                        {iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},
+                        {iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},
                     ]
                 },
                 {
