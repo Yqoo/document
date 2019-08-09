@@ -55,6 +55,7 @@ export default {
                     iconImg: require('@/assets/image/icons/fileIcons/check.png'),
                     iconTitle: '查看',
                     isRightBorder: false,
+                    flag: false,  //用于判断二级菜单是否显示
                     secondMenu: [
                         {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '压缩压缩'},
                     ]
@@ -63,9 +64,29 @@ export default {
                     iconImg: require('@/assets/image/icons/fileIcons/array.png'),
                     iconTitle: '排列',
                     isRightBorder: true,
+                    flag: false,
                     secondMenu: [
                         {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '压缩压缩'},
                     ]
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),
+                    iconTitle: '发送',
+                    isRightBorder: true,
+                    flag: false,
+                    secondMenu: [
+                        {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '压缩压缩'},
+                    ]
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),
+                    iconTitle: '刷新',
+                    isRightBorder: false
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/help.png'),
+                    iconTitle: '帮助',
+                    isRightBorder: false
                 },
             ]
         },
