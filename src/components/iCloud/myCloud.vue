@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-30 09:10:35
  * @LastEditors: OBKoro1
- * @LastEditTime: 2019-08-09 09:42:30
+ * @LastEditTime: 2019-08-09 09:51:56
  -->
 <template>
   <div class='myCloud' v-drag :class="themeColorName">

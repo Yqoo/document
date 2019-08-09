@@ -1,3 +1,8 @@
+<!--
+ * @Date: 2019-07-24 11:37:02
+ * @LastEditors: OBKoro1
+ * @LastEditTime: 2019-08-09 17:41:23
+ -->
 <template>
     <el-row>
         <el-col :span="2">
@@ -11,28 +16,115 @@
             </div>
             <span style="position: absolute;top: 0px;font-size: 12px;left: 40px;">挚友ICloud</span>
         </el-col>
-        <el-col :span='4'>
-            <div class="grid-content2">
-                <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
-                    <el-select v-model="select" slot="prepend" placeholder="请选择">
-                        <el-option label="功能" value="action">
-                            <span style="float: left; font-size: 13px"><i class="el-icon-position"></i></span>
-                            <span style="float: right;font-size: 13px">功能</span>
-                        </el-option>
-                        <el-option label='文件' value="floder">
-                            <span style="float: left; font-size: 13px"><i class="el-icon-folder"></i></span>
-                            <span style="float: right;font-size: 13px">文件</span>
-                        </el-option>
-                        <el-option label='浏览器' value="web">
-                            <span style="float: left; font-size: 13px"><i class="el-icon-eleme"></i></span>
-                            <span style="float: right;font-size: 13px">浏览器</span>
-                        </el-option>
-                    </el-select>
-                    <el-button slot="append" icon="el-icon-search"></el-button>
-                </el-input>
-            </div>    
+        <el-col :span='1' style="text-align:left">
+            <el-tooltip class="item" effect="light" content="在这里输入您要搜索的内容" placement="top-start">
+                <i class="el-icon-search" style="font-size:20px;"  @click="searchDrawer = true"></i>
+            </el-tooltip>
+            <el-drawer
+                :visible.sync="searchDrawer"
+                :direction="searchDirection"
+                size="25%"
+                custom-class="searchDrawer"
+                :show-close="false"
+                :modal="false">
+                <el-row>
+                    <el-col :span="6">
+                        <el-menu :collapse="false">
+                            <el-menu-item>
+                                <i class="el-icon-s-operation" style="color:#fff"></i>
+                                <span slot="title">开始</span>
+                            </el-menu-item>
+                            <el-menu-item @click="innerDrawer = false">
+                                <i class="el-icon-s-home" style="color:#fff"></i>
+                                <span slot="title">主页</span>
+                            </el-menu-item>
+                            <el-menu-item @click="open('system')">
+                                <i class="el-icon-s-tools" style="color:#fff"></i>
+                                <span slot="title">设置</span>
+                            </el-menu-item>
+                        </el-menu>
+                    </el-col>
+                    <el-col :span="18">
+                        <div class="searchTxt fadeInUp animated" v-show="innerDrawer">
+                            <el-tabs v-model="searchType">
+                                <el-tab-pane name="application">
+                                    <span slot="label"><i class="el-icon-film" style="font-size:20px;"></i></span>
+                                    <div class="searchTxt_title">应用</div>
+                                    <div class="searchTxt_desc">
+                                        <i class="el-icon-film"></i>
+                                        <span>输入关键字以搜索应用</span>
+                                    </div>
+                                    <div class="searchTxt_list"></div>
+                                    <div class="searchTxt_input">
+                                        <el-input placeholder="应用：请输入内容">
+                                            <i slot="prefix" class="el-input__icon el-icon-film"></i>
+                                            <el-button slot="append" icon="el-icon-search"></el-button>
+                                        </el-input>
+                                    </div>
+                                </el-tab-pane>
+                                <el-tab-pane name="file">
+                                    <span slot="label"><i class="el-icon-document" style="font-size:20px;"></i></span>
+                                    <div class="searchTxt_title">文件</div>
+                                    <div class="searchTxt_desc">
+                                        <i class="el-icon-document"></i>
+                                        <span>输入关键字以搜索文件</span>
+                                    </div>
+                                    <div class="searchTxt_list"></div>
+                                    <div class="searchTxt_input">
+                                        <el-input placeholder="文件：请输入内容">
+                                            <i slot="prefix" class="el-input__icon el-icon-document"></i>
+                                            <el-button slot="append" icon="el-icon-search"></el-button>
+                                        </el-input>
+                                    </div>
+                                </el-tab-pane>
+                                <el-tab-pane name="web">
+                                    <span slot="label"><i class="el-icon-basketball" style="font-size:20px;"></i></span>
+                                    <div class="searchTxt_title">网页</div>
+                                    <div class="searchTxt_desc">
+                                        <i class="el-icon-basketball"></i>
+                                        <span>输入关键字以搜索网页</span>
+                                    </div>
+                                    <div class="searchTxt_list"></div>
+                                    <div class="searchTxt_input">
+                                        <el-input placeholder="网页：请输入内容">
+                                            <i slot="prefix" class="el-input__icon el-icon-basketball"></i>
+                                            <el-button slot="append" icon="el-icon-search"></el-button>
+                                        </el-input>
+                                    </div>
+                                </el-tab-pane>
+                            </el-tabs>
+                        </div>
+                        <div class="searchMain fadeInDown animated" v-show="!innerDrawer">
+                           <div class="searchTop">
+                               <img :src="require('@/assets/image/icons/deskIcons/icon-ad.png')">
+                               <span>挚友iCloud</span>
+                           </div>
+                           <el-row class="searchMiddle">
+                               <el-col :span="8" class="hvr-float" >
+                                   <i class="el-icon-film" @click="searchTypeOpen('application')"></i>
+                                   <p>应用</p>
+                               </el-col>
+                               <el-col :span="8" class="hvr-float">
+                                   <i class="el-icon-document" @click="searchTypeOpen('file')"></i>
+                                   <p>文件</p>
+                               </el-col>
+                               <el-col :span="8" class="hvr-float">
+                                   <i class="el-icon-basketball" @click="searchTypeOpen('web')"></i>
+                                   <p>网页</p>
+                               </el-col>
+                           </el-row>
+                           <div class="searchBottom">
+                               <div>
+                                   你要挚友iCloud做些什么呢？
+                               </div>
+                               <el-input placeholder="在这里输入要搜索的内容" suffix-icon="el-icon-search" @focus="innerDrawer = true"></el-input>
+                           </div>
+                       </div>
+                    </el-col>
+                </el-row>
+            </el-drawer>
         </el-col>  
-        <el-col :span='14'>
+        <el-col :span='17'>
             <div class="grid-content3" @contextmenu.prevent.stop="taskBarMenus($event)" style="position:relation">
                 <span style="opacity:0">.</span>
                 <el-tag v-for="(tab,index) in tabsFilter" :key="index" :class="index"  effect="plain" type="info" @close="closeTab(index)" @click="showTab(index,tab.isLocal)"> <img :src="tab.icon" style="vertical-align:middle;position:relative;top:-2px;width:23px;">{{tab.name}}</el-tag>
@@ -80,8 +172,12 @@ export default {
             isFix:false,
             isShowTask:false,
             drawer:false,
-            direction:'rtl',
+            direction:'rtl',//抽屉出现位置
             select:'',
+            searchDrawer: false,
+            searchDirection:'ltr',
+            innerDrawer:false,
+            searchType:'web',//默认绑定显示的search tabs标签
         }
     },
     created(){
@@ -91,16 +187,9 @@ export default {
         }, 1000);
     },
     methods:{
-        search(){
-            this.$alert(this.searchText,'搜索内容',{
-                confirmButtonText:'close',
-                callback:action => {
-                    this.$message({
-                        type:'info',
-                        message:action
-                    })
-                }
-            })
+        searchTypeOpen( type ){//动态显示选择要搜索的tabs
+            this.searchType = type;
+            this.innerDrawer = true;
         },
         open( params ){
             this.$emit( 'open',params );
@@ -243,5 +332,105 @@ export default {
         box-shadow:0 0 0 1px hsla(0,0%,100%,.3) inset,0 .5em 1em rgba(0,0,0,0.6)!important;
         text-shadow:0 1px 1px hsla(0,0%,100%,.3)!important;
         color:#fff!important;
+    }
+    .searchDrawer {
+        height: 500px!important;
+        background: rgba(0,0,0,0.6)!important;
+        & .el-drawer__header {
+            display: none!important;
+        }
+         & .el-menu {
+            background: rgba(0,0,0,0.6)!important;
+            & .el-menu-item:hover{
+                background: rgb(114, 111, 111)!important
+            }
+            & .el-menu-item:active{
+                color: #000!important
+            }
+            & .el-menu-item span {
+                color: #fff;
+                font-size: 12px;
+            }
+        }
+    }
+    .el-drawer.ltr{
+        top: auto!important;
+        bottom:40px!important;
+    }
+    .el-drawer__body .el-menu>li:nth-child(3){
+        margin-top:360px;
+    }
+    .searchTxt {
+        height: 500px;
+        background:#fff;
+        & .searchTxt_title{
+            font-size: 12px;
+            font-weight: bold;
+        }
+        & .searchTxt_desc {
+            & i {
+                font-size: 25px;
+                vertical-align: middle;
+                padding: 5px 10px;
+            }
+            & span {
+                font-size: 12px;
+            }
+        }
+        & .searchTxt_list {
+            height: 350px;
+            overflow-y: scroll;
+        }
+        & .el-input__inner{
+            border-radius: 0px;
+        }
+    }
+    .searchMain {
+        display:flex;
+        flex-flow: column;
+        text-align: center;
+        & .searchTop {
+            & img {
+                width: 180px;
+                margin-top: 50px;
+            }
+            & span {
+                font-size: 35px;
+                color:#409EFF;
+                position: absolute;
+                top: 200px;
+                left: 0px;
+                width: 100%;
+            }
+        }
+        & .searchMiddle {
+            margin-top: 100px;
+            & .el-col  {
+                padding: 5px;
+                cursor: pointer;
+                color: #fff;
+                & i {
+                    font-size: 25px;
+                }
+                & p {
+                    font-size: 12px;
+                }
+            }
+        }
+        & .searchBottom {
+            & div{
+                color: #fff;
+                height: 50px;
+                text-align: center;
+                font-size: 12px;
+                line-height: 50px;
+                & .el-input__inner {
+                    border-radius: 0px!important;
+                }
+            }
+            & .el-input {
+                width: 90%!important;
+            }
+        }
     }
 </style>
