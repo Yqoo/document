@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-25 15:53:39
  * @LastEditors: OBKoro1
- * @LastEditTime: 2019-08-09 09:08:18
+ * @LastEditTime: 2019-08-09 09:58:00
  -->
 <template>
     <el-row class="fadeInLeftBig animated">
@@ -11,13 +11,13 @@
                     <i class="el-icon-s-operation" style="color:#fff"></i>
                     <span slot="title">开始</span>
                 </el-menu-item>
-                <el-menu-item @click="openChild('hidden')" class="hvr-wobble-horizontal">
-                    <img :src="require('@/assets/image/icons/deskIcons/icon-desktop.png')">
-                    <span slot="title">我的桌面</span>
-                </el-menu-item>
                 <el-menu-item class="hvr-wobble-horizontal">
                     <img :src="require('@/assets/image/icons/deskIcons/icon-user.png')">
                     <span slot="title">我的账户</span>
+                </el-menu-item>
+                <el-menu-item @click="openChild('hidden')" class="hvr-wobble-horizontal">
+                    <img :src="require('@/assets/image/icons/deskIcons/icon-desktop.png')">
+                    <span slot="title">我的桌面</span>
                 </el-menu-item>
                 <el-menu-item @click="openChild('myCloud')" class="hvr-wobble-horizontal">
                     <img :src="require('@/assets/image/icons/deskIcons/icon-cloud.png')">
@@ -148,6 +148,9 @@ export default {
     .el-row {
         height: 475px;
         background: transparent;
+    }
+    .el-menu> li:nth-child(2){
+        margin-top: 150px!important;
     }
     .el-menu-item:hover{
         background: transparent!important;
