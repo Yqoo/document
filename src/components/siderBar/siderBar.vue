@@ -1,14 +1,23 @@
+<!--
+ * @Date: 2019-07-25 15:53:39
+ * @LastEditors: OBKoro1
+ * @LastEditTime: 2019-08-09 09:08:18
+ -->
 <template>
     <el-row class="fadeInLeftBig animated">
         <el-col :span="4">
-            <el-menu :collapse="isCollapse" background-color="transparent" router>
-                <el-menu-item class="hvr-wobble-horizontal">
+            <el-menu :collapse="isCollapse" background-color="transparent" router >
+                <el-menu-item class="hvr-wobble-horizontal" @click="expanded">
                     <i class="el-icon-s-operation" style="color:#fff"></i>
                     <span slot="title">开始</span>
                 </el-menu-item>
                 <el-menu-item @click="openChild('hidden')" class="hvr-wobble-horizontal">
                     <img :src="require('@/assets/image/icons/deskIcons/icon-desktop.png')">
                     <span slot="title">我的桌面</span>
+                </el-menu-item>
+                <el-menu-item class="hvr-wobble-horizontal">
+                    <img :src="require('@/assets/image/icons/deskIcons/icon-user.png')">
+                    <span slot="title">我的账户</span>
                 </el-menu-item>
                 <el-menu-item @click="openChild('myCloud')" class="hvr-wobble-horizontal">
                     <img :src="require('@/assets/image/icons/deskIcons/icon-cloud.png')">
@@ -57,6 +66,9 @@ export default {
     methods:{
         openChild( p ){
             this.$emit( 'openChild',p );
+        },
+        expanded(){
+            this.isCollapse = !this.isCollapse;
         }
     },
     mounted(){
@@ -134,14 +146,19 @@ export default {
         }
     }
     .el-row {
-        height: 500px;
+        height: 475px;
         background: transparent;
     }
     .el-menu-item:hover{
         background: transparent!important;
     }
-    .el-menu-item i {
+    .el-menu-item i,.el-menu-item span {
         color:#fff;
+    }
+    .el-menu-item span {
+        color:#fff;
+        font-size: 12px;
+        padding-left: 5px;
     }
     .el-menu--collapse li:nth-child(2){
         margin-top:150px;

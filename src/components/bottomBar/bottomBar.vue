@@ -215,7 +215,7 @@ export default {
     .alertLeftSideBar{
         background:rgba(24, 21, 21, 0.25) border-box!important;
         overflow:hidden!important;
-        border: 1px solid #fff;
+        border: 1px solid #eee;
         box-shadow:0 0 0 1px hsla(0,0%,100%,.3) inset,0 .5em 1em rgba(0,0,0,0.6)!important;
         text-shadow:0 1px 1px hsla(0,0%,100%,.3)!important;
         color:#fff!important;
