@@ -15,7 +15,12 @@
             <span>当前位置</span>
           </el-col>
           <el-col :span="17"  class="path">
-            <div>这里是路径</div>
+            <div>
+              <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>首页</el-breadcrumb-item>
+                <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+              </el-breadcrumb>
+            </div>
           </el-col>
           <el-col :span="5" class="search">
             <el-input
@@ -197,7 +202,7 @@ export default {
       & .searchContent{
         font-size: 12px;
         line-height: 28px;
-        height: 28px;
+        // height: 28px;
         & .addressImg{
           display: inline-block;
           width: 20px;
@@ -212,6 +217,10 @@ export default {
             height: 26px;
             line-height: 26px;
             width: 97%;
+            & .el-breadcrumb{
+              line-height: 26px;
+              padding-left: 5px;
+            }
           }
         }
         & .search{
