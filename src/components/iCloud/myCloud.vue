@@ -45,7 +45,7 @@
         </div>
       </aside>
       <div class="rightContent">
-        <component :is="current"></component>
+        <component :is="current" @changeUtils="changeUtils"></component>
       </div>
     </section>
   </div>
@@ -81,7 +81,7 @@ export default {
             {
               label:'我的云端',
               name: 'mineCloud',
-              icon:require('@/assets/image/icons/deskIcons/icon-myCloud.png'),
+              icon:require('@/assets/image/icons/deskIcons/icon-computer.png'),
               children:[
                 {label:'桌面',icon:require('@/assets/image/icons/deskIcons/tree-computer.png')},
                 {label:'我的文档',icon:require('@/assets/image/icons/deskIcons/tree-folder.png')},
@@ -116,7 +116,7 @@ export default {
             }
           ],
           current:'iCloudIndex',//初始进入myCloud 默认右侧显示
-          utilName: 'myCloud',  //选中的模块名称
+          utilName: 'unit',  //选中的模块名称
           isShowUtils: true,  // 展开工具栏
           hideUtil: '',  // 隐藏工具栏类名
         };
@@ -135,11 +135,22 @@ export default {
         this.isShowUtils = !this.isShowUtils;
         this.hideUtil = this.isShowUtils === true ? '' : 'hide';
       },
-      handleNodeClick(data, node, el) {  //节点被选中
+      handleNodeClick(data, node, el) {  //节点被选中，切换模块和工具栏
         console.log(data)
         // console.log(node)
         // console.log(el)
         this.current = data.name;
+        //判断出现的工具栏
+        if(data.name === 'organizationCloud'){
+          this.utilName = 'organizationCloud';
+        } else if(data.name === 'mineCloud' || data.name === 'shareCloud') {
+          this.utilName = 'unit';
+        }
+      },
+      changeUtils( tag ){  // 点击右侧内容模块，切换工具栏
+        if( tag === 'mineCloud' ){
+          this.utilName = 'mineCloud';
+        }
       }
     },
     mounted(){
@@ -258,6 +269,8 @@ export default {
         background: #fff;
         overflow: auto;
         border-right: 10px solid #c5c5c5;
+        padding: 10px;
+        box-sizing: border-box;
       }
       & > div.rightContent {
         float: left;

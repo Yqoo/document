@@ -6,7 +6,7 @@
  -->
 <template>
   <div class='iCloudIndex'>
-    <mineCloud></mineCloud>
+    <mineCloud @changeUtils='changeUtils'></mineCloud>
     <shareCloud></shareCloud>
     <organizationCloud></organizationCloud>
   </div>
@@ -27,6 +27,11 @@ export default {
     return {
     };
   },
+  methods: {
+    changeUtils( tag ) {
+      this.$emit('changeUtils', tag);
+    }
+  }
 }
 </script>
 <style lang='less' scoped>
