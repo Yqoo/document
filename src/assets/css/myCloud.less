@@ -1,0 +1,47 @@
+.cards{
+    display:flex;
+    flex-flow: row wrap;
+    & .el-card {
+      margin: 5px 10px;
+      cursor: pointer;
+      width:80px;
+      height: 80px;
+      border: none;
+      & /deep/ .el-card__body{
+        padding: 5px 5px;
+        text-align: center;
+        & img{
+          display: inline-block;
+          width: 60%;
+        }
+        & img.fileIcon{
+          position: absolute;
+          top: 0;
+          width: 22px;
+          right: 20%;
+        }
+      }
+      & i{
+        font-size: 40px;
+      }
+    }
+    & .el-card.addBorder{
+      border: 1px solid #EBEEF5;
+    }
+  }
+.el-collapse-item{
+  & /deep/ .el-collapse-item__header{
+    & > img{
+      display: inline-block;
+      width: 20px;
+      margin-right: 10px;
+    }
+    & > .el-collapse-item__arrow{
+      display: none;
+    }
+  }
+}
+.el-collapse-item.is-disabled /deep/ .el-collapse-item__header{
+  color: #303133;
+  cursor: initial;
+}

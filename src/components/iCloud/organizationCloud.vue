@@ -1,8 +1,8 @@
 <!-- 我的云端：组织云端 -->
 <template>
   <div class='organizationCloud'>
-      <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item  name='1'>
+      <el-collapse v-model="activeNames">
+        <el-collapse-item  name='1' :disabled='true'>
             <template slot="title">
                 <img src='@/assets/image/icons/deskIcons/tree-org.png'/>组织云端
             </template>
@@ -28,42 +28,10 @@ export default {
     };
   },
   methods: {
-      handleChange( val ){
-          console.log(val)
-      }
   }
 }
 
 </script>
 <style lang='less' scoped>
-.cards{
-    display:flex;
-    flex-flow: row wrap;
-    & .el-card {
-      margin: 5px 10px;
-      cursor: pointer;
-      width:80px;
-      height: 80px;
-      & /deep/ .el-card__body{
-        padding: 5px 5px;
-        text-align: center;
-        & img{
-          display: inline-block;
-          width: 60%;
-        }
-      }
-      & i{
-        font-size: 40px;
-      }
-    }
-  }
-.el-collapse-item{
-  & /deep/ .el-collapse-item__header{
-    & > img{
-      display: inline-block;
-      width: 20px;
-      margin-right: 10px;
-    }
-  }
-}
+@import '../../assets/css/myCloud.less';
 </style>

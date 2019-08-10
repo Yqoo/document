@@ -11,7 +11,7 @@ export default {
   props:{
       utilName: {
           type: String,
-          default: 'myCloud'
+          default: 'unit'
       } 
   },
   components:{
@@ -30,9 +30,52 @@ export default {
             isRightBorder: true
         },
     };
+    let check = { //查看
+        iconImg: require('@/assets/image/icons/fileIcons/check.png'),
+        iconTitle: '查看',
+        isRightBorder: false,
+        flag: false,  //用于判断二级菜单是否显示
+        secondMenu: [
+            {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '压缩压缩'},
+        ]
+    };
+    let array = {  // 排列
+        iconImg: require('@/assets/image/icons/fileIcons/array.png'),
+        iconTitle: '排列',
+        isRightBorder: true,
+        flag: false,
+        secondMenu: [
+            {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '压缩压缩'},
+        ]
+    };
+    let send = {  // 发送
+        iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),
+        iconTitle: '发送',
+        isRightBorder: true,
+        flag: false,
+        secondMenu: [
+            {iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},
+            {iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},
+            {iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},
+            {iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},
+            {iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},
+        ]
+    };
+    let refresh_help = {  // 刷新和帮助
+        refresh: {
+            iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),
+            iconTitle: '刷新',
+            isRightBorder: false
+        },
+        help: {
+            iconImg: require('@/assets/image/icons/fileIcons/help.png'),
+            iconTitle: '帮助',
+            isRightBorder: false
+        },
+    }
     return {
         active: {
-            myCloud: [
+            unit: [
                 {
                     iconImg: require('@/assets/image/icons/fileIcons/copy.png'),
                     iconTitle: '复制',
@@ -55,46 +98,46 @@ export default {
                 },
                 volume.addV,
                 volume.reduceV,
+                check,
+                array,
+                send,
+                refresh_help.refresh,
+                refresh_help.help
+            ],
+            organizationCloud: [  // 组织云端
+                volume.addV,
+                volume.reduceV,
                 {
-                    iconImg: require('@/assets/image/icons/fileIcons/check.png'),
-                    iconTitle: '查看',
-                    isRightBorder: false,
-                    flag: false,  //用于判断二级菜单是否显示
-                    secondMenu: [
-                        {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '压缩压缩'},
-                    ]
+                    iconImg: require('@/assets/image/icons/fileIcons/attr.png'),
+                    iconTitle: '云端属性',
+                    isRightBorder: false
                 },
+                check,
+                array,
+                send,
+                refresh_help.refresh,
+                refresh_help.help
+            ],
+            mineCloud: [
                 {
-                    iconImg: require('@/assets/image/icons/fileIcons/array.png'),
-                    iconTitle: '排列',
-                    isRightBorder: true,
-                    flag: false,
-                    secondMenu: [
-                        {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '压缩压缩'},
-                    ]
-                },
-                {
-                    iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),
-                    iconTitle: '发送',
-                    isRightBorder: true,
-                    flag: false,
-                    secondMenu: [
-                        {iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},
-                        {iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},
-                        {iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},
-                        {iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},
-                        {iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},
-                    ]
-                },
-                {
-                    iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),
-                    iconTitle: '刷新',
+                    iconImg: require('@/assets/image/icons/fileIcons/partition.png'),
+                    iconTitle: '创建分区',
                     isRightBorder: false
                 },
                 {
-                    iconImg: require('@/assets/image/icons/fileIcons/help.png'),
-                    iconTitle: '帮助',
+                    iconImg: require('@/assets/image/icons/fileIcons/parname.png'),
+                    iconTitle: '分区命名',
                     isRightBorder: false
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/format.png'),
+                    iconTitle: '格式分区',
+                    isRightBorder: false
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),
+                    iconTitle: '删除分区',
+                    isRightBorder: true
                 },
             ]
         },
