@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-10 11:12:36
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 11:13:30
+ * @LastEditTime: 2019-08-10 14:14:46
  * @Desc: 授权信息组件
  -->
 <template>
@@ -24,7 +24,7 @@ export default {
 </script>
 <style lang='less' scoped>
   .authorizationMessage {
-    height: 530px;
+    height: 550px;
     overflow-y:auto;
     overflow-x: hidden;
   }

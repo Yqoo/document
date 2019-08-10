@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-10 11:10:02
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 11:10:42
+ * @LastEditTime: 2019-08-10 14:13:20
  * @Desc: 备份恢复组件
  -->
 <template>
@@ -24,7 +24,7 @@ export default {
 </script>
 <style lang='less' scoped>
   .backupAndRecovery{
-    height: 530px;
+    height: 550px;
     overflow-y:auto;
     overflow-x: hidden;
   }

@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-10 11:06:19
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 11:08:50
+ * @LastEditTime: 2019-08-10 14:13:32
  * @desc:日志管理组件
  -->
  <template>
@@ -24,7 +24,7 @@
  </script>
  <style lang='less' scoped>
   .logManage {
-    height: 530px;
+    height: 550px;
     overflow-y:auto;
     overflow-x: hidden; 
   }
