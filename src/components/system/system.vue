@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-26 17:20:46
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 14:19:13
+ * @LastEditTime: 2019-08-10 16:49:40
  -->
 <template>
   <div class='themeBox' v-drag:themeBox>
@@ -9,7 +9,7 @@
       <boxTools class="theme-color moveBox"  :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentName"></boxTools>
         <el-row>
           <el-col :span="leftSize">
-            <el-tooltip class="item" effect="dark" content="展开/收缩" placement="right-start">
+            <el-tooltip class="item" effect="dark" :content="tips" placement="right-start">
                <i class="el-icon-s-operation" @click="expand"></i>
             </el-tooltip>
             <div class="leftSystemLogo" >
@@ -18,23 +18,19 @@
             </div>
             <el-menu class="el-menu-vertical-demo" :default-active="defaultActive"  @select="selectNav" :collapse="isCollapse">
               <el-menu-item index='applications'>
-                <i class="el-icon-menu" style="color:#f38181"></i>
+                <img :src="require('@/assets/image/icons/deskIcons/icon-applications.png')">
                 <span slot="title">程序应用</span>
               </el-menu-item>
-            <!--  <el-menu-item index='organization'>
-                <i class="el-icon-s-custom" style="color:#5edfff"></i>
-                <span slot="title">组织与用户</span>
-              </el-menu-item> -->
               <el-menu-item index='wallpaper'>
                 <i class="el-icon-picture" style="color:#6c7b95"></i>
                 <span slot="title">更换壁纸</span>
               </el-menu-item>
               <el-menu-item index='theme'>
-                <i class="el-icon-eleme" style="color:#a0cc78"></i>
+                <i class="el-icon-menu" style="color:#a0cc78"></i>
                 <span slot="title">主题设置</span>
               </el-menu-item>
               <el-menu-item index='logManage'>
-                <i class="el-icon-date" style="color:#3fc1c9"></i>
+                <img :src="require('@/assets/image/icons/deskIcons/icon-log.png')">
                 <span slot="title">日志管理</span>
               </el-menu-item>
               <el-menu-item index='backupAndRecovery'>
@@ -42,7 +38,7 @@
                 <span slot="title">备份恢复</span>
               </el-menu-item>
               <el-menu-item index='authorizationMessage'>
-                <i class="el-icon-document-checked" style="color:#1fab89"></i>
+                <img :src="require('@/assets/image/icons/deskIcons/icon-authorizationMessage.png')">
                 <span slot="title">授权信息</span>
               </el-menu-item>
               <el-menu-item index='help'>
@@ -104,6 +100,7 @@ export default {
           componentName:'系统设置',
           isCollapse:false,//是否收缩菜单栏
           leftSize:4,
+          tips:'收缩',
         };
     },
     methods:{
@@ -113,7 +110,7 @@ export default {
       selectNav( index ){
         this.current = index;
       },
-      windowsTools( obj ){  
+      windowsTools( obj ){
         let _s = {
           minSize:   ( param ) => this.$emit( 'minSize',param ),
           maxSize:   ( param ) => tools._maxSize(document.querySelector( param )),
@@ -129,7 +126,7 @@ export default {
     },
     watch:{
       isCollapse( val ){
-        val && (this.leftSize = 2) || ( this.leftSize = 4 );
+        val && (this.leftSize = 2,this.tips = '展开') || ( this.leftSize = 4,this.tips = '收缩' );
       }
     },
 }
@@ -192,6 +189,14 @@ export default {
     & .el-menu-item span {
       font-size: 13px;
     }
+    & .el-menu-item img {
+      width: 18px;
+      padding: 0px 7px 0px 3px;
+    }
+    & .el-menu-item:nth-child(1){
+      border-top:1px solid #ddd;
+    }
+     
   }
   .leftSystemLogo{
     height: 150px;
@@ -212,7 +217,7 @@ export default {
   .el-icon-s-operation {
     padding-left: 23px;
     cursor: pointer;
-    color: #00e0ff;
+    color: #3d84a8;
     font-size: 18px;
   }
 </style>

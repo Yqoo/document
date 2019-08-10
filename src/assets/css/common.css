@@ -194,3 +194,6 @@ ol {
 .el-radio__label{
   font-size: 12px;
 }
+.el-tabs__item {
+  font-size: 12px!important;
+}
