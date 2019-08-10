@@ -54,7 +54,7 @@ export default {
 }
 .block{
     position: relative;
-    width: 50px;
+    width: 55px;
     float: left;
     text-align: center;
     cursor: pointer;

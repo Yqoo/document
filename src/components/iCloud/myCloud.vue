@@ -148,9 +148,7 @@ export default {
         }
       },
       changeUtils( tag ){  // 点击右侧内容模块，切换工具栏
-        if( tag === 'mineCloud' ){
-          this.utilName = 'mineCloud';
-        }
+        this.utilName = tag;
       }
     },
     mounted(){

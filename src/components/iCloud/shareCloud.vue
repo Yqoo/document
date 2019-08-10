@@ -2,17 +2,19 @@
 <template>
   <div class='shareCloud'>
       <el-collapse v-model="activeNames">
-        <el-collapse-item  name='1' :disabled='true'>
-            <template slot="title">
-                <img src='@/assets/image/icons/deskIcons/tree-share.png'/>共享云端
-            </template>
-            <div class="cards slideInDown animated">
-                <el-card v-for="(c,index) in shareCloud" :key="index" shadow="hover" class="hvr-sink">
-                    <img :src="c.imgurl"/>
-                    <div class="bottom1">{{c.name}}</div>
-                </el-card>
-            </div>
-        </el-collapse-item>
+        <div @click="clickBlock('unit')">
+          <el-collapse-item  name='1' :disabled='true'>
+              <template slot="title">
+                  <img src='@/assets/image/icons/deskIcons/tree-share.png'/>共享云端
+              </template>
+              <div class="cards slideInDown animated">
+                  <el-card v-for="(c,index) in shareCloud" :key="index" shadow="hover" class="hvr-sink">
+                      <img :src="c.imgurl"/>
+                      <div class="bottom1">{{c.name}}</div>
+                  </el-card>
+              </div>
+          </el-collapse-item>
+        </div>
       </el-collapse>
   </div>
 </template>
@@ -29,6 +31,9 @@ export default {
     };
   },
   methods: {
+    clickBlock(tag){
+      this.$emit('changeUtils', tag);
+    }
   }
 }
 

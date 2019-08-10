@@ -2,17 +2,19 @@
 <template>
   <div class='organizationCloud'>
       <el-collapse v-model="activeNames">
-        <el-collapse-item  name='1' :disabled='true'>
-            <template slot="title">
-                <img src='@/assets/image/icons/deskIcons/tree-org.png'/>组织云端
-            </template>
-            <div class="cards slideInUp animated">
-                <el-card v-for="(c,index) in organizationCloud" :key="index" shadow="hover" class="hvr-forward">
-                    <i :class="c.imgurl"></i>
-                    <div class="bottom1">{{c.name}}</div>
-                </el-card>
-            </div>
-        </el-collapse-item>
+        <div @click="clickBlock('organizationCloud')">
+            <el-collapse-item  name='1' :disabled='true'>
+              <template slot="title">
+                  <img src='@/assets/image/icons/deskIcons/tree-org.png'/>组织云端
+              </template>
+              <div class="cards slideInUp animated">
+                  <el-card v-for="(c,index) in organizationCloud" :key="index" shadow="hover" class="hvr-forward">
+                      <i :class="c.imgurl"></i>
+                      <div class="bottom1">{{c.name}}</div>
+                  </el-card>
+              </div>
+          </el-collapse-item>
+        </div>
       </el-collapse>
   </div>
 </template>
@@ -28,6 +30,9 @@ export default {
     };
   },
   methods: {
+    clickBlock(tag){
+      this.$emit('changeUtils', tag);
+    }
   }
 }
 

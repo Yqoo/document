@@ -139,6 +139,18 @@ export default {
                     iconTitle: '删除分区',
                     isRightBorder: true
                 },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/attr.png'),
+                    iconTitle: '分区属性',
+                    isRightBorder: true
+                },
+                volume.addV,
+                volume.reduceV,
+                check,
+                array,
+                send,
+                refresh_help.refresh,
+                refresh_help.help
             ]
         },
     };

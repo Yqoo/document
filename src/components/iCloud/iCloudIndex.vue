@@ -7,8 +7,8 @@
 <template>
   <div class='iCloudIndex'>
     <mineCloud @changeUtils='changeUtils'></mineCloud>
-    <shareCloud></shareCloud>
-    <organizationCloud></organizationCloud>
+    <shareCloud @changeUtils='changeUtils'></shareCloud>
+    <organizationCloud @changeUtils='changeUtils'></organizationCloud>
   </div>
 </template>
 

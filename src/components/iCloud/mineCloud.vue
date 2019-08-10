@@ -2,18 +2,20 @@
 <template>
   <div class='mineCloud'>
     <el-collapse v-model="activeNames">
-        <el-collapse-item name="1" :disabled='true'>
-            <template slot="title">
-                <img src='@/assets/image/icons/deskIcons/icon-computer.png'/>挚友云
-            </template>
-            <div class="cards slideInRight animated">
-                <el-card v-for="(c,index) in zyCloud" :key="index" shadow="hover" class="hvr-backward">
-                    <img :src="c.imgurl"/>
-                    <div class="bottom">{{c.name}}</div>
-                    <img :src="c.icon" class="fileIcon">
-                </el-card>
-            </div>
-        </el-collapse-item>
+        <div @click="clickBlock('unit')" style='border-bottom:1px solid #ebeef5'>
+          <el-collapse-item name="1" :disabled='true'>
+              <template slot="title">
+                  <img src='@/assets/image/icons/deskIcons/icon-computer.png'/>挚友云
+              </template>
+              <div class="cards slideInRight animated">
+                  <el-card v-for="(c,index) in zyCloud" :key="index" shadow="hover" class="hvr-backward">
+                      <img :src="c.imgurl"/>
+                      <div class="bottom">{{c.name}}</div>
+                      <img :src="c.icon" class="fileIcon">
+                  </el-card>
+              </div>
+          </el-collapse-item>
+        </div>
         <div @click="clickBlock('mineCloud')">
           <el-collapse-item name="2" :disabled='true'>
               <template slot="title">
