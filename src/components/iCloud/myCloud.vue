@@ -166,10 +166,10 @@ export default {
 <style lang='less' scoped>
   .myCloud {
     // min-height: 60%;  
-    width: 70%;
+    width: 80%;
     position: absolute;
     top: 10%;
-    left: 15%;
+    left: 10%;
     border-radius: 8px;
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     transition: box-shadow 0.5s, transform 0.5s;
@@ -180,7 +180,7 @@ export default {
       position: relative;
       background: #fff;
       box-sizing: border-box;
-      border: 10px solid #f1f1f1;
+      border: 10px solid #c5c5c5;
       border-bottom: none;
       padding: 10px;
       & > .utilLists{
@@ -248,7 +248,7 @@ export default {
       box-sizing: border-box;
       border-radius: 0 0 5px 5px;
       background: #fff;
-      border: 10px solid #f1f1f1;
+      border: 10px solid #c5c5c5;
       & aside{
         position: absolute;
         top: 0px;
@@ -257,7 +257,7 @@ export default {
         height: 100%;
         background: #fff;
         overflow: auto;
-        border-right: 10px solid #f1f1f1;
+        border-right: 10px solid #c5c5c5;
       }
       & > div.rightContent {
         float: left;

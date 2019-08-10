@@ -47,6 +47,10 @@ export default {
       & /deep/ .el-card__body{
         padding: 5px 5px;
         text-align: center;
+        & img{
+          display: inline-block;
+          width: 60%;
+        }
       }
       & i{
         font-size: 40px;
