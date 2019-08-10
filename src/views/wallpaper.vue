@@ -1,3 +1,8 @@
+<!--
+ * @Date: 2019-08-01 10:55:48
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-10 11:03:10
+ -->
 <template>
   <div class='wallpaper'>
     <div class="dragDiv">
@@ -155,6 +160,9 @@ export default {
 </script>
 <style lang='less' scoped>
   .wallpaper{
+    height: 530px;
+    overflow-y:auto;
+    overflow-x: hidden;
     & > div {
       margin-top: 2%;
       padding-left: 10px;
