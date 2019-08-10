@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-24 11:37:02
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-09 18:04:25
+ * @LastEditTime: 2019-08-10 09:14:15
  -->
 <template>
     <el-row>
@@ -129,7 +129,7 @@
                 <span style="opacity:0">.</span>
                 <el-tag v-for="(tab,index) in tabsFilter" :key="index" :class="index"  effect="plain" type="info" @close="closeTab(index)" @click="showTab(index,tab.isLocal)"> <img :src="tab.icon" style="vertical-align:middle;position:relative;top:-2px;width:23px;">{{tab.name}}</el-tag>
                 <el-popover placement="top-start" width="100" trigger="click" popper-class="taskMenuPop" @hide="hideTask">
-                    <taskBarMenus @close="closeTab" v-if="isShowTask" :isFix="isFix" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></taskBarMenus>
+                    <taskBarMenus @close="closeTab" @showDesk="open" v-if="isShowTask" :isFix="isFix" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></taskBarMenus>
                     <i slot="reference" class="el-icon-location-outline taskBarPosition" style="position:absolute;opacity:0;"></i>
                 </el-popover>
             </div>    
