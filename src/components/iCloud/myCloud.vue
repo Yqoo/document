@@ -30,7 +30,7 @@
     <section class="clearfix">
       <aside>
         <div>
-          <el-tree :data="treeData">
+          <el-tree :data="treeData" @node-click="handleNodeClick">
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>
                 <img :src="data.icon">{{ data.label }}
@@ -50,13 +50,19 @@
 import tools from  "@/assets/js/utils/tools.js";
 import boxTools from "@/views/boxTools";
 import iCloudIndex from "@/components/iCloud/iCloudIndex";
-import utilLists from "@/components/iCloud/utilLists"
+import utilLists from "@/components/iCloud/utilLists";
+import mineCloud from '@/components/iCloud/mineCloud';
+import shareCloud from '@/components/iCloud/shareCloud';
+import organizationCloud from '@/components/iCloud/organizationCloud';
 export default {
     name:'myCloud',
     components:{
       boxTools,
       iCloudIndex,
       utilLists,
+      mineCloud,
+      shareCloud,
+      organizationCloud
     },
     data() {
         return {
@@ -69,6 +75,7 @@ export default {
           treeData:[
             {
               label:'我的云端',
+              name: 'mineCloud',
               icon:require('@/assets/image/icons/deskIcons/icon-myCloud.png'),
               children:[
                 {label:'桌面',icon:require('@/assets/image/icons/deskIcons/tree-computer.png')},
@@ -80,6 +87,7 @@ export default {
             },
             {
               label:'共享云端',
+              name: 'shareCloud',
               icon:require('@/assets/image/icons/deskIcons/tree-share.png'),
               children:[
                 {label:'开发部',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')},
@@ -88,6 +96,7 @@ export default {
             },
             {
               label:'组织云端',
+              name: 'organizationCloud',
               icon:require('@/assets/image/icons/deskIcons/tree-org.png'),
               children:[
                 {
@@ -120,6 +129,12 @@ export default {
       utilCollapse() { //收缩工具栏
         this.isShowUtils = !this.isShowUtils;
         this.hideUtil = this.isShowUtils === true ? '' : 'hide';
+      },
+      handleNodeClick(data, node, el) {  //节点被选中
+        console.log(data)
+        // console.log(node)
+        // console.log(el)
+        this.current = data.name;
       }
     },
     mounted(){
