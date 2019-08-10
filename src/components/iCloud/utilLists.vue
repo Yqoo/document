@@ -18,6 +18,18 @@ export default {
       topUtil,
   },
   data () {
+    let volume = { // 容量增加减少
+        addV: {
+            iconImg: require('@/assets/image/icons/fileIcons/addC.png'),
+            iconTitle: '申请增容',
+            isRightBorder: false
+        },
+        reduceV: {
+            iconImg: require('@/assets/image/icons/fileIcons/reduceC.png'),
+            iconTitle: '申请减容',
+            isRightBorder: true
+        },
+    };
     return {
         active: {
             myCloud: [
@@ -41,16 +53,8 @@ export default {
                     iconTitle: '回收站',
                     isRightBorder: true
                 },
-                {
-                    iconImg: require('@/assets/image/icons/fileIcons/addC.png'),
-                    iconTitle: '申请增容',
-                    isRightBorder: false
-                },
-                {
-                    iconImg: require('@/assets/image/icons/fileIcons/reduceC.png'),
-                    iconTitle: '申请减容',
-                    isRightBorder: true
-                },
+                volume.addV,
+                volume.reduceV,
                 {
                     iconImg: require('@/assets/image/icons/fileIcons/check.png'),
                     iconTitle: '查看',

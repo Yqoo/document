@@ -146,10 +146,10 @@ export default {
 <style lang='less' scoped>
   .myCloud {
     // min-height: 60%;  
-    width: 60%;
+    width: 70%;
     position: absolute;
     top: 10%;
-    left: 20%;
+    left: 15%;
     border-radius: 8px;
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     transition: box-shadow 0.5s, transform 0.5s;
@@ -237,10 +237,11 @@ export default {
       }
       & > div.rightContent {
         float: left;
-        height: 100%;
+        height: 450px;
         width: 100%;
         padding-left: 25%;
         box-sizing: border-box;
+        overflow: auto;
       }
     }
   }

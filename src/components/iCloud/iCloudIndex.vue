@@ -6,7 +6,7 @@
  -->
 <template>
   <div class=''>
-     <el-collapse v-model="activeCollapse" accordion>
+     <el-collapse v-model="activeCollapse">
       <el-collapse-item name='1'>
         <template slot="title">
           <i class="el-icon-cloudy"></i>挚友云
@@ -18,7 +18,7 @@
           </el-card>
         </div>
       </el-collapse-item>
-        <el-collapse-item>
+        <el-collapse-item  name='2'>
         <template slot="title">
           <i class="el-icon-s-custom"></i>我的云端
         </template>
@@ -29,7 +29,7 @@
           </el-card>
         </div>
       </el-collapse-item>
-        <el-collapse-item>
+        <el-collapse-item  name='3'>
         <template slot="title">
           <i class="el-icon-cloudy-and-sunny"></i>共享云端
         </template>
@@ -40,7 +40,7 @@
           </el-card>
         </div>
       </el-collapse-item>
-        <el-collapse-item>
+        <el-collapse-item  name='4'>
         <template slot="title">
           <i class="el-icon-partly-cloudy"></i>组织云端
         </template>
@@ -61,7 +61,7 @@ export default {
   name: 'iCloudIndex',
   data() {
     return {
-      activeCollapse:['1'],
+      activeCollapse:['1', '2' ,'3', '4'],
       zyCloud:[
         {name:'我的桌面',imgurl:'el-icon-s-platform'},
         {name:'我的文档',imgurl:'el-icon-folder'},
