@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-10 10:53:31
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 11:01:57
+ * @LastEditTime: 2019-08-10 14:13:15
  * @desc: 程序应用组件
  -->
 <template>
@@ -24,7 +24,7 @@ export default {
 </script>
 <style lang='less' scoped>
   .applications{
-    height: 530px;
+    height: 550px;
     overflow-y:auto;
     overflow-x: hidden; 
   }

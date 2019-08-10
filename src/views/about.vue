@@ -44,7 +44,7 @@ export default {
 </script>
 <style lang='less' scoped>
   .about {
-    height: 530px;
+    height: 550px;
     overflow-y:auto;
     overflow-x: hidden;
   }

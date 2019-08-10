@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-06 10:42:39
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 11:14:46
+ * @LastEditTime: 2019-08-10 14:14:12
  * @Desc: 
  -->
 /**
@@ -45,7 +45,7 @@ export default {
 </script>
 <style lang='less' scoped>
   .help{
-    height: 530px;
+    height: 550px;
     overflow-y:auto;
     overflow-x: hidden;
   }

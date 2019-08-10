@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-01 10:55:48
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 11:03:10
+ * @LastEditTime: 2019-08-10 14:14:22
  -->
 <template>
   <div class='wallpaper'>
@@ -160,7 +160,7 @@ export default {
 </script>
 <style lang='less' scoped>
   .wallpaper{
-    height: 530px;
+    height: 550px;
     overflow-y:auto;
     overflow-x: hidden;
     & > div {

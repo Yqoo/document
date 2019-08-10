@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-29 10:42:23
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 11:02:28
+ * @LastEditTime: 2019-08-10 14:12:46
  -->
 <template>
   <div class='theme'>
@@ -85,7 +85,7 @@ export default {
 </script>
 <style lang='less' scoped>
   .theme{
-    height: 530px;
+    height: 550px;
     overflow-y:auto;
     overflow-x: hidden;
     & div {
