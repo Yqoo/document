@@ -1,3 +1,8 @@
+<!--
+ * @Date: 2019-08-01 09:26:31
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-10 09:15:53
+ -->
 <template>
   <div class='taskBarMenus fadeInUp animated'>
     <ul>
@@ -22,6 +27,7 @@ export default {
     data() {
         return {
           menus:[
+            { name:'显示桌面',icon:'el-icon-s-platform',color:{ color:'#207561' },type:'showDesk' },
             { name:'锁屏设置',icon:'el-icon-unlock',color:{ color:'#29c6cd' },type:'lockScreen' },
             { name:'锁定任务栏',icon:'el-icon-lock',color:{ color:'#ff89c0' },type:'lockTask' },
             { name:'任务栏设置',icon:'el-icon-setting',color:{ color:'#fea386' },type:'position',children:[
@@ -53,6 +59,7 @@ export default {
     methods:{
       taskMethods( type ){
         let active = Object.assign({
+          showDesk: () => this.$emit('showDesk','hidden'),//关闭桌面所有已显示的弹出层组件,
           position: () => false,
           lockScreen: () => { this.$emit('lockScreen')},
           lockTask: () => {

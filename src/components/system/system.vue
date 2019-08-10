@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-26 17:20:46
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-09 18:03:26
+ * @LastEditTime: 2019-08-10 09:27:24
  -->
 <template>
   <div class='themeBox' v-drag:themeBox>
@@ -110,9 +110,9 @@ section{
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  border: 10px solid rgba(255,255,255,0.5);
+  border: 10px solid #eee;
   border-radius: 0 0 5px 5px;
-  background: rgba(255,255,255,0.75);
+  background: #fff;
   &:after {
     content: '';
     display: block;

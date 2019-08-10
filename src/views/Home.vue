@@ -1,3 +1,8 @@
+<!--
+ * @Date: 2019-07-23 17:42:48
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-10 09:11:13
+ -->
 <template>
   <el-container :style="bg">
     <el-main ref="main">
