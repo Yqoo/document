@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-08-06 10:45:28
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-10 11:15:47
+ * @Desc: 
+ -->
 /**
   关于作品组件
  */
@@ -38,7 +44,9 @@ export default {
 </script>
 <style lang='less' scoped>
   .about {
-    padding:10px;
+    height: 530px;
+    overflow-y:auto;
+    overflow-x: hidden;
   }
   .myFont {
     font-size: 12px;

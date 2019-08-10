@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-08-06 10:42:39
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-10 11:14:46
+ * @Desc: 
+ -->
 /**
   使用帮助组件
  */
@@ -39,7 +45,9 @@ export default {
 </script>
 <style lang='less' scoped>
   .help{
-    padding:20px;
+    height: 530px;
+    overflow-y:auto;
+    overflow-x: hidden;
   }
   .myFont {
     font-size:12px;

@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-26 17:20:46
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 09:27:24
+ * @LastEditTime: 2019-08-10 11:13:53
  -->
 <template>
   <div class='themeBox' v-drag:themeBox>
@@ -9,26 +9,42 @@
       <boxTools class="theme-color moveBox"  :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentName"></boxTools>
       <section>
         <aside>
+          <div class="leftSystemLogo">
+            <div><img :src="require('@/assets/image/icons/deskIcons/icon-bigSetting.png')"></div>
+            <span>系统设置</span>
+          </div>
           <el-menu class="el-menu-vertical-demo" :default-active="defaultActive"  @select="selectNav">
-            <el-menu-item index='config'>
+            <!-- <el-menu-item index='config'>
               <i class="el-icon-setting" style="color:#696464"></i>
               <span slot="title">系统设置</span>
+            </el-menu-item> -->
+            <el-menu-item index='applications'>
+              <i class="el-icon-menu" style="color:#f38181"></i>
+              <span slot="title">程序应用</span>
             </el-menu-item>
-            <el-menu-item index='organization'>
+           <!--  <el-menu-item index='organization'>
               <i class="el-icon-s-custom" style="color:#5edfff"></i>
               <span slot="title">组织与用户</span>
-            </el-menu-item>
-            <el-menu-item index='personal'>
-              <i class="el-icon-user" style="color:#e16363"></i>
-              <span slot="title">个人中心</span>
+            </el-menu-item> -->
+            <el-menu-item index='wallpaper'>
+              <i class="el-icon-picture" style="color:#6c7b95"></i>
+              <span slot="title">更换壁纸</span>
             </el-menu-item>
             <el-menu-item index='theme'>
               <i class="el-icon-eleme" style="color:#a0cc78"></i>
               <span slot="title">主题设置</span>
             </el-menu-item>
-            <el-menu-item index='wallpaper'>
-              <i class="el-icon-picture" style="color:#6c7b95"></i>
-              <span slot="title">更换壁纸</span>
+            <el-menu-item index='logManage'>
+              <i class="el-icon-date" style="color:#3fc1c9"></i>
+              <span slot="title">日志管理</span>
+            </el-menu-item>
+            <el-menu-item index='backupAndRecovery'>
+              <i class="el-icon-refresh" style="color:#cca8e9"></i>
+              <span slot="title">备份恢复</span>
+            </el-menu-item>
+            <el-menu-item index='authorizationMessage'>
+              <i class="el-icon-document-checked" style="color:#1fab89"></i>
+              <span slot="title">授权信息</span>
             </el-menu-item>
             <el-menu-item index='help'>
               <i class="el-icon-question" style="color:#ffd692"></i>
@@ -52,26 +68,28 @@
 import tools from  "@/assets/js/utils/tools.js";
 import { themeMixin}  from '@/assets/js/themeMixin.js';
 import theme from "@/views/theme";
-import config from "@/views/config";
 import wallpaper from "@/views/wallpaper";
-import personal from "@/views/personal";
 import boxTools from "@/views/boxTools";
-import organization from "@/components/organization/organization";
 import help from "@/views/help";
 import about from "@/views/about";
+import applications from "@/components/applications/applications";
+import logManage from "@/components/logManage/logManage";
+import backupAndRecovery from "@/components/backupAndRecovery/backupAndRecovery";
+import authorizationMessage from "@/views/authorizationMessage";
 export default {
     mixins: [themeMixin],
     name: 'system',
     props:['index'],
     components:{
       theme,
-      personal,
       boxTools,
       wallpaper,
-      config,
-      organization,
       help,
-      about
+      about,
+      applications,
+      logManage,
+      backupAndRecovery,
+      authorizationMessage
     },
     data() {
         return {
@@ -156,6 +174,25 @@ section{
     }
     & .el-menu-item:focus{
       background: rgba(0,0,0,.09);
+    }
+    & .el-menu-item span {
+      font-size: 13px;
+    }
+  }
+  .leftSystemLogo{
+    height: 150px;
+    display: flex;
+    flex-flow: column;
+    text-align: center;
+    line-height: 30px;
+    & div {
+      padding-top: 10px;
+      & img {
+        width: 100px;
+      }
+    }
+    & span {
+      font-size: 12px;
     }
   }
 </style>

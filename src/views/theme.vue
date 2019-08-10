@@ -1,3 +1,8 @@
+<!--
+ * @Date: 2019-07-29 10:42:23
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-10 11:02:28
+ -->
 <template>
   <div class='theme'>
     <div class="dragDiv">
@@ -80,6 +85,9 @@ export default {
 </script>
 <style lang='less' scoped>
   .theme{
+    height: 530px;
+    overflow-y:auto;
+    overflow-x: hidden;
     & div {
       font-size: 12px;
       & i {
