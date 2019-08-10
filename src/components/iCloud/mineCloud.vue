@@ -8,8 +8,9 @@
             </template>
             <div class="cards slideInRight animated">
                 <el-card v-for="(c,index) in zyCloud" :key="index" shadow="hover" class="hvr-backward">
-                    <i :class="c.imgurl"></i>
+                    <img :src="c.imgurl"/>
                     <div class="bottom">{{c.name}}</div>
+                    <img :src="c.icon" class="fileIcon">
                 </el-card>
             </div>
         </el-collapse-item>
@@ -19,7 +20,7 @@
             </template>
             <div class="cards slideInLeft animated">
                 <el-card v-for="(c,index) in myCloud" :key="index" shadow="hover" class="hvr-float">
-                    <i :class="c.imgurl"></i>
+                    <img :src="c.imgurl"/>
                     <div class="bottom1">{{c.name}}</div>
                 </el-card>
             </div>
@@ -34,19 +35,19 @@ export default {
     return {
         activeNames: ['1', '2'],
         zyCloud:[
-        {name:'我的桌面',imgurl:'el-icon-s-platform'},
-        {name:'我的文档',imgurl:'el-icon-folder'},
-        {name:'加密云端',imgurl:'el-icon-folder'},
-        {name:'我的共享',imgurl:'el-icon-user'},
-        {name:'接收共享',imgurl:'el-icon-sort'},
-        {name:'我的分享',imgurl:'el-icon-share'},
-        {name:'接收分享',imgurl:'el-icon-folder-checked'},
-        {name:'备份中心',imgurl:'el-icon-folder-checked'},
+        {name:'我的桌面',imgurl:require('@/assets/image/icons/fileIcons/desk.png'),icon:''},
+        {name:'我的文档',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon: ''},
+        {name:'加密云端',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/dsi.png')},
+        {name:'我的共享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/user.png')},
+        {name:'接收共享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/person.png')},
+        {name:'我的分享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/myshare.png')},
+        {name:'接收分享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/recept.png')},
+        {name:'备份中心',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/backups.png')},
       ],
       myCloud:[
-        {name:'软件区',imgurl:'el-icon-mobile'},
-        {name:'文档区',imgurl:'el-icon-mobile'},
-        {name:'娱乐区',imgurl:'el-icon-mobile'},
+        {name:'软件区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk.png')},
+        {name:'文档区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk.png')},
+        {name:'娱乐区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk.png')},
       ],
     };
   },
@@ -70,6 +71,16 @@ export default {
       & /deep/ .el-card__body{
         padding: 5px 5px;
         text-align: center;
+        & img{
+          display: inline-block;
+          width: 60%;
+        }
+        & img.fileIcon{
+          position: absolute;
+          top: 0;
+          width: 22px;
+          right: 20%;
+        }
       }
       & i{
         font-size: 40px;

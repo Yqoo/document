@@ -15,7 +15,12 @@
             <span>当前位置</span>
           </el-col>
           <el-col :span="17"  class="path">
-            <div>这里是路径</div>
+            <div>
+              <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>首页</el-breadcrumb-item>
+                <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+              </el-breadcrumb>
+            </div>
           </el-col>
           <el-col :span="5" class="search">
             <el-input
@@ -161,10 +166,10 @@ export default {
 <style lang='less' scoped>
   .myCloud {
     // min-height: 60%;  
-    width: 70%;
+    width: 80%;
     position: absolute;
     top: 10%;
-    left: 15%;
+    left: 10%;
     border-radius: 8px;
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     transition: box-shadow 0.5s, transform 0.5s;
@@ -175,7 +180,7 @@ export default {
       position: relative;
       background: #fff;
       box-sizing: border-box;
-      border: 10px solid #f1f1f1;
+      border: 10px solid #c5c5c5;
       border-bottom: none;
       padding: 10px;
       & > .utilLists{
@@ -197,7 +202,7 @@ export default {
       & .searchContent{
         font-size: 12px;
         line-height: 28px;
-        height: 28px;
+        // height: 28px;
         & .addressImg{
           display: inline-block;
           width: 20px;
@@ -212,6 +217,10 @@ export default {
             height: 26px;
             line-height: 26px;
             width: 97%;
+            & .el-breadcrumb{
+              line-height: 26px;
+              padding-left: 5px;
+            }
           }
         }
         & .search{
@@ -239,7 +248,7 @@ export default {
       box-sizing: border-box;
       border-radius: 0 0 5px 5px;
       background: #fff;
-      border: 10px solid #f1f1f1;
+      border: 10px solid #c5c5c5;
       & aside{
         position: absolute;
         top: 0px;
@@ -248,7 +257,7 @@ export default {
         height: 100%;
         background: #fff;
         overflow: auto;
-        border-right: 10px solid #f1f1f1;
+        border-right: 10px solid #c5c5c5;
       }
       & > div.rightContent {
         float: left;

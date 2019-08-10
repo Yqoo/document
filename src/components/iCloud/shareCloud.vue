@@ -8,7 +8,7 @@
             </template>
             <div class="cards slideInDown animated">
                 <el-card v-for="(c,index) in shareCloud" :key="index" shadow="hover" class="hvr-sink">
-                    <i :class="c.imgurl"></i>
+                    <img :src="c.imgurl"/>
                     <div class="bottom1">{{c.name}}</div>
                 </el-card>
             </div>
@@ -23,8 +23,8 @@ export default {
     return {
         activeNames: ['1'],
         shareCloud:[
-            {name:'开发部',imgurl:'el-icon-mobile'},
-            {name:'学习区',imgurl:'el-icon-mobile'},
+            {name:'开发部',imgurl:require('@/assets/image/icons/deskIcons/tree-disk2.png')},
+            {name:'学习区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk2.png')},
       ],
     };
   },
@@ -48,6 +48,10 @@ export default {
       & /deep/ .el-card__body{
         padding: 5px 5px;
         text-align: center;
+        & img{
+          display: inline-block;
+          width: 60%;
+        }
       }
       & i{
         font-size: 40px;
