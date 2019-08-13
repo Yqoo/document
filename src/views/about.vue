@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-06 10:45:28
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 11:15:47
+ * @LastEditTime: 2019-08-13 15:32:05
  * @Desc: 
  -->
 /**
@@ -45,6 +45,7 @@ export default {
 <style lang='less' scoped>
   .about {
     height: 550px;
+    padding: 10px;
     overflow-y:auto;
     overflow-x: hidden;
   }
