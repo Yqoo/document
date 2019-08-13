@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { themeMixin } from '@/assets/js/themeMixin.js'
 import tools from  "@/assets/js/utils/tools.js";
 import boxTools from "@/views/boxTools";
 import iCloudIndex from "@/components/iCloud/iCloudIndex";
@@ -63,6 +64,7 @@ import myCloudContent from '@/components/iCloud/myCloudContent';
 import shareCloudContent from '@/components/iCloud/shareCloudContent';
 import organizationContent from '@/components/iCloud/organizationContent';
 export default {
+    mixins: [themeMixin],
     name:'myCloud',
     components:{
       boxTools,
@@ -147,7 +149,7 @@ export default {
         // console.log(node)
         // console.log(el)
         //判断出现的内容模块
-        if(data.name === 'desk'){
+        if(data.name === 'desk'){ // 如果点击的是桌面，则小化弹框
           this.windowsTools({param: 'myCloud', type:'minSize'});
         } else {
           this.current = data.name;
@@ -166,21 +168,6 @@ export default {
     mounted(){
       this.minWidth = document.querySelector('.myCloud').offsetWidth;
       this.minHeight = document.querySelector('.myCloud').offsetHeight;
-    },
-    created(){
-      this.themeColorName = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).className;
-      this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
-    },
-    watch:{
-      storeChange( val ){
-        this.themeColorName = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).className;
-        this.themeColorStyle = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).style;
-      }
-    },
-    computed:{
-      storeChange(){
-        return this.$store.state.themeColor;
-      }
     },
 }
 </script>
