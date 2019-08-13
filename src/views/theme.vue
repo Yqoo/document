@@ -8,33 +8,56 @@
     <div class="dragDiv">
       <i class="el-icon-eleme"></i> 主题设置
     </div>
-    <div>
-      <i class="el-icon-star-on"></i> 默认主题
-      <div class="defaultTheme">
-        <el-card v-for="(item,index) in defaultThemeColor " :key="item.name" :class="item.name" class="hvr-float-shadow" :offset="index > 0 ? 4 : 0">
-          <div @click="changeDefaultTheme(item.name)">
-            <span>{{item.themeName}}</span>
+    <el-row>
+      <el-col :span='16'>
+        <div>
+          <i class="el-icon-star-on"></i> 默认主题
+          <div class="defaultTheme">
+            <el-card v-for="(item,index) in defaultThemeColor " :key="item.name" :class="item.name" class="hvr-float-shadow" :offset="index > 0 ? 4 : 0">
+              <div @click="changeDefaultTheme(item.name)">
+                <span>{{item.themeName}}</span>
+              </div>
+            </el-card>
           </div>
-        </el-card>
-      </div>
-    </div>
-    <div>
-      <i class="el-icon-edit"></i> 自定义主题
-      <div class="customTheme">
-        <el-form :themeForm="themeForm" size="mini">
-          <el-form-item label="背景">
-            <el-radio-group v-model="themeForm.type" @change="changeType">
-              <el-radio label="imgUrl">图片</el-radio>
-              <el-radio label="color">渐变颜色</el-radio>
-              <el-radio label="opacity">玻璃效果</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item>
-            <component :is="current"></component>
-          </el-form-item>
-        </el-form>
-      </div>
-    </div>
+        </div>
+        <div>
+          <i class="el-icon-edit"></i> 自定义主题
+          <div class="customTheme">
+            <el-form :themeForm="themeForm" size="mini">
+              <el-form-item label="背景">
+                <el-radio-group v-model="themeForm.type" @change="changeType">
+                  <el-radio label="imgUrl">图片</el-radio>
+                  <el-radio label="color">渐变颜色</el-radio>
+                  <el-radio label="opacity">玻璃效果</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item>
+                <component :is="current"></component>
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span='8'>
+        <div>
+          <i class="el-icon-picture"></i>主题对应图标设置
+          <el-radio-group v-model="themeIcon">
+            <el-radio :label="1">我的云端</el-radio>
+            <el-radio :label="2">共享云端</el-radio>
+            <el-radio :label="3">组织云端</el-radio>
+            <el-radio :label="4">硬盘图标</el-radio>
+            <el-radio :label="5">系统设置</el-radio>
+            <el-radio :label="6">回收站</el-radio>
+            <el-radio :label="7">文件夹</el-radio>
+          </el-radio-group>
+        </div>
+        <el-row>
+          <i class="el-icon-picture-outline"></i>选择图标
+          <el-col :span='12'></el-col>
+          <el-col :span='12'></el-col>
+        </el-row>
+      </el-col>
+    </el-row>
   </div>  
 </template>
 
@@ -59,7 +82,8 @@ export default {
             {name: 'colorA', themeName: '天空蓝'}, 
             {name: 'colorB', themeName: '青草绿'}, 
             {name: 'colorC', themeName: '渐变粉'}, 
-            {name: 'colorD', themeName: '酷炫黑'}]
+            {name: 'colorD', themeName: '酷炫黑'}],
+            themeIcon: 6,  // 主题图标
         };
     },
     methods:{
@@ -95,21 +119,22 @@ export default {
         vertical-align: sub;
       }
     }
-    & div:nth-child(1){
-      & i {
-        padding: 5px 0px 5px 15px;
-      }
-    }
-    & div:nth-child(2){
-      & i {
-        padding: 15px 0px 5px 20px;
-      }
-    }
-    & div:nth-child(3){
-      & i {
-        padding: 15px 0px 5px 20px;
-      }
+    & div.dragDiv{
+      padding: 10px 0 0px 10px;
     }      
+    & div.el-col{
+      & > div{
+        & > i{
+          margin: 10px 5px 10px 10px;
+        }
+      }
+    }
+  }
+  .el-radio-group {
+    margin: 0 10px 0;
+    & .el-radio{
+      margin-bottom: 8px;
+    }
   }
   .defaultTheme {
     display: flex;
@@ -134,7 +159,7 @@ export default {
     }
   }
   .el-form{
-    padding:0px 100px;
+    padding:0px 20px 0 10px;
   }
   .colorA{
     background: -webkit-linear-gradient(160deg, #ecfcff, #5edfff);
