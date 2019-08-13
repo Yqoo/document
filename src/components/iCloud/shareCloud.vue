@@ -20,7 +20,9 @@
 </template>
 
 <script>
+import { myCloudMixin } from '@/assets/js/myCloudMixin.js'
 export default {
+  mixins: [myCloudMixin],
   data () {
     return {
         activeNames: ['1'],
@@ -31,9 +33,6 @@ export default {
     };
   },
   methods: {
-    clickBlock(tag){
-      this.$emit('changeUtils', tag);
-    }
   }
 }
 
