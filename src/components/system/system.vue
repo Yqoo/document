@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-26 17:20:46
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 16:49:40
+ * @LastEditTime: 2019-08-13 10:32:29
  -->
 <template>
   <div class='themeBox' v-drag:themeBox>
@@ -169,7 +169,7 @@ export default {
     background: #fff;
   }
   .themeBox {
-    width: 60%;
+    width: 70%;
     background: transparent;
     //border: 3px double #b1b0b0;
     position: absolute;
