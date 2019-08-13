@@ -8,23 +8,28 @@
                   <img src='@/assets/image/icons/deskIcons/icon-computer.png'/>挚友云
               </template>
               <div class="cards slideInRight animated">
-                  <el-card v-for="(c,index) in zyCloud" :key="index" shadow="hover" class="hvr-backward">
-                      <img :src="c.imgurl"/>
-                      <div class="bottom">{{c.name}}</div>
-                      <img :src="c.icon" class="fileIcon">
+                  <el-card v-for="(c,index) in zyCloud" :class="c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-backward">
+                      <div @click="activeCard(c, zyCloud)">
+                        <img :src="c.imgurl"/>
+                        <div class="bottom">{{c.name}}</div>
+                        <img :src="c.icon" class="fileIcon">
+                      </div>
                   </el-card>
               </div>
           </el-collapse-item>
         </div>
         <div @click="clickBlock('mineCloud')">
+          <space-progress :avaliableSpace='avaliableSpace' :totalSpace='totalSpace'></space-progress>
           <el-collapse-item name="2" :disabled='true'>
               <template slot="title">
                   <img src='@/assets/image/icons/deskIcons/icon-ad.png'/>我的云端
               </template>
               <div class="cards slideInLeft animated">
-                  <el-card v-for="(c,index) in myCloud" :key="index" shadow="hover" class="hvr-float">
-                      <img :src="c.imgurl"/>
-                      <div class="bottom1">{{c.name}}</div>
+                  <el-card v-for="(c,index) in myCloud" :class="c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-float">
+                      <div @click="activeCard(c, myCloud)">
+                        <img :src="c.imgurl"/>
+                        <div class="bottom1">{{c.name}}</div>
+                      </div>
                   </el-card>
               </div>
           </el-collapse-item>
@@ -35,26 +40,32 @@
 
 <script>
 import { myCloudMixin } from '@/assets/js/myCloudMixin.js'
+import SpaceProgress from '@/views/spaceProgress.vue';
 export default {
   mixins: [myCloudMixin],
+  components: {
+    SpaceProgress,
+  },
   data () {
     return {
         activeNames: ['1', '2'],
         zyCloud:[
-        {name:'我的桌面',imgurl:require('@/assets/image/icons/fileIcons/desk.png'),icon:''},
-        {name:'我的文档',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon: ''},
-        {name:'加密空间',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/dsi.png')},
-        {name:'我的共享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/user.png')},
-        {name:'接收共享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/person.png')},
-        {name:'我的分享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/myshare.png')},
-        {name:'接收分享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/recept.png')},
-        {name:'备份中心',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/backups.png')},
+        {name:'我的桌面',imgurl:require('@/assets/image/icons/fileIcons/desk.png'),icon:'',active:false},
+        {name:'我的文档',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon: '',active:false},
+        {name:'加密空间',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/dsi.png'),active:false},
+        {name:'我的共享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/user.png'),active:false},
+        {name:'接收共享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/person.png'),active:false},
+        {name:'我的分享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/myshare.png'),active:false},
+        {name:'接收分享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/recept.png'),active:false},
+        {name:'备份中心',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/backups.png'),active:false},
       ],
       myCloud:[
-        {name:'软件区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png')},
-        {name:'文档区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png')},
-        {name:'娱乐区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png')},
+        {name:'软件区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
+        {name:'文档区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
+        {name:'娱乐区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
       ],
+      avaliableSpace: 18.6,  //可用空间
+      totalSpace: 30.2,  //总空间
     };
   },
   methods: {
@@ -64,4 +75,11 @@ export default {
 </script>
 <style lang='less' scoped>
 @import '../../assets/css/myCloud.less';
+
+.spaceProgress{
+  position: absolute;
+  width: 47%;
+  right: 5px;
+  top: 4%;
+}
 </style>

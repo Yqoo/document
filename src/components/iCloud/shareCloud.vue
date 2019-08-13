@@ -8,9 +8,11 @@
                   <img src='@/assets/image/icons/deskIcons/tree-share.png'/>共享云端
               </template>
               <div class="cards slideInDown animated">
-                  <el-card v-for="(c,index) in shareCloud" :key="index" shadow="hover" class="hvr-sink">
-                      <img :src="c.imgurl"/>
-                      <div class="bottom1">{{c.name}}</div>
+                  <el-card v-for="(c,index) in shareCloud" :class="c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-sink">
+                      <div @click="activeCard(c, shareCloud)">
+                        <img :src="c.imgurl"/>
+                        <div class="bottom1">{{c.name}}</div>
+                      </div>
                   </el-card>
               </div>
           </el-collapse-item>
@@ -27,8 +29,8 @@ export default {
     return {
         activeNames: ['1'],
         shareCloud:[
-            {name:'开发部',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png')},
-            {name:'学习区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png')},
+            {name:'开发部',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
+            {name:'学习区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
       ],
     };
   },
