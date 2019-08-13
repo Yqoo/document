@@ -36,7 +36,9 @@ export default {
         isRightBorder: false,
         flag: false,  //用于判断二级菜单是否显示
         secondMenu: [
-            {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '压缩压缩'},
+            {iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},
+            {iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},
+            {iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'},
         ]
     };
     let array = {  // 排列
@@ -45,7 +47,8 @@ export default {
         isRightBorder: true,
         flag: false,
         secondMenu: [
-            {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '压缩压缩'},
+            {iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},
+            {iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}
         ]
     };
     let send = {  // 发送

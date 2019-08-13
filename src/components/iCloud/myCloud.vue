@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { themeMixin } from '@/assets/js/themeMixin.js'
 import tools from  "@/assets/js/utils/tools.js";
 import boxTools from "@/views/boxTools";
 import iCloudIndex from "@/components/iCloud/iCloudIndex";
@@ -59,7 +60,11 @@ import utilLists from "@/components/iCloud/utilLists";
 import mineCloud from '@/components/iCloud/mineCloud';
 import shareCloud from '@/components/iCloud/shareCloud';
 import organizationCloud from '@/components/iCloud/organizationCloud';
+import myCloudContent from '@/components/iCloud/myCloudContent';
+import shareCloudContent from '@/components/iCloud/shareCloudContent';
+import organizationContent from '@/components/iCloud/organizationContent';
 export default {
+    mixins: [themeMixin],
     name:'myCloud',
     components:{
       boxTools,
@@ -67,7 +72,10 @@ export default {
       utilLists,
       mineCloud,
       shareCloud,
-      organizationCloud
+      organizationCloud,
+      myCloudContent,
+      shareCloudContent,
+      organizationContent
     },
     data() {
         return {
@@ -83,11 +91,11 @@ export default {
               name: 'mineCloud',
               icon:require('@/assets/image/icons/deskIcons/icon-computer.png'),
               children:[
-                {label:'桌面',icon:require('@/assets/image/icons/deskIcons/tree-computer.png')},
-                {label:'我的文档',icon:require('@/assets/image/icons/deskIcons/tree-folder.png')},
-                {label:'软件区',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
-                {label:'文档区',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
-                {label:'娱乐区',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
+                {label:'桌面',name: 'desk',icon:require('@/assets/image/icons/deskIcons/tree-computer.png')},
+                {label:'我的文档',name:'myCloudContent',icon:require('@/assets/image/icons/deskIcons/tree-folder.png')},
+                {label:'软件区',name:'myCloudContent',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
+                {label:'文档区',name:'myCloudContent',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
+                {label:'娱乐区',name:'myCloudContent',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
               ],
             },
             {
@@ -95,8 +103,8 @@ export default {
               name: 'shareCloud',
               icon:require('@/assets/image/icons/deskIcons/tree-share.png'),
               children:[
-                {label:'开发部',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')},
-                {label:'学习区',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')}
+                {label:'开发部',name:'shareCloudContent',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')},
+                {label:'学习区',name:'shareCloudContent',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')}
               ],
             },
             {
@@ -107,9 +115,10 @@ export default {
                 {
                   label:'四川挚友软件有限公司',
                   icon:require('@/assets/image/icons/deskIcons/tree-disk.png'),
+                  name:'organizationContent',
                   children:[
-                    {label:'前端学习区',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')},
-                    {label:'后端学习区',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')}
+                    {label:'前端学习区',name:'organizationContent',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')},
+                    {label:'后端学习区',name:'organizationContent',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')}
                   ]
                 }
               ],
@@ -139,7 +148,12 @@ export default {
         console.log(data)
         // console.log(node)
         // console.log(el)
-        this.current = data.name;
+        //判断出现的内容模块
+        if(data.name === 'desk'){ // 如果点击的是桌面，则小化弹框
+          this.windowsTools({param: 'myCloud', type:'minSize'});
+        } else {
+          this.current = data.name;
+        }
         //判断出现的工具栏
         if(data.name === 'organizationCloud'){
           this.utilName = 'organizationCloud';
@@ -154,21 +168,6 @@ export default {
     mounted(){
       this.minWidth = document.querySelector('.myCloud').offsetWidth;
       this.minHeight = document.querySelector('.myCloud').offsetHeight;
-    },
-    created(){
-      this.themeColorName = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).className;
-      this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
-    },
-    watch:{
-      storeChange( val ){
-        this.themeColorName = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).className;
-        this.themeColorStyle = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).style;
-      }
-    },
-    computed:{
-      storeChange(){
-        return this.$store.state.themeColor;
-      }
     },
 }
 </script>
@@ -272,7 +271,7 @@ export default {
       }
       & > div.rightContent {
         float: left;
-        height: 450px;
+        height: 500px;
         width: 100%;
         padding-left: 25%;
         box-sizing: border-box;
