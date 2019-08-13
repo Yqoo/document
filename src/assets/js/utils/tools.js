@@ -46,7 +46,14 @@ let tools = {
         // 弹框高度还原
         try {//不是所有组件下都有 rightContent
             let rightContent = tagName.querySelector('.rightContent');
-            rightContent.style.height = minHeight - 58 + 'px';
+            let cutHeight = 0;
+            if(tagName.className.indexOf('myCloud') > -1){
+                // 173：弹框标题高度+工具栏高度+边框
+                cutHeight = 173;
+            }else {
+                cutHeight = 58;  //看情况分析
+            }
+            rightContent.style.height = minHeight - cutHeight + 'px';
         } catch (error) {
             //...
         }
@@ -59,7 +66,15 @@ let tools = {
         // 弹框高度变化
         try {
             let rightContent = tagName.querySelector('.rightContent');
-            rightContent.style.height = document.documentElement.clientHeight - 98 + 'px';
+            let cutHeight = 0;
+            if(tagName.className.indexOf('myCloud') > -1){
+                // 174：弹框标题高度+工具栏高度+边框
+                cutHeight = 174;
+            }else {
+                // 弹框标题高度35 + 边框20
+                cutHeight = 55;
+            }
+            rightContent.style.height = document.documentElement.clientHeight - cutHeight + 'px';
         } catch (error) {
             //...
         }
