@@ -73,6 +73,7 @@ export default {
 <style lang='less' scoped>
   .applications{
     height: 550px;
+    padding: 10px;
     overflow-y:auto;
     overflow-x: hidden; 
     & .title {

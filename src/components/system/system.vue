@@ -1,58 +1,36 @@
 <!--
  * @Date: 2019-07-26 17:20:46
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-13 10:32:29
+ * @LastEditTime: 2019-08-13 15:31:09
  -->
 <template>
   <div class='themeBox' v-drag:themeBox>
     <div class="fadeInLeftBig animated" :class="themeColorName">
       <boxTools class="theme-color moveBox"  :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentName"></boxTools>
+      <el-tooltip class="item" effect="light" content="返回" placement="bottom">
+        <i class="el-icon-back backBtn" v-if="leftSize == 24?false:true" @click="leftSize = 24"></i>
+      </el-tooltip>
         <el-row>
-          <el-col :span="leftSize">
-            <el-tooltip class="item" effect="dark" :content="tips" placement="right-start">
-               <i class="el-icon-s-operation" @click="expand"></i>
-            </el-tooltip>
+          <el-col :span="leftSize" >
             <div class="leftSystemLogo" >
-              <div><img :src="require('@/assets/image/icons/deskIcons/icon-bigSetting.png')" v-show="!isCollapse"></div>
-              <span v-show="!isCollapse">系统设置</span>
+              <div><img :src="require('@/assets/image/icons/deskIcons/icon-bigSetting.png')" ></div>
+              <span>系统设置</span>
             </div>
-            <el-menu class="el-menu-vertical-demo" :default-active="defaultActive"  @select="selectNav" :collapse="isCollapse">
-              <el-menu-item index='applications'>
-                <img :src="require('@/assets/image/icons/deskIcons/icon-applications.png')">
-                <span slot="title">程序应用</span>
-              </el-menu-item>
-              <el-menu-item index='wallpaper'>
-                <i class="el-icon-picture" style="color:#6c7b95"></i>
-                <span slot="title">更换壁纸</span>
-              </el-menu-item>
-              <el-menu-item index='theme'>
-                <i class="el-icon-menu" style="color:#a0cc78"></i>
-                <span slot="title">主题设置</span>
-              </el-menu-item>
-              <el-menu-item index='logManage'>
-                <img :src="require('@/assets/image/icons/deskIcons/icon-log.png')">
-                <span slot="title">日志管理</span>
-              </el-menu-item>
-              <el-menu-item index='backupAndRecovery'>
-                <i class="el-icon-refresh" style="color:#cca8e9"></i>
-                <span slot="title">备份恢复</span>
-              </el-menu-item>
-              <el-menu-item index='authorizationMessage'>
-                <img :src="require('@/assets/image/icons/deskIcons/icon-authorizationMessage.png')">
-                <span slot="title">授权信息</span>
-              </el-menu-item>
-              <el-menu-item index='help'>
-                <i class="el-icon-question" style="color:#ffd692"></i>
-                <span slot="title">使用帮助</span>
-              </el-menu-item>
-              <el-menu-item index='about'>
-                <i class="el-icon-info" style="color:#e15249"></i>
-                <span slot="title">关于作品</span>
-              </el-menu-item>
-            </el-menu>
+            <div class="searchInput">
+              <el-input  suffix-icon="el-icon-search" placeholder="查找设置"></el-input>
+            </div>
+            <ul class="menus">
+              <li v-for="(menu,key) in menus" :key="key" class="hvr-float-shadow" @click='chooseMenus(menu.name)'>
+                <img :src="menu.img">
+                <div>
+                  <span>{{menu.title}}</span>
+                  <p>{{menu.desc}}</p>
+                </div>
+              </li>
+            </ul>
             </el-col>
             <el-col :span="24-leftSize">
-            <div class="rightContent">
+            <div class="rightContent zoomIn animated">            
               <component :is="current" ></component>
             </div>
           </el-col>
@@ -73,6 +51,8 @@ import applications from "@/components/applications/applications";
 import logManage from "@/components/logManage/logManage";
 import backupAndRecovery from "@/components/backupAndRecovery/backupAndRecovery";
 import authorizationMessage from "@/views/authorizationMessage";
+import organization from "@/components/organization/organization";
+import dc from "@/components/dataCenter/dc";
 export default {
     mixins: [themeMixin],
     name: 'system',
@@ -86,7 +66,9 @@ export default {
       applications,
       logManage,
       backupAndRecovery,
-      authorizationMessage
+      authorizationMessage,
+      organization,
+      dc
     },
     data() {
         return {
@@ -98,14 +80,25 @@ export default {
           zIndex:this.$store.state.zIndex,
           info:{className:'.themeBox',name:'system',icon:'icon-system'},//boxTools组件所需参数
           componentName:'系统设置',
-          isCollapse:false,//是否收缩菜单栏
-          leftSize:4,
-          tips:'收缩',
+          leftSize:24,
+          menus:[//菜单
+            { name:'dc',title:'数据中心',img:require('@/assets/image/icons/deskIcons/icon-datas.png'),desc:'数据库建立、维护、链接、合并与分离'},
+            { name:'applications',title:'程序应用',img:require('@/assets/image/icons/deskIcons/icon-applications.png'),desc:'云商城、程序下载、安装、启用、设置与控制台'},
+            { name:'organization',title:'组织与账户',img:require('@/assets/image/icons/deskIcons/icon-adiminster.png'),desc:'组织、等级、用户、岗位、角色、上下级与用户组'},
+            { name:'wallpaper',title:'壁纸设置',img:require('@/assets/image/icons/deskIcons/icon-wallpaper.png'),desc:'为桌面更换个性化壁纸'},
+            { name:'theme',title:'主题设置',img:require('@/assets/image/icons/deskIcons/icon-theme.png'),desc:'为系统更换显示风格、包括颜色、图标与效果'},
+            { name:'logManage',title:'日志管理',img:require('@/assets/image/icons/deskIcons/icon-log.png'),desc:'日志的管理'},
+            { name:'backupAndRecovery',title:'备份恢复',img:require('@/assets/image/icons/deskIcons/icon-backupArecy.png'),desc:'备份的恢复'},
+            { name:'authorizationMessage',title:'授权信息',img:require('@/assets/image/icons/deskIcons/icon-authorizationMessage.png'),desc:'授权的信息'},
+            { name:'help',title:'使用帮助',img:require('@/assets/image/icons/deskIcons/icon-help.png'),desc:'使用帮助'},
+            { name:'about',title:'关于我们',img:require('@/assets/image/icons/deskIcons/icon-about.png'),desc:'关于我们的详细信息'},
+          ],
         };
     },
     methods:{
-      expand(){
-        this.isCollapse = !this.isCollapse
+      chooseMenus( name ){
+        this.current = name;
+        this.leftSize = 0;
       },
       selectNav( index ){
         this.current = index;
@@ -125,9 +118,7 @@ export default {
       this.minHeight = document.querySelector('.themeBox').offsetHeight;
     },
     watch:{
-      isCollapse( val ){
-        val && (this.leftSize = 2,this.tips = '展开') || ( this.leftSize = 4,this.tips = '收缩' );
-      }
+      
     },
 }
 </script>
@@ -169,49 +160,32 @@ export default {
     background: #fff;
   }
   .themeBox {
-    width: 70%;
-    background: transparent;
+    width: 60%;
+    height: 70%;
+    background: #fff;
     //border: 3px double #b1b0b0;
     position: absolute;
-    top:50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    top:10%;
+    left: 20%;
     border-radius: 8px;
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     transition: box-shadow 0.5s, transform 0.5s;
     text-align: left;
-    & .el-menu-item:hover{
-      background: rgba(0,0,0,.09);
-    }
-    & .el-menu-item:focus{
-      background: rgba(0,0,0,.09);
-    }
-    & .el-menu-item span {
-      font-size: 13px;
-    }
-    & .el-menu-item img {
-      width: 18px;
-      padding: 0px 7px 0px 3px;
-    }
-    & .el-menu-item:nth-child(1){
-      border-top:1px solid #ddd;
-    }
-     
   }
   .leftSystemLogo{
     height: 150px;
     display: flex;
     flex-flow: column;
     text-align: center;
-    line-height: 30px;
     & div {
-      padding-top: 10px;
+      padding: 20px 0px;
       & img {
         width: 100px;
       }
     }
     & span {
       font-size: 12px;
+      margin-top: -20px;
     }
   }
   .el-icon-s-operation {
@@ -219,5 +193,39 @@ export default {
     cursor: pointer;
     color: #3d84a8;
     font-size: 18px;
+  }
+  .searchInput {
+    width: 40%;
+    margin: 10px auto 25px;
+  }
+  .menus {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    padding: 20px;
+    & li {
+      margin:20px 5px;
+      cursor: pointer;
+      & img {
+        width:30px;
+      }
+      & div {
+        float: right;
+        width: 150px;
+        padding-left: 10px;
+        & span {
+          font-size: 14px;
+        }
+        & p {
+          font-size: 10px;
+        }
+      }
+    }   
+  }
+  .backBtn {
+    position: absolute;
+    left:100px;
+    top: 9px;
+    cursor: pointer;
   }
 </style>
