@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-01 09:26:31
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 09:15:53
+ * @LastEditTime: 2019-08-10 17:22:35
  -->
 <template>
   <div class='taskBarMenus fadeInUp animated'>
@@ -50,10 +50,10 @@ export default {
         this.showSecondMenu = false;
       }
       if( this.isFix === null ){//控制显示固定 和 取消固定
-        this.menus.splice(3,3);
+        this.menus.splice(4,3);
       } else {
-        if( this.isFix ) this.menus.splice(3,1);
-        else this.menus.splice(4,1);
+        if( this.isFix ) this.menus.splice(4,1);
+        else this.menus.splice(5,1);
       }
     },
     methods:{
@@ -133,7 +133,7 @@ export default {
     position: absolute;
     width: 60%;
     left:100%;
-    top:-55px;
+    top:-83px;
     background: #fff;
   }
   .rightChildUl{
