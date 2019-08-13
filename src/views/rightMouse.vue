@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-26 11:42:30
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-13 17:00:32
+ * @Desc: 
+ -->
 <template>
   <div class='' @contextmenu.stop.prevent @click.stop>
     <ul class="menus pulse animated" :style="menuPosition" ref="ulMenu" @mouseleave="leaveMenus">
@@ -114,8 +120,19 @@ export default {
               {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
               {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
             ],
-            protogenesis:[],
-            recycle:[],
+            recycle:[
+              {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
+              {title:'清空回收站',icon:'el-icon-refresh',color:{ color:'#ff5858' },fn:() => {console.log(1)}},
+            ],
+            iCloud:[
+              {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'服务',icon:'el-icon-key',color:{ color:'#ec8f6a' },fn:() => {console.log(1)}},
+              {title:'属性',icon:'el-icon-warning',color:{ color:'#00a79d' },fn:() => {
+                this.$emit('closeMenus',true);
+                this.$emit('rightMouseClick',{name:'systemProperties'});
+              }},
+            ],
           },
           
         };
