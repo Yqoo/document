@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-23 17:42:48
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-13 17:04:38
+ * @LastEditTime: 2019-08-14 15:27:19
  -->
 <template>
   <el-container :style="bg">
@@ -99,12 +99,13 @@
           </div>
         </div>
       </vue-drawer-layout>
-      <system @closeItem="closeItem" @minSize="minSize" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display"></system>
+      <system @closeItem="closeItem" @minSize="minSize" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display" @applications="applications"></system>
       <myCloud v-if='isShowBox.myCloud.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.myCloud.display"></myCloud>
       <recycle v-if='isShowBox.recycle.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.recycle.display"></recycle>
       <browser v-if='isShowBox.browser.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.browser.display"></browser>
       <news v-if='isShowBox.news.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.news.display"></news>
       <systemProperties v-if='isShowBox.systemProperties.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.systemProperties.display"></systemProperties>
+      <iCloudConsole v-if='isShowBox.iCloudConsole.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.iCloudConsole.display"></iCloudConsole>
     </el-main>
     <el-footer :class="footerClass" :style="groundGlass">
       <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></bottomBar>
@@ -122,6 +123,7 @@ import recycle from "@/components/recycle/recycle";
 import browser from "@/views/browser";
 import news from "@/views/news";
 import systemProperties from "@/components/systemProperties/systemProperties";
+import iCloudConsole from "@/components/supervisorConsole/iCloudConsole.vue";
 import tools from  "@/assets/js/utils/tools.js";
 import { GridLayout, GridItem } from 'vue-grid-layout';
 export default {
@@ -136,7 +138,8 @@ export default {
     GridItem,
     browser,
     news,
-    systemProperties
+    systemProperties,
+    iCloudConsole
   },
   data() {
     return {
@@ -163,6 +166,7 @@ export default {
         browser: { show:false,name:'浏览器',display:false,icon:require('../assets/image/icons/deskIcons/icon-browser.png') },
         news: { show:false,name:'新闻',display:false,icon:require('../assets/image/icons/deskIcons/icon-news.png') },
         systemProperties: { show:false,name:'系统属性',display:false,icon:require('../assets/image/icons/deskIcons/icon-systemProperties.png') },
+        iCloudConsole: { show:false,name:'iCloud控制台',display:false,icon:require('../assets/image/icons/deskIcons/icon-ad.png') },
       },
       index:'theme',
       isMoveDrawer:false,
@@ -361,6 +365,10 @@ export default {
     },
     layoutUpdatedEvent( newLayout ){  // 移动成功后获取新的图标信息
       // console.log(newLayout)
+    },
+    applications({component,open}){//system组件下的程序应用下的menus菜单的操作集合
+      this.isShowBox[component].show = open;
+      this.isShowBox[component].display = open;
     }
   },
   mounted(){

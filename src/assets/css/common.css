@@ -197,3 +197,6 @@ ol {
 .el-tabs__item {
   font-size: 12px!important;
 }
+.el-tabs__header {
+  margin: 0px!important;
+}

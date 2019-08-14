@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-10 10:53:31
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-13 10:31:57
+ * @LastEditTime: 2019-08-14 15:09:29
  * @desc: 程序应用组件
  -->
 <template>
@@ -11,40 +11,69 @@
       <span>程序应用</span>
     </div>
     <div class="applications-main">
-      <el-tabs v-model="active">
-        <el-tab-pane label="所有" name="all">
-          <ul class="appList">
-            <li>
+      <el-row>
+        <el-col :span="2">
+          <div class="classify">
+            <i class="el-icon-s-goods"></i>
+            <span>应用中心</span>
+          </div>
+        </el-col>
+        <el-col :span="22">
+          <el-tabs v-model="active">
+            <el-tab-pane label="云商城" name="mall"></el-tab-pane>
+            <el-tab-pane label="已下载" name="downloaded"></el-tab-pane>
+            <el-tab-pane label="已安装" name="installed"></el-tab-pane>
+            <el-tab-pane label="已授权" name="authorized"></el-tab-pane>
+            <el-tab-pane label="可更新" name="renewable"></el-tab-pane>
+          </el-tabs>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="2" >
+          <div class="classify">
+            <i class="el-icon-s-grid"></i>
+            <span>应用分类</span>
+          </div>
+        </el-col>
+        <el-col :span="22">
+          <el-tabs v-model="active2">
+            <el-tab-pane label="所有" name="all"></el-tab-pane>
+            <el-tab-pane label="云存储" name="cloudStorage"></el-tab-pane>
+          </el-tabs>
+        </el-col>
+      </el-row>
+      <div class="appDiv">
+        <ul class="appList">
+          <li>
+            <el-badge value='已启用' type="primary">
               <div class="appImg">
-                <img :src="require('@/assets/image/icons/deskIcons/icon-ad.png')" alt="">
+                <img :src="require('@/assets/image/icons/deskIcons/icon-ad.png')">
               </div>
-              <div class="appName">挚友ICloud</div>
-              <div class="appSetting">
-                <div class="btnBox">
-                  <div>
-                    <i class="el-icon-setting"></i>
-                    <span>配置程序</span>
-                  </div>
-                  <div>
-                    <el-popover trigger="click" placement="bottom" width="100" @show="expandMenus = false" @hide="expandMenus = true">
-                      <ul class="itemMenus">
-                        <li v-for="(item,key) in menus" :key="key">
-                          <i :class="item.icon" :style="item.color"></i>
-                          <span>{{item.title}}</span>
-                        </li>
-                      </ul>
-                      <i v-if="expandMenus" class="el-icon-caret-bottom" slot="reference" style="font-size:14px;" title="工具栏"></i>
-                      <i v-else class="el-icon-caret-top" slot="reference" style="font-size:14px;" title="工具栏"></i>
-                    </el-popover>
-                  </div>
+            </el-badge>
+            <div class="appName">挚友ICloud</div>
+            <div class="appSetting">
+              <div class="btnBox">
+                <div>
+                  <i class="el-icon-setting"></i>
+                  <span>配置程序</span>
+                </div>
+                <div>
+                  <el-popover trigger="click" placement="bottom" width="100" @show="expandMenus = false" @hide="expandMenus = true">
+                    <ul class="itemMenus">
+                      <li v-for="(item,key) in menus" :key="key" @click="handle(item.name)">
+                        <i :class="item.icon" :style="item.color"></i>
+                        <span>{{item.title}}</span>
+                      </li>
+                    </ul>
+                    <i v-if="expandMenus" class="el-icon-caret-bottom" slot="reference" style="font-size:14px;" title="工具栏"></i>
+                    <i v-else class="el-icon-caret-top" slot="reference" style="font-size:14px;" title="工具栏"></i>
+                  </el-popover>
                 </div>
               </div>
-            </li>
-          </ul>
-        </el-tab-pane>
-        <el-tab-pane label="已启用" name="enabled">已启用</el-tab-pane>
-        <el-tab-pane label="未启用" name="disabled">未启用</el-tab-pane>
-      </el-tabs>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -56,10 +85,13 @@ export default {
   components: {},
   data() {
     return {
-      active: "all",//默认展示所有
+      active: "",
+      active2: '',
       expandMenus:true,
       menus:[//每项子菜单
+        { name:'download',title:'下载程序',icon:"el-icon-download",color:{ color:'#9896f1' } },
         { name:'install',title:'安装程序',icon:"el-icon-connection",color:{ color:'#eb7070' } },
+        { name:'renewable',title:'更新程序',icon:"el-icon-refresh-right",color:{ color:'#edb1f1' } },
         { name:'buy',title:'购买授权',icon:"el-icon-shopping-cart-2",color:{ color:'#35b0ab'} },
         { name:'setting',title:'系统设置',icon:"el-icon-setting",color:{ color:'#4f81c7'} },
         { name:'console',title:'管理控制台',icon:"el-icon-s-marketing",color:{ color:'#589167'} },
@@ -68,12 +100,20 @@ export default {
       ],
     };
   },
+  methods:{
+    handle( name ){
+      this.$emit('childHandle',{
+        component:'iCloudConsole',
+        open:true
+      });
+    }
+  },
 }
 </script>
 <style lang='less' scoped>
   .applications{
-    height: 550px;
-    padding: 10px;
+    padding: 20px;
+    height: 60%;
     overflow-y:auto;
     overflow-x: hidden; 
     & .title {
@@ -91,7 +131,9 @@ export default {
     }
   }
   .appList {
-    padding:0px 3px;
+    padding:5px 3px;
+    display:flex;
+    flex-flow:row wrap;
     & li {
       height: 150px;
       width: 120px;
@@ -99,6 +141,7 @@ export default {
       border-radius: 5px;
       background:linear-gradient(#ecfcff,#fff);
       text-align:center;
+      margin: 10px 15px;
       & img {
         width: 80px;
       }
@@ -143,4 +186,12 @@ export default {
       padding-left: 8px;
     }
   }
+  .classify {
+    height: 38px;
+    line-height: 38px;
+    border-bottom: 2px solid #ddd;
+    & span {
+      padding-left: 3px;
+    }
+  } 
 </style>

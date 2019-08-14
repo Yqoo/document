@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-26 17:20:46
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-13 15:31:09
+ * @LastEditTime: 2019-08-14 15:14:08
  -->
 <template>
   <div class='themeBox' v-drag:themeBox>
@@ -31,7 +31,7 @@
             </el-col>
             <el-col :span="24-leftSize">
             <div class="rightContent zoomIn animated">            
-              <component :is="current" ></component>
+              <component :is="current" @childHandle="childHandle"></component>
             </div>
           </el-col>
         </el-row>
@@ -112,13 +112,13 @@ export default {
         };
         _s[obj.type](obj.param);
       },
+      childHandle( {component,open} ){//子组件$emit事件
+        this.$emit('applications',{component,open});
+      }
     },
     mounted(){
       this.minWidth = document.querySelector('.themeBox').offsetWidth;
       this.minHeight = document.querySelector('.themeBox').offsetHeight;
-    },
-    watch:{
-      
     },
 }
 </script>
@@ -161,7 +161,7 @@ export default {
   }
   .themeBox {
     width: 60%;
-    height: 70%;
+    height: 60%;
     background: #fff;
     //border: 3px double #b1b0b0;
     position: absolute;

@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-13 16:36:29
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-13 18:09:19
+ * @LastEditTime: 2019-08-14 15:19:27
  * @Desc: 系统属性组件
  -->
 <template>
@@ -84,6 +84,7 @@ export default {
     left: 20%;
     background: #fff;
     border-radius: 5px;
+    box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
   }
   .SPMain{
     & .el-row {
@@ -99,7 +100,6 @@ export default {
         & p {
           padding: 5px 0px;
           font-size: 12px;
-          font-weight: 600;
         }
       }
     }
