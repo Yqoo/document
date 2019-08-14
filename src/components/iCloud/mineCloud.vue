@@ -9,8 +9,8 @@
               </template>
               <div class="cards slideInRight animated">
                   <el-card v-for="(c,index) in zyCloud" :class="_isClick.mineCloud.zhiyou&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-backward">
-                      <div @click="activeCard(c, zyCloud)">
-                        <img :src="c.imgurl"/>
+                      <div @click="activeCard(c, zyCloud)" :title="c.name">
+                        <img :src="c.imgurl" :style="size"/>
                         <div class="bottom">{{c.name}}</div>
                         <img :src="c.icon" class="fileIcon">
                       </div>
@@ -26,8 +26,8 @@
               </template>
               <div class="cards slideInLeft animated">
                   <el-card v-for="(c,index) in myCloud" :class="_isClick.mineCloud.mine&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-float">
-                      <div @click="activeCard(c, myCloud)">
-                        <img :src="c.imgurl"/>
+                      <div @click="activeCard(c, myCloud)" :title="c.name">
+                        <img :src="c.imgurl" :style="size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>
                   </el-card>

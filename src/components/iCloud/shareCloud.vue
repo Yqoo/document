@@ -9,8 +9,8 @@
               </template>
               <div class="cards slideInDown animated">
                   <el-card v-for="(c,index) in shareCloud" :class="_isClick.shareCloud&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-sink">
-                      <div @click="activeCard(c, shareCloud)">
-                        <img :src="c.imgurl"/>
+                      <div @click="activeCard(c, shareCloud)" :title="c.name">
+                        <img :src="c.imgurl" :style="size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>
                   </el-card>

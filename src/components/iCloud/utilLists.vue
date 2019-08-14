@@ -192,8 +192,8 @@ export default {
     };
   },
   methods: {
-      utilClick( name ){
-          this.$emit('utilClick', name);
+      utilClick( value ){
+          this.$emit('utilClick', value);
       }
   }
 }
