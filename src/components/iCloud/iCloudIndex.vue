@@ -26,14 +26,7 @@ export default {
   },
   props:['attrs'],
   data() {
-    return {
-      // attrs: {
-      //   isClick: {// 用于判断点击的哪一块内容(点击其他模块时，边框消失)
-      //     mineCloud: {zhiyou: false, mine: false},
-      //     shareCloud: false,
-      //     organizationCloud: false,
-      //   },
-      // }  
+    return { 
     };
   },
   methods: {
