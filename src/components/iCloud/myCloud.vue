@@ -151,7 +151,7 @@ export default {
         this.isShowUtils = !this.isShowUtils;
         this.hideUtil = this.isShowUtils === true ? '' : 'hide';
       },
-      handleNodeClick(data, node, el) {  //节点被选中，切换模块和工具栏
+      handleNodeClick(data, node, el) {  //左侧树节点被选中，切换模块和工具栏
         console.log(data)
         // console.log(node)
         // console.log(el)
