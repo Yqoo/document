@@ -1,7 +1,7 @@
 <!-- 我的云端：工具栏 -->
 <template>
   <div class='utilLists'>
-      <topUtil :lists="active[utilName]"></topUtil>
+      <topUtil :lists="active[utilName]" @utilClick="utilClick"></topUtil>
   </div>
 </template>
 
@@ -191,7 +191,11 @@ export default {
         },
     };
   },
-  methods: {}
+  methods: {
+      utilClick( name ){
+          this.$emit('utilClick', name);
+      }
+  }
 }
 
 </script>

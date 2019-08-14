@@ -1,12 +1,12 @@
 <!-- 我的云端：单个工具操作 -->
 <template>
   <div class='topUtil'>
-      <div class="block" v-for="(item,index) in lists"  @click="showMenu(item)" :key="index" :style="item.isRightBorder?{borderRight: '1px solid #DCDFE6'}:''">
+      <div class="block" v-for="(item,index) in lists" @click="showMenu(item)" :key="index" :style="item.isRightBorder?{borderRight: '1px solid #DCDFE6'}:''">
           <el-image :src="item.iconImg"></el-image>
           <p>{{item.iconTitle}}</p>
           <i v-if="item.secondMenu" class="el-icon-caret-bottom"></i>
           <ul class="childMenu" v-if="item.flag" @mouseleave="hideMenu">
-              <li v-for="list in item.secondMenu" :key="list.iconTitle">
+              <li v-for="list in item.secondMenu" @click.stop="utilClick(list)" :key="list.iconTitle">
                   <img :src="list.iconImg" :alt="list.iconTitle">
                   <span>{{list.iconTitle}}</span>
               </li>
@@ -24,23 +24,33 @@ export default {
   },
   data () {
     return {
+        arr: this.lists,
     };
   },
   methods: {
       showMenu( item ) {  // 展开二级菜单
+          if(item.secondMenu == null){ // 没有子菜单
+            this.utilClick(item);
+              return false;
+          }
+          //有子菜单
           if(item.flag){
               item.flag = false;
           } else {
-              for(let i=0; i< this.lists.length; i++){
-                  this.lists[i].flag = false;
+              for(let i=0; i< this.arr.length; i++){
+                  this.arr[i].flag = false;
               }
               item.flag = true;
           }
       },
       hideMenu() {  //隐藏二级菜单
-        for(let i=0; i< this.lists.length; i++){
-            this.lists[i].flag = false;
+        for(let i=0; i< this.arr.length; i++){
+            this.arr[i].flag = false;
         }
+      },
+      utilClick( item ){
+          this.hideMenu();
+          this.$emit('utilClick', item.iconTitle);
       }
   }
 }

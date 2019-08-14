@@ -8,7 +8,7 @@
     <boxTools class="theme-color moveBox" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
     <div class="topContent">
         <i class="el-icon-arrow-down" v-show="isShowUtils" @click="utilCollapse" title="收起工具栏"></i>
-        <utilLists :utilName="utilName" :class="hideUtil"></utilLists>
+        <utilLists :utilName="utilName" @utilClick="utilClick" :class="hideUtil"></utilLists>
         <el-row class="searchContent">
           <el-col :span="2">
             <img class="addressImg" src="@/assets/image/icons/deskIcons/address.png"/>
@@ -183,6 +183,9 @@ export default {
           this.attrs.isClick[tag.clickTag] = true;
         }
       },
+      utilClick( name ){ // name: 工具栏点击的名字
+        console.log(name)
+      }
     },
     mounted(){
       this.minWidth = document.querySelector('.myCloud').offsetWidth;
