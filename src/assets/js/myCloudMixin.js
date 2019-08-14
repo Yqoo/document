@@ -2,6 +2,12 @@ export const myCloudMixin = {
     data() {
         return {}
     },
+    props: ['attrs'],
+    computed: {
+        _isClick() { //用于判断点击的某一块内容
+            return this.attrs.isClick;
+        }
+    },
     methods: {
         //点击右侧内容，切换工具栏
         clickBlock( tag ) {

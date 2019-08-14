@@ -8,7 +8,7 @@
     <boxTools class="theme-color moveBox" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
     <div class="topContent">
         <i class="el-icon-arrow-down" v-show="isShowUtils" @click="utilCollapse" title="收起工具栏"></i>
-        <utilLists :utilName="utilName" :class="hideUtil"></utilLists>
+        <utilLists :utilName="utilName" @utilClick="utilClick" :class="hideUtil"></utilLists>
         <el-row class="searchContent">
           <el-col :span="2">
             <img class="addressImg" src="@/assets/image/icons/deskIcons/address.png"/>
@@ -45,7 +45,7 @@
         </div>
       </aside>
       <div class="rightContent">
-        <component :is="current" @changeUtils="changeUtils"></component>
+        <component :is="current" @changeUtils="changeUtils" :attrs="attrs"></component>
       </div>
     </section>
   </div>
@@ -128,6 +128,13 @@ export default {
           utilName: 'unit',  //选中的模块名称
           isShowUtils: true,  // 展开工具栏
           hideUtil: '',  // 隐藏工具栏类名
+          attrs: {
+            isClick: {// 用于判断点击的哪一块内容(点击其他模块时，边框消失)
+              mineCloud: {zhiyou: false, mine: false},
+              shareCloud: false,
+              organizationCloud: false,
+            },
+          },  //用来判断组件中所传属性
         };
     },
     methods:{
@@ -144,7 +151,7 @@ export default {
         this.isShowUtils = !this.isShowUtils;
         this.hideUtil = this.isShowUtils === true ? '' : 'hide';
       },
-      handleNodeClick(data, node, el) {  //节点被选中，切换模块和工具栏
+      handleNodeClick(data, node, el) {  //左侧树节点被选中，切换模块和工具栏
         console.log(data)
         // console.log(node)
         // console.log(el)
@@ -155,20 +162,44 @@ export default {
           this.current = data.name;
         }
         //判断出现的工具栏
-        if(data.name === 'organizationCloud'){
-          this.utilName = 'organizationCloud';
-        } else if(data.name === 'mineCloud' || data.name === 'shareCloud') {
-          this.utilName = 'unit';
+        switch (data.name) {
+          case 'mineCloud':
+            this.utilName = 'unit';break;
+          default:
+            this.utilName = data.name;
         }
       },
       changeUtils( tag ){  // 点击右侧内容模块，切换工具栏
-        this.utilName = tag;
+        this.utilName = tag.utilTag;
+        //给点击的内容加上边框
+        Object.assign(this.attrs.isClick, {
+          mineCloud: {zhiyou: false, mine: false},
+          shareCloud: false,
+          organizationCloud: false,
+        });
+        if(tag.clickTag === 'zhiyou' || tag.clickTag === 'mine'){
+          this.attrs.isClick.mineCloud[tag.clickTag] = true;
+        } else {
+          this.attrs.isClick[tag.clickTag] = true;
+        }
+      },
+      utilClick( name ){ // name: 工具栏点击的名字
+        console.log(name)
       }
     },
     mounted(){
       this.minWidth = document.querySelector('.myCloud').offsetWidth;
       this.minHeight = document.querySelector('.myCloud').offsetHeight;
     },
+    watch: {
+      current( val ) {
+        // console.log(val)
+        if(val === 'mineCloud' || val === 'shareCloud' || val === 'organizationCloud'){
+          //
+        } else {
+        }
+      }
+    }
 }
 </script>
 <style lang='less' scoped>

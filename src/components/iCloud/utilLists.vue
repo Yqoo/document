@@ -1,7 +1,7 @@
 <!-- 我的云端：工具栏 -->
 <template>
   <div class='utilLists'>
-      <topUtil :lists="active[utilName]"></topUtil>
+      <topUtil :lists="active[utilName]" @utilClick="utilClick"></topUtil>
   </div>
 </template>
 
@@ -121,7 +121,7 @@ export default {
                 refresh_help.refresh,
                 refresh_help.help
             ],
-            mineCloud: [
+            mineCloud: [  // 我的云端
                 {
                     iconImg: require('@/assets/image/icons/fileIcons/partition.png'),
                     iconTitle: '创建分区',
@@ -154,11 +154,48 @@ export default {
                 send,
                 refresh_help.refresh,
                 refresh_help.help
-            ]
+            ],
+            shareCloud: [  // 共享云端
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/partition.png'),
+                    iconTitle: '创建云端',
+                    isRightBorder: false
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/editCloud.png'),
+                    iconTitle: '编辑云端',
+                    isRightBorder: false
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/power.png'),
+                    iconTitle: '云端权限',
+                    isRightBorder: false
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/format.png'),
+                    iconTitle: '格式云端',
+                    isRightBorder: false
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),
+                    iconTitle: '删除云端',
+                    isRightBorder: true
+                },
+                volume.addV,
+                volume.reduceV,
+                check,
+                array,
+                refresh_help.refresh,
+                refresh_help.help
+            ],
         },
     };
   },
-  methods: {}
+  methods: {
+      utilClick( name ){
+          this.$emit('utilClick', name);
+      }
+  }
 }
 
 </script>

@@ -6,9 +6,9 @@
  -->
 <template>
   <div class='iCloudIndex'>
-    <mineCloud @changeUtils='changeUtils'></mineCloud>
-    <shareCloud @changeUtils='changeUtils'></shareCloud>
-    <organizationCloud @changeUtils='changeUtils'></organizationCloud>
+    <mineCloud @changeUtils='changeUtils' :attrs="attrs"></mineCloud>
+    <shareCloud @changeUtils='changeUtils' :attrs="attrs"></shareCloud>
+    <organizationCloud @changeUtils='changeUtils' :attrs="attrs"></organizationCloud>
   </div>
 </template>
 
@@ -16,6 +16,7 @@
 import mineCloud from '@/components/iCloud/mineCloud.vue';
 import organizationCloud from '@/components/iCloud/organizationCloud.vue';
 import shareCloud from '@/components/iCloud/shareCloud.vue';
+import { debuglog } from 'util';
 export default {
   name: 'iCloudIndex',
   components: {
@@ -23,8 +24,9 @@ export default {
     organizationCloud,
     shareCloud
   },
+  props:['attrs'],
   data() {
-    return {
+    return { 
     };
   },
   methods: {
