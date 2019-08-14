@@ -2,10 +2,10 @@ export const myCloudMixin = {
     data() {
         return {}
     },
-    props: ['isClick'],
+    props: ['attrs'],
     computed: {
         _isClick() { //用于判断点击的某一块内容
-            return this.isClick;
+            return this.attrs.isClick;
         }
     },
     methods: {

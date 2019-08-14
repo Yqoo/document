@@ -60,6 +60,7 @@ export default {
     cursor: pointer;
     & .el-image {
         width: 50%;
+        height: 28px;
     }
     & p{
         position: relative;

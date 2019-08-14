@@ -45,7 +45,7 @@
         </div>
       </aside>
       <div class="rightContent">
-        <component :is="current" @changeUtils="changeUtils"></component>
+        <component :is="current" @changeUtils="changeUtils" :attrs="attrs"></component>
       </div>
     </section>
   </div>
@@ -128,6 +128,13 @@ export default {
           utilName: 'unit',  //选中的模块名称
           isShowUtils: true,  // 展开工具栏
           hideUtil: '',  // 隐藏工具栏类名
+          attrs: {
+            isClick: {// 用于判断点击的哪一块内容(点击其他模块时，边框消失)
+              mineCloud: {zhiyou: false, mine: false},
+              shareCloud: false,
+              organizationCloud: false,
+            },
+          },  //用来判断组件中所传属性
         };
     },
     methods:{
@@ -155,20 +162,41 @@ export default {
           this.current = data.name;
         }
         //判断出现的工具栏
-        if(data.name === 'organizationCloud'){
-          this.utilName = 'organizationCloud';
-        } else if(data.name === 'mineCloud' || data.name === 'shareCloud') {
-          this.utilName = 'unit';
+        switch (data.name) {
+          case 'mineCloud':
+            this.utilName = 'unit';break;
+          default:
+            this.utilName = data.name;
         }
       },
       changeUtils( tag ){  // 点击右侧内容模块，切换工具栏
-        this.utilName = tag;
-      }
+        this.utilName = tag.utilTag;
+        //给点击的内容加上边框
+        Object.assign(this.attrs.isClick, {
+          mineCloud: {zhiyou: false, mine: false},
+          shareCloud: false,
+          organizationCloud: false,
+        });
+        if(tag.clickTag === 'zhiyou' || tag.clickTag === 'mine'){
+          this.attrs.isClick.mineCloud[tag.clickTag] = true;
+        } else {
+          this.attrs.isClick[tag.clickTag] = true;
+        }
+      },
     },
     mounted(){
       this.minWidth = document.querySelector('.myCloud').offsetWidth;
       this.minHeight = document.querySelector('.myCloud').offsetHeight;
     },
+    watch: {
+      current( val ) {
+        // console.log(val)
+        if(val === 'mineCloud' || val === 'shareCloud' || val === 'organizationCloud'){
+          //
+        } else {
+        }
+      }
+    }
 }
 </script>
 <style lang='less' scoped>

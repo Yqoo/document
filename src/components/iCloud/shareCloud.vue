@@ -2,13 +2,13 @@
 <template>
   <div class='shareCloud'>
       <el-collapse v-model="activeNames">
-        <div @click="clickBlock({utilTag:'unit',clickTag:'shareCloud'})">
+        <div @click="clickBlock({utilTag:'shareCloud',clickTag:'shareCloud'})">
           <el-collapse-item  name='1' :disabled='true'>
               <template slot="title">
                   <img src='@/assets/image/icons/deskIcons/tree-share.png'/>共享云端
               </template>
               <div class="cards slideInDown animated">
-                  <el-card v-for="(c,index) in shareCloud" :class="_isClick&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-sink">
+                  <el-card v-for="(c,index) in shareCloud" :class="_isClick.shareCloud&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-sink">
                       <div @click="activeCard(c, shareCloud)">
                         <img :src="c.imgurl"/>
                         <div class="bottom1">{{c.name}}</div>

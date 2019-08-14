@@ -8,7 +8,7 @@
                   <img src='@/assets/image/icons/deskIcons/tree-org.png'/>组织云端
               </template>
               <div class="cards slideInUp animated">
-                  <el-card v-for="(c,index) in organizationCloud" :class="_isClick&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-forward">
+                  <el-card v-for="(c,index) in organizationCloud" :class="_isClick.organizationCloud&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-forward">
                       <div @click="activeCard(c, organizationCloud)">
                         <i :class="c.imgurl"></i>
                         <div class="bottom1">{{c.name}}</div>
