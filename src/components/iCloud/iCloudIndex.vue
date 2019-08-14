@@ -6,9 +6,9 @@
  -->
 <template>
   <div class='iCloudIndex'>
-    <mineCloud @changeUtils='changeUtils'></mineCloud>
-    <shareCloud @changeUtils='changeUtils'></shareCloud>
-    <organizationCloud @changeUtils='changeUtils'></organizationCloud>
+    <mineCloud @changeUtils='changeUtils' :isClick="isClick.mineCloud"></mineCloud>
+    <shareCloud @changeUtils='changeUtils' :isClick="isClick.shareCloud"></shareCloud>
+    <organizationCloud @changeUtils='changeUtils' :isClick="isClick.organizationCloud"></organizationCloud>
   </div>
 </template>
 
@@ -16,6 +16,7 @@
 import mineCloud from '@/components/iCloud/mineCloud.vue';
 import organizationCloud from '@/components/iCloud/organizationCloud.vue';
 import shareCloud from '@/components/iCloud/shareCloud.vue';
+import { debuglog } from 'util';
 export default {
   name: 'iCloudIndex',
   components: {
@@ -25,11 +26,26 @@ export default {
   },
   data() {
     return {
+      isClick: {// 用于判断点击的哪一块内容(点击其他模块时，边框消失)
+        mineCloud: {zhiyou: false, mine: false},
+        shareCloud: false,
+        organizationCloud: false,
+      },  
     };
   },
   methods: {
     changeUtils( tag ) {
-      this.$emit('changeUtils', tag);
+      Object.assign(this.isClick, {
+        mineCloud: {zhiyou: false, mine: false},
+        shareCloud: false,
+        organizationCloud: false,
+      });
+      if(tag.clickTag === 'zhiyou' || tag.clickTag === 'mine'){
+        this.isClick.mineCloud[tag.clickTag] = true;
+      } else {
+        this.isClick[tag.clickTag] = true;
+      }
+      this.$emit('changeUtils', tag.utilTag);
     }
   }
 }
