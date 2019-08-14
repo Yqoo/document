@@ -128,13 +128,13 @@ export default {
           utilName: 'unit',  //选中的模块名称
           isShowUtils: true,  // 展开工具栏
           hideUtil: '',  // 隐藏工具栏类名
-          attrs: {
+          attrs: { //用来判断组件中所传属性
             isClick: {// 用于判断点击的哪一块内容(点击其他模块时，边框消失)
               mineCloud: {zhiyou: false, mine: false},
               shareCloud: false,
               organizationCloud: false,
             },
-          },  //用来判断组件中所传属性
+          }, 
         };
     },
     methods:{
@@ -183,8 +183,13 @@ export default {
           this.attrs.isClick[tag.clickTag] = true;
         }
       },
-      utilClick( name ){ // name: 工具栏点击的名字
-        console.log(name)
+      utilClick( value ){ // name: 工具栏点击的名字
+        console.log(value);
+        if(value.one === '查看'){
+          Object.assign(this.attrs, {
+            iconSize: value.second
+          });
+        }
       }
     },
     mounted(){
@@ -194,11 +199,7 @@ export default {
     watch: {
       current( val ) {
         // console.log(val)
-        if(val === 'mineCloud' || val === 'shareCloud' || val === 'organizationCloud'){
-          //
-        } else {
-        }
-      }
+      },
     }
 }
 </script>

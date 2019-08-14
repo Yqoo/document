@@ -6,6 +6,11 @@ export const myCloudMixin = {
     computed: {
         _isClick() { //用于判断点击的某一块内容
             return this.attrs.isClick;
+        },
+    },
+    data(){
+        return {
+            size: {width: '60%'},
         }
     },
     methods: {

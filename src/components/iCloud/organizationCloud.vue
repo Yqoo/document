@@ -9,8 +9,8 @@
               </template>
               <div class="cards slideInUp animated">
                   <el-card v-for="(c,index) in organizationCloud" :class="_isClick.organizationCloud&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-forward">
-                      <div @click="activeCard(c, organizationCloud)">
-                        <i :class="c.imgurl"></i>
+                      <div @click="activeCard(c, organizationCloud)" :title="c.name">
+                        <img :src="c.imgurl" :style="size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>
                   </el-card>
@@ -29,7 +29,7 @@ export default {
     return {
         activeNames: ['1'],
         organizationCloud:[
-            {name:'挚友',imgurl:'el-icon-office-building',active:false}
+            {name:'四川挚友软件有限公司',imgurl:require('@/assets/image/icons/fileIcons/company.png'),active:false}
       ],
     };
   },
