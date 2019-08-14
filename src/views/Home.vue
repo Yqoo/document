@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-23 17:42:48
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 09:11:13
+ * @LastEditTime: 2019-08-13 17:04:38
  -->
 <template>
   <el-container :style="bg">
@@ -61,7 +61,7 @@
               </grid-layout>
             </div>
           </div>
-          <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus"></rightMenus>
+          <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus" @rightMouseClick="rightMouseClick"></rightMenus>
         </div>
         <div class="drawer-content lockSystem" slot="drawer">
           <span class="myFont"><i class="el-icon-view"></i> 预览</span>
@@ -104,6 +104,7 @@
       <recycle v-if='isShowBox.recycle.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.recycle.display"></recycle>
       <browser v-if='isShowBox.browser.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.browser.display"></browser>
       <news v-if='isShowBox.news.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.news.display"></news>
+      <systemProperties v-if='isShowBox.systemProperties.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.systemProperties.display"></systemProperties>
     </el-main>
     <el-footer :class="footerClass" :style="groundGlass">
       <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></bottomBar>
@@ -120,6 +121,7 @@ import myCloud from "@/components/iCloud/myCloud";
 import recycle from "@/components/recycle/recycle";
 import browser from "@/views/browser";
 import news from "@/views/news";
+import systemProperties from "@/components/systemProperties/systemProperties";
 import tools from  "@/assets/js/utils/tools.js";
 import { GridLayout, GridItem } from 'vue-grid-layout';
 export default {
@@ -133,7 +135,8 @@ export default {
     GridLayout,
     GridItem,
     browser,
-    news
+    news,
+    systemProperties
   },
   data() {
     return {
@@ -159,6 +162,7 @@ export default {
         recycle: { show:false,name:'回收站',display:false,icon:require('../assets/image/icons/deskIcons/icon-recycle.png') },
         browser: { show:false,name:'浏览器',display:false,icon:require('../assets/image/icons/deskIcons/icon-browser.png') },
         news: { show:false,name:'新闻',display:false,icon:require('../assets/image/icons/deskIcons/icon-news.png') },
+        systemProperties: { show:false,name:'系统属性',display:false,icon:require('../assets/image/icons/deskIcons/icon-systemProperties.png') },
       },
       index:'theme',
       isMoveDrawer:false,
@@ -185,11 +189,11 @@ export default {
       lockTips:'',//解锁密码错误时的提醒信息
       userSettingLockTime:this.$store.state.lockTime,//锁屏时间
       defaultApps:[  // 桌面默认展示的list
-        {"x":0,'y':0,'w':1,'h':1,'i':'1',type: '1',name:'我的云端',title:'myCloud',img:require('../assets/image/icons/deskIcons/icon-computer.png')},
+        {"x":0,'y':0,'w':1,'h':1,'i':'1',type: 'iCloud',name:'我的云端',title:'myCloud',img:require('../assets/image/icons/deskIcons/icon-computer.png')},
         {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',name:'浏览器',title:'browser',img:require('../assets/image/icons/deskIcons/icon-geogle.png')},
-        {"x":0,'y':2,'w':1,'h':1,'i':'3',type: '1',name:'系统设置',title:'system',img:require('../assets/image/icons/deskIcons/icon-setting.png')},
+        {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',name:'系统设置',title:'system',img:require('../assets/image/icons/deskIcons/icon-setting.png')},
         {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',name:'新闻',title:'news',img:require('../assets/image/icons/deskIcons/icon-news.png')},
-        {"x":1,'y':0,'w':1,'h':1,'i':'6',type: '1',name:'回收站',title:'recycle',img:require('../assets/image/icons/deskIcons/icon-recycle.png')},
+        {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',name:'回收站',title:'recycle',img:require('../assets/image/icons/deskIcons/icon-recycle.png')},
         {"x":1,'y':1,'w':1,'h':1,'i':'7',type: '0'},
         {"x":1,'y':2,'w':1,'h':1,'i':'8',type: '0'},
         {"x":1,'y':3,'w':1,'h':1,'i':'9',type: '0'},
@@ -224,18 +228,31 @@ export default {
       //右键事件
       this.isRightMouseClick = true;
       let type = e.target.getAttribute('type');
-      //桌面下右键弹出层 desktop 应用下右键弹出层 app  设置|| 我的电脑等下弹出层 protogenesis 回收站下弹出层 recycle
-      if( type === '1'){
-        this.rules = 'app';
-      } else {
-        this.rules = 'desktop';
-      };
+      //桌面下右键弹出层 desktop 应用下右键弹出层 app  设置|| 我的电脑等下弹出层 recycle 回收站下弹出层 recycle
+      switch ( type ) {
+        case '1':
+          this.rules = 'app';//应用
+          break;
+        case 'iCloud':
+          this.rules = 'iCloud';//我的云端
+          break;
+        case 'recycle':
+          this.rules = 'recycle';//回收站
+          break;
+        default:
+          this.rules = 'desktop';//桌面
+          break;
+      }
       this.position = Object.assign({
         mainHeight: this.$refs.main.$el.clientHeight,
         mainWidth: this.$refs.main.$el.clientWidth,
         left: e.clientX,
         top: e.clientY
       });
+    },
+    rightMouseClick({ name }){//非desktop下右键菜单点击回调
+      this.isShowBox[name].show = true;
+      this.isShowBox[name].display = true;
     },
     hideRightMenus(){
       this.isRightMouseClick = false;
