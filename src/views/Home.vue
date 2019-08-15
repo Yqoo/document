@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-23 17:42:48
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-14 15:27:19
+ * @LastEditTime: 2019-08-15 17:52:11
  -->
 <template>
   <el-container :style="bg">
@@ -106,6 +106,7 @@
       <news v-if='isShowBox.news.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.news.display"></news>
       <systemProperties v-if='isShowBox.systemProperties.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.systemProperties.display"></systemProperties>
       <iCloudConsole v-if='isShowBox.iCloudConsole.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.iCloudConsole.display"></iCloudConsole>
+      <organization v-if='isShowBox.organization.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.organization.display"></organization>
     </el-main>
     <el-footer :class="footerClass" :style="groundGlass">
       <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></bottomBar>
@@ -124,6 +125,7 @@ import browser from "@/views/browser";
 import news from "@/views/news";
 import systemProperties from "@/components/systemProperties/systemProperties";
 import iCloudConsole from "@/components/supervisorConsole/iCloudConsole.vue";
+import organization from "@/components/organization/organization";
 import tools from  "@/assets/js/utils/tools.js";
 import { GridLayout, GridItem } from 'vue-grid-layout';
 export default {
@@ -139,7 +141,8 @@ export default {
     browser,
     news,
     systemProperties,
-    iCloudConsole
+    iCloudConsole,
+    organization
   },
   data() {
     return {
@@ -167,6 +170,7 @@ export default {
         news: { show:false,name:'新闻',display:false,icon:require('../assets/image/icons/deskIcons/icon-news.png') },
         systemProperties: { show:false,name:'系统属性',display:false,icon:require('../assets/image/icons/deskIcons/icon-systemProperties.png') },
         iCloudConsole: { show:false,name:'iCloud控制台',display:false,icon:require('../assets/image/icons/deskIcons/icon-ad.png') },
+        organization: { show:false,name:'组织与用户',display:false,icon:require('../assets/image/icons/deskIcons/icon-organization.png') },
       },
       index:'theme',
       isMoveDrawer:false,

@@ -1,52 +1,67 @@
+<!--
+ * @Date: 2019-08-06 10:40:02
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-15 18:02:00
+ * @Desc: 组织与用户组件外部容器
+ -->
 /** 
 组织与用户组件
 
 */
 <template>
-  <div class="organization">
-    <div class="top">
-      <i class="el-icon-user-solid"></i><span class="myFont">组织与用户</span>
+  <div class="organization" v-drag>
+    <div :class="themeColorName">
+      <boxTools class="theme-color moveBox"  :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentName"></boxTools>
+      <orgIndex></orgIndex>
     </div>
-    <el-tabs type='card' v-model="activeTab">
-      <el-tab-pane label="组织等级" name='org-level'>组织等级</el-tab-pane>
-      <el-tab-pane label="组织管理" name='org-manage'>组织管理</el-tab-pane>
-      <el-tab-pane label="岗位管理" name='post-manage'>岗位管理</el-tab-pane>
-      <el-tab-pane label="角色管理" name='role-manage'>角色管理</el-tab-pane>
-      <el-tab-pane label="分级组织" name='grading-org'>分级组织</el-tab-pane>
-      <el-tab-pane label="参与者属性" name='participant'>参与者属性</el-tab-pane>
-      <el-tab-pane label="员工" name='employes'>员工</el-tab-pane>
-      <el-tab-pane label="用户" name='user'>用户</el-tab-pane>
-      <el-tab-pane label="上下级" name='supAsub'>上下级</el-tab-pane>
-    </el-tabs>
   </div>
 </template>
 
 <script>
+import tools from  "@/assets/js/utils/tools.js";
+import { themeMixin}  from '@/assets/js/themeMixin.js';
+import boxTools from "@/views/boxTools";
+import orgIndex from "@/components/organization/orgIndex.vue";
 export default {
+  mixins: [themeMixin],
   name: "organization",
+  components: {
+    boxTools,
+    orgIndex
+  },
   data() {
     return {
-      activeTab:'org-level'
+      info:{className:'.organization',name:'organization',icon:'icon-organization'},
+      componentName:'组织与用户',
+      minWidth:'',
+      minHeight:'',
     };
-  }
+  },
+  methods:{
+    windowsTools( obj ){
+      let _s = {
+        minSize:   ( param ) => this.$emit( 'minSize',param ),
+        maxSize:   ( param ) => tools._maxSize(document.querySelector( param )),
+        restore:   ( param ) => tools._restore( document.querySelector(param),this.minHeight,this.minWidth),
+        closeItem: ( param ) => this.$emit( 'closeItem',param )
+      };
+      _s[obj.type](obj.param);
+    },
+  },
+  mounted(){
+    this.minWidth = document.querySelector('.organization').offsetWidth;
+    this.minHeight = document.querySelector('.organization').offsetHeight;
+  },
 };
 </script>
 <style lang='less' scoped>
   .organization {
-    padding:10px;
-    & .top {
-      box-sizing: border-box;
-      margin-bottom: 3px;
-    }
-    & .myFont {
-      font-size:12px;
-      padding-left:10px;
-    }
-    & /deep/ .el-tabs__item{
-      padding: 0 13px;
-      line-height: 35px;
-      height: 35px;
-      font-size: 12px;
-    }
+    background: #fff;
+    width: 60%;
+    height: 70%;
+    position: absolute;
+    top: 10%;
+    left:20%;
+    border-radius: 5px;
   }
 </style>

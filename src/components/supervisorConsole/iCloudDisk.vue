@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-14 16:45:07
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-15 17:03:00
+ * @LastEditTime: 2019-08-15 17:21:58
  * @Desc: iCloud组件下的存储中心
  -->
 <template>
@@ -151,6 +151,9 @@ export default {
     let checkNum = ( rule,value,callback) => {
       isNaN( value ) && callback( new Error('请输入数字')) || ( value > 4*1024 ? callback( new Error('分配空间不能大于4T')):true )
     };
+    let checkPort = ( rule,value,fn ) => {
+      isNaN( value ) && fn( new Error( '请输入1-65535之间的数字')) || ( value >= 1 && value <= 65535 ? true:fn( new Error( '请输入1-65535之间的数字')));
+    };
     return {
       tableData:[
         { ID:1,dc:'A中心',IP:'127.0.0.1',port:'8080',path:'D:/',allocation:'90%',usable:'10%',user:'Yqoo',time:'13:00'},
@@ -184,6 +187,7 @@ export default {
         ],
         port: [
           { required: true, message: '请输入端口号', trigger: 'blur' },
+          { validator: checkPort, trigger: 'blur' }
         ],
         name: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
