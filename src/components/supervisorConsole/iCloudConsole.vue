@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-14 14:47:00
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-14 16:53:23
+ * @LastEditTime: 2019-08-14 17:40:58
  * @Desc: iCloud管理控制台
  -->
 <template>
@@ -12,7 +12,7 @@
         <el-col :span="3">
           <div class="leftImgBox">
             <img :src="require('@/assets/image/icons/appIcons/appIcons-console.png')" >
-            <p >iCloud服务中心控制台</p>
+            <p >iCloud控制台</p>
           </div>
           <el-menu @select="selecetNav" default-active="iCloudDisk">
             <el-menu-item index="iCloudDesc">
@@ -80,6 +80,9 @@ export default {
     },
     selecetNav( index ){
       this.current = index;
+    },
+    deleteRow(index, rows) {
+      rows.splice(index, 1);
     }
   },
   mounted(){
@@ -93,8 +96,8 @@ export default {
 </script>
 <style lang='less' scoped>
   .iCloudConsole {
-    width: 60%;
-    height: 60%;
+    width: 70%;
+    height: 65%;
     background: #fff;
     position: absolute;
     top: 10%;
