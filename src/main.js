@@ -1,3 +1,9 @@
+/*
+ * @Date: 2019-07-23 17:42:48
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-15 09:08:56
+ * @Desc: 
+ */
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
@@ -14,10 +20,13 @@ import "@/style/theme.less";
 import "@/assets/js/dialog.js"
 import vcolorpicker from 'vcolorpicker';
 import tools from '@/assets/js/utils/tools.js';
-import DrawerLayout from 'vue-drawer-layout'
+import DrawerLayout from 'vue-drawer-layout';
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/index.css'
 Vue.use(DrawerLayout)
 Vue.use(vcolorpicker);
 Vue.use(ElementUI);
+Vue.use(VXETable);
 Vue.config.productionTip = false;
 Vue.prototype.axios = axios;
 Vue.prototype._ = _;
