@@ -1,5 +1,5 @@
 /*
-我的云端：不同组件相同工具栏操作
+我的云端：不同组件，相同工具栏操作
 */
 export const myCloudUtilMixin = {
     props: ['attrs'],

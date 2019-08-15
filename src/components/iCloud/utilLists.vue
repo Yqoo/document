@@ -76,24 +76,109 @@ export default {
             isRightBorder: false
         },
     }
+    let newCreate = {// 新建文件 && 新建文件夹
+        newFile: {
+            iconImg: require('@/assets/image/icons/fileIcons/newFile.png'),
+            iconTitle: '新建文件',
+            isRightBorder: false,
+            flag: false,
+            secondMenu: [
+                {iconImg: require('@/assets/image/icons/fileIcons/doc.png'),iconTitle: 'Word文档'},
+                {iconImg: require('@/assets/image/icons/fileIcons/excel.png'),iconTitle: 'Excel文档'},
+                {iconImg: require('@/assets/image/icons/fileIcons/ppt.png'),iconTitle: 'PPT文档'},
+                {iconImg: require('@/assets/image/icons/fileIcons/txt.png'),iconTitle: '文本文件'}
+            ]
+        },
+        newFolder: {
+            iconImg: require('@/assets/image/icons/fileIcons/newFolder.png'),
+            iconTitle: '新建文件夹',
+            isRightBorder: true
+        }
+    };
+    let copy_paste_rename = { // 复制 && 粘贴 && 重命名
+        copy: {
+            iconImg: require('@/assets/image/icons/fileIcons/copy.png'),
+            iconTitle: '复制',
+            isRightBorder: false
+        },
+        paste: {
+            iconImg: require('@/assets/image/icons/fileIcons/paste.png'),
+            iconTitle: '粘贴',
+            isRightBorder: false,
+        },
+        rename: {
+            iconImg: require('@/assets/image/icons/fileIcons/rename.png'),
+            iconTitle: '重命名',
+            isRightBorder: false
+        },
+    };
+    let cut = {  // 剪切
+        iconImg: require('@/assets/image/icons/fileIcons/cut.png'),
+        iconTitle: '剪切',
+        isRightBorder: false
+    };
+    let deleteFile = { // 删除
+        iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),
+        iconTitle: '删除',
+        isRightBorder: true
+    };
+    let preview_edit_coordination = { // 在线编辑 && 在线编辑 && 协同编辑
+        preview: {
+            iconImg: require('@/assets/image/icons/fileIcons/preview.png'),
+            iconTitle: '在线预览',
+            isRightBorder: false
+        },
+        edit: {
+            iconImg: require('@/assets/image/icons/fileIcons/edit.png'),
+            iconTitle: '在线编辑',
+            isRightBorder: false
+        },
+        coordination: {
+            iconImg: require('@/assets/image/icons/fileIcons/coordination.png'),
+            iconTitle: '协同编辑',
+            isRightBorder: true
+        }
+    }
+    let shareFile = { // 分享 && 共享
+        share: {
+            iconImg: require('@/assets/image/icons/fileIcons/myshare.png'),
+            iconTitle: '分享',
+            isRightBorder: false
+        },
+        enjoyTogether: {
+            iconImg: require('@/assets/image/icons/fileIcons/person.png'),
+            iconTitle: '共享',
+            isRightBorder: true
+        }
+    };
+    let compress= { //在线压缩 && 在线解压
+        iconImg: require('@/assets/image/icons/fileIcons/compress.png'),
+        iconTitle: '解压与压缩',
+        isRightBorder: true,
+        flag: false,
+        secondMenu: [
+            {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '在线压缩'},
+            {iconImg: require('@/assets/image/icons/fileIcons/decompression.png'),iconTitle: '在线解压'},
+        ]
+    };
+    let down_upload = { // 下载 && 上传
+        down: {
+            iconImg: require('@/assets/image/icons/fileIcons/down.png'),
+            iconTitle: '下载',
+            isRightBorder: false
+        },
+        upload: {
+            iconImg: require('@/assets/image/icons/fileIcons/upload.png'),
+            iconTitle: '上传',
+            isRightBorder: true
+        }
+    };
     return {
         active: {
             unit: [
-                {
-                    iconImg: require('@/assets/image/icons/fileIcons/copy.png'),
-                    iconTitle: '复制',
-                    isRightBorder: false
-                },
-                {
-                    iconImg: require('@/assets/image/icons/fileIcons/paste.png'),
-                    iconTitle: '粘贴',
-                    isRightBorder: false,
-                },
-                {
-                    iconImg: require('@/assets/image/icons/fileIcons/rename.png'),
-                    iconTitle: '重命名',
-                    isRightBorder: false
-                },
+                copy_paste_rename.copy,
+                copy_paste_rename.paste,
+                copy_paste_rename.rename,
                 {
                     iconImg: require('@/assets/image/icons/fileIcons/recycle.png'),
                     iconTitle: '回收站',
@@ -188,6 +273,55 @@ export default {
                 refresh_help.refresh,
                 refresh_help.help
             ],
+            myCloudContent:[ // 我的文档，软件区，娱乐区，文档区
+                newCreate.newFile,
+                newCreate.newFolder,
+                copy_paste_rename.copy,
+                copy_paste_rename.paste,
+                copy_paste_rename.rename,
+                cut,
+                deleteFile,
+                preview_edit_coordination.preview,
+                preview_edit_coordination.edit,
+                preview_edit_coordination.coordination,
+                shareFile.share,
+                shareFile.enjoyTogether,
+                compress,
+                down_upload.down,
+                down_upload.upload,
+                check,
+                array,
+                send,
+                refresh_help.refresh,
+                refresh_help.help,
+            ],
+            share_organization:[
+                newCreate.newFile,
+                newCreate.newFolder,
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/limit.png'),
+                    iconTitle: '文件夹权限',
+                    isRightBorder: false
+                },
+                copy_paste_rename.copy,
+                copy_paste_rename.paste,
+                copy_paste_rename.rename,
+                cut,
+                deleteFile,
+                preview_edit_coordination.preview,
+                preview_edit_coordination.edit,
+                preview_edit_coordination.coordination,
+                compress,
+                down_upload.down,
+                down_upload.upload,
+                shareFile.share,
+                shareFile.enjoyTogether,
+                check,
+                array,
+                send,
+                refresh_help.refresh,
+                refresh_help.help,
+            ]
         },
     };
   },

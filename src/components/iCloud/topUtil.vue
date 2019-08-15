@@ -64,7 +64,7 @@ export default {
 }
 .block{
     position: relative;
-    width: 55px;
+    width: 60px;
     float: left;
     text-align: center;
     cursor: pointer;

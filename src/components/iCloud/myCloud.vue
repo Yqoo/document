@@ -165,6 +165,10 @@ export default {
         switch (data.name) {
           case 'mineCloud':
             this.utilName = 'unit';break;
+          case 'shareCloudContent':
+            this.utilName = 'share_organization';break;
+          case 'organizationContent':
+            this.utilName = 'share_organization';break;
           default:
             this.utilName = data.name;
         }
@@ -203,8 +207,7 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-  .myCloud {
-    // min-height: 60%;  
+  .myCloud { 
     width: 80%;
     position: absolute;
     top: 50%;
@@ -224,7 +227,7 @@ export default {
       border-bottom: none;
       padding: 10px;
       & > .utilLists{
-        height: 50px;
+        max-height: 100px;
         // transition: height 0.6s;
         margin-bottom: 10px;
       }
