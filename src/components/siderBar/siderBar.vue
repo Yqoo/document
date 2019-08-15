@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-25 15:53:39
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-09 18:05:06
+ * @LastEditTime: 2019-08-15 17:49:59
  -->
 <template>
     <el-row class="fadeInLeftBig animated">
@@ -41,7 +41,10 @@
         <el-col :span="14">
             <div class="container">
             <div class="card">
-                <div class="tile">1</div>
+                <div class="tile" @click="openChild('organization')">
+                    <img :src="require('@/assets/image/icons/deskIcons/icon-adiminster.png')">
+                    <p class="myFont">组织与用户</p>
+                </div>
                 <div class="tile">2</div>
                 <div class="tile">3</div>
                 <div class="tile">4</div>
@@ -72,7 +75,7 @@ export default {
         }
     },
     mounted(){
-        let card = document.querySelector(".card");
+       /*  let card = document.querySelector(".card");
         let tiles = ["red", "orange","blue", "brown", "yellow", "orange","yellow",'red',];
         card.childNodes.forEach(function (child, i) {
             if (child.style) {
@@ -97,7 +100,7 @@ export default {
         };
         let expand = function expand(node) {
             node.className = node.className.replace(" contract", " expand");
-        };
+        }; */
     }
 }
 </script>
@@ -119,13 +122,16 @@ export default {
         height: 80px;
         margin: 7px;
         width: 80px;
-        line-height: 80px;
+        padding: 10px 0px;
         text-align: center;
         cursor: pointer;
+        box-sizing: border-box;
         &:hover{
-            border: 1px solid #eee;
-            border-radius: 5px;
-            box-sizing: border-box;
+           cursor: pointer;
+        }
+        & img {
+            width: 30px;
+            
         }
     }
     .contract {
@@ -165,5 +171,8 @@ export default {
     }
     .el-menu--collapse li:nth-child(2){
         margin-top:150px;
+    }
+    .myFont {
+        font-size: 10px;
     }
 </style>

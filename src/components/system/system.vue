@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-26 17:20:46
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-14 15:14:08
+ * @LastEditTime: 2019-08-15 18:03:22
  -->
 <template>
   <div class='themeBox' v-drag:themeBox>
@@ -51,7 +51,7 @@ import applications from "@/components/applications/applications";
 import logManage from "@/components/logManage/logManage";
 import backupAndRecovery from "@/components/backupAndRecovery/backupAndRecovery";
 import authorizationMessage from "@/views/authorizationMessage";
-import organization from "@/components/organization/organization";
+import orgIndex from "@/components/organization/orgIndex.vue";
 import dc from "@/components/dataCenter/dc";
 export default {
     mixins: [themeMixin],
@@ -67,7 +67,7 @@ export default {
       logManage,
       backupAndRecovery,
       authorizationMessage,
-      organization,
+      orgIndex,
       dc
     },
     data() {
@@ -84,7 +84,7 @@ export default {
           menus:[//菜单
             { name:'dc',title:'数据中心',img:require('@/assets/image/icons/deskIcons/icon-datas.png'),desc:'数据库建立、维护、链接、合并与分离'},
             { name:'applications',title:'程序应用',img:require('@/assets/image/icons/deskIcons/icon-applications.png'),desc:'云商城、程序下载、安装、启用、设置与控制台'},
-            { name:'organization',title:'组织与账户',img:require('@/assets/image/icons/deskIcons/icon-adiminster.png'),desc:'组织、等级、用户、岗位、角色、上下级与用户组'},
+            { name:'orgIndex',title:'组织与账户',img:require('@/assets/image/icons/deskIcons/icon-adiminster.png'),desc:'组织、等级、用户、岗位、角色、上下级与用户组'},
             { name:'wallpaper',title:'壁纸设置',img:require('@/assets/image/icons/deskIcons/icon-wallpaper.png'),desc:'为桌面更换个性化壁纸'},
             { name:'theme',title:'主题设置',img:require('@/assets/image/icons/deskIcons/icon-theme.png'),desc:'为系统更换显示风格、包括颜色、图标与效果'},
             { name:'logManage',title:'日志管理',img:require('@/assets/image/icons/deskIcons/icon-log.png'),desc:'日志的管理'},
