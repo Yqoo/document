@@ -45,7 +45,7 @@
         </div>
       </aside>
       <div class="rightContent">
-        <component :is="current" @changeUtils="changeUtils" :attrs="attrs"></component>
+        <component :is="current" @changeUtils="changeUtils" :attrs="attrs" :current="$current"></component>
       </div>
     </section>
   </div>
@@ -124,7 +124,7 @@ export default {
               ],
             }
           ],
-          current:'iCloudIndex',//初始进入myCloud 默认右侧显示
+          current: 'iCloudIndex',//初始进入myCloud 默认右侧显示
           utilName: 'unit',  //选中的模块名称
           isShowUtils: true,  // 展开工具栏
           hideUtil: '',  // 隐藏工具栏类名
@@ -133,9 +133,14 @@ export default {
               mineCloud: {zhiyou: false, mine: false},
               shareCloud: false,
               organizationCloud: false,
-            },
+            }
           }, 
         };
+    },
+    computed: {
+      $current(){
+        return this.current;
+      }
     },
     methods:{
       windowsTools( obj ){  
@@ -152,7 +157,7 @@ export default {
         this.hideUtil = this.isShowUtils === true ? '' : 'hide';
       },
       handleNodeClick(data, node, el) {  //左侧树节点被选中，切换模块和工具栏
-        console.log(data)
+        // console.log(data)
         //判断出现的内容模块
         this.current = data.name;
         //判断出现的工具栏
@@ -189,7 +194,7 @@ export default {
         }
       },
       utilClick( name ){ // one: 工具栏点击的名字  second：点击的二级菜单名字
-        console.log(name)
+        // console.log(name)
         this.attrs = {
           ...this.attrs,
           name,

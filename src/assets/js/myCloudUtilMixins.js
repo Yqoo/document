@@ -2,20 +2,30 @@
 我的云端：不同组件，相同工具栏操作
 */
 export const myCloudUtilMixin = {
-    props: ['attrs'],
+    props: ['attrs', 'current'],
     data(){
         return {
             size: {width: '60%'}, // 图标大小
-            isDisplay: true, // true：行展示  false：列展示
+            displayName: '行展示', // 行展示 && 列展示
         }
     },
-    computed: {
+    created () {
+      let curr = this.current;
+        if(curr=== undefined){
+          curr = 'iCloudIndex';
+        }
+        if(this.$store.state.displayMode[curr] != undefined){
+          this.displayName =  this.$store.state.displayMode[curr];
+        }else {
+          this.displayName = '行展示';
+        }
     },
     watch: {
         $props: {
             deep: true,
             handler() {
                 let { name, current } = this.attrs;
+                this.displayName = name;
                 switch( name ){
                     case '小图标':
                         this.size = {width: '40%'};break;
@@ -35,12 +45,7 @@ export const myCloudUtilMixin = {
     },
     methods: {
         changeDidplay(name, current){
-            this.$store.commit('changeDidplay', {name,current});
+            this.$store.commit('changeDidplay', {name, current});
         }
     },
-    mounted : {
-        displayShow(){ //判断是行展示还是列展示
-            //
-        }
-    }
 }
