@@ -39,10 +39,13 @@
 </template>
 
 <script>
-import { myCloudMixin } from '@/assets/js/myCloudMixin.js'
+import { myCloudMixin } from '@/assets/js/myCloudMixin.js';
+import { myCloudUtilMixin } from '@/assets/js/myCloudUtilMixins.js';
 import SpaceProgress from '@/views/spaceProgress.vue';
+import { constants } from 'crypto';
 export default {
   mixins: [myCloudMixin],
+  extends: myCloudUtilMixin,
   components: {
     SpaceProgress,
   },

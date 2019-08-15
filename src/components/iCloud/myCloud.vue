@@ -183,13 +183,12 @@ export default {
           this.attrs.isClick[tag.clickTag] = true;
         }
       },
-      utilClick( value ){ // name: 工具栏点击的名字
-        console.log(value);
-        if(value.one === '查看'){
-          Object.assign(this.attrs, {
-            iconSize: value.second
-          });
-        }
+      utilClick( name ){ // one: 工具栏点击的名字  second：点击的二级菜单名字
+        console.log(name)
+        this.attrs = {
+          ...this.attrs,
+          name
+        };
       }
     },
     mounted(){
@@ -208,8 +207,9 @@ export default {
     // min-height: 60%;  
     width: 80%;
     position: absolute;
-    top: 10%;
-    left: 10%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     border-radius: 8px;
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     transition: box-shadow 0.5s, transform 0.5s;
@@ -303,7 +303,8 @@ export default {
       }
       & > div.rightContent {
         float: left;
-        height: 500px;
+        max-height: 500px;
+        min-height: 400px;
         width: 100%;
         padding-left: 25%;
         box-sizing: border-box;

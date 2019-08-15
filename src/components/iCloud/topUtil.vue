@@ -6,7 +6,7 @@
           <p>{{item.iconTitle}}</p>
           <i v-if="item.secondMenu" class="el-icon-caret-bottom"></i>
           <ul class="childMenu" v-if="item.flag" @mouseleave="hideMenu">
-              <li v-for="list in item.secondMenu" @click.stop="utilClick(item,list)" :key="list.iconTitle">
+              <li v-for="list in item.secondMenu" @click.stop="utilClick(list)" :key="list.iconTitle">
                   <img :src="list.iconImg" :alt="list.iconTitle">
                   <span>{{list.iconTitle}}</span>
               </li>
@@ -48,10 +48,9 @@ export default {
             this.arr[i].flag = false;
         }
       },
-      utilClick( item, list ){
+      utilClick( item){
           this.hideMenu();
-          let value = {one: item.iconTitle, second: list.iconTitle};
-          this.$emit('utilClick', value);
+          this.$emit('utilClick', item.iconTitle);
       }
   }
 }
