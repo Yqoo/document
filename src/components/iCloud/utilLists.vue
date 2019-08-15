@@ -35,7 +35,7 @@ export default {
         iconTitle: '查看',
         isRightBorder: false,
         flag: false,  //用于判断二级菜单是否显示
-        secondMenu: [
+        children: [
             {iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},
             {iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},
             {iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'},
@@ -46,7 +46,7 @@ export default {
         iconTitle: '排列',
         isRightBorder: true,
         flag: false,
-        secondMenu: [
+        children: [
             {iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},
             {iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}
         ]
@@ -56,7 +56,7 @@ export default {
         iconTitle: '发送',
         isRightBorder: true,
         flag: false,
-        secondMenu: [
+        children: [
             {iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},
             {iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},
             {iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},
@@ -76,24 +76,86 @@ export default {
             isRightBorder: false
         },
     }
+    let newCreate = {// 新建文件 && 新建文件夹
+        iconImg: require('@/assets/image/icons/fileIcons/newFile.png'),
+        iconTitle: '新建',
+        isRightBorder: false,
+        flag: false,
+        children: [
+            {
+                iconImg: require('@/assets/image/icons/fileIcons/newFile.png'),
+                iconTitle: '新建文件',
+                flag: false,
+                children: [
+                    {iconImg: require('@/assets/image/icons/fileIcons/doc.png'),iconTitle: 'Word文档'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/excel.png'),iconTitle: 'Excel文档'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/ppt.png'),iconTitle: 'PPT文档'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/txt.png'),iconTitle: '文本文件'}
+                ]
+            },
+            {iconImg:require('@/assets/image/icons/fileIcons/newFolder.png'),iconTitle:'新建文件夹'}
+        ]
+    };
+    let fileOperation = { // 复制 && 粘贴 && 重命名 && 剪切
+        iconImg: require('@/assets/image/icons/fileIcons/fileO.png'),
+        iconTitle: '文件操作',
+        isRightBorder: false,
+        flag: false,
+        children: [
+            {
+                iconImg: require('@/assets/image/icons/fileIcons/dailyO.png'),
+                iconTitle: '日常操作',
+                children: [
+                    {iconImg: require('@/assets/image/icons/fileIcons/cut.png'),iconTitle: '剪切'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/copy.png'),iconTitle: '复制'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/paste.png'),iconTitle: '粘贴'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '重命名'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除'}
+                ],
+            },
+            {
+                iconImg: require('@/assets/image/icons/fileIcons/check.png'),
+                iconTitle: '在线操作',
+                children: [
+                    {iconImg: require('@/assets/image/icons/fileIcons/preview.png'),iconTitle: '在线预览'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/edit.png'),iconTitle: '在线编辑'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/coordination.png'),iconTitle: '协同编辑'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '在线压缩'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/decompression.png'),iconTitle: '在线解压'}, 
+                    {iconImg: require('@/assets/image/icons/fileIcons/encryption.png'),iconTitle: '文件加密'}, 
+                    {iconImg: require('@/assets/image/icons/fileIcons/dsi.png'),iconTitle: '文件解密'}       
+                ]
+            },
+        ],
+    };
+    let shareFile = { // 分享 && 共享
+        share: {
+            iconImg: require('@/assets/image/icons/fileIcons/myshare.png'),
+            iconTitle: '分享',
+            isRightBorder: false
+        },
+        enjoyTogether: {
+            iconImg: require('@/assets/image/icons/fileIcons/person.png'),
+            iconTitle: '共享',
+            isRightBorder: true
+        }
+    };
+    let down_upload = { // 下载 && 上传
+        down: {
+            iconImg: require('@/assets/image/icons/fileIcons/down.png'),
+            iconTitle: '下载',
+            isRightBorder: false
+        },
+        upload: {
+            iconImg: require('@/assets/image/icons/fileIcons/upload.png'),
+            iconTitle: '上传',
+            isRightBorder: true
+        }
+    };
     return {
         active: {
             unit: [
-                {
-                    iconImg: require('@/assets/image/icons/fileIcons/copy.png'),
-                    iconTitle: '复制',
-                    isRightBorder: false
-                },
-                {
-                    iconImg: require('@/assets/image/icons/fileIcons/paste.png'),
-                    iconTitle: '粘贴',
-                    isRightBorder: false,
-                },
-                {
-                    iconImg: require('@/assets/image/icons/fileIcons/rename.png'),
-                    iconTitle: '重命名',
-                    isRightBorder: false
-                },
+                fileOperation,
                 {
                     iconImg: require('@/assets/image/icons/fileIcons/recycle.png'),
                     iconTitle: '回收站',
@@ -188,6 +250,37 @@ export default {
                 refresh_help.refresh,
                 refresh_help.help
             ],
+            myCloudContent:[ // 我的文档，软件区，娱乐区，文档区
+                newCreate,
+                fileOperation,
+                shareFile.share,
+                shareFile.enjoyTogether,
+                down_upload.down,
+                down_upload.upload,
+                check,
+                array,
+                send,
+                refresh_help.refresh,
+                refresh_help.help,
+            ],
+            share_organization:[
+                newCreate,
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/limit.png'),
+                    iconTitle: '文件夹权限',
+                    isRightBorder: false
+                },
+                fileOperation,
+                down_upload.down,
+                down_upload.upload,
+                shareFile.share,
+                shareFile.enjoyTogether,
+                check,
+                array,
+                send,
+                refresh_help.refresh,
+                refresh_help.help,
+            ]
         },
     };
   },

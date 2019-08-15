@@ -22,9 +22,11 @@
 </template>
 
 <script>
-import { myCloudMixin } from '@/assets/js/myCloudMixin.js'
+import { myCloudMixin } from '@/assets/js/myCloudMixin.js';
+import { myCloudUtilMixin } from '@/assets/js/myCloudUtilMixins.js';
 export default {
   mixins: [myCloudMixin],
+  extends: myCloudUtilMixin,
   data () {
     return {
         activeNames: ['1'],
