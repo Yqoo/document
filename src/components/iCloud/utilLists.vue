@@ -102,30 +102,32 @@ export default {
         isRightBorder: false,
         flag: false,
         children: [
-            {iconImg: require('@/assets/image/icons/fileIcons/copy.png'),iconTitle: '复制'},
-            {iconImg: require('@/assets/image/icons/fileIcons/paste.png'),iconTitle: '粘贴'},
-            {iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '重命名'},
-            {iconImg: require('@/assets/image/icons/fileIcons/cut.png'),iconTitle: '剪切'},
-            {iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除'}
+            {
+                iconImg: require('@/assets/image/icons/fileIcons/dailyO.png'),
+                iconTitle: '日常操作',
+                children: [
+                    {iconImg: require('@/assets/image/icons/fileIcons/cut.png'),iconTitle: '剪切'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/copy.png'),iconTitle: '复制'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/paste.png'),iconTitle: '粘贴'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '重命名'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除'}
+                ],
+            },
+            {
+                iconImg: require('@/assets/image/icons/fileIcons/check.png'),
+                iconTitle: '在线操作',
+                children: [
+                    {iconImg: require('@/assets/image/icons/fileIcons/preview.png'),iconTitle: '在线预览'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/edit.png'),iconTitle: '在线编辑'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/coordination.png'),iconTitle: '协同编辑'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '在线压缩'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/decompression.png'),iconTitle: '在线解压'}, 
+                    {iconImg: require('@/assets/image/icons/fileIcons/encryption.png'),iconTitle: '文件加密'}, 
+                    {iconImg: require('@/assets/image/icons/fileIcons/dsi.png'),iconTitle: '文件解密'}       
+                ]
+            },
         ],
     };
-    let preview_edit_coordination = { // 在线编辑 && 在线编辑 && 协同编辑
-        preview: {
-            iconImg: require('@/assets/image/icons/fileIcons/preview.png'),
-            iconTitle: '在线预览',
-            isRightBorder: false
-        },
-        edit: {
-            iconImg: require('@/assets/image/icons/fileIcons/edit.png'),
-            iconTitle: '在线编辑',
-            isRightBorder: false
-        },
-        coordination: {
-            iconImg: require('@/assets/image/icons/fileIcons/coordination.png'),
-            iconTitle: '协同编辑',
-            isRightBorder: true
-        }
-    }
     let shareFile = { // 分享 && 共享
         share: {
             iconImg: require('@/assets/image/icons/fileIcons/myshare.png'),
@@ -137,16 +139,6 @@ export default {
             iconTitle: '共享',
             isRightBorder: true
         }
-    };
-    let compress= { //在线压缩 && 在线解压
-        iconImg: require('@/assets/image/icons/fileIcons/compress.png'),
-        iconTitle: '解压与压缩',
-        isRightBorder: true,
-        flag: false,
-        children: [
-            {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '在线压缩'},
-            {iconImg: require('@/assets/image/icons/fileIcons/decompression.png'),iconTitle: '在线解压'},
-        ]
     };
     let down_upload = { // 下载 && 上传
         down: {
@@ -261,12 +253,8 @@ export default {
             myCloudContent:[ // 我的文档，软件区，娱乐区，文档区
                 newCreate,
                 fileOperation,
-                preview_edit_coordination.preview,
-                preview_edit_coordination.edit,
-                preview_edit_coordination.coordination,
                 shareFile.share,
                 shareFile.enjoyTogether,
-                compress,
                 down_upload.down,
                 down_upload.upload,
                 check,
@@ -283,10 +271,6 @@ export default {
                     isRightBorder: false
                 },
                 fileOperation,
-                preview_edit_coordination.preview,
-                preview_edit_coordination.edit,
-                preview_edit_coordination.coordination,
-                compress,
                 down_upload.down,
                 down_upload.upload,
                 shareFile.share,

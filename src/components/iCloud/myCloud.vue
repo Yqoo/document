@@ -227,8 +227,8 @@ export default {
       border-bottom: none;
       padding: 10px;
       & > .utilLists{
-        max-height: 100px;
-        // transition: height 0.6s;
+        height: 50px;
+        // transition: height 0.3s;
         margin-bottom: 10px;
       }
       & > .utilLists.hide {
