@@ -79,7 +79,7 @@ export default {
     let newCreate = {// 新建文件 && 新建文件夹
         iconImg: require('@/assets/image/icons/fileIcons/newFile.png'),
         iconTitle: '新建',
-        isRightBorder: true,
+        isRightBorder: false,
         flag: false,
         children: [
             {
@@ -105,13 +105,9 @@ export default {
             {iconImg: require('@/assets/image/icons/fileIcons/copy.png'),iconTitle: '复制'},
             {iconImg: require('@/assets/image/icons/fileIcons/paste.png'),iconTitle: '粘贴'},
             {iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '重命名'},
-            {iconImg: require('@/assets/image/icons/fileIcons/cut.png'),iconTitle: '剪切'}
+            {iconImg: require('@/assets/image/icons/fileIcons/cut.png'),iconTitle: '剪切'},
+            {iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除'}
         ],
-    };
-    let deleteFile = { // 删除
-        iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),
-        iconTitle: '删除',
-        isRightBorder: true
     };
     let preview_edit_coordination = { // 在线编辑 && 在线编辑 && 协同编辑
         preview: {
@@ -265,7 +261,6 @@ export default {
             myCloudContent:[ // 我的文档，软件区，娱乐区，文档区
                 newCreate,
                 fileOperation,
-                deleteFile,
                 preview_edit_coordination.preview,
                 preview_edit_coordination.edit,
                 preview_edit_coordination.coordination,
@@ -288,7 +283,6 @@ export default {
                     isRightBorder: false
                 },
                 fileOperation,
-                deleteFile,
                 preview_edit_coordination.preview,
                 preview_edit_coordination.edit,
                 preview_edit_coordination.coordination,
