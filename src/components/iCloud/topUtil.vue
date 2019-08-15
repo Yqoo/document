@@ -4,11 +4,17 @@
       <div class="block" v-for="(item,index) in lists" @click="showMenu(item)" :key="index" :style="item.isRightBorder?{borderRight: '1px solid #DCDFE6'}:''">
           <el-image :src="item.iconImg"></el-image>
           <p>{{item.iconTitle}}</p>
-          <i v-if="item.secondMenu" class="el-icon-caret-bottom"></i>
+          <i v-if="item.children" class="el-icon-caret-bottom"></i>
           <ul class="childMenu" v-if="item.flag" @mouseleave="hideMenu">
-              <li v-for="list in item.secondMenu" @click.stop="utilClick(list)" :key="list.iconTitle">
+              <li v-for="list in item.children" @click.stop="utilClick(list)" :key="list.iconTitle">
                   <img :src="list.iconImg" :alt="list.iconTitle">
                   <span>{{list.iconTitle}}</span>
+                  <ul class="threeMenu" v-if="list.children">
+                      <li v-for="l in list.children" :key="l.iconTitle" @click.stop="utilClick(l)">
+                          <img :src="l.iconImg" :alt="l.iconTitle">
+                          <span>{{l.iconTitle}}</span>
+                      </li>
+                  </ul>
               </li>
           </ul>
       </div>
@@ -22,14 +28,19 @@ export default {
           type: Array,
       }
   },
+  computed: {
+      arr() {
+          return this.lists;
+      }
+  },
   data () {
     return {
-        arr: this.lists,
+        // arr: this.lists,
     };
   },
   methods: {
       showMenu( item ) {  // 展开二级菜单
-          if(item.secondMenu == null){ // 没有子菜单
+          if(item.children == null){ // 没有子菜单
             this.utilClick(item);
               return false;
           }
@@ -93,12 +104,25 @@ export default {
         top: 115%;
         left: 0;
         & li{
+            position: relative;
             line-height: 30px;
             text-align: left;
             padding: 0 5%;
             &:hover{
                 cursor: pointer;
                 background: #eee;
+            }
+            &:hover ul.threeMenu{
+                display: block;
+            }
+            & ul.threeMenu{
+                display: none;
+                position: absolute;
+                left: 100%;
+                width: 100%;
+                top: 0;
+                background: #fff;
+                border: 1px solid #DCDFE6;
             }
         }
         & img{

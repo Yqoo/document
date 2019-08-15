@@ -35,7 +35,7 @@ export default {
         iconTitle: '查看',
         isRightBorder: false,
         flag: false,  //用于判断二级菜单是否显示
-        secondMenu: [
+        children: [
             {iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},
             {iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},
             {iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'},
@@ -46,7 +46,7 @@ export default {
         iconTitle: '排列',
         isRightBorder: true,
         flag: false,
-        secondMenu: [
+        children: [
             {iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},
             {iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}
         ]
@@ -56,7 +56,7 @@ export default {
         iconTitle: '发送',
         isRightBorder: true,
         flag: false,
-        secondMenu: [
+        children: [
             {iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},
             {iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},
             {iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},
@@ -77,45 +77,36 @@ export default {
         },
     }
     let newCreate = {// 新建文件 && 新建文件夹
-        newFile: {
-            iconImg: require('@/assets/image/icons/fileIcons/newFile.png'),
-            iconTitle: '新建文件',
-            isRightBorder: false,
-            flag: false,
-            secondMenu: [
-                {iconImg: require('@/assets/image/icons/fileIcons/doc.png'),iconTitle: 'Word文档'},
-                {iconImg: require('@/assets/image/icons/fileIcons/excel.png'),iconTitle: 'Excel文档'},
-                {iconImg: require('@/assets/image/icons/fileIcons/ppt.png'),iconTitle: 'PPT文档'},
-                {iconImg: require('@/assets/image/icons/fileIcons/txt.png'),iconTitle: '文本文件'}
-            ]
-        },
-        newFolder: {
-            iconImg: require('@/assets/image/icons/fileIcons/newFolder.png'),
-            iconTitle: '新建文件夹',
-            isRightBorder: true
-        }
+        iconImg: require('@/assets/image/icons/fileIcons/newFile.png'),
+        iconTitle: '新建',
+        isRightBorder: true,
+        flag: false,
+        children: [
+            {
+                iconImg: require('@/assets/image/icons/fileIcons/newFile.png'),
+                iconTitle: '新建文件',
+                flag: false,
+                children: [
+                    {iconImg: require('@/assets/image/icons/fileIcons/doc.png'),iconTitle: 'Word文档'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/excel.png'),iconTitle: 'Excel文档'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/ppt.png'),iconTitle: 'PPT文档'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/txt.png'),iconTitle: '文本文件'}
+                ]
+            },
+            {iconImg:require('@/assets/image/icons/fileIcons/newFolder.png'),iconTitle:'新建文件夹'}
+        ]
     };
-    let copy_paste_rename = { // 复制 && 粘贴 && 重命名
-        copy: {
-            iconImg: require('@/assets/image/icons/fileIcons/copy.png'),
-            iconTitle: '复制',
-            isRightBorder: false
-        },
-        paste: {
-            iconImg: require('@/assets/image/icons/fileIcons/paste.png'),
-            iconTitle: '粘贴',
-            isRightBorder: false,
-        },
-        rename: {
-            iconImg: require('@/assets/image/icons/fileIcons/rename.png'),
-            iconTitle: '重命名',
-            isRightBorder: false
-        },
-    };
-    let cut = {  // 剪切
-        iconImg: require('@/assets/image/icons/fileIcons/cut.png'),
-        iconTitle: '剪切',
-        isRightBorder: false
+    let fileOperation = { // 复制 && 粘贴 && 重命名 && 剪切
+        iconImg: require('@/assets/image/icons/fileIcons/fileO.png'),
+        iconTitle: '文件操作',
+        isRightBorder: false,
+        flag: false,
+        children: [
+            {iconImg: require('@/assets/image/icons/fileIcons/copy.png'),iconTitle: '复制'},
+            {iconImg: require('@/assets/image/icons/fileIcons/paste.png'),iconTitle: '粘贴'},
+            {iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '重命名'},
+            {iconImg: require('@/assets/image/icons/fileIcons/cut.png'),iconTitle: '剪切'}
+        ],
     };
     let deleteFile = { // 删除
         iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),
@@ -156,7 +147,7 @@ export default {
         iconTitle: '解压与压缩',
         isRightBorder: true,
         flag: false,
-        secondMenu: [
+        children: [
             {iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '在线压缩'},
             {iconImg: require('@/assets/image/icons/fileIcons/decompression.png'),iconTitle: '在线解压'},
         ]
@@ -176,9 +167,7 @@ export default {
     return {
         active: {
             unit: [
-                copy_paste_rename.copy,
-                copy_paste_rename.paste,
-                copy_paste_rename.rename,
+                fileOperation,
                 {
                     iconImg: require('@/assets/image/icons/fileIcons/recycle.png'),
                     iconTitle: '回收站',
@@ -274,12 +263,8 @@ export default {
                 refresh_help.help
             ],
             myCloudContent:[ // 我的文档，软件区，娱乐区，文档区
-                newCreate.newFile,
-                newCreate.newFolder,
-                copy_paste_rename.copy,
-                copy_paste_rename.paste,
-                copy_paste_rename.rename,
-                cut,
+                newCreate,
+                fileOperation,
                 deleteFile,
                 preview_edit_coordination.preview,
                 preview_edit_coordination.edit,
@@ -296,17 +281,13 @@ export default {
                 refresh_help.help,
             ],
             share_organization:[
-                newCreate.newFile,
-                newCreate.newFolder,
+                newCreate,
                 {
                     iconImg: require('@/assets/image/icons/fileIcons/limit.png'),
                     iconTitle: '文件夹权限',
                     isRightBorder: false
                 },
-                copy_paste_rename.copy,
-                copy_paste_rename.paste,
-                copy_paste_rename.rename,
-                cut,
+                fileOperation,
                 deleteFile,
                 preview_edit_coordination.preview,
                 preview_edit_coordination.edit,
