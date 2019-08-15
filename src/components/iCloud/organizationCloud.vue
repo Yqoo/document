@@ -5,7 +5,7 @@
         <div @click="clickBlock({utilTag:'organizationCloud',clickTag:'organizationCloud'})">
             <el-collapse-item  name='1' :disabled='true'>
               <template slot="title">
-                  <img src='@/assets/image/icons/deskIcons/tree-org.png'/>组织云端
+                  <img src='@/assets/image/icons/deskIcons/tree-org2.png'/>组织云端
               </template>
               <div class="cards slideInUp animated">
                   <el-card v-for="(c,index) in organizationCloud" :class="_isClick.organizationCloud&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-forward">
