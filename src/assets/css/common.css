@@ -236,3 +236,14 @@ ol {
 .el-switch__label * {
   font-size: 12px;
 }
+.el-slider__marks-text{
+  width: 40px;
+  font-size: 10px;
+  margin-top: 10px;
+}
+.el-message-box__title {
+  font-size: 13px;
+}  
+.el-select .el-input{
+  width: 100%;
+}
