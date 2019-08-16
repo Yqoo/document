@@ -45,7 +45,7 @@
         </div>
       </aside>
       <div class="rightContent">
-        <component :is="current" @changeUtils="changeUtils" @openFolder="openFolder" :attrs="attrs" :current="current"></component>
+        <component v-if="refreshContent" :is="current" @changeUtils="changeUtils" @openFolder="openFolder" :attrs="attrs" :current="current"></component>
       </div>
     </section>
   </div>
@@ -137,6 +137,7 @@ export default {
               organizationCloud: false,
             }
           }, 
+          refreshContent: true, // 刷新
         };
     },
     methods:{
@@ -180,8 +181,14 @@ export default {
           this.attrs.isClick[tag.clickTag] = true;
         }
       },
-      utilClick( name ){ // one: 工具栏点击的名字  second：点击的二级菜单名字
-        // console.log(name)
+      utilClick( name ){ // 工具栏中点击的名字
+        //点击的是刷新
+        if(name === '刷新'){
+          this.refreshContent = false;
+          this.$nextTick(() => {
+            this.refreshContent = true;
+          });
+        }
         this.attrs = {
           ...this.attrs,
           name,
@@ -197,7 +204,7 @@ export default {
         this.utilsShow(component);
       },
       utilsShow( name ){ // 点击树节点和双击文件，改变工具栏
-        console.log(name)
+        // console.log(name)
         switch (name) {
           case 'mineCloud':
             this.utilName = 'unit';break;
