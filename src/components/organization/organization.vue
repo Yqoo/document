@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-06 10:40:02
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-15 18:02:00
+ * @LastEditTime: 2019-08-15 18:13:51
  * @Desc: 组织与用户组件外部容器
  -->
 /** 
@@ -12,7 +12,7 @@
   <div class="organization" v-drag>
     <div :class="themeColorName">
       <boxTools class="theme-color moveBox"  :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentName"></boxTools>
-      <orgIndex></orgIndex>
+      <orgIndex class="fadeIn animated"></orgIndex>
     </div>
   </div>
 </template>
