@@ -7,9 +7,9 @@
               <template slot="title">
                   <img src='@/assets/image/icons/deskIcons/tree-org2.png'/>组织云端
               </template>
-              <div class="cards slideInUp animated">
+              <div class="cards slideInUp animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in organizationCloud" :class="_isClick.organizationCloud&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-forward">
-                      <div @click="activeCard(c, organizationCloud)" :title="c.name">
+                      <div @click="activeCard(c, organizationCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>
@@ -31,7 +31,7 @@ export default {
     return {
         activeNames: ['1'],
         organizationCloud:[
-            {name:'四川挚友软件有限公司',imgurl:require('@/assets/image/icons/fileIcons/company.png'),active:false}
+            {name:'四川挚友软件有限公司',component:'organizationContent',imgurl:require('@/assets/image/icons/fileIcons/company.png'),active:false}
       ],
     };
   },

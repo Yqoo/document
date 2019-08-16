@@ -1,6 +1,8 @@
 /*
 我的云端：不同组件，相同工具栏操作
 */
+
+var timer= null; // 用于判断单击还是双击事件
 export const myCloudUtilMixin = {
     props: ['attrs', 'current'],
     data(){
@@ -10,6 +12,7 @@ export const myCloudUtilMixin = {
         }
     },
     created () {
+        //判断组件是行展示还是列展示
       let curr = this.current;
         if(curr=== undefined){
           curr = 'iCloudIndex';
@@ -25,7 +28,6 @@ export const myCloudUtilMixin = {
             deep: true,
             handler() {
                 let { name, current } = this.attrs;
-                this.displayName = name;
                 switch( name ){
                     case '小图标':
                         this.size = {width: '40%'};break;
@@ -44,8 +46,23 @@ export const myCloudUtilMixin = {
         },
     },
     methods: {
-        changeDidplay(name, current){
+        //单击（文件夹）时，有一个边框
+        activeCard(item, dataArr) {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                for(let i=0; i< dataArr.length; i++){
+                    dataArr[i].active = false;
+                }
+                item.active = true;
+            }, 300);
+        },
+        changeDidplay(name, current){ //修改展示方式
+            this.displayName = name;
             this.$store.commit('changeDidplay', {name, current});
+        },
+        openFolder(component) { // 双击文件
+            clearTimeout(timer);
+            this.$emit('openFolder', component);
         }
     },
 }

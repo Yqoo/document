@@ -7,9 +7,9 @@
               <template slot="title">
                   <img src='@/assets/image/icons/deskIcons/tree-share2.png'/>共享云端
               </template>
-              <div class="cards slideInDown animated">
+              <div class="cards slideInDown animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in shareCloud" :class="_isClick.shareCloud&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-sink">
-                      <div @click="activeCard(c, shareCloud)" :title="c.name">
+                      <div @click="activeCard(c, shareCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>
@@ -31,8 +31,8 @@ export default {
     return {
         activeNames: ['1'],
         shareCloud:[
-            {name:'开发部',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
-            {name:'学习区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
+            {name:'开发部',component:'shareCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
+            {name:'学习区',component:'shareCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
       ],
     };
   },
