@@ -6,9 +6,9 @@
  -->
 <template>
   <div class='iCloudIndex'>
-    <mineCloud @changeUtils='changeUtils' :attrs="attrs"></mineCloud>
-    <shareCloud @changeUtils='changeUtils' :attrs="attrs"></shareCloud>
-    <organizationCloud @changeUtils='changeUtils' :attrs="attrs"></organizationCloud>
+    <mineCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs"></mineCloud>
+    <shareCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs"></shareCloud>
+    <organizationCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs"></organizationCloud>
   </div>
 </template>
 
@@ -32,6 +32,9 @@ export default {
   methods: {
     changeUtils( tag ) {
       this.$emit('changeUtils', tag);
+    },
+    openFolder( name ){ // 双击文件夹
+      this.$emit('openFolder', name);
     }
   }
 }

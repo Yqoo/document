@@ -9,7 +9,7 @@
               </template>
               <div class="cards slideInRight animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in zyCloud" :class="_isClick.mineCloud.zhiyou&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-backward">
-                      <div @click="activeCard(c, zyCloud)" :title="c.name">
+                      <div @click="activeCard(c, zyCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom">{{c.name}}</div>
                         <img :src="c.icon" class="fileIcon">
@@ -26,7 +26,7 @@
               </template>
               <div class="cards slideInLeft animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in myCloud" :class="_isClick.mineCloud.mine&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-float">
-                      <div @click="activeCard(c, myCloud)" :title="c.name">
+                      <div @click="activeCard(c, myCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>
@@ -53,19 +53,19 @@ export default {
     return {
         activeNames: ['1', '2'],
         zyCloud:[
-        {name:'我的桌面',imgurl:require('@/assets/image/icons/deskIcons/desk.png'),icon:'',active:false},
-        {name:'我的文档',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon: '',active:false},
-        {name:'加密空间',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/dsi.png'),active:false},
-        {name:'我的共享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/user.png'),active:false},
-        {name:'接收共享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/person.png'),active:false},
-        {name:'我的分享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/myshare.png'),active:false},
-        {name:'接收分享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/recept.png'),active:false},
-        {name:'备份中心',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/backups.png'),active:false},
+        {name:'我的桌面',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/desk.png'),icon:'',active:false},
+        {name:'我的文档',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon: '',active:false},
+        {name:'加密空间',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/dsi.png'),active:false},
+        {name:'我的共享',component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/user.png'),active:false},
+        {name:'接收共享',component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/person.png'),active:false},
+        {name:'我的分享',component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/myshare.png'),active:false},
+        {name:'接收分享',component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/recept.png'),active:false},
+        {name:'备份中心',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/backups.png'),active:false},
       ],
       myCloud:[
-        {name:'软件区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-        {name:'文档区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-        {name:'娱乐区',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
+        {name:'软件区',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
+        {name:'文档区',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
+        {name:'娱乐区',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
       ],
       avaliableSpace: 18.6,  //可用空间
       totalSpace: 30.2,  //总空间

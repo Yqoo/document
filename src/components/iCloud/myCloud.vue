@@ -45,7 +45,7 @@
         </div>
       </aside>
       <div class="rightContent">
-        <component :is="current" @changeUtils="changeUtils" :attrs="attrs" :current="$current"></component>
+        <component :is="current" @changeUtils="changeUtils" @openFolder="openFolder" :attrs="attrs" :current="current"></component>
       </div>
     </section>
   </div>
@@ -63,6 +63,7 @@ import organizationCloud from '@/components/iCloud/organizationCloud';
 import myCloudContent from '@/components/iCloud/myCloudContent';
 import shareCloudContent from '@/components/iCloud/shareCloudContent';
 import organizationContent from '@/components/iCloud/organizationContent';
+import shareContent from "@/components/iCloud/shareContent.vue";
 export default {
     mixins: [themeMixin],
     name:'myCloud',
@@ -75,7 +76,8 @@ export default {
       organizationCloud,
       myCloudContent,
       shareCloudContent,
-      organizationContent
+      organizationContent,
+      shareContent
     },
     data() {
         return {
@@ -137,11 +139,6 @@ export default {
           }, 
         };
     },
-    computed: {
-      $current(){
-        return this.current;
-      }
-    },
     methods:{
       windowsTools( obj ){  
         let _s = {
@@ -200,17 +197,15 @@ export default {
           name,
           current: this.current
         };
-      }
+      },
+      openFolder( component ){ //双击文件夹
+        this.current = component;
+      },
     },
     mounted(){
       this.minWidth = document.querySelector('.myCloud').offsetWidth;
       this.minHeight = document.querySelector('.myCloud').offsetHeight;
     },
-    watch: {
-      current( val ) {
-        // console.log(val)
-      },
-    }
 }
 </script>
 <style lang='less' scoped>
