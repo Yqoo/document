@@ -25,7 +25,6 @@ export const myCloudUtilMixin = {
             deep: true,
             handler() {
                 let { name, current } = this.attrs;
-                this.displayName = name;
                 switch( name ){
                     case '小图标':
                         this.size = {width: '40%'};break;
@@ -44,7 +43,8 @@ export const myCloudUtilMixin = {
         },
     },
     methods: {
-        changeDidplay(name, current){
+        changeDidplay(name, current){ //修改展示方式
+            this.displayName = name;
             this.$store.commit('changeDidplay', {name, current});
         }
     },

@@ -3,23 +3,20 @@
   <div class='mineCloud'>
     <el-collapse v-model="activeNames">
         <div @click="clickBlock({utilTag:'unit',clickTag: 'zhiyou'})" style='border-bottom:1px solid #ebeef5'>
-          <el-collapse-item v-if="displayName==='行展示'" name="1" :disabled='true'>
+          <el-collapse-item name="1" :disabled='true'>
               <template slot="title">
-                  <img src='@/assets/image/icons/deskIcons/icon-myCloud.png'/>挚友云{{displayName}}
+                  <img src='@/assets/image/icons/deskIcons/icon-myCloud.png'/>挚友云
               </template>
-              <div class="cards slideInRight animated">
+              <div class="cards slideInRight animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in zyCloud" :class="_isClick.mineCloud.zhiyou&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-backward">
                       <div @click="activeCard(c, zyCloud)" :title="c.name">
-                        <img :src="c.imgurl" :style="size"/>
+                        <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom">{{c.name}}</div>
                         <img :src="c.icon" class="fileIcon">
                       </div>
                   </el-card>
               </div>
           </el-collapse-item>
-          <ul v-if="displayName==='列展示'">
-            <li v-for="(item, index) in zyCloud" :key="index">{{item.name}}</li>
-          </ul>
         </div>
         <div @click="clickBlock({utilTag:'mineCloud',clickTag:'mine'})">
           <space-progress :avaliableSpace='avaliableSpace' :totalSpace='totalSpace'></space-progress>
@@ -27,10 +24,10 @@
               <template slot="title">
                   <img src='@/assets/image/icons/deskIcons/icon-computer.png'/>我的云端
               </template>
-              <div class="cards slideInLeft animated">
+              <div class="cards slideInLeft animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in myCloud" :class="_isClick.mineCloud.mine&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-float">
                       <div @click="activeCard(c, myCloud)" :title="c.name">
-                        <img :src="c.imgurl" :style="size"/>
+                        <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>
                   </el-card>
