@@ -4,7 +4,7 @@
  * @LastEditTime: 2019-08-09 18:04:44
  -->
 <template>
-  <div class='myCloud' v-drag :class="themeColorName">
+  <div class='myCloud' v-drag @contextmenu.prevent :class="themeColorName">
     <boxTools class="theme-color moveBox" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
     <div class="topContent">
         <i class="el-icon-arrow-down" v-show="isShowUtils" @click="utilCollapse" title="收起工具栏"></i>
@@ -196,6 +196,9 @@ export default {
         };
       },
       openFolder( component ){ //双击文件夹
+        if(component == null){
+          return false;
+        }
         if(component === 'enjoyContent' || component === 'shareContent'){
           this.current = 'shareContent';
         }else{

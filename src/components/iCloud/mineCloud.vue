@@ -8,7 +8,7 @@
                   <img src='@/assets/image/icons/deskIcons/icon-myCloud.png'/>挚友云
               </template>
               <div class="cards slideInRight animated" :class="displayName==='行展示'?'row':'col'">
-                  <el-card v-for="(c,index) in zyCloud" :class="_isClick.mineCloud.zhiyou&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-backward">
+                  <el-card v-for="(c,index) in zyCloud" :class="_isClick.mineCloud.zhiyou&&c.active?'addBorder':''" :key="index" shadow="hover">
                       <div @click="activeCard(c, zyCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom">{{c.name}}</div>
@@ -25,7 +25,7 @@
                   <img src='@/assets/image/icons/deskIcons/icon-computer.png'/>我的云端
               </template>
               <div class="cards slideInLeft animated" :class="displayName==='行展示'?'row':'col'">
-                  <el-card v-for="(c,index) in myCloud" :class="_isClick.mineCloud.mine&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-float">
+                  <el-card v-for="(c,index) in myCloud" :class="_isClick.mineCloud.mine&&c.active?'addBorder':''" :key="index" shadow="hover">
                       <div @click="activeCard(c, myCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom1">{{c.name}}</div>

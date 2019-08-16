@@ -8,7 +8,7 @@
                   <img src='@/assets/image/icons/deskIcons/tree-org2.png'/>组织云端
               </template>
               <div class="cards slideInUp animated" :class="displayName==='行展示'?'row':'col'">
-                  <el-card v-for="(c,index) in organizationCloud" :class="_isClick.organizationCloud&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-forward">
+                  <el-card v-for="(c,index) in organizationCloud" :class="_isClick.organizationCloud&&c.active?'addBorder':''" :key="index" shadow="hover">
                       <div @click="activeCard(c, organizationCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="size"/>
                         <div class="bottom1">{{c.name}}</div>
@@ -42,4 +42,10 @@ export default {
 </script>
 <style lang='less' scoped>
 @import '../../assets/css/myCloud.less';
+.el-collapse{
+  border: none;
+  & /deep/ .el-collapse-item__wrap{
+    border: none;
+  }
+}
 </style>
