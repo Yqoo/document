@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-14 16:45:07
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-15 17:21:58
+ * @LastEditTime: 2019-08-16 10:13:04
  * @Desc: iCloud组件下的存储中心
  -->
 <template>
@@ -57,7 +57,7 @@
           ref="diskForm"
           label-width="70px"
           size="mini"
-          :inline="true"
+          :inline="false"
           >
           <div class="position">
             <el-form-item label="存储中心" prop="diskcenter">
@@ -73,15 +73,19 @@
               </el-switch>
             </el-form-item>
           </div>
-          <div v-if="isShowSpace">
+          <div v-show="isShowSpace">
             <el-form-item label="物理地址" prop="path">
               <el-input v-model="diskForm.path"></el-input>
             </el-form-item>
-            <div class="position">
+            <div>
               <el-form-item label="分配空间" prop="num">
-                <el-input v-model="diskForm.num" placeholder="输入空间值（G）"></el-input>
+                <el-slider
+                  v-model="value"
+                  show-input
+                  :marks="marks">
+                </el-slider>
               </el-form-item>
-              <span class="formSpan">物理空间5T,可分配空间4T</span>
+              <span class="formSpan" style="color:green">物理空间100G,可分配空间100G</span>
             </div>
             <div class="position">
               <el-form-item label="创建人" prop="creater">
@@ -92,23 +96,19 @@
               </el-form-item>
             </div>
           </div>
-          <div v-else>
-            <div>
-              <el-form-item label="网络地址" prop="IP">
-                <el-input v-model="diskForm.IP"></el-input>
-              </el-form-item>
-              <el-form-item label="端口" prop="port">
-                <el-input v-model="diskForm.port"></el-input>
-              </el-form-item>
-            </div>
-            <div >
+          <div v-show="!isShowSpace">
+            <el-form-item label="网络地址" prop="IP">
+              <el-input v-model="diskForm.IP"></el-input>
+            </el-form-item>
+            <el-form-item label="端口" prop="port">
+              <el-input v-model="diskForm.port"></el-input>
+            </el-form-item>
               <el-form-item label="用户名" prop="name">
-                <el-input v-model="diskForm.name"></el-input>
-              </el-form-item>
-              <el-form-item label="密码" prop="pwd">
-                <el-input v-model="diskForm.pwd"></el-input>
-              </el-form-item>
-            </div>
+              <el-input v-model="diskForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="pwd">
+              <el-input v-model="diskForm.pwd"></el-input>
+            </el-form-item>
           </div>
         </el-form>
       </div>
@@ -178,10 +178,6 @@ export default {
         path: [
           { required: true, message: '请选择物理地址', trigger: 'blur' },
         ],
-        num: [
-          { required: true, message: '请输入空间值', trigger: 'blur' },
-          { validator: checkNum, trigger: 'blur' }
-        ],
         IP: [
           { required: true, message: '请输入网络地址', trigger: 'blur' },
         ],
@@ -201,6 +197,12 @@ export default {
       confirm:'confirmAndcontinue',
       nextStep:true,//控制创建存储中心在网络地址下的底部工具栏的显示
       testOver:null,//测试是否通过
+      value: 10,
+      marks: {
+        10: '10G',
+        50: '50G',
+        100: '100G',
+      },
     };
   },
   methods:{
