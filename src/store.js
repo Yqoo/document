@@ -17,6 +17,7 @@ export default new Vuex.Store({
     lockTime:localStorage.getItem('lockTime')?localStorage.getItem('lockTime'):60,
     footerPosition: localStorage.getItem('footerPosition')?localStorage.getItem('footerPosition'):'bottom',  //底部位置
     isLockTask: localStorage.getItem('isLockTask')?localStorage.getItem('isLockTask'): true,  //判断是否锁定任务栏
+    displayMode: localStorage.getItem('displayMode')?JSON.parse(localStorage.getItem('displayMode')):{},  //组件中的展示方式
   },
   mutations: {
     changeThemeColor( state, curColor) {//切换主题
@@ -61,6 +62,10 @@ export default new Vuex.Store({
     changeLockTaskStatus(state, status) {  // 改变任务栏是否锁定的状态  true:可锁定  false：可解锁
       this.state.isLockTask = status;
       localStorage.setItem('isLockTask', status);
+    },
+    changeDidplay(state, data){ //我的云端：组件的展示方式
+      this.state.displayMode[data.current] = data.name;
+      localStorage.setItem('displayMode', JSON.stringify(this.state.displayMode));
     }
   },
   actions: {},

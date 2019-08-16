@@ -5,7 +5,7 @@
         <div @click="clickBlock({utilTag:'shareCloud',clickTag:'shareCloud'})">
           <el-collapse-item  name='1' :disabled='true'>
               <template slot="title">
-                  <img src='@/assets/image/icons/deskIcons/tree-share.png'/>共享云端
+                  <img src='@/assets/image/icons/deskIcons/tree-share2.png'/>共享云端
               </template>
               <div class="cards slideInDown animated">
                   <el-card v-for="(c,index) in shareCloud" :class="_isClick.shareCloud&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-sink">

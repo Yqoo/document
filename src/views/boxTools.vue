@@ -23,11 +23,18 @@ export default {
     mixins: [themeMixin],
     name:'boxTools',
     props:['info','title'],
+    computed: {
+      iconName() {
+        return this.info.icon;
+      },
+      src() {
+        return require('@/assets/image/icons/deskIcons/'+this.iconName+'.png');
+      }
+    },
     data() {
         return {
           msg:Object.assign({},this.info),
           max:true,
-          src:require('@/assets/image/icons/deskIcons/'+this.info.icon+'.png'),
           tools:{
             minSize: () => this.$emit('windowsTools',{param:this.msg.name,type:'minSize'}),//最小化
             maxSize: () =>{ this.$emit( 'windowsTools',{param:this.msg.className,type:'maxSize'} );this.max = false; },//最大化

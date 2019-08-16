@@ -13,6 +13,7 @@
                       <li v-for="l in list.children" :key="l.iconTitle" @click.stop="utilClick(l)">
                           <img :src="l.iconImg" :alt="l.iconTitle">
                           <span>{{l.iconTitle}}</span>
+                          <span>{{l.tip}}</span>
                       </li>
                   </ul>
               </li>
@@ -123,6 +124,12 @@ export default {
                 top: 0;
                 background: #fff;
                 border: 1px solid #DCDFE6;
+                & > li {
+                    & > span:nth-of-type(2){
+                        position: absolute;
+                        right: 3px;
+                    }
+                }
             }
         }
         & img{

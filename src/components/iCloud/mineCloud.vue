@@ -3,9 +3,9 @@
   <div class='mineCloud'>
     <el-collapse v-model="activeNames">
         <div @click="clickBlock({utilTag:'unit',clickTag: 'zhiyou'})" style='border-bottom:1px solid #ebeef5'>
-          <el-collapse-item name="1" :disabled='true'>
+          <el-collapse-item v-if="displayName==='行展示'" name="1" :disabled='true'>
               <template slot="title">
-                  <img src='@/assets/image/icons/deskIcons/icon-myCloud.png'/>挚友云
+                  <img src='@/assets/image/icons/deskIcons/icon-myCloud.png'/>挚友云{{displayName}}
               </template>
               <div class="cards slideInRight animated">
                   <el-card v-for="(c,index) in zyCloud" :class="_isClick.mineCloud.zhiyou&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-backward">
@@ -17,6 +17,9 @@
                   </el-card>
               </div>
           </el-collapse-item>
+          <ul v-if="displayName==='列展示'">
+            <li v-for="(item, index) in zyCloud" :key="index">{{item.name}}</li>
+          </ul>
         </div>
         <div @click="clickBlock({utilTag:'mineCloud',clickTag:'mine'})">
           <space-progress :avaliableSpace='avaliableSpace' :totalSpace='totalSpace'></space-progress>
@@ -53,7 +56,7 @@ export default {
     return {
         activeNames: ['1', '2'],
         zyCloud:[
-        {name:'我的桌面',imgurl:require('@/assets/image/icons/fileIcons/desk.png'),icon:'',active:false},
+        {name:'我的桌面',imgurl:require('@/assets/image/icons/deskIcons/desk.png'),icon:'',active:false},
         {name:'我的文档',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon: '',active:false},
         {name:'加密空间',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/dsi.png'),active:false},
         {name:'我的共享',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/user.png'),active:false},

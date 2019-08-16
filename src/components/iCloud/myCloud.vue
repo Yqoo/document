@@ -45,7 +45,7 @@
         </div>
       </aside>
       <div class="rightContent">
-        <component :is="current" @changeUtils="changeUtils" :attrs="attrs"></component>
+        <component :is="current" @changeUtils="changeUtils" :attrs="attrs" :current="$current"></component>
       </div>
     </section>
   </div>
@@ -91,7 +91,7 @@ export default {
               name: 'mineCloud',
               icon:require('@/assets/image/icons/deskIcons/icon-computer.png'),
               children:[
-                {label:'桌面',name: 'desk',icon:require('@/assets/image/icons/deskIcons/tree-computer.png')},
+                {label:'桌面',name: 'myCloudContent',icon:require('@/assets/image/icons/deskIcons/desk.png')},
                 {label:'我的文档',name:'myCloudContent',icon:require('@/assets/image/icons/deskIcons/tree-folder.png')},
                 {label:'软件区',name:'myCloudContent',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
                 {label:'文档区',name:'myCloudContent',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
@@ -101,7 +101,7 @@ export default {
             {
               label:'共享云端',
               name: 'shareCloud',
-              icon:require('@/assets/image/icons/deskIcons/tree-share.png'),
+              icon:require('@/assets/image/icons/deskIcons/tree-share2.png'),
               children:[
                 {label:'开发部',name:'shareCloudContent',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')},
                 {label:'学习区',name:'shareCloudContent',icon:require('@/assets/image/icons/deskIcons/tree-disk2.png')}
@@ -110,7 +110,7 @@ export default {
             {
               label:'组织云端',
               name: 'organizationCloud',
-              icon:require('@/assets/image/icons/deskIcons/tree-org.png'),
+              icon:require('@/assets/image/icons/deskIcons/tree-org2.png'),
               children:[
                 {
                   label:'四川挚友软件有限公司',
@@ -124,7 +124,7 @@ export default {
               ],
             }
           ],
-          current:'iCloudIndex',//初始进入myCloud 默认右侧显示
+          current: 'iCloudIndex',//初始进入myCloud 默认右侧显示
           utilName: 'unit',  //选中的模块名称
           isShowUtils: true,  // 展开工具栏
           hideUtil: '',  // 隐藏工具栏类名
@@ -133,9 +133,14 @@ export default {
               mineCloud: {zhiyou: false, mine: false},
               shareCloud: false,
               organizationCloud: false,
-            },
+            }
           }, 
         };
+    },
+    computed: {
+      $current(){
+        return this.current;
+      }
     },
     methods:{
       windowsTools( obj ){  
@@ -152,15 +157,9 @@ export default {
         this.hideUtil = this.isShowUtils === true ? '' : 'hide';
       },
       handleNodeClick(data, node, el) {  //左侧树节点被选中，切换模块和工具栏
-        console.log(data)
-        // console.log(node)
-        // console.log(el)
+        // console.log(data)
         //判断出现的内容模块
-        if(data.name === 'desk'){ // 如果点击的是桌面，则小化弹框
-          this.windowsTools({param: 'myCloud', type:'minSize'});
-        } else {
-          this.current = data.name;
-        }
+        this.current = data.name;
         //判断出现的工具栏
         switch (data.name) {
           case 'mineCloud':
@@ -172,6 +171,13 @@ export default {
           default:
             this.utilName = data.name;
         }
+        //点击节点切换弹框标题
+        let iconArr = data.icon.split('/');
+        let icon = iconArr[iconArr.length - 1].split('.')[0];
+        Object.assign(this.info, {
+          icon: icon
+        });
+        this.componentTitle = data.label;
       },
       changeUtils( tag ){  // 点击右侧内容模块，切换工具栏
         this.utilName = tag.utilTag;
@@ -188,10 +194,11 @@ export default {
         }
       },
       utilClick( name ){ // one: 工具栏点击的名字  second：点击的二级菜单名字
-        console.log(name)
+        // console.log(name)
         this.attrs = {
           ...this.attrs,
-          name
+          name,
+          current: this.current
         };
       }
     },

@@ -106,11 +106,11 @@ export default {
                 iconImg: require('@/assets/image/icons/fileIcons/dailyO.png'),
                 iconTitle: '日常操作',
                 children: [
-                    {iconImg: require('@/assets/image/icons/fileIcons/cut.png'),iconTitle: '剪切'},
-                    {iconImg: require('@/assets/image/icons/fileIcons/copy.png'),iconTitle: '复制'},
-                    {iconImg: require('@/assets/image/icons/fileIcons/paste.png'),iconTitle: '粘贴'},
-                    {iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '重命名'},
-                    {iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除'}
+                    {iconImg: require('@/assets/image/icons/fileIcons/cut.png'),iconTitle: '剪切',tip:'Ctrl+x'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/copy.png'),iconTitle: '复制',tip:'Ctrl+c'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/paste.png'),iconTitle: '粘贴',tip:'Ctrl+v'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '重命名',tip:'F2'},
+                    {iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除',tip:'del'}
                 ],
             },
             {
