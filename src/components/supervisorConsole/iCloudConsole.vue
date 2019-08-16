@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-14 14:47:00
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-14 17:40:58
+ * @LastEditTime: 2019-08-16 14:46:48
  * @Desc: iCloud管理控制台
  -->
 <template>
@@ -14,7 +14,7 @@
             <img :src="require('@/assets/image/icons/appIcons/appIcons-console.png')" >
             <p >iCloud控制台</p>
           </div>
-          <el-menu @select="selecetNav" default-active="iCloudDisk">
+          <el-menu @select="selecetNav" default-active="iCloudDC">
             <el-menu-item index="iCloudDesc">
               <img :src="require('@/assets/image/icons/appIcons/appIcons-desc.png')">
               <span slot="title">云端概述</span>
@@ -34,7 +34,7 @@
           </el-menu>
         </el-col>
         <el-col :span="21">
-          <component :is="current"></component>
+          <component :is="current" class="fadeIn animated"></component>
         </el-col>
       </el-row>
     </div>
@@ -65,7 +65,7 @@ export default {
       minWidth:'',
       info:{className:'.iCloudConsole',name:'iCloudConsole',icon:'icon-iCloudConsole'},
       componentName:'iCloud控制台',
-      current:'iCloudDisk'
+      current:'iCloudDC'
     };
   },
   methods:{
@@ -105,6 +105,9 @@ export default {
     border-radius: 5px;
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     font-size: 12px;
+    & .el-menu {
+      border: none!important;
+    }
   }
   .leftImgBox {
     text-align: center;
