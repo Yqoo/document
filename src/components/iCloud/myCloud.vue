@@ -157,17 +157,7 @@ export default {
         // console.log(data)
         //判断出现的内容模块
         this.current = data.name;
-        //判断出现的工具栏
-        switch (data.name) {
-          case 'mineCloud':
-            this.utilName = 'unit';break;
-          case 'shareCloudContent':
-            this.utilName = 'share_organization';break;
-          case 'organizationContent':
-            this.utilName = 'share_organization';break;
-          default:
-            this.utilName = data.name;
-        }
+        this.utilsShow(data.name);
         //点击节点切换弹框标题
         let iconArr = data.icon.split('/');
         let icon = iconArr[iconArr.length - 1].split('.')[0];
@@ -199,8 +189,30 @@ export default {
         };
       },
       openFolder( component ){ //双击文件夹
-        this.current = component;
+        if(component === 'enjoyContent' || component === 'shareContent'){
+          this.current = 'shareContent';
+        }else{
+          this.current = component;
+        }
+        this.utilsShow(component);
       },
+      utilsShow( name ){ // 点击树节点和双击文件，改变工具栏
+        console.log(name)
+        switch (name) {
+          case 'mineCloud':
+            this.utilName = 'unit';break;
+          case 'shareCloudContent':
+            this.utilName = 'share_organization';break;
+          case 'organizationContent':
+            this.utilName = 'share_organization';break;
+          case 'shareContent':
+            this.utilName = "shareContent";break;
+          case 'enjoyContent':
+            this.utilName = 'enjoyContent';break;
+          default:
+            this.utilName = name;
+        }
+      }
     },
     mounted(){
       this.minWidth = document.querySelector('.myCloud').offsetWidth;
