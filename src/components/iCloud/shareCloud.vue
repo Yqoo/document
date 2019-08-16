@@ -8,7 +8,7 @@
                   <img src='@/assets/image/icons/deskIcons/tree-share2.png'/>共享云端
               </template>
               <div class="cards slideInDown animated" :class="displayName==='行展示'?'row':'col'">
-                  <el-card v-for="(c,index) in shareCloud" :class="_isClick.shareCloud&&c.active?'addBorder':''" :key="index" shadow="hover" class="hvr-sink">
+                  <el-card v-for="(c,index) in shareCloud" :class="_isClick.shareCloud&&c.active?'addBorder':''" :key="index" shadow="hover">
                       <div @click="activeCard(c, shareCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="size"/>
                         <div class="bottom1">{{c.name}}</div>
@@ -43,4 +43,10 @@ export default {
 </script>
 <style lang='less' scoped>
 @import '../../assets/css/myCloud.less';
+.el-collapse{
+  border: none;
+  & /deep/ .el-collapse-item__wrap{
+    border: none;
+  }
+}
 </style>

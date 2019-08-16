@@ -4,7 +4,7 @@
  * @LastEditTime: 2019-08-09 18:04:44
  -->
 <template>
-  <div class='myCloud' v-drag :class="themeColorName">
+  <div class='myCloud' v-drag @contextmenu.prevent :class="themeColorName">
     <boxTools class="theme-color moveBox" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
     <div class="topContent">
         <i class="el-icon-arrow-down" v-show="isShowUtils" @click="utilCollapse" title="收起工具栏"></i>
@@ -45,7 +45,7 @@
         </div>
       </aside>
       <div class="rightContent">
-        <component :is="current" @changeUtils="changeUtils" @openFolder="openFolder" :attrs="attrs" :current="current"></component>
+        <component v-if="refreshContent" :is="current" @changeUtils="changeUtils" @openFolder="openFolder" :attrs="attrs" :current="current"></component>
       </div>
     </section>
   </div>
@@ -137,6 +137,7 @@ export default {
               organizationCloud: false,
             }
           }, 
+          refreshContent: true, // 刷新
         };
     },
     methods:{
@@ -157,17 +158,7 @@ export default {
         // console.log(data)
         //判断出现的内容模块
         this.current = data.name;
-        //判断出现的工具栏
-        switch (data.name) {
-          case 'mineCloud':
-            this.utilName = 'unit';break;
-          case 'shareCloudContent':
-            this.utilName = 'share_organization';break;
-          case 'organizationContent':
-            this.utilName = 'share_organization';break;
-          default:
-            this.utilName = data.name;
-        }
+        this.utilsShow(data.name);
         //点击节点切换弹框标题
         let iconArr = data.icon.split('/');
         let icon = iconArr[iconArr.length - 1].split('.')[0];
@@ -190,8 +181,14 @@ export default {
           this.attrs.isClick[tag.clickTag] = true;
         }
       },
-      utilClick( name ){ // one: 工具栏点击的名字  second：点击的二级菜单名字
-        // console.log(name)
+      utilClick( name ){ // 工具栏中点击的名字
+        //点击的是刷新
+        if(name === '刷新'){
+          this.refreshContent = false;
+          this.$nextTick(() => {
+            this.refreshContent = true;
+          });
+        }
         this.attrs = {
           ...this.attrs,
           name,
@@ -199,8 +196,33 @@ export default {
         };
       },
       openFolder( component ){ //双击文件夹
-        this.current = component;
+        if(component == null){
+          return false;
+        }
+        if(component === 'enjoyContent' || component === 'shareContent'){
+          this.current = 'shareContent';
+        }else{
+          this.current = component;
+        }
+        this.utilsShow(component);
       },
+      utilsShow( name ){ // 点击树节点和双击文件，改变工具栏
+        // console.log(name)
+        switch (name) {
+          case 'mineCloud':
+            this.utilName = 'unit';break;
+          case 'shareCloudContent':
+            this.utilName = 'share_organization';break;
+          case 'organizationContent':
+            this.utilName = 'share_organization';break;
+          case 'shareContent':
+            this.utilName = "shareContent";break;
+          case 'enjoyContent':
+            this.utilName = 'enjoyContent';break;
+          default:
+            this.utilName = name;
+        }
+      }
     },
     mounted(){
       this.minWidth = document.querySelector('.myCloud').offsetWidth;

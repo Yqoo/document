@@ -137,7 +137,7 @@ export default {
         enjoyTogether: {
             iconImg: require('@/assets/image/icons/fileIcons/person.png'),
             iconTitle: '共享',
-            isRightBorder: true
+            isRightBorder: true,
         }
     };
     let down_upload = { // 下载 && 上传
@@ -149,8 +149,49 @@ export default {
         upload: {
             iconImg: require('@/assets/image/icons/fileIcons/upload.png'),
             iconTitle: '上传',
-            isRightBorder: true
+            isRightBorder: true,
+            flag: false,
+            children: [
+                {iconImg: require('@/assets/image/icons/fileIcons/newFile.png'),iconTitle: '上传文件'},
+                {iconImg: require('@/assets/image/icons/fileIcons/newFolder.png'),iconTitle: '上传文件夹'},
+            ]
         }
+    };
+    let preview = {
+        iconImg: require('@/assets/image/icons/fileIcons/preview.png'),
+        iconTitle: '在线预览',
+        isRightBorder: false,
+    };
+    let diagram = {
+        iconImg: require('@/assets/image/icons/fileIcons/diagram.png'),
+        iconTitle: '关系图',
+        isRightBorder: true,
+    };
+    let approval ={
+        iconImg: require('@/assets/image/icons/fileIcons/approval-submit.png'),
+        iconTitle: '审批',
+        isRightBorder: false,
+        flag: false,
+        children: [
+            {iconImg: require('@/assets/image/icons/fileIcons/approval-submit.png'),iconTitle: '提交审批'},
+            {iconImg: require('@/assets/image/icons/fileIcons/approval-progress.png'),iconTitle: '审批进度'},
+            {iconImg: require('@/assets/image/icons/fileIcons/flowpath.png'),iconTitle: '审批流程'}
+        ]
+    };
+    let print = {
+        iconImg: require('@/assets/image/icons/fileIcons/print.png'),
+        iconTitle: '打印',
+        isRightBorder: false,
+    };
+    let showField={
+        iconImg: require('@/assets/image/icons/fileIcons/col.png'),
+        iconTitle: '显示字段',
+        isRightBorder: false,
+    };
+    let exportExcel = {
+        iconImg: require('@/assets/image/icons/fileIcons/export.png'),
+        iconTitle: '导出excel',
+        isRightBorder: false,
     };
     return {
         active: {
@@ -263,7 +304,7 @@ export default {
                 refresh_help.refresh,
                 refresh_help.help,
             ],
-            share_organization:[
+            share_organization:[ //共享云端 =》节点
                 newCreate,
                 {
                     iconImg: require('@/assets/image/icons/fileIcons/limit.png'),
@@ -277,6 +318,95 @@ export default {
                 shareFile.enjoyTogether,
                 check,
                 array,
+                send,
+                refresh_help.refresh,
+                refresh_help.help,
+            ],
+            shareContent: [ // 挚友云=》 我的分享 && 接受分享
+                preview,
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/dailyO.png'),
+                    iconTitle: '分享操作',
+                    isRightBorder: false,
+                    flag: false,
+                    children:[
+                        {iconImg: require('@/assets/image/icons/fileIcons/myshare.png'),iconTitle: '访问分享'},
+                        {iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '修改分享'},
+                        {iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '取消分享'}
+                    ]
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/link.png'),
+                    iconTitle: '复制链接',
+                    isRightBorder: false,
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/lock.png'),
+                    iconTitle: '复制提取码',
+                    isRightBorder: false,
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/limit.png'),
+                    iconTitle: '分享权限',
+                    isRightBorder: false,
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/edit.png'),
+                    iconTitle: '更改提取码',
+                    isRightBorder: false,
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/log.png'),
+                    iconTitle: '分享日志',
+                    isRightBorder: false,
+                },
+                diagram,
+                approval,
+                print,
+                showField,
+                exportExcel,
+                send,
+                refresh_help.refresh,
+                refresh_help.help,
+            ],
+            enjoyContent: [ // 挚友云=》 我的共享 && 接受共享
+                preview,
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/dailyO.png'),
+                    iconTitle: '共享操作',
+                    isRightBorder: false,
+                    flag: false,
+                    children:[
+                        {iconImg: require('@/assets/image/icons/fileIcons/enjoyTo.png'),iconTitle: '访问共享'},
+                        {iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '修改共享'},
+                        {iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '取消共享'}
+                    ]
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/limit.png'),
+                    iconTitle: '共享权限',
+                    isRightBorder: false,
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/calendar.png'),
+                    iconTitle: '共享期限',
+                    isRightBorder: false,
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/edit.png'),
+                    iconTitle: '更改密码',
+                    isRightBorder: false,
+                },
+                {
+                    iconImg: require('@/assets/image/icons/fileIcons/log.png'),
+                    iconTitle: '共享日志',
+                    isRightBorder: false,
+                },
+                diagram,
+                approval,
+                print,
+                showField,
+                exportExcel,
                 send,
                 refresh_help.refresh,
                 refresh_help.help,

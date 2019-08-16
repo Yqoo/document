@@ -5,14 +5,16 @@
     display:flex;
     flex-flow: row wrap;
     & .el-card {
+      position: relative;
       margin: 5px 10px;
-      cursor: inherit;
+      cursor: default;
       width:80px;
       height: 80px;
       border: 1px solid transparent;
       & /deep/ .el-card__body{
         padding: 5px 5px;
         text-align: center;
+        font-size: 12px;
         & img{
           display: inline-block;
           width: 60%;
@@ -23,13 +25,15 @@
           width: 22px;
           right: 20%;
         }
+        & img + div{
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
       }
       & i{
         font-size: 40px;
       }
-    }
-    & .el-card.addBorder{
-      border: 1px solid #d2d2d2;
     }
 }
 .cards.col {
@@ -38,21 +42,29 @@
   & .el-card{
     border: 1px solid transparent;
     width: 33%;
-    cursor: inherit;
+    cursor: default;
     box-sizing: border-box;
     & /deep/ .el-card__body{
+      font-size: 12px;
       & img{
         float: left;
         width: 22px !important;
+        margin-right: 5px;
       }
       & img.fileIcon{
         display: none;
       }
+      & img + div{
+        line-height: 22px;
+      }
     }
   }
-  & .el-card.addBorder{
-    border: 1px solid #d2d2d2;
-  }
+}
+.cards .el-card:hover{
+  background: #f5f5f5;
+}
+.cards .el-card.addBorder{
+  border: 1px solid #d2d2d2;
 }
 .el-collapse-item{
   & /deep/ .el-collapse-item__header{

@@ -63,6 +63,6 @@ export const myCloudUtilMixin = {
         openFolder(component) { // 双击文件
             clearTimeout(timer);
             this.$emit('openFolder', component);
-        }
+        },
     },
 }
