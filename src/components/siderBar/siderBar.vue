@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-25 15:53:39
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-15 17:49:59
+ * @LastEditTime: 2019-08-19 11:54:56
  -->
 <template>
     <el-row class="fadeInLeftBig animated">
@@ -11,7 +11,7 @@
                     <i class="el-icon-s-operation" style="color:#fff"></i>
                     <span slot="title">开始</span>
                 </el-menu-item>
-                <el-menu-item class="hvr-wobble-horizontal">
+                <el-menu-item @click="openChild('account')" class="hvr-wobble-horizontal">
                     <img :src="require('@/assets/image/icons/deskIcons/icon-user.png')">
                     <span slot="title">我的账户</span>
                 </el-menu-item>
