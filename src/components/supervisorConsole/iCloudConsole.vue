@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-14 14:47:00
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-16 14:46:48
+ * @LastEditTime: 2019-08-19 09:40:31
  * @Desc: iCloud管理控制台
  -->
 <template>
@@ -14,7 +14,7 @@
             <img :src="require('@/assets/image/icons/appIcons/appIcons-console.png')" >
             <p >iCloud控制台</p>
           </div>
-          <el-menu @select="selecetNav" default-active="iCloudDC">
+          <el-menu @select="selecetNav" default-active="iCloudDisk">
             <el-menu-item index="iCloudDesc">
               <img :src="require('@/assets/image/icons/appIcons/appIcons-desc.png')">
               <span slot="title">云端概述</span>
@@ -65,7 +65,7 @@ export default {
       minWidth:'',
       info:{className:'.iCloudConsole',name:'iCloudConsole',icon:'icon-iCloudConsole'},
       componentName:'iCloud控制台',
-      current:'iCloudDC'
+      current:'iCloudDisk'
     };
   },
   methods:{

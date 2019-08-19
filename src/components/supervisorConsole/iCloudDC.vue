@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-14 16:47:38
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-16 16:46:33
+ * @LastEditTime: 2019-08-16 17:20:56
  * @Desc: iCloud组件下的数据中心
  -->
 <template>
@@ -70,7 +70,7 @@ export default {
     };
   },
   methods:{
-    handleSpace( card,index ){
+    handleSpace( card,index ){//左侧所选空间并标识
       this.leftsize = 8;
       this.chooseSpace = card;
       this.leftSpace.map( (item,v) => {
