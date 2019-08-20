@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-14 16:45:07
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-16 10:13:04
+ * @LastEditTime: 2019-08-19 10:22:47
  * @Desc: iCloud组件下的存储中心
  -->
 <template>
@@ -39,13 +39,14 @@
           <template v-else>
             <i class="el-icon-edit toolsIcon" @click="editRowEvent(row)" title="编辑" style="color:#46cdcf"></i>
             <i class="el-icon-delete toolsIcon" @click="delrow(row)"  title="删除" style="color:#e84545"></i>
-            <i class="el-icon-user toolsIcon"  title="管理员" style="color:#2a363b"></i>
+            <i class="el-icon-user toolsIcon" @click="admin(row)" title="管理员" style="color:#2a363b"></i>
             <i class="el-icon-sort toolsIcon"  title="迁移" style="color:#07689f"></i>
           </template>
         </template>
       </vxe-table-column>
     </vxe-table>
-    <el-dialog   :visible.sync="dialogFormVisible" v-dialogDrag :modal="false" width="40%">
+    <el-dialog   :visible.sync="dialogFormVisible" v-dialogDrag :modal="false" width="40%" :close-on-click-modal="false">
+      <!-- 创建存储中心 -->
       <div slot="title" class="messageBox-title">
         <img :src="require('@/assets/image/icons/appIcons/appIcons-cloudDisk.png')">
         <span>创建存储中心</span>
@@ -139,6 +140,46 @@
         </div>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="dialogAllocationVisible" :modal="false" width="60%" v-dialogDrag :close-on-click-modal="false">
+      <!-- 分配存储空间 -->
+      <div slot="title" class="messageBox-title">
+        <img :src="require('@/assets/image/icons/appIcons/appIcons-cloudDisk.png')">
+        <span>分配存储空间</span>
+      </div>
+      <div class="allocationBody">
+        <el-row>
+          <el-col :span="4">
+            <div style="text-align:center">
+              <img :src="require('@/assets/image/icons/appIcons/appIcons-disk.png')">
+            </div>
+            <div class="allocationDesc">
+              <p>
+                <img :src="require('@/assets/image/icons/appIcons/appIcons-cloudDisk.png')">
+                存储中心：
+              </p>
+              <p>
+                <img :src="require('@/assets/image/icons/appIcons/appIcons-interAddres.png')">
+                网络地址：192.168.000.200
+              </p>
+              <p>
+                <img :src="require('@/assets/image/icons/appIcons/appIcons-disk.png')" >
+                总空间：
+              </p>
+              <p>
+                <img :src="require('@/assets/image/icons/appIcons/appIcons-spaceable.png')">
+                可分空间：
+              </p>
+            </div>
+          </el-col>
+          <el-col :span="20">
+            <div class="rightTitle">
+              <el-button size="mini" icon="el-icon-plus" type="success" plain>创建存储空间</el-button>
+              <el-button size="mini" icon="el-icon-back" type="danger" plain>返回</el-button>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -160,7 +201,8 @@ export default {
         { ID:2,dc:'B中心',IP:'127.0.0.1',port:'8080',path:'D:/',allocation:'90%',usable:'10%',user:'Yqoo',time:'13:00'},
         { ID:3,dc:'C中心',IP:'127.0.0.1',port:'8080',path:'D:/',allocation:'90%',usable:'10%',user:'Yqoo',time:'13:00'},
       ],
-      dialogFormVisible: false,
+      dialogFormVisible: false,//创建存储中心dialog
+      dialogAllocationVisible:false,//分配存储空间dialog
       diskForm:{
         diskcenter:'',
         path:'',
@@ -203,6 +245,7 @@ export default {
         50: '50G',
         100: '100G',
       },
+      
     };
   },
   methods:{
@@ -262,6 +305,10 @@ export default {
     test(){//测试
       this.testOver = true;
     },
+    admin( row  ){//存储中心子界面，存储空间
+      console.log( row )
+      this.dialogAllocationVisible = true;
+    },
    
   },
   watch:{
@@ -301,5 +348,31 @@ export default {
     font-size: 12px;
     line-height: 2.5em;
     padding-left: 13px;
+  }
+  .allocationBody{
+    text-align: left;
+    & .el-row {
+      & .el-col {
+        & img {
+          width: 80px;
+        }
+        & .allocationDesc {
+          border-top: 1px solid #ddd;
+          & img {
+            width:20px;
+            vertical-align: bottom;
+          }
+          & p {
+            font-size: 10px;
+            padding: 10px 0px;
+          }
+        }
+        & .rightTitle {
+          text-align: right;
+          padding-bottom: 5px;
+          border-bottom: 1px solid #ddd;
+        }
+      }
+    }
   }
 </style>

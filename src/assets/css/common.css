@@ -216,7 +216,7 @@ ol {
 }
 .el-dialog__body{
   padding: 10px 20px;
-  height: 300px;
+  min-height: 300px;
   overflow-y: auto;
   border-bottom: 1px solid #ddd;
 }
@@ -246,4 +246,7 @@ ol {
 }  
 .el-select .el-input{
   width: 100%;
+}
+.el-progress__text {
+  font-size: 12px!important;
 }

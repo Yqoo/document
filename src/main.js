@@ -1,7 +1,7 @@
 /*
  * @Date: 2019-07-23 17:42:48
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-15 09:08:56
+ * @LastEditTime: 2019-08-20 14:18:22
  * @Desc: 
  */
 import Vue from "vue";
@@ -29,10 +29,12 @@ Vue.use(ElementUI);
 Vue.use(VXETable);
 Vue.config.productionTip = false;
 Vue.prototype.axios = axios;
+axios.defaults.baseURL = "http://192.168.0.181:8080";//配置axios默认基础地址
+axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.prototype._ = _;
 Vue.prototype._getThemeColor = tools.getThemeColor;
 Vue.prototype._getPosition = tools.getPosition;
-/* router.beforeEach((to,from,next) => {
+router.beforeEach((to,from,next) => {//全局路由守卫
   if(to.path === '/login'){
     next()
   } else {
@@ -43,7 +45,7 @@ Vue.prototype._getPosition = tools.getPosition;
       next();
     }
   }
-}) */
+})
 Vue.directive('drag',{
   inserted:function( el,bilding ){
     let op = el;

@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-14 14:47:00
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-14 17:40:58
+ * @LastEditTime: 2019-08-19 09:40:31
  * @Desc: iCloud管理控制台
  -->
 <template>
@@ -34,7 +34,7 @@
           </el-menu>
         </el-col>
         <el-col :span="21">
-          <component :is="current"></component>
+          <component :is="current" class="fadeIn animated"></component>
         </el-col>
       </el-row>
     </div>
@@ -105,6 +105,9 @@ export default {
     border-radius: 5px;
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     font-size: 12px;
+    & .el-menu {
+      border: none!important;
+    }
   }
   .leftImgBox {
     text-align: center;

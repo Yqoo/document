@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-06 10:40:02
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-15 18:13:51
+ * @LastEditTime: 2019-08-20 18:01:22
  * @Desc: 组织与用户组件外部容器
  -->
 /** 
@@ -63,5 +63,7 @@ export default {
     top: 10%;
     left:20%;
     border-radius: 5px;
+    box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
+    transition: box-shadow 0.5s, transform 0.5s;
   }
 </style>
