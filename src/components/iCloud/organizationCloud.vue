@@ -2,14 +2,14 @@
 <template>
   <div class='organizationCloud'>
       <el-collapse v-model="activeNames">
-        <div @click="clickBlock({utilTag:'organizationCloud',clickTag:'organizationCloud'})">
+        <div @click="clickBlock({clickTag:'organizationCloud'})">
             <el-collapse-item  name='1' :disabled='true'>
               <template slot="title">
                   <img src='@/assets/image/icons/deskIcons/tree-org2.png'/>组织云端
               </template>
               <div class="cards slideInUp animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in organizationCloud" :class="_isClick.organizationCloud&&c.active?'addBorder':''" :key="index" shadow="hover">
-                      <div @click="activeCard(c, organizationCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
+                      <div @mousedown="activeCard($event, c, index, organizationCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>
@@ -27,12 +27,12 @@ import { myCloudUtilMixin } from '@/assets/js/myCloudUtilMixins.js';
 export default {
   mixins: [myCloudMixin],
   extends: myCloudUtilMixin,
+  props:['attrs'],
   data () {
     return {
         activeNames: ['1'],
-        organizationCloud:[
-            {name:'四川挚友软件有限公司',component:'organizationContent',imgurl:require('@/assets/image/icons/fileIcons/company.png'),active:false}
-      ],
+        organizationData:this.attrs.organizationCloud,
+        organizationCloud:this.attrs.organizationCloud.data,
     };
   },
   methods: {

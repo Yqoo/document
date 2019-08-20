@@ -6,9 +6,9 @@
  -->
 <template>
   <div class='iCloudIndex'>
-    <mineCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs"></mineCloud>
-    <shareCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs"></shareCloud>
-    <organizationCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs"></organizationCloud>
+    <mineCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs" @hideRightMenu="hideRightMenu" @showRightMenu="showRightMenu"></mineCloud>
+    <shareCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs" @hideRightMenu="hideRightMenu" @showRightMenu="showRightMenu"></shareCloud>
+    <organizationCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs" @hideRightMenu="hideRightMenu" @showRightMenu="showRightMenu"></organizationCloud>
   </div>
 </template>
 
@@ -35,8 +35,14 @@ export default {
     },
     openFolder( name ){ // 双击文件夹
       this.$emit('openFolder', name);
-    }
-  }
+    },
+    hideRightMenu(){ //隐藏右键菜单
+        this.$emit('hideRightMenu');
+    },
+    showRightMenu(e) { // 显示右键菜单
+        this.$emit('showRightMenu', e);
+    },
+  },
 }
 </script>
 <style lang='less' scoped>
