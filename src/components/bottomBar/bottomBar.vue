@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-24 11:37:02
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-10 09:14:15
+ * @LastEditTime: 2019-08-20 17:56:46
  -->
 <template>
     <el-row>
@@ -199,8 +199,7 @@ export default {
         },
         showTab( tab,type ){
             if( type ) this.$emit('showTab',tab,type);//历史固定任务栏
-            else this.$emit('showTab',tab)
-            
+            else this.$emit('showTab',tab);
         },
         taskBarMenus( e ){
             let name = e.target.classList[e.target.classList.length-1];//获取点击的tabs的name

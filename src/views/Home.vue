@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-23 17:42:48
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-19 12:03:37
+ * @LastEditTime: 2019-08-20 17:53:49
  -->
 <template>
   <el-container :style="bg">
@@ -108,6 +108,7 @@
       <iCloudConsole v-if='isShowBox.iCloudConsole.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.iCloudConsole.display"></iCloudConsole>
       <organization v-if='isShowBox.organization.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.organization.display"></organization>
       <account v-if='isShowBox.account.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.account.display"></account>
+      <taskManager v-if='isShowBox.taskManager.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.taskManager.display"></taskManager>
     </el-main>
     <el-footer :class="footerClass" :style="groundGlass">
       <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></bottomBar>
@@ -128,6 +129,7 @@ import systemProperties from "@/components/systemProperties/systemProperties";
 import iCloudConsole from "@/components/supervisorConsole/iCloudConsole.vue";
 import organization from "@/components/organization/organization";
 import account from "@/components/account/account.vue";
+import taskManager from "@/components/taskManager/taskManager.vue";
 import tools from  "@/assets/js/utils/tools.js";
 import { GridLayout, GridItem } from 'vue-grid-layout';
 export default {
@@ -145,7 +147,8 @@ export default {
     systemProperties,
     iCloudConsole,
     organization,
-    account
+    account,
+    taskManager
   },
   data() {
     return {
@@ -175,6 +178,7 @@ export default {
         iCloudConsole: { show:false,name:'iCloud控制台',display:false,icon:require('../assets/image/icons/deskIcons/icon-ad.png') },
         organization: { show:false,name:'组织与用户',display:false,icon:require('../assets/image/icons/deskIcons/icon-organization.png') },
         account: { show:false,name:'我的账户',display:false,icon:require('../assets/image/icons/deskIcons/icon-account.png') },
+        taskManager: { show:false,name:'任务管理器',display:false,icon:require('../assets/image/icons/deskIcons/icon-taskManager.png') },
       },
       index:'theme',
       isMoveDrawer:false,

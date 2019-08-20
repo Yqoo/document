@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-01 09:26:31
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-13 17:02:08
+ * @LastEditTime: 2019-08-20 17:56:59
  -->
 <template>
   <div class='taskBarMenus fadeInUp animated'>
@@ -29,6 +29,7 @@ export default {
           menus:[
             { name:'显示桌面',icon:'el-icon-s-platform',color:{ color:'#207561' },type:'showDesk' },
             { name:'锁屏设置',icon:'el-icon-unlock',color:{ color:'#29c6cd' },type:'lockScreen' },
+            { name:'任务管理器',icon:'el-icon-s-help',color:{ color:'#ed3833' },type:'taskManage' },
             { name:'锁定任务栏',icon:'el-icon-lock',color:{ color:'#ff89c0' },type:'lockTask' },
             { name:'任务栏设置',icon:'el-icon-setting',color:{ color:'#fea386' },type:'position',children:[
               { name:'顶部',icon:'el-icon-caret-top',color:{ color:'#f12b6b' },type:'top' },
@@ -50,10 +51,10 @@ export default {
         this.showSecondMenu = false;
       }
       if( this.isFix === null ){//控制显示固定 和 取消固定
-        this.menus.splice(4,3);
+        this.menus.splice(5,3);
       } else {
-        if( this.isFix ) this.menus.splice(4,1);
-        else this.menus.splice(5,1);
+        if( this.isFix ) this.menus.splice(5,1);
+        else this.menus.splice(6,1);
       }
     },
     methods:{
@@ -101,6 +102,7 @@ export default {
             } 
           },
           close: () => { this.$emit('close',Object.keys(this.$store.state.chooseTabName)) },
+          taskManage: () => this.$emit('showDesk','taskManager'),
         });
         active[type]();
       }
