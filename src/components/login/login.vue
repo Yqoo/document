@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-07-23 17:54:07
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-20 14:10:26
+ * @Desc: 
+ -->
 <template>
     <div class="login">
         <div class="formBox">
@@ -18,7 +24,7 @@
                 <el-form-item label="" prop="pwd">
                     <el-input  type="password" v-model="pwdform.pwd" placeholder="请输入密码">
                          <i slot="prefix" class="el-input__icon el-icon-lock" style="color:#409EFF"></i>
-                        <el-button slot="append" style="color:#409EFF" @click="submitForm('pwdform')"><i class="el-icon-finished"></i> 登录</el-button> 
+                        <el-button slot="append" style="color:#409EFF" @click.prevent="submitForm('pwdform')"><i class="el-icon-finished"></i> 登录</el-button> 
                     </el-input>
                     <el-button type="text"><i class="el-icon-question" style="margin-top:5px"></i><span style="font-size:12px;">忘记密码</span></el-button>
                 </el-form-item>
@@ -36,7 +42,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button  type="primary" style="width:100%" @click="submitForm('phoneform')">登录</el-button>
+                    <el-button  type="primary" style="width:100%" @click.prevent="submitForm('phoneform')">登录</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -44,6 +50,7 @@
     </div>
 </template>
 <script>
+import qs from 'qs';
 export default {
     name: 'login',
     data(){
@@ -100,7 +107,31 @@ export default {
         submitForm( formName ){
              this.$refs[formName].validate( valid => {
                  if( valid ){
-                     //...
+                    let params = {
+                    account:this.pwdform.username,
+                    password:this.pwdform.pwd
+                    }
+                    this.axios.post('/login',qs.stringify(params)).then( res => {
+                        switch ( res.data.code ) {
+                            case -2:
+                                this.$message({
+                                    message:res.data.desc,
+                                    type:'error'
+                                });
+                                break;
+                            case -1:
+                                this.$message({ message:'系统错误，请联系管理员',type:'error'});
+                                break;
+                            case 2:
+                                this.$message({ message:'系统错误',type:'error' });
+                                break
+                            default:
+                                this.$message({ message:res.data.desc,type:'success' });
+                                localStorage.setItem('loginToken','success');
+                                this.$router.push({ path:'/' })
+                                break;
+                        }
+                    }) .catch( err => console.log( err ))
                  } else {
                     this.$message({
                         message: '请填写完整登录信息',
@@ -108,6 +139,7 @@ export default {
                     });
                  }
              })
+             return false;
         },
         changeLoginStyle(){
             this.isPwd = !this.isPwd;

@@ -1,13 +1,13 @@
 <!--
  * @Date: 2019-08-19 11:49:20
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-19 18:17:31
+ * @LastEditTime: 2019-08-20 16:19:04
  * @Desc: 我的账户组件
  -->
 <template>
   <div class='account'  v-drag :class="themeColorName">
     <boxTools class="theme-color moveBox" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
-    <div class="accountBody">
+    <div class="accountBody fadeIn animated">
       <div class="accountTitle">
         <el-avatar :size="30" :src="avatar"></el-avatar>
         <div class="desc">
@@ -23,14 +23,23 @@
       <el-row>
         <el-col :span="6">
           <div class="avatarImg">
-            <el-avatar shape="square" :size="130" fit="cover" :src="url"></el-avatar>
+            <el-image style="width: 120px; height: 120px" :src="avatarUrl" fit="fit"></el-image>
             <div class="avatarTools">
-              <i class="el-icon-user-solid" style="color:#64c4ed"></i>
-              <el-button type="text" size="mini">更改头像</el-button>
-              <i class="el-icon-unlock" style="color:#207561"></i>
-              <el-button type="text" size="mini">更改密码</el-button>
-              <i class="el-icon-mobile-phone" style="color:#ff935c"></i>
-              <el-button type="text" size="mini">绑定手机</el-button>
+              <el-upload class="upload-demo"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :on-success="handleAvatarSuccess"
+                :show-file-list="false">
+                 <i class="el-icon-user-solid" style="color:#64c4ed"></i>
+                <el-button type="text" size="mini">更改头像</el-button>
+              </el-upload>
+              <div>
+                <i class="el-icon-unlock" style="color:#207561"></i>
+                <el-button type="text" size="mini" @click="changePwd">更改密码</el-button>
+              </div>
+              <div>
+                <i class="el-icon-mobile-phone" style="color:#ff935c"></i>
+                <el-button type="text" size="mini" @click="dialogPhone = true">绑定手机</el-button>
+              </div>
             </div>
           </div>
           <div class="info">
@@ -83,32 +92,91 @@
                 <span>通讯信息</span>
               </div>
               <div>
-                <el-button size="mini" icon="el-icon-edit-outline" type="primary">修改</el-button>
+                <el-dropdown split-button type="primary" @command="addCommunication" size="mini">
+                  新增联系方式
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="电话">电话</el-dropdown-item>
+                    <el-dropdown-item command="QQ">QQ</el-dropdown-item>
+                    <el-dropdown-item command="微信">微信</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+                <el-button size="mini" icon="el-icon-edit-outline" type="primary" @click="isdisabled = false" style="margin-left:10px;">修改</el-button>
                 <el-button size="mini" icon="el-icon-document-checked" type="success">保存</el-button>
               </div>
             </div>
             <div class="comFormBox">
               <el-form :model="basicInfo.communication"  label-width="80px" size="mini">
                 <el-form-item label="电子邮件">
-                  <el-input v-model="basicInfo.communication.email"></el-input>
+                  <el-input v-model="basicInfo.communication.email" :disabled="isdisabled"></el-input>
                 </el-form-item>
                  <el-form-item label="办公地点">
-                  <el-input v-model="basicInfo.communication.officeLocation"></el-input>
+                  <el-input v-model="basicInfo.communication.officeLocation" :disabled="isdisabled"></el-input>
                 </el-form-item>
-                 <el-form-item label="办公室">
-                  <el-input v-model="basicInfo.communication.office"></el-input>
+                <el-form-item label="办公室">
+                  <el-input v-model="basicInfo.communication.office" :disabled="isdisabled"></el-input>
                 </el-form-item>
                 <el-form-item label="电话">
-                  <el-input v-model="basicInfo.communication.phone"></el-input>
+                  <el-input v-model="basicInfo.communication.phone" :disabled="isdisabled"></el-input>
                 </el-form-item>
-                <el-form-item>
-                  <el-button size="mini" type="primary" icon="el-icon-plus">新增联系方式</el-button>
+                <el-form-item v-for="t in basicInfo.communication.type" 
+                  :key="t.key" :label="t.name">
+                  <el-input v-model="t.value">
+                    <i slot="suffix" class="el-icon-circle-close" @click="removeCommunication(t)" v-if="t.key" title="删除该联系方式"></i>
+                  </el-input>
+                </el-form-item>                
+              </el-form>
+              <div class="comTitle">
+                <div>
+                  <i class="el-icon-s-operation"></i>
+                  <span>上下级关系</span>
+                </div>
+                <div>
+                  <el-button size="mini" icon="el-icon-edit-outline" type="primary" @click="isdisabled2 = false">修改</el-button>
+                  <el-button size="mini" icon="el-icon-document-checked" type="success">保存</el-button>
+                </div>
+              </div>
+              <el-form :model="basicInfo.leaderMember" label-width="80px" size="mini">
+                <el-form-item label="直接上级">
+                  <el-input v-model="basicInfo.leaderMember.immediateSuperior" :disabled="isdisabled2"></el-input>
+                </el-form-item>
+                <el-form-item label="直接下级">
+                  <el-input v-model="basicInfo.leaderMember.directSubordinates" :disabled="isdisabled2"></el-input>
                 </el-form-item>
               </el-form>
             </div>
           </div>
         </el-col>
       </el-row>
+      <el-dialog
+        :visible.sync="dialogPhone"
+        v-dialogDrag
+        :modal="false"
+        width="30%"
+        :close-on-click-modal="false">
+        <div slot="title">
+          <i class="el-icon-phone"></i>
+          <span>绑定手机</span>
+        </div>
+        <div>
+          <el-form ref="phoneForm" :model="phoneForm" size="small">
+            <el-form-item>
+              <el-input >
+                <template slot="prepend">手机号</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input >
+                <template slot="prepend">验证码</template>
+                <el-button slot="append" style="color:#409EFF">发送验证码</el-button>
+              </el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div slot="footer">
+          <el-button size="mini" type="danger">取消</el-button>
+          <el-button size="mini" type="success">确认</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -130,7 +198,7 @@ export default {
       minWidth:'',
       minHeight:'',
       avatar: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-      url: 'http://a3.qpic.cn/psb?/V10vB2uw2CoNmJ/Dd6fFmAGXXBJDZiqwdU91mXc7uiZuC9Em4PgcTIj5fA!/m/dEYBAAAAAAAAnull&bo=ZwOHBAAAAAARB9c!&rf=photolist&t=5',
+      avatarUrl: 'http://m.qpic.cn/psb?/V10vB2uw2CoNmJ/XwKpb*tX5HNfAFVwlzkbj6GUeQnPLXzUOpoFped4n6A!/b/dIMAAAAAAAAA&bo=OAQjCQAAAAARByY!&rf=viewer_4',
       basicInfo:{//基本信息
         personal:[//个人信息
           { value:'赵文嘉',title:'姓名' },
@@ -152,13 +220,22 @@ export default {
           { value:'5',title:"邮件",icon:'el-icon-message',type:"info" },
           { value:'100',title:"短信",icon:'el-icon-mobile-phone',type:"danger" },
         ],
-        communication:{
+        communication:{//通讯信息
           email:'',
           officeLocation:'',
           office:'',
           phone:'',
+          type:[],
+        },
+        leaderMember:{//上下级关系
+          immediateSuperior:'',//直接上级
+          directSubordinates:'',//直接下级
         },
       },
+      isdisabled:true,
+      isdisabled2:true,
+      dialogPhone:false,
+      phoneForm:{},
     }
   },
   methods:{
@@ -170,6 +247,35 @@ export default {
         closeItem: ( param ) => this.$emit( 'closeItem',param )
       };
       _s[obj.type](obj.param);
+    },
+    handleAvatarSuccess( res,file ){//上传头像
+      this.avatarUrl = URL.createObjectURL(file.raw);
+    },
+    addCommunication( command ){//新增联系方式
+      this.basicInfo.communication.type.push({ name:command,value:'',key:Date.now() });
+    },
+    removeCommunication( t ){//删除联系方式
+      let index = this.basicInfo.communication.type.indexOf( t );
+      if( index !== -1 ) this.basicInfo.communication.type.splice(index,1);
+    },
+    changePwd(){//更改密码
+      this.$prompt('请输入旧密码','更改密码',{
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        beforeClose:(action, instance, done) => {
+          if( action === 'confirm' ){
+            //判断旧密码是否正确 错误不进行done()
+            done();
+          } else {
+            done();
+          }
+        }
+      }).then(( {value} ) => {
+        this.$prompt('请输入新密码','更改密码',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        })
+      })
     },
   },
   mounted(){
@@ -220,6 +326,9 @@ export default {
         text-align: center;
         padding: 5px 0px;
         & .avatarTools {
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: center;
           margin-top: 10px;
           & i {
             font-size: 20px;
@@ -309,8 +418,25 @@ export default {
           padding-right: 30px;
         }
         & .comFormBox {
-          padding: 10px 30px;
+          padding: 10px 0px;
+          height: 400px;
+          overflow-y: auto;
+          & .el-form {
+            padding: 10px 30px;
+          }
+          & .el-form-item {
+            margin-bottom: 3px;
+          }
         }
+      }
+    }
+  }
+  .el-dialog__wrapper {
+    & /deep/.el-dialog__body {
+      min-height: 100px;
+      padding: 20px 50px;
+      & /deep/.el-input{
+        margin-bottom: 5px;
       }
     }
   }
