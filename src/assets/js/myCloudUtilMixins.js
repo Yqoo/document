@@ -9,7 +9,13 @@ export const myCloudUtilMixin = {
         return {
             size: {width: '60%'}, // 图标大小
             displayName: '行展示', // 行展示 && 列展示
+            startIndex: 0, //记录选中的文件位置
         }
+    },
+    computed: {
+        _isClick() { //用于判断点击的某一块内容
+            return this.attrs.isClick;
+        },
     },
     created () {
         //判断组件是行展示还是列展示
@@ -46,15 +52,30 @@ export const myCloudUtilMixin = {
         },
     },
     methods: {
-        //单击（文件夹）时，有一个边框
-        activeCard(item, dataArr) {
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                for(let i=0; i< dataArr.length; i++){
-                    dataArr[i].active = false;
-                }
+        activeCard(e, item, i, dataArr) { // 单击（文件夹），多选，添加一个边框表示选中
+            let start = this.startIndex;
+            this.startIndex = i;
+            let end = i;
+            if(e.ctrlKey){ // ctrl + 左键 多选
                 item.active = true;
-            }, 300);
+            }else if(e.shiftKey){ //  shift + 左键多选
+                if( start > end ){
+                    let middle = start;
+                    start = end;
+                    end = middle;
+                }
+                for(let j=start; j<=end; j++){
+                    dataArr[j].active = true;
+                }
+            }else { // 单击选中
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    for(let i=0; i< dataArr.length; i++){
+                        dataArr[i].active = false;
+                    }
+                    item.active = true;
+                }, 200); 
+            }
         },
         changeDidplay(name, current){ //修改展示方式
             this.displayName = name;
@@ -63,6 +84,9 @@ export const myCloudUtilMixin = {
         openFolder(component) { // 双击文件
             clearTimeout(timer);
             this.$emit('openFolder', component);
+        },
+        showRightMenu(e, list) { // 显示右键菜单
+            this.$emit('showRightMenu', {e, list});
         },
     },
 }

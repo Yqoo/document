@@ -2,14 +2,14 @@
 <template>
   <div class='mineCloud'>
     <el-collapse v-model="activeNames">
-        <div @click="clickBlock({utilTag:'unit',clickTag: 'zhiyou'})" style='border-bottom:1px solid #ebeef5'>
+        <div @click="clickBlock({clickTag: 'zhiyou', list:blankRightZy})" @contextmenu.prevent="showRightMenu($event,blankRightZy)">
           <el-collapse-item name="1" :disabled='true'>
               <template slot="title">
                   <img src='@/assets/image/icons/deskIcons/icon-myCloud.png'/>挚友云
               </template>
               <div class="cards slideInRight animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in zyCloud" :class="_isClick.mineCloud.zhiyou&&c.active?'addBorder':''" :key="index" shadow="hover">
-                      <div @click="activeCard(c, zyCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
+                      <div @mousedown="activeCard($event, c, index, zyCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom">{{c.name}}</div>
                         <img :src="c.icon" class="fileIcon">
@@ -18,7 +18,7 @@
               </div>
           </el-collapse-item>
         </div>
-        <div @click="clickBlock({utilTag:'mineCloud',clickTag:'mine'})">
+        <div @click="clickBlock({clickTag:'mine', list: blankRightMine})" @contextmenu.prevent="showRightMenu($event, blankRightMine)" >
           <space-progress :avaliableSpace='avaliableSpace' :totalSpace='totalSpace'></space-progress>
           <el-collapse-item name="2" :disabled='true'>
               <template slot="title">
@@ -26,7 +26,7 @@
               </template>
               <div class="cards slideInLeft animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in myCloud" :class="_isClick.mineCloud.mine&&c.active?'addBorder':''" :key="index" shadow="hover">
-                      <div @click="activeCard(c, myCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
+                      <div @mousedown="activeCard($event, c, index, myCloud)" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>
@@ -43,32 +43,37 @@ import { myCloudMixin } from '@/assets/js/myCloudMixin.js';
 import { myCloudUtilMixin } from '@/assets/js/myCloudUtilMixins.js';
 import SpaceProgress from '@/views/spaceProgress.vue';
 import { constants } from 'crypto';
+import rightMenu from '@/components/iCloud/rightMenu.vue'
 export default {
   mixins: [myCloudMixin],
   extends: myCloudUtilMixin,
   components: {
     SpaceProgress,
+    rightMenu,
+  },
+  created(){
+    console.log(this.attrs)
+  },
+  computed:{
+    zyCloud(){
+      let data = this.attrs.data.filter((i) => {
+        return i.type === 0;
+      });
+      return data;
+    },
+    myCloud(){
+      return this.attrs.data.filter((i) => {
+        return i.type === 1;
+      });
+    }
   },
   data () {
     return {
         activeNames: ['1', '2'],
-        zyCloud:[
-        {name:'我的桌面',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/desk.png'),icon:'',active:false},
-        {name:'我的文档',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon: '',active:false},
-        {name:'加密空间',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/dsi.png'),active:false},
-        {name:'我的共享',component:'enjoyContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/user.png'),active:false},
-        {name:'接收共享',component:'enjoyContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/person.png'),active:false},
-        {name:'我的分享',component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/myshare.png'),active:false},
-        {name:'接收分享',component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/recept.png'),active:false},
-        {name:'备份中心',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/backups.png'),active:false},
-      ],
-      myCloud:[
-        {name:'软件区',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-        {name:'文档区',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-        {name:'娱乐区',component:'myCloudContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-      ],
-      avaliableSpace: 18.6,  //可用空间
-      totalSpace: 30.2,  //总空间
+        blankRightMine: this.attrs.blankRightMine, //我的云端：空白处左右键
+        blankRightZy: this.attrs.blankRightZy, //挚友云：空白处左右键
+        avaliableSpace: 18.6,  //可用空间
+        totalSpace: 30.2,  //总空间
     };
   },
   methods: {

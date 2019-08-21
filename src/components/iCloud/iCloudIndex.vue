@@ -6,9 +6,9 @@
  -->
 <template>
   <div class='iCloudIndex'>
-    <mineCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs"></mineCloud>
-    <shareCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs"></shareCloud>
-    <organizationCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="attrs"></organizationCloud>
+    <mineCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="mineCloud"  @showRightMenu="showRightMenu"></mineCloud>
+    <shareCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="shareCloud" @showRightMenu="showRightMenu"></shareCloud>
+    <organizationCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="organizationCloud" @showRightMenu="showRightMenu"></organizationCloud>
   </div>
 </template>
 
@@ -25,8 +25,19 @@ export default {
     shareCloud
   },
   props:['attrs'],
+  computed:{
+    mineCloud(){
+      return {isClick: this.attrs.isClick, ...this.attrs.mineCloud}
+    },
+    shareCloud(){
+      return {isClick: this.attrs.isClick, ...this.attrs.shareCloud}
+    },
+    organizationCloud(){
+      return {isClick: this.attrs.isClick, ...this.attrs.organizationCloud}
+    }
+  },
   data() {
-    return { 
+    return {
     };
   },
   methods: {
@@ -35,8 +46,11 @@ export default {
     },
     openFolder( name ){ // 双击文件夹
       this.$emit('openFolder', name);
-    }
-  }
+    },
+    showRightMenu(data) { // 显示右键菜单
+        this.$emit('showRightMenu', data);
+    },
+  },
 }
 </script>
 <style lang='less' scoped>
