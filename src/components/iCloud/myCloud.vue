@@ -129,8 +129,6 @@ export default {
           info:{ className:'.myCloud',name:'myCloud',icon:'icon-myCloud' },
           minWidth:'',
           minHeight:'',
-          themeColorName:'',
-          themeColorStyle: {},
           componentTitle:'我的云端',
           treeData:[
             {
@@ -355,6 +353,9 @@ export default {
           this.$nextTick(() => {
             this.refreshContent = true;
           });
+        }else if(name === '回收站'){
+          this.$parent.$parent.$parent.applicationHandle('recycle');
+          return false;
         }
         this.attrs = {
           ...this.attrs,
