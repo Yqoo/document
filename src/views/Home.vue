@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-23 17:42:48
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-21 11:37:28
+ * @LastEditTime: 2019-08-21 15:33:58
  -->
 <template>
   <el-container :style="bg">
@@ -155,6 +155,11 @@
         @showTab="showChild"
         @closeTab="closeChild"
         @start="openChild"></taskManager>
+      <domainConsole 
+        v-if='isShowBox.domainConsole.show' 
+        @closeItem="closeItem" 
+        @minSize="minSize" 
+        v-show="isShowBox.domainConsole.display"></domainConsole>
     </el-main>
     <el-footer :class="footerClass" :style="groundGlass">
       <bottomBar 
@@ -182,6 +187,7 @@ import iCloudConsole from "@/components/supervisorConsole/iCloudConsole.vue";
 import organization from "@/components/organization/organization";
 import account from "@/components/account/account.vue";
 import taskManager from "@/components/taskManager/taskManager.vue";
+import domainConsole from "@/components/domainConsole/domainConsole.vue";
 import tools from  "@/assets/js/utils/tools.js";
 import { GridLayout, GridItem } from 'vue-grid-layout';
 export default {
@@ -200,7 +206,8 @@ export default {
     iCloudConsole,
     organization,
     account,
-    taskManager
+    taskManager,
+    domainConsole
   },
   data() {
     return {
@@ -231,6 +238,7 @@ export default {
         organization: { show:false,name:'组织与用户',sign:'organization',display:false,icon:require('../assets/image/icons/deskIcons/icon-organization.png') },
         account: { show:false,name:'我的账户',sign:'account',display:false,icon:require('../assets/image/icons/deskIcons/icon-account.png') },
         taskManager: { show:false,name:'任务管理器',sign:'taskManager',display:false,icon:require('../assets/image/icons/deskIcons/icon-taskManager.png') },
+        domainConsole: { show:false,name:'域名服务管理控制台',sign:'domainConsole',display:false,icon:require('../assets/image/icons/deskIcons/icon-domainConsole.png') },
       },
       index:'theme',
       isMoveDrawer:false,

@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-10 10:53:31
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-14 15:09:29
+ * @LastEditTime: 2019-08-21 15:31:42
  * @desc: 程序应用组件
  -->
 <template>
@@ -44,13 +44,13 @@
       </el-row>
       <div class="appDiv">
         <ul class="appList">
-          <li>
+          <li v-for="(item,index) in items" :key="index">
             <el-badge value='已启用' type="primary">
               <div class="appImg">
-                <img :src="require('@/assets/image/icons/deskIcons/icon-ad.png')">
+                <img :src="item.img">
               </div>
             </el-badge>
-            <div class="appName">挚友ICloud</div>
+            <div class="appName">{{item.title}}</div>
             <div class="appSetting">
               <div class="btnBox">
                 <div>
@@ -58,15 +58,14 @@
                   <span>配置程序</span>
                 </div>
                 <div>
-                  <el-popover trigger="click" placement="bottom" width="100" @show="expandMenus = false" @hide="expandMenus = true">
+                  <el-popover trigger="click" placement="bottom" width="100">
                     <ul class="itemMenus">
-                      <li v-for="(item,key) in menus" :key="key" @click="handle(item.name)">
-                        <i :class="item.icon" :style="item.color"></i>
-                        <span>{{item.title}}</span>
+                      <li v-for="(val,index) in item.children" :key="index" @click="handle(menus[val].name)">
+                        <i :class="menus[val].icon" :style="menus[val].color"></i>
+                        <span>{{menus[val].title}}</span>
                       </li>
                     </ul>
-                    <i v-if="expandMenus" class="el-icon-caret-bottom" slot="reference" style="font-size:14px;" title="工具栏"></i>
-                    <i v-else class="el-icon-caret-top" slot="reference" style="font-size:14px;" title="工具栏"></i>
+                    <i class="el-icon-caret-bottom" slot="reference" style="font-size:14px;" title="工具栏"></i>
                   </el-popover>
                 </div>
               </div>
@@ -87,8 +86,11 @@ export default {
     return {
       active: "",
       active2: '',
-      expandMenus:true,
-      menus:[//每项子菜单
+      items:[//商品列表
+        { name:'iCloud',title:'挚友iCloud',img:require('@/assets/image/icons/deskIcons/icon-ad.png'),children:[0,1,2,3,4,5,6,7] },
+        { name:'domain',title:'域名服务',img:require('@/assets/image/icons/appIcons/appIcon-domain.png'),children:[8] },
+      ],
+      menus:[//每项子菜单 利用items中的children下标匹配
         { name:'download',title:'下载程序',icon:"el-icon-download",color:{ color:'#9896f1' } },
         { name:'install',title:'安装程序',icon:"el-icon-connection",color:{ color:'#eb7070' } },
         { name:'renewable',title:'更新程序',icon:"el-icon-refresh-right",color:{ color:'#edb1f1' } },
@@ -97,15 +99,21 @@ export default {
         { name:'console',title:'管理控制台',icon:"el-icon-s-marketing",color:{ color:'#589167'} },
         { name:'disabled',title:'禁用',icon:"el-icon-turn-off",color:{ color:'#216583'} },
         { name:'uninstall',title:'卸载程序',icon:"el-icon-sold-out",color:{ color:'#e15249'} },
+        { name:'domain',title:'域名服务',icon:"el-icon-location-outline",color:{ color:'#384259'} },
       ],
+      handleMenus:{//定义子菜单的方法集合
+        console:() => { this.$emit('childHandle',{ component:'iCloudConsole',open:true})},
+        domain:() => { this.$emit('childHandle',{ component:'domainConsole',open:true})},
+      },
     };
   },
   methods:{
     handle( name ){
-      this.$emit('childHandle',{
-        component:'iCloudConsole',
-        open:true
-      });
+      try {
+        this.handleMenus[name]();
+      } catch (error) {
+        this.$message.error('系统错误，请联系管理员')
+      }
     }
   },
 }
