@@ -27,12 +27,10 @@ import { myCloudUtilMixin } from '@/assets/js/myCloudUtilMixins.js';
 export default {
   mixins: [myCloudMixin],
   extends: myCloudUtilMixin,
-  props:['attrs'],
   data () {
     return {
         activeNames: ['1'],
-        contentData: this.attrs.shareCloud,
-        shareCloud: this.attrs.shareCloud.data,
+        shareCloud: this.attrs.data,
     };
   },
   methods: {

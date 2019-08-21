@@ -50,10 +50,10 @@
         </div>
       </aside>
       <div class="rightContent">
-        <component v-if="refreshContent && rightContentData!=''" :is="current" @changeUtils="changeUtils" @openFolder="openFolder" @hideRightMenu="hideRightMenu" @showRightMenu="showRightMenu" :attrs="attrs" :current="current" ref="rightComponent"></component>
+        <component v-if="refreshContent && rightContentData!=''" :is="current" @changeUtils="changeUtils" @openFolder="openFolder" @showRightMenu="showRightMenu" :attrs="attrs" :current="current" ref="rightComponent"></component>
       </div>
     </section>
-    <rightMenu v-if="isShowRight" :position="menuPosition" :lists="menuList" @rightMenuClick="rightMenuClick"></rightMenu>
+    <rightMenu v-if="isShowRight" :position="menuPosition" :lists="menuList" @rightMenuClick="rightMenuClick" @hideRightMenu="hideRightMenu"></rightMenu>
   </div>
 </template>
 
@@ -73,7 +73,11 @@ var rightData = {
             mineCloud:{
               fileRight:[],
               folderRight:[],
-              blankRight:[],
+              blankRightZy:[],
+              blankRightMine:[
+                {iconImg:require('@/assets/image/icons/fileIcons/partition.png'),iconTitle:'创建云端',children:[{iconImg:require('@/assets/image/icons/deskIcons/tree-disk3.png'),iconTitle:'子菜单',tip:'Ctrl+x'}]},
+                {iconImg:require('@/assets/image/icons/fileIcons/format.png'),iconTitle:'格式云端'}
+              ],
               data:[
                 {name:'我的桌面',type:0,component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/desk.png'),icon:'',active:false},
                 {name:'我的文档',type:0,component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon: '',active:false},
@@ -138,8 +142,6 @@ export default {
                   label:'桌面',
                   name: 'fileContent',
                   icon:require('@/assets/image/icons/deskIcons/desk.png'),
-                  left:[],
-                  right:[]
                   },
                 {label:'我的文档',name:'fileContent',icon:require('@/assets/image/icons/deskIcons/tree-folder.png')},
                 {label:'软件区',name:'fileContent',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
@@ -285,10 +287,6 @@ export default {
           isShowRight: false,  //是否显示右键菜单（点击树节点使用）
           menuPosition: {top: 0, left: 0},  //右键菜单的位置
           menuList: [],  // 右键菜单的内容
-          rightMenuLists: [ //右键菜单（临时）
-              {iconImg:require('@/assets/image/icons/fileIcons/partition.png'),iconTitle:'创建云端',children:[{iconImg:require('@/assets/image/icons/deskIcons/tree-disk3.png'),iconTitle:'子菜单',tip:'Ctrl+x'}]},
-              {iconImg:require('@/assets/image/icons/fileIcons/format.png'),iconTitle:'格式云端'}
-          ],
         };
     },
     methods:{
@@ -308,6 +306,11 @@ export default {
       handleNodeClick(data, node, el) {  //左侧树节点左键选中，切换模块和工具栏
         console.log(data)
         this.current = data.name; // 切换显示组件
+        //展示对应组件的数据
+        this.attrs={
+          ...this.attrs,
+          ...rightData[data.name]
+        };
         this.lists = data.left;  // 切换工具栏
         //点击节点切换弹框标题
         let iconArr = data.icon.split('/');
@@ -318,21 +321,21 @@ export default {
         this.componentTitle = data.label;
       },
       rightNodeClick(e, data){  //树节点右键选中
-        this.isShowRight = true;
-        this.showRightMenu(e, data.right);
+        this.showRightMenu({e, list:data.right});
       }, 
-      showRightMenu(e, list){ // 右键菜单显示数据展示和位置展示
+      showRightMenu( data ){ // 右键菜单显示数据展示和位置展示
+        this.isShowRight = true;
+        let e = data.e;
         let top = e.clientY - (document.querySelector('.myCloud').offsetTop - document.querySelector('.myCloud').offsetHeight / 2);
         let left = e.clientX - document.querySelector('.myCloud').offsetLeft;
         Object.assign(this.menuPosition, {
           top: top + 'px',
           left: left + 'px'
         });
-        this.menuList = list;
+        this.menuList = data.list;
       },
       changeUtils( tag ){  // 点击右侧内容模块，切换工具栏
-        //备注：根据tag区分点击的是 zhiyou 还是 mine 模块，来找数据显示工具栏
-        //this.utilName = tag;  
+        this.lists = tag.list; //切换工具栏
         //给点击的内容加上边框,切换模块时，清除其他模块点中的文件
         Object.assign(this.attrs.isClick, {
           mineCloud: {zhiyou: false, mine: false},
@@ -369,7 +372,8 @@ export default {
           this.isShowRight = false;
       },
       rightMenuClick(item){ // 树节点右键菜单选中
-        console.log(this.$refs.rightComponent);
+        console.log(item)
+        // console.log(this.$refs.rightComponent);
       }
     },
     mounted(){

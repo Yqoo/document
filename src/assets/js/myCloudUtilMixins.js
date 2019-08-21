@@ -85,13 +85,8 @@ export const myCloudUtilMixin = {
             clearTimeout(timer);
             this.$emit('openFolder', component);
         },
-        hideRightMenu(){ //隐藏右键菜单
-            this.$emit('hideRightMenu');
+        showRightMenu(e, list) { // 显示右键菜单
+            this.$emit('showRightMenu', {e, list});
         },
-        showRightMenu(e) { // 显示右键菜单
-            this.$emit('showRightMenu', e);
-        },
-        rightMenuClick(item){ // 右键菜单选中
-        }
     },
 }

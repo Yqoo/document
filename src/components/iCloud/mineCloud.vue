@@ -2,7 +2,7 @@
 <template>
   <div class='mineCloud'>
     <el-collapse v-model="activeNames">
-        <div @click="clickBlock({clickTag: 'zhiyou'})" style='border-bottom:1px solid #ebeef5'>
+        <div @click="clickBlock({clickTag: 'zhiyou', list:blankRightZy})" @contextmenu.prevent="showRightMenu($event,blankRightZy)">
           <el-collapse-item name="1" :disabled='true'>
               <template slot="title">
                   <img src='@/assets/image/icons/deskIcons/icon-myCloud.png'/>挚友云
@@ -18,7 +18,7 @@
               </div>
           </el-collapse-item>
         </div>
-        <div @click="clickBlock({clickTag:'mine'})" @contextmenu.prevent="showRightMenu" >
+        <div @click="clickBlock({clickTag:'mine', list: blankRightMine})" @contextmenu.prevent="showRightMenu($event, blankRightMine)" >
           <space-progress :avaliableSpace='avaliableSpace' :totalSpace='totalSpace'></space-progress>
           <el-collapse-item name="2" :disabled='true'>
               <template slot="title">
@@ -47,20 +47,22 @@ import rightMenu from '@/components/iCloud/rightMenu.vue'
 export default {
   mixins: [myCloudMixin],
   extends: myCloudUtilMixin,
-  props:['attrs'],
   components: {
     SpaceProgress,
     rightMenu,
   },
+  created(){
+    console.log(this.attrs)
+  },
   computed:{
     zyCloud(){
-      let data = this.attrs.mineCloud.data.filter((i) => {
+      let data = this.attrs.data.filter((i) => {
         return i.type === 0;
       });
       return data;
     },
     myCloud(){
-      return this.attrs.mineCloud.data.filter((i) => {
+      return this.attrs.data.filter((i) => {
         return i.type === 1;
       });
     }
@@ -68,7 +70,8 @@ export default {
   data () {
     return {
         activeNames: ['1', '2'],
-        mineCloud: this.attrs.mineCloud,
+        blankRightMine: this.attrs.blankRightMine, //我的云端：空白处左右键
+        blankRightZy: this.attrs.blankRightZy, //挚友云：空白处左右键
         avaliableSpace: 18.6,  //可用空间
         totalSpace: 30.2,  //总空间
     };

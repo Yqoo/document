@@ -27,12 +27,10 @@ import { myCloudUtilMixin } from '@/assets/js/myCloudUtilMixins.js';
 export default {
   mixins: [myCloudMixin],
   extends: myCloudUtilMixin,
-  props:['attrs'],
   data () {
     return {
         activeNames: ['1'],
-        organizationData:this.attrs.organizationCloud,
-        organizationCloud:this.attrs.organizationCloud.data,
+        organizationCloud:this.attrs.data,
     };
   },
   methods: {
