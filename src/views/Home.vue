@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-23 17:42:48
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-20 17:53:49
+ * @LastEditTime: 2019-08-21 11:37:28
  -->
 <template>
   <el-container :style="bg">
@@ -99,19 +99,71 @@
           </div>
         </div>
       </vue-drawer-layout>
-      <system @closeItem="closeItem" @minSize="minSize" v-if="isShowBox.system.show" :index="index" v-show="isShowBox.system.display" @applications="applications"></system>
-      <myCloud v-if='isShowBox.myCloud.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.myCloud.display"></myCloud>
-      <recycle v-if='isShowBox.recycle.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.recycle.display"></recycle>
-      <browser v-if='isShowBox.browser.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.browser.display"></browser>
-      <news v-if='isShowBox.news.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.news.display"></news>
-      <systemProperties v-if='isShowBox.systemProperties.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.systemProperties.display"></systemProperties>
-      <iCloudConsole v-if='isShowBox.iCloudConsole.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.iCloudConsole.display"></iCloudConsole>
-      <organization v-if='isShowBox.organization.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.organization.display"></organization>
-      <account v-if='isShowBox.account.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.account.display"></account>
-      <taskManager v-if='isShowBox.taskManager.show' @closeItem="closeItem" @minSize="minSize" v-show="isShowBox.taskManager.display"></taskManager>
+      <system 
+        @closeItem="closeItem" 
+        @minSize="minSize" 
+        v-if="isShowBox.system.show" 
+        :index="index" 
+        v-show="isShowBox.system.display" 
+        @applications="applications"></system>
+      <myCloud 
+        v-if='isShowBox.myCloud.show' 
+        @closeItem="closeItem" 
+        @minSize="minSize" 
+        v-show="isShowBox.myCloud.display"></myCloud>
+      <recycle 
+        v-if='isShowBox.recycle.show' 
+        @closeItem="closeItem" 
+        @minSize="minSize" 
+        v-show="isShowBox.recycle.display"></recycle>
+      <browser 
+        v-if='isShowBox.browser.show' 
+        @closeItem="closeItem" 
+        @minSize="minSize" 
+        v-show="isShowBox.browser.display"></browser>
+      <news 
+        v-if='isShowBox.news.show' 
+        @closeItem="closeItem"
+        @minSize="minSize" 
+        v-show="isShowBox.news.display"></news>
+      <systemProperties 
+        v-if='isShowBox.systemProperties.show' 
+        @closeItem="closeItem" 
+        @minSize="minSize" 
+        v-show="isShowBox.systemProperties.display"></systemProperties>
+      <iCloudConsole 
+        v-if='isShowBox.iCloudConsole.show' 
+        @closeItem="closeItem" 
+        @minSize="minSize" 
+        v-show="isShowBox.iCloudConsole.display"></iCloudConsole>
+      <organization 
+        v-if='isShowBox.organization.show' 
+        @closeItem="closeItem" 
+        @minSize="minSize" 
+        v-show="isShowBox.organization.display"></organization>
+      <account 
+        v-if='isShowBox.account.show' 
+        @closeItem="closeItem" 
+        @minSize="minSize" 
+        v-show="isShowBox.account.display"></account>
+      <taskManager 
+        v-if='isShowBox.taskManager.show' 
+        @closeItem="closeItem" 
+        @minSize="minSize" 
+        v-show="isShowBox.taskManager.display" 
+        :isShowBox="isShowBox" 
+        @showTab="showChild"
+        @closeTab="closeChild"
+        @start="openChild"></taskManager>
     </el-main>
     <el-footer :class="footerClass" :style="groundGlass">
-      <bottomBar :tabs="isShowBox" @open="openChild" @closeTab="closeChild" @showTab="showChild" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></bottomBar>
+      <bottomBar 
+        :tabs="isShowBox" 
+        @open="openChild" 
+        @closeTab="closeChild"
+        @showTab="showChild" 
+        @barChangePosition="barChangePosition" 
+        @lockScreen="lockScreen"></bottomBar>
     </el-footer>
   </el-container>
 </template>
@@ -169,16 +221,16 @@ export default {
         mainWidth: '',
       },
       isShowBox:{
-        system: { show:false,name:'系统设置',display:false,icon:require('@/assets/image/icons/deskIcons/icon-system.png') },
-        myCloud: { show:false,name:'我的云端',display:false,icon:require('@/assets/image/icons/deskIcons/icon-myCloud.png') },
-        recycle: { show:false,name:'回收站',display:false,icon:require('../assets/image/icons/deskIcons/icon-recycle.png') },
-        browser: { show:false,name:'浏览器',display:false,icon:require('../assets/image/icons/deskIcons/icon-browser.png') },
-        news: { show:false,name:'新闻',display:false,icon:require('../assets/image/icons/deskIcons/icon-news.png') },
-        systemProperties: { show:false,name:'系统属性',display:false,icon:require('../assets/image/icons/deskIcons/icon-systemProperties.png') },
-        iCloudConsole: { show:false,name:'iCloud控制台',display:false,icon:require('../assets/image/icons/deskIcons/icon-ad.png') },
-        organization: { show:false,name:'组织与用户',display:false,icon:require('../assets/image/icons/deskIcons/icon-organization.png') },
-        account: { show:false,name:'我的账户',display:false,icon:require('../assets/image/icons/deskIcons/icon-account.png') },
-        taskManager: { show:false,name:'任务管理器',display:false,icon:require('../assets/image/icons/deskIcons/icon-taskManager.png') },
+        system: { show:false,name:'系统设置',sign:'system',display:false,icon:require('@/assets/image/icons/deskIcons/icon-system.png') },
+        myCloud: { show:false,name:'我的云端',sign:'myCloud',display:false,icon:require('@/assets/image/icons/deskIcons/icon-myCloud.png') },
+        recycle: { show:false,name:'回收站',sign:'recycle',display:false,icon:require('../assets/image/icons/deskIcons/icon-recycle.png') },
+        browser: { show:false,name:'浏览器',sign:'browser',display:false,icon:require('../assets/image/icons/deskIcons/icon-browser.png') },
+        news: { show:false,name:'新闻',sign:'news',display:false,icon:require('../assets/image/icons/deskIcons/icon-news.png') },
+        systemProperties: { show:false,name:'系统属性',sign:'systemProperties',display:false,icon:require('../assets/image/icons/deskIcons/icon-systemProperties.png') },
+        iCloudConsole: { show:false,name:'iCloud控制台',sign:'iCloudConsole',display:false,icon:require('../assets/image/icons/deskIcons/icon-ad.png') },
+        organization: { show:false,name:'组织与用户',sign:'organization',display:false,icon:require('../assets/image/icons/deskIcons/icon-organization.png') },
+        account: { show:false,name:'我的账户',sign:'account',display:false,icon:require('../assets/image/icons/deskIcons/icon-account.png') },
+        taskManager: { show:false,name:'任务管理器',sign:'taskManager',display:false,icon:require('../assets/image/icons/deskIcons/icon-taskManager.png') },
       },
       index:'theme',
       isMoveDrawer:false,
