@@ -33,7 +33,7 @@ export const myCloudUtilMixin = {
         $props: {
             deep: true,
             handler() {
-                let { name, current } = this.attrs;
+                let { name, current, clickTag } = this.attrs;
                 switch( name ){
                     case '小图标':
                         this.size = {width: '40%'};break;
@@ -47,6 +47,19 @@ export const myCloudUtilMixin = {
                     case '列展示':
                         this.changeDidplay(name, current);
                         break;
+                    case "创建分区":
+                        try {
+                            this.createPartition();
+                        }catch{
+                            console.log('方法在操作的组件中');
+                        }
+                        break;
+                        case "申请增容":
+                            this.capacityOperation({clickTag,operate:'add'});
+                            break;
+                        case "申请减容":
+                            this.capacityOperation({clickTag,operate:'reduce'});
+                            break;
                 }
             }
         },

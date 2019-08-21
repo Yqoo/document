@@ -15,6 +15,9 @@ export const myCloudMixin = {
         //点击右侧内容，切换工具栏
         clickBlock( tag ) {
             this.$emit('changeUtils', tag);
+        },
+        capacityOperation( data ){ // 申请增容，申请减容
+            console.log(data)
         }
     }
 }

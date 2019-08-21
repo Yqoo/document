@@ -30,6 +30,7 @@ export default {
           this.$emit('hideRightMenu');
       },
       rightMenuClick( item ) { // 选中
+          this.hideRightMenu();
           this.$emit('rightMenuClick', item);
       }
   }
