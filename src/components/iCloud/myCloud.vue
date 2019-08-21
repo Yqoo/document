@@ -70,46 +70,71 @@ import fileContent from '@/components/iCloud/fileContent';
 import shareContent from "@/components/iCloud/shareContent.vue";
 import rightMenu from '@/components/iCloud/rightMenu.vue';
 var rightData = {
-            mineCloud:{
-              fileRight:[],
-              folderRight:[],
-              blankRightZy:[],
-              blankRightMine:[
-                {iconImg:require('@/assets/image/icons/fileIcons/partition.png'),iconTitle:'创建云端',children:[{iconImg:require('@/assets/image/icons/deskIcons/tree-disk3.png'),iconTitle:'子菜单',tip:'Ctrl+x'}]},
-                {iconImg:require('@/assets/image/icons/fileIcons/format.png'),iconTitle:'格式云端'}
-              ],
-              data:[
-                {name:'我的桌面',type:0,component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/desk.png'),icon:'',active:false},
-                {name:'我的文档',type:0,component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon: '',active:false},
-                {name:'私密空间',type:0,component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/dsi.png'),active:false},
-                {name:'我的共享',type:0,component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/user.png'),active:false},
-                {name:'接收共享',type:0,component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/person.png'),active:false},
-                {name:'我的分享',type:0,component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/myshare.png'),active:false},
-                {name:'接收分享',type:0,component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/recept.png'),active:false},
-                {name:'备份中心',type:0,component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/backups.png'),active:false},
-                {name:'软件区',type:1,component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-                {name:'文档区',type:1,component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-                {name:'娱乐区',type:1,component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-            ],
-            },
-            shareCloud:{
-              fileRight:[],
-              folderRight:[],
-              blankRight:[],
-              data:[
-                {name:'开发部',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
-                {name:'学习区',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
-              ]
-            },
-          organizationCloud:{
-              fileRight:[],
-              folderRight:[],
-              blankRight:[],
-              data:[
-                  {name:'四川挚友软件有限公司',component:'fileContent',imgurl:require('@/assets/image/icons/fileIcons/company.png'),active:false}
-                ]
-            },
-          };
+  mineCloud: {
+    zhiyou: {
+      fileRight:[],
+      folderRight: [],
+      blankRight:[],
+      data:[
+        {name:'我的桌面',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/desk.png'),icon:'',active:false},
+        {name:'我的文档',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon: '',active:false},
+        {name:'私密空间',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/dsi.png'),active:false},
+        {name:'我的共享',component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/user.png'),active:false},
+        {name:'接收共享',component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/person.png'),active:false},
+        {name:'我的分享',component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/myshare.png'),active:false},
+        {name:'接收分享',component:'shareContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/recept.png'),active:false},
+        {name:'备份中心',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/backups.png'),active:false},
+      ],
+    },
+    mine: {
+      fileRight:[],
+      folderRight: [
+        {iconImg: require('@/assets/image/icons/fileIcons/partition.png'),iconTitle: '创建分区',isRightBorder: false},
+        {iconImg: require('@/assets/image/icons/fileIcons/parname.png'),iconTitle: '分区命名',isRightBorder: false},
+        {iconImg: require('@/assets/image/icons/fileIcons/format.png'),iconTitle: '格式分区',isRightBorder: false},
+        {iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除分区',isRightBorder: true},
+        {iconImg: require('@/assets/image/icons/fileIcons/attr.png'),iconTitle: '分区属性',isRightBorder: true},
+        {iconImg: require('@/assets/image/icons/fileIcons/addC.png'),iconTitle: '申请增容',isRightBorder: false},
+        {iconImg: require('@/assets/image/icons/fileIcons/reduceC.png'),iconTitle: '申请减容',isRightBorder: true},
+        {iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'}]},
+        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
+        {iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),iconTitle: '发送',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},{iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},{iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},{iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},{iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},]},
+        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
+        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
+      ],
+      blankRight:[
+        {iconImg: require('@/assets/image/icons/fileIcons/partition.png'),iconTitle: '创建分区',isRightBorder: false},
+        {iconImg: require('@/assets/image/icons/fileIcons/attr.png'),iconTitle: '分区属性',isRightBorder: true},
+        {iconImg: require('@/assets/image/icons/fileIcons/addC.png'),iconTitle: '申请增容',isRightBorder: false},
+        {iconImg: require('@/assets/image/icons/fileIcons/reduceC.png'),iconTitle: '申请减容',isRightBorder: true},
+        {iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'}]},
+        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
+      ],
+      data:[
+        {name:'软件区',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
+        {name:'文档区',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
+        {name:'娱乐区',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
+      ]
+    }
+  },
+  shareCloud:{
+    fileRight:[],
+    folderRight:[],
+    blankRight:[],
+    data:[
+      {name:'开发部',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
+      {name:'学习区',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
+    ]
+  },
+  organizationCloud:{
+    fileRight:[],
+    folderRight:[],
+    blankRight:[],
+    data:[
+        {name:'四川挚友软件有限公司',component:'fileContent',imgurl:require('@/assets/image/icons/fileIcons/company.png'),active:false}
+      ]
+  },
+};
 export default {
     mixins: [themeMixin],
     name:'myCloud',
@@ -136,11 +161,7 @@ export default {
               name: 'mineCloud',
               icon:require('@/assets/image/icons/deskIcons/icon-computer.png'),
               children:[
-                {
-                  label:'桌面',
-                  name: 'fileContent',
-                  icon:require('@/assets/image/icons/deskIcons/desk.png'),
-                  },
+                {label:'桌面',name: 'fileContent',icon:require('@/assets/image/icons/deskIcons/desk.png'),},
                 {label:'我的文档',name:'fileContent',icon:require('@/assets/image/icons/deskIcons/tree-folder.png')},
                 {label:'软件区',name:'fileContent',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
                 {label:'文档区',name:'fileContent',icon:require('@/assets/image/icons/deskIcons/tree-disk.png')},
@@ -285,6 +306,7 @@ export default {
           isShowRight: false,  //是否显示右键菜单（点击树节点使用）
           menuPosition: {top: 0, left: 0},  //右键菜单的位置
           menuList: [],  // 右键菜单的内容
+          clickTag: 'zhiyou', //记录点击的模块
         };
     },
     methods:{
@@ -331,35 +353,46 @@ export default {
           left: left + 'px'
         });
         this.menuList = data.list;
+        this.lists = data.list; //切换工具栏
       },
       changeUtils( tag ){  // 点击右侧内容模块，切换工具栏
         this.lists = tag.list; //切换工具栏
+        this.clickTag = tag.clickTag;  // 更换点击的模块
         //给点击的内容加上边框,切换模块时，清除其他模块点中的文件
-        Object.assign(this.attrs.isClick, {
-          mineCloud: {zhiyou: false, mine: false},
-          shareCloud: false,
-          organizationCloud: false,
+        Object.assign(this.attrs,{
+          isClick: {
+            mineCloud: {zhiyou: false, mine: false},
+            shareCloud: false,
+            organizationCloud: false,
+          }
         });
         if(tag.clickTag === 'zhiyou' || tag.clickTag === 'mine'){
           this.attrs.isClick.mineCloud[tag.clickTag] = true;
         } else {
           this.attrs.isClick[tag.clickTag] = true;
         }
+        //点击空白处，清除选中的文件边框
+        if(tag.e.toElement.className.indexOf('cards') != -1){
+          let dataList = (tag.clickTag === 'zhiyou' || tag.clickTag === 'mine') ? rightData.mineCloud[tag.clickTag].data : rightData[tag.clickTag].data;
+          for(let i=0; i< dataList.length; i++){
+            dataList[i].active = false;
+          }
+        }
       },
       utilClick( name ){ // 工具栏中点击的名字
-        //点击的是刷新
-        if(name === '刷新'){
+        if(name === '刷新'){//点击的是刷新
           this.refreshContent = false;
           this.$nextTick(() => {
             this.refreshContent = true;
           });
-        }else if(name === '回收站'){
+        }else if(name === '回收站'){ // 点击回收站
           this.$parent.$parent.$parent.applicationHandle('recycle');
           return false;
         }
         this.attrs = {
           ...this.attrs,
           name,
+          clickTag: this.clickTag,
           current: this.current
         };
       },
@@ -372,9 +405,21 @@ export default {
       hideRightMenu(){ //隐藏右键菜单
           this.isShowRight = false;
       },
-      rightMenuClick(item){ // 树节点右键菜单选中
+      rightMenuClick(item){ // 树节点右键，右侧内容右键菜单点击选中
         console.log(item)
-        // console.log(this.$refs.rightComponent);
+        switch(item.iconTitle){
+          case "创建分区":
+            if(this.current === 'iCloudIndex'){
+              this.$refs.rightComponent.$children[0].createPartition();
+            }else{
+              this.$refs.rightComponent.createPartition();
+            }
+            break;
+          case "申请增容":
+            break;
+          case "申请减容":
+            break;
+        }
       }
     },
     mounted(){
@@ -491,8 +536,8 @@ export default {
       }
       & > div.rightContent {
         float: left;
-        max-height: 500px;
-        min-height: 400px;
+        max-height: 501px;
+        min-height: 401px;
         width: 100%;
         padding-left: 25%;
         box-sizing: border-box;

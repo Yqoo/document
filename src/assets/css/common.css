@@ -224,8 +224,9 @@ ol {
   padding: 10px 20px 10px;
 }
 .messageBox-title img {
-  width: 18px;
-  vertical-align: bottom;
+  width: 20px;
+  vertical-align: middle;
+  margin-right: 5px;
 }
 .messageBox-body {
   text-align: left;

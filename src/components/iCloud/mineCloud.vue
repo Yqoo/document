@@ -2,7 +2,7 @@
 <template>
   <div class='mineCloud'>
     <el-collapse v-model="activeNames">
-        <div @click="clickBlock({clickTag: 'zhiyou', list:blankRightZy})" @contextmenu.prevent="showRightMenu($event,blankRightZy)">
+        <div @click="clickBlock({e: $event, clickTag: 'zhiyou', list:blankRightZy})" @contextmenu.prevent="showRightMenu($event,blankRightZy)">
           <el-collapse-item name="1" :disabled='true'>
               <template slot="title">
                   <img src='@/assets/image/icons/deskIcons/icon-myCloud.png'/>挚友云
@@ -18,7 +18,7 @@
               </div>
           </el-collapse-item>
         </div>
-        <div @click="clickBlock({clickTag:'mine', list: blankRightMine})" @contextmenu.prevent="showRightMenu($event, blankRightMine)" >
+        <div @click="clickBlock({e:$event,clickTag:'mine', list: blankRightMine})" @contextmenu.prevent="showRightMenu($event, blankRightMine)" >
           <space-progress :avaliableSpace='avaliableSpace' :totalSpace='totalSpace'></space-progress>
           <el-collapse-item name="2" :disabled='true'>
               <template slot="title">
@@ -35,6 +35,41 @@
           </el-collapse-item>
         </div>
     </el-collapse>
+    <el-dialog
+      v-dialogDrag
+      :visible.sync="dialogVisible"
+      :append-to-body="true"
+      :close-on-click-modal="false"
+      width="40%">
+      <div slot="title" class="messageBox-title">
+        <img :src="require('@/assets/image/icons/fileIcons/partition.png')">
+        <span>创建分区</span>
+      </div>
+      <el-form :model="createForm" :rules="createRules" ref="createForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="分区名称:" prop="partitionName">
+          <el-input v-model="createForm.partitionName"></el-input>
+        </el-form-item>
+        <el-form-item label="分区盘符:" prop="disk">
+          <el-select v-model="createForm.disk">
+            <el-option label="E:" value="E:"></el-option>
+            <el-option label="F:" value="F:"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="数据中心:" prop="data">
+          <el-input v-model="createForm.data"></el-input>
+        </el-form-item>
+        <el-form-item label="创建人:">
+          <span>{{creater}}</span>
+        </el-form-item>
+        <el-form-item label="创建时间:">
+          <span>{{createTime}}</span>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetForm('createForm')">取 消</el-button>
+        <el-button type="primary" @click="submitCreateFrom('createForm')">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -44,6 +79,7 @@ import { myCloudUtilMixin } from '@/assets/js/myCloudUtilMixins.js';
 import SpaceProgress from '@/views/spaceProgress.vue';
 import { constants } from 'crypto';
 import rightMenu from '@/components/iCloud/rightMenu.vue'
+import { debuglog } from 'util';
 export default {
   mixins: [myCloudMixin],
   extends: myCloudUtilMixin,
@@ -54,29 +90,53 @@ export default {
   created(){
     console.log(this.attrs)
   },
-  computed:{
-    zyCloud(){
-      let data = this.attrs.data.filter((i) => {
-        return i.type === 0;
-      });
-      return data;
-    },
-    myCloud(){
-      return this.attrs.data.filter((i) => {
-        return i.type === 1;
-      });
-    }
-  },
   data () {
     return {
         activeNames: ['1', '2'],
-        blankRightMine: this.attrs.blankRightMine, //我的云端：空白处左右键
-        blankRightZy: this.attrs.blankRightZy, //挚友云：空白处左右键
+        zyCloud:this.attrs.zhiyou.data,  
+        myCloud:this.attrs.mine.data,
+        blankRightMine: this.attrs.mine.blankRight, //我的云端：空白处左右键
+        blankRightZy: this.attrs.zhiyou.blankRight, //挚友云：空白处左右键
+        dialogVisible: false,  //控制弹框显示隐藏
+        createForm:{  // 创建分区表单
+          partitionName:'', //分区名称
+          disk:'',  //分区盘符
+          data:'',  //数据中心
+        }, 
+        createRules:{ // 创建分区表单规则
+          partitionName: [
+            {required: true, message:'请输入分区名称', trigger: 'blur'}
+          ],
+          disk: [
+            {required: true, message:'请选择分区盘符', trigger: 'change'}
+          ],
+          data:[
+            {required: true, message:'请输入数据中心', trigger: 'blur'}
+          ]
+        },
+        creater: '系统管理员',
+        createTime: '2019-08-21',
         avaliableSpace: 18.6,  //可用空间
         totalSpace: 30.2,  //总空间
     };
   },
   methods: {
+    createPartition(){ //创建分区弹框显示隐藏
+      this.dialogVisible = true;
+    },
+    resetForm( formname ){ //取消创建分区
+      this.$refs[formname].resetFields();
+    },
+    submitCreateFrom( formname ){
+      this.$refs[formname].validate((valid) => {
+        if(valid){
+          console.log('提交');
+        } else {
+          console.log('提交失败');
+          return false;
+        }
+      });
+    }
   },
 }
 

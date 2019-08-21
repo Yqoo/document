@@ -25,19 +25,30 @@ export default {
     shareCloud
   },
   props:['attrs'],
+  created(){
+    this.mine = this.attrs.mineCloud;
+    this.share = this.attrs.shareCloud;
+    this.organization = this.attrs.organizationCloud;
+    delete this.attrs['mineCloud'];
+    delete this.attrs['shareCloud'];
+    delete this.attrs['organizationCloud'];
+  },
   computed:{
     mineCloud(){
-      return {isClick: this.attrs.isClick, ...this.attrs.mineCloud}
+      return {...this.attrs, ...this.mine}
     },
     shareCloud(){
-      return {isClick: this.attrs.isClick, ...this.attrs.shareCloud}
+      return {...this.attrs, ...this.share}
     },
     organizationCloud(){
-      return {isClick: this.attrs.isClick, ...this.attrs.organizationCloud}
+      return {...this.attrs, ...this.organization}
     }
   },
   data() {
     return {
+      mine: '',
+      share: '',
+      organization: ''
     };
   },
   methods: {
