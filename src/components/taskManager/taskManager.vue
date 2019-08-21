@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-20 17:37:24
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-20 18:19:35
+ * @LastEditTime: 2019-08-21 11:55:44
  * @Desc: 任务管理器组件
  -->  
 <template>
@@ -12,13 +12,54 @@
         <el-tab-pane name="course">
           <span slot="label"><img :src="require('@/assets/image/icons/deskIcons/icon-taskCourse.png')"> 进程</span>
           <div class="main">
-            进程
+            <el-table
+              :data="course"
+              stripe
+              style="width: 100%"
+              size="mini"
+              >
+              <el-table-column prop="name" label='名称'>
+                <template slot-scope="scope">
+                  <img :src="scope.row.icon">
+                  <span>{{scope.row.name}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="show" label='状态' :formatter="formatterTable"></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <i class="el-icon-full-screen" v-if="!scope.row.display " @click="expand(scope.row)" title="展开"></i>
+                  <i class="el-icon-remove-outline" v-else @click="expand(scope.row)" title="缩小"></i>
+                  <i class="el-icon-circle-close" @click="close(scope.row)" title="关闭"></i>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </el-tab-pane>
         <el-tab-pane name="start">
           <span slot="label"><img :src="require('@/assets/image/icons/deskIcons/icon-taskStart.png')">启用</span>  
           <div class="main">
-            启用
+            <el-table
+              :data="start"
+              stripe
+              style="width: 100%"
+              size="mini"
+              height="400"
+              >
+              <el-table-column prop="name" label='名称'>
+                <template slot-scope="scope">
+                  <img :src="scope.row.icon">
+                  <span>{{scope.row.name}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="show" label='状态' :formatter="formatterStart"></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <i class="el-icon-video-pause" v-if="scope.row.show" @click="handon(scope.row)" title="启用"></i>
+                  <i class="el-icon-video-play" v-else @click="handon(scope.row)" title="停止"></i>
+                  
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </el-tab-pane>
         <el-tab-pane label="服务" name="serve">
@@ -40,6 +81,7 @@ export default {
   components: {
     boxTools,
   },
+  props:['isShowBox'],
   data() {
     return {
       info:{ className:'.taskManager',name:'taskManager',icon:'icon-taskManager' },
@@ -48,7 +90,8 @@ export default {
       componentTitle:'任务管理器',
       minWidth:'',
       minHeight:'',
-      active:'serve',//初始激活的tab
+      active:'course',//初始激活的tab
+      courselist:[this.isShowBox],
     };
   },
   methods:{
@@ -61,6 +104,23 @@ export default {
       };
       _s[obj.type](obj.param);
     },
+    formatterTable(row, column, cellValue, index){//数据格式化
+      if( cellValue ) return '正在运行';
+    },
+    expand( row ){//展开
+      this.$emit( 'showTab',row.sign );
+    },
+    close( row ){//关闭
+      this.$emit( 'closeTab',row.sign );
+    },
+    formatterStart(row, column, cellValue, index){
+      let msg = '';
+      cellValue && ( msg = '已启用') || ( msg = '未启用' );
+      return msg;
+    },
+    handon( row ){
+      this.$emit('start',row.sign)
+    }
   },
   mounted(){
     this.minWidth = document.querySelector('.taskManager').offsetWidth;
@@ -74,19 +134,37 @@ export default {
     storeChange( val ){
       this.themeColorName = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).className;
       this.themeColorStyle = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).style;
-    }
+    },
   },
   computed:{
     storeChange(){
       return this.$store.state.themeColor;
+    },
+    course(){
+      let list = this.courselist[0];
+      let arr = [];
+      for( let key in list ){
+        if( list[key].show ){
+          arr.push(Object.assign({},list[key]))
+        }
+      };
+      return arr;
+    },
+    start(){
+      let list = this.courselist[0];
+      let arr = [];
+      for( let key in list ){
+        arr.push(Object.assign({},list[key]))
+      };
+      return arr;
     }
   },
 };
 </script>
 <style lang='less' scoped>
   .taskManager {
-    height: 70%;
-    width: 40%;
+    min-height: 70%;
+    width: 35%;
     position: absolute;
     top: 10%;
     left: 20%;
@@ -104,10 +182,22 @@ export default {
         & /deep/ img {
           width: 20px;
           vertical-align: sub;
+          padding-right: 5px;
         }
       }
       & .main {
         padding: 5px;
+        & /deep/.cell{
+          & img {
+            vertical-align: top;
+          }
+          & i {
+            font-size: 16px;
+            padding-right: 10px;
+            color:#00b8a9;
+            cursor: pointer;
+          }
+        }
       }
     }
   }
