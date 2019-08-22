@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-10 10:53:31
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-21 15:31:42
+ * @LastEditTime: 2019-08-22 11:29:26
  * @desc: 程序应用组件
  -->
 <template>
@@ -89,6 +89,7 @@ export default {
       items:[//商品列表
         { name:'iCloud',title:'挚友iCloud',img:require('@/assets/image/icons/deskIcons/icon-ad.png'),children:[0,1,2,3,4,5,6,7] },
         { name:'domain',title:'域名服务',img:require('@/assets/image/icons/appIcons/appIcon-domain.png'),children:[8] },
+        { name:'note',title:'短信',img:require('@/assets/image/icons/appIcons/appIcon-domain.png'),children:[9] },
       ],
       menus:[//每项子菜单 利用items中的children下标匹配
         { name:'download',title:'下载程序',icon:"el-icon-download",color:{ color:'#9896f1' } },
@@ -100,10 +101,12 @@ export default {
         { name:'disabled',title:'禁用',icon:"el-icon-turn-off",color:{ color:'#216583'} },
         { name:'uninstall',title:'卸载程序',icon:"el-icon-sold-out",color:{ color:'#e15249'} },
         { name:'domain',title:'域名服务',icon:"el-icon-location-outline",color:{ color:'#384259'} },
+        { name:'note',title:'短信服务',icon:"el-icon-chat-dot-square",color:{ color:'#b7e778'} },
       ],
       handleMenus:{//定义子菜单的方法集合
         console:() => { this.$emit('childHandle',{ component:'iCloudConsole',open:true})},
         domain:() => { this.$emit('childHandle',{ component:'domainConsole',open:true})},
+        note:() => { this.$emit('childHandle',{ component:'note',open:true})},
       },
     };
   },

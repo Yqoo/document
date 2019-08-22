@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-21 15:25:17
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-22 11:14:00
+ * @LastEditTime: 2019-08-22 15:22:44
  * @Desc: 域名管理控制台
  -->
  <template>
@@ -306,7 +306,7 @@ export default {
   }
   .right{
     margin-left: 358px;
-    height: 530px;
+    min-height: 530px;
     border-top: 8px solid #ddd;
     border-right: 8px solid #ddd;
     border-bottom: 8px solid #ddd;

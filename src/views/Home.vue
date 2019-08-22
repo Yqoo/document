@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-23 17:42:48
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-21 15:33:58
+ * @LastEditTime: 2019-08-22 11:33:42
  -->
 <template>
   <el-container :style="bg">
@@ -160,6 +160,11 @@
         @closeItem="closeItem" 
         @minSize="minSize" 
         v-show="isShowBox.domainConsole.display"></domainConsole>
+      <note 
+        v-if='isShowBox.note.show' 
+        @closeItem="closeItem" 
+        @minSize="minSize" 
+        v-show="isShowBox.note.display"></note>
     </el-main>
     <el-footer :class="footerClass" :style="groundGlass">
       <bottomBar 
@@ -188,6 +193,7 @@ import organization from "@/components/organization/organization";
 import account from "@/components/account/account.vue";
 import taskManager from "@/components/taskManager/taskManager.vue";
 import domainConsole from "@/components/domainConsole/domainConsole.vue";
+import note from "@/components/note/note.vue";
 import tools from  "@/assets/js/utils/tools.js";
 import { GridLayout, GridItem } from 'vue-grid-layout';
 export default {
@@ -207,7 +213,8 @@ export default {
     organization,
     account,
     taskManager,
-    domainConsole
+    domainConsole,
+    note
   },
   data() {
     return {
@@ -239,6 +246,7 @@ export default {
         account: { show:false,name:'我的账户',sign:'account',display:false,icon:require('../assets/image/icons/deskIcons/icon-account.png') },
         taskManager: { show:false,name:'任务管理器',sign:'taskManager',display:false,icon:require('../assets/image/icons/deskIcons/icon-taskManager.png') },
         domainConsole: { show:false,name:'域名服务管理控制台',sign:'domainConsole',display:false,icon:require('../assets/image/icons/deskIcons/icon-domainConsole.png') },
+        note: { show:false,name:'手机短信管理控制台',sign:'note',display:false,icon:require('../assets/image/icons/deskIcons/icon-note.png') },
       },
       index:'theme',
       isMoveDrawer:false,
