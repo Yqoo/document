@@ -6,9 +6,9 @@
  -->
 <template>
   <div class='iCloudIndex'>
-    <mineCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="mineCloud"  @showRightMenu="showRightMenu"></mineCloud>
-    <shareCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="shareCloud" @showRightMenu="showRightMenu"></shareCloud>
-    <organizationCloud @changeUtils='changeUtils' @openFolder="openFolder" :attrs="organizationCloud" @showRightMenu="showRightMenu"></organizationCloud>
+    <mineCloud @changeUtils='changeUtils' @someMethods="someMethods" :attrs="mineCloud"></mineCloud>
+    <shareCloud @changeUtils='changeUtils' @someMethods="someMethods" :attrs="shareCloud"></shareCloud>
+    <organizationCloud @changeUtils='changeUtils' @someMethods="someMethods" :attrs="organizationCloud"></organizationCloud>
   </div>
 </template>
 
@@ -16,13 +16,15 @@
 import mineCloud from '@/components/iCloud/mineCloud.vue';
 import organizationCloud from '@/components/iCloud/organizationCloud.vue';
 import shareCloud from '@/components/iCloud/shareCloud.vue';
+import capacity from '@/components/iCloud/capacity.vue';
 import { debuglog } from 'util';
 export default {
   name: 'iCloudIndex',
   components: {
     mineCloud,
     organizationCloud,
-    shareCloud
+    shareCloud,
+    capacity
   },
   props:['attrs'],
   created(){
@@ -42,25 +44,22 @@ export default {
     },
     organizationCloud(){
       return {...this.attrs, ...this.organization}
-    }
+    },
   },
   data() {
     return {
       mine: '',
       share: '',
-      organization: ''
+      organization: '',
     };
   },
   methods: {
     changeUtils( tag ) {
       this.$emit('changeUtils', tag);
     },
-    openFolder( name ){ // 双击文件夹
-      this.$emit('openFolder', name);
-    },
-    showRightMenu(data) { // 显示右键菜单
-        this.$emit('showRightMenu', data);
-    },
+    someMethods( msg ){ // 触发父组件中的方法
+      this.$emit('someMethods', msg);
+    }
   },
 }
 </script>

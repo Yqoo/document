@@ -2,7 +2,7 @@
 <template>
   <div class='shareCloud'>
       <el-collapse v-model="activeNames">
-        <div @click="clickBlock({clickTag:'shareCloud'})">
+        <div @click="clickBlock({e: $event,clickTag:'shareCloud'})">
           <el-collapse-item  name='1' :disabled='true'>
               <template slot="title">
                   <img src='@/assets/image/icons/deskIcons/tree-share2.png'/>共享云端
@@ -18,6 +18,12 @@
           </el-collapse-item>
         </div>
       </el-collapse>
+      <capacity 
+        v-if="capacityVisible&&capacityData.clickTag==='shareCloud'" 
+        :capacityVisible="capacityVisible" 
+        :info="capacityData"
+        @closeCapacityForm="closeCapacityForm">
+      </capacity>
   </div>
 </template>
 

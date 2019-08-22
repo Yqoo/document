@@ -10,6 +10,8 @@ export const myCloudUtilMixin = {
             size: {width: '60%'}, // 图标大小
             displayName: '行展示', // 行展示 && 列展示
             startIndex: 0, //记录选中的文件位置
+            folderRight: [], //文件夹右键
+            fileRight: [], //文件右键
         }
     },
     computed: {
@@ -65,8 +67,10 @@ export const myCloudUtilMixin = {
         },
     },
     methods: {
-        activeCard(e, item, i, dataArr) { // 单击（文件夹），多选，添加一个边框表示选中
+        activeCard( data ) { // 单击（文件夹），多选，添加一个边框表示选中
             let start = this.startIndex;
+            let utilList = [];
+            let i = data.i, e = data.e, item = data.item, dataArr=data.dataArr;
             this.startIndex = i;
             let end = i;
             if(e.ctrlKey){ // ctrl + 左键 多选
@@ -89,6 +93,28 @@ export const myCloudUtilMixin = {
                     item.active = true;
                 }, 200); 
             }
+            if(item.type==='folder'){
+                if(data.clickTag === 'zhiyou'){
+                    utilList = this.folderRightZy;
+                }else if(data.clickTag==='mine'){
+                    utilList = this.folderRightMine;
+                }else{
+                    utilList = this.folderRight;
+                }
+            }else if(item.type === 'private'){ //私密空间
+                utilList = this.privateSpaceRight;
+            }else if(item.type === 'share'){ //我的分享& & 接收分享
+                utilList = this.shareRight;
+            }else if(item.type === 'enjoy'){ //我的共享 && 接收共享
+                utilList = this.enjoyRight;
+            }else if(item.type==='file'){
+                utilList = this.fileRight;
+            }
+            let info = {
+                ...data,
+                utilList
+            };
+            this.$emit('someMethods',{name:'clickFile',data:info});//点中文件（文件夹），改变工具栏
         },
         changeDidplay(name, current){ //修改展示方式
             this.displayName = name;
@@ -96,10 +122,27 @@ export const myCloudUtilMixin = {
         },
         openFolder(component) { // 双击文件
             clearTimeout(timer);
-            this.$emit('openFolder', component);
+            this.$emit('someMethods', {name:'openFolder',data:component});
         },
-        showRightMenu(e, list) { // 显示右键菜单
-            this.$emit('showRightMenu', {e, list});
+        showRightMenu(data) { // 点击空白，显示右键菜单
+            let dataArr = data.dataArr;
+            for(let i=0; i< dataArr.length; i++){
+                dataArr[i].active = false;
+            }
+            this.$emit('someMethods', {name:'showRightMenu',data});
         },
+        clickBlock( tag ) { //点击右侧空白，切换工具栏
+            if(tag.e.toElement.className.indexOf('cards') != -1){
+                this.$emit('someMethods', {name:'clickBlock',data:tag});
+            }
+        },
+        fileRightMenu( data ){ //点击文件，显示右键
+            let item = data.item, dataArr = data.dataArr;
+            for(let i=0; i< dataArr.length; i++){
+                dataArr[i].active = false;
+            }
+            item.active = true;
+            this.$emit('someMethods', {name:'showRightMenu',data});
+        }
     },
 }

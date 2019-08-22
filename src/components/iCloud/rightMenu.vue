@@ -68,6 +68,7 @@ export default {
             width: 100%;
             border: 1px solid #DCDFE6;
             display: none;
+            background: #fff;
         }
         & .tip{
             position: absolute;
