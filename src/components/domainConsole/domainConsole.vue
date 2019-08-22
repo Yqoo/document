@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-21 15:25:17
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-21 18:24:31
+ * @LastEditTime: 2019-08-22 11:14:00
  * @Desc: 域名管理控制台
  -->
  <template>
@@ -15,7 +15,7 @@
       </div>
       <div class="right">
         <div class="topBtns">
-          <el-button type='text' icon="el-icon-user">注册</el-button>
+          <el-button type='text' icon="el-icon-user" @click="registerFormVisible = true">注册</el-button>
           <el-button type='text' icon="el-icon-switch-button">注销</el-button>
         </div>
         <div class="main">
@@ -76,7 +76,13 @@
                         <p>
                           <img :src="require('@/assets/image/icons/appIcons/appIcon-dns.png')">
                         </p>
-                        <p><el-button size='mini' type="danger">我要访问</el-button></p>
+                        <p>
+                          <el-button-group style="display:flex;border:none;">
+                            <el-button size="mini" type="danger">启动</el-button>
+                            <el-button size="mini" type="danger">停止</el-button>
+                            <el-button size="mini" type="danger">重启</el-button>
+                          </el-button-group>
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -91,7 +97,7 @@
                         <p>
                           <img :src="require('@/assets/image/icons/appIcons/appIcon-xufei.png')">
                         </p>
-                        <p><el-button size='mini' type="danger">我要访问</el-button></p>
+                        <p><el-button size='mini' type="danger">我要续费</el-button></p>
                       </div>
                     </div>
                   </div>
@@ -106,7 +112,7 @@
                         <p>
                           <img :src="require('@/assets/image/icons/appIcons/appIcon-domainsetting.png')">
                         </p>
-                        <p><el-button size='mini' type="danger">我要访问</el-button></p>
+                        <p><el-button size='mini' type="danger">我要设置</el-button></p>
                       </div>
                     </div>
                   </div>
@@ -117,6 +123,56 @@
         </div>
       </div>
     </div>
+    <el-dialog :visible.sync="registerFormVisible" v-dialogDrag :modal="false" width="30%" :close-on-click-modal="false">
+      <div slot="title" class="dialogTitle">
+        <i class="el-icon-user-solid"></i>
+        <span>注册账号</span>
+      </div>
+      <div class="desc">
+        <span>账户设置</span>
+        <span>请设置你的用户名和密码用于登录</span>
+      </div>
+      <div class="dialogBody">
+        <el-form
+          ref="registerForm"
+          :model="registerForm"
+          :rules="registerRules"
+          label-width="80px"
+          size="mini"
+          class="demo-ruleForm"
+          status-icon
+          >
+          <el-form-item label="用户名" prop='name'>
+            <el-input v-model="registerForm.name" placeholder="请输入用户名"></el-input>
+          </el-form-item>
+          <el-form-item label="登录密码" prop="password">
+            <el-input type="password" v-model="registerForm.password" autocomplete="off" placeholder="请输入密码"></el-input>
+          </el-form-item>
+          <el-form-item label="确认密码" prop="confirmPwd">
+            <el-input type="password" v-model="registerForm.confirmPwd" autocomplete="off" placeholder="请确认密码"></el-input>
+          </el-form-item>
+          <div class="desc2">
+            <span>基本信息</span>
+            <span>请输入真实信息</span>
+          </div>
+          <el-form-item label="手机号" prop='phone'>
+            <el-input v-model="registerForm.phone" placeholder="请输入手机号"></el-input>
+          </el-form-item>
+          <el-form-item label="验证码" prop="code">
+            <el-input v-model="registerForm.code" placeholder="请填写验证码">
+              <el-button slot="append" type="success">获取验证码</el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="注册邮箱" prop="email">
+            <el-input v-model="registerForm.email" placeholder="请输入邮箱"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialogFooter">
+        <el-button size="mini" type="success">注册</el-button>
+        <el-button size="mini" type="primary">取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
  
@@ -131,6 +187,32 @@ export default {
     boxTools,
   },
   data() {
+    let validatePass = ( rule, value, fn ) => {
+      if( value === '') fn( new Error('请输入密码') );
+      else {
+        if( this.registerForm.confirmPwd !== ''){
+          this.$refs.registerForm.validateField('confirmPwd')
+        }
+        fn();
+      }
+    };
+    let validateCheckPass = ( rule,value,fn ) => {
+      if( value === '') fn( new Error('请确认密码'))
+      else if( value !== this.registerForm.password ){
+        fn( new Error('两次输入的密码不一致'))
+      } else fn();
+    };
+    let validateEmail = ( rule,value,fn ) => {
+      if( value === '') fn( new Error('请输入邮箱'))
+      else {
+        let reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+        if( reg.test( value ) ){
+           fn();
+        } else {
+          fn( new Error('请输入正确的邮箱账号'))
+        }
+      }
+    };
     return {
       info:{ className:'.domainConsole',name:'domainConsole',icon:'icon-domainConsole' },
       componentTitle:'域名服务管理控制台',
@@ -143,6 +225,35 @@ export default {
           serviceAs:'2019年12月31',
           ID:123456
         },
+      },
+      registerFormVisible:false,//注册表单dialog显示
+      registerForm:{
+        name:'',
+        password:'',
+        confirmPwd:'',
+        phone:'',
+        code:'',
+        email:''
+      },
+      registerRules:{//注册表单规则
+        name:[
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+        ],
+        password:[
+          { validator: validatePass, trigger: 'blur' }
+        ],
+        confirmPwd:[
+          { validator: validateCheckPass, trigger: 'blur' }
+        ],
+        phone:[
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+        ],
+        code:[
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+        ],
+        email:[
+          { validator: validateEmail, trigger: 'blur' }
+        ],
       },
     };
   },
@@ -289,6 +400,41 @@ export default {
           }
         }
       }
+    }
+  }
+  .dialogTitle {
+    & i {
+      font-size: 14px;
+      padding-right: 3px;
+      color:#3490de;
+    }
+    & span {
+      font-size: 12px;
+    }
+  }
+  .dialogBody {
+    padding: 0px 50px 0px 20px;
+  }
+  .desc {
+    & span:nth-child(1){
+      font-weight: 600;
+      padding-left: 34px;
+    }
+    & span:nth-child(2){
+      font-size: 12px;
+      color:rgb(175, 173, 173);
+      padding-left: 10px;
+    }
+  }
+  .desc2 {
+    & span:nth-child(1){
+      font-weight: 600;
+      padding-left: 12px;
+    }
+    & span:nth-child(2){
+      font-size: 12px;
+      color:rgb(175, 173, 173);
+      padding-left: 10px;
     }
   }
 </style>
