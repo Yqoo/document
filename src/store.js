@@ -1,3 +1,9 @@
+/*
+ * @Date: 2019-07-23 17:42:48
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-22 17:38:00
+ * @Desc: 
+ */
 import Vue from "vue";
 import Vuex from "vuex";
 

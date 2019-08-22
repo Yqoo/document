@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-23 17:54:07
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-20 14:10:26
+ * @LastEditTime: 2019-08-22 17:43:37
  * @Desc: 
  -->
 <template>
@@ -105,39 +105,33 @@ export default {
     },
     methods:{
         submitForm( formName ){
-             this.$refs[formName].validate( valid => {
-                 if( valid ){
-                    let params = {
-                    account:this.pwdform.username,
-                    password:this.pwdform.pwd
+            let type = formName === 'pwdform'? 'zh':'ph';
+            this.$refs[formName].validate( valid => {
+                if( valid ){
+                let params = {
+                account:this.pwdform.username,
+                password:this.pwdform.pwd,
+                type,
+                }
+                this.axios.post('/login',qs.stringify(params)).then( res => {
+                     switch ( res.data.code ) {
+                        case 200:
+                            this.$message({ message:res.data.desc,type:'success' });
+                            let curTime = new Date().getTime();
+                            localStorage.setItem('loginToken',JSON.stringify({is:true,time:curTime}));
+                            this.$router.push({ path:'/' })
+                            break;
+                        default:
+                            this.$message({ message:res.data.desc,type:'error'});
+                            break;
                     }
-                    this.axios.post('/login',qs.stringify(params)).then( res => {
-                        switch ( res.data.code ) {
-                            case -2:
-                                this.$message({
-                                    message:res.data.desc,
-                                    type:'error'
-                                });
-                                break;
-                            case -1:
-                                this.$message({ message:'系统错误，请联系管理员',type:'error'});
-                                break;
-                            case 2:
-                                this.$message({ message:'系统错误',type:'error' });
-                                break
-                            default:
-                                this.$message({ message:res.data.desc,type:'success' });
-                                localStorage.setItem('loginToken','success');
-                                this.$router.push({ path:'/' })
-                                break;
-                        }
-                    }) .catch( err => console.log( err ))
-                 } else {
-                    this.$message({
-                        message: '请填写完整登录信息',
-                        type: 'error'
-                    });
-                 }
+                }) .catch( err => console.log( err ))
+                } else {
+                this.$message({
+                    message: '请填写完整登录信息',
+                    type: 'error'
+                });
+                }
              })
              return false;
         },

@@ -1,7 +1,7 @@
 /*
  * @Date: 2019-07-23 17:42:48
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-21 10:33:51
+ * @LastEditTime: 2019-08-22 18:06:05
  * @Desc: 
  */
 import Vue from "vue";
@@ -40,9 +40,14 @@ router.beforeEach((to,from,next) => {//全局路由守卫
   } else {
     let token = localStorage.getItem('loginToken');
     if( token === null || token === ''){
-      next({path: '/login'})
-    } else{
-      next();
+      next({path: '/login'});
+    } else {
+      let obj = JSON.parse( token );
+      if( new Date().getTime() - obj.time > 1000*60*60*24 ){//过期时间为1天
+        next({path: '/login'});
+      } else {
+        next();
+      }
     }
   }
 })
