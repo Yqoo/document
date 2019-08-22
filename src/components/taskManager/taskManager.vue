@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-20 17:37:24
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-21 11:55:44
+ * @LastEditTime: 2019-08-22 09:43:13
  * @Desc: 任务管理器组件
  -->  
 <template>
@@ -18,7 +18,7 @@
               style="width: 100%"
               size="mini"
               >
-              <el-table-column prop="name" label='名称'>
+              <el-table-column prop="name" label='名称' :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                   <img :src="scope.row.icon">
                   <span>{{scope.row.name}}</span>
@@ -45,7 +45,7 @@
               size="mini"
               height="400"
               >
-              <el-table-column prop="name" label='名称'>
+              <el-table-column prop="name" label='名称' :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                   <img :src="scope.row.icon">
                   <span>{{scope.row.name}}</span>
@@ -54,9 +54,8 @@
               <el-table-column prop="show" label='状态' :formatter="formatterStart"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <i class="el-icon-video-pause" v-if="scope.row.show" @click="handon(scope.row)" title="启用"></i>
-                  <i class="el-icon-video-play" v-else @click="handon(scope.row)" title="停止"></i>
-                  
+                  <i class="el-icon-video-pause" v-if="scope.row.show" @click="handon(scope.row)" title="停止"></i>
+                  <i class="el-icon-video-play" v-else @click="handon(scope.row)" title="启用"></i>                  
                 </template>
               </el-table-column>
             </el-table>
