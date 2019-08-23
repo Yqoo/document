@@ -10,8 +10,9 @@ export const myCloudUtilMixin = {
             size: {width: '60%'}, // 图标大小
             displayName: '行展示', // 行展示 && 列展示
             startIndex: 0, //记录选中的文件位置
-            folderRight: [], //文件夹右键
-            fileRight: [], //文件右键
+            folderRight: this.attrs.folderRight, //文件夹右键
+            fileRight: this.attrs.fileRight, //文件右键
+            blankRight:this.attrs.blankRight, //空白右键
         }
     },
     computed: {
@@ -69,7 +70,6 @@ export const myCloudUtilMixin = {
     methods: {
         activeCard( data ) { // 单击（文件夹），多选，添加一个边框表示选中
             let start = this.startIndex;
-            let utilList = [];
             let i = data.i, e = data.e, item = data.item, dataArr=data.dataArr;
             this.startIndex = i;
             let end = i;
@@ -93,23 +93,7 @@ export const myCloudUtilMixin = {
                     item.active = true;
                 }, 200); 
             }
-            if(item.type==='folder'){
-                if(data.clickTag === 'zhiyou'){
-                    utilList = this.folderRightZy;
-                }else if(data.clickTag==='mine'){
-                    utilList = this.folderRightMine;
-                }else{
-                    utilList = this.folderRight;
-                }
-            }else if(item.type === 'private'){ //私密空间
-                utilList = this.privateSpaceRight;
-            }else if(item.type === 'share'){ //我的分享& & 接收分享
-                utilList = this.shareRight;
-            }else if(item.type === 'enjoy'){ //我的共享 && 接收共享
-                utilList = this.enjoyRight;
-            }else if(item.type==='file'){
-                utilList = this.fileRight;
-            }
+            let utilList = this.getUtilList(item, data.clickTag);
             let info = {
                 ...data,
                 utilList
@@ -136,13 +120,37 @@ export const myCloudUtilMixin = {
                 this.$emit('someMethods', {name:'clickBlock',data:tag});
             }
         },
-        fileRightMenu( data ){ //点击文件，显示右键
+        fileRightMenu( data ){ //右键文件，显示右键菜单
             let item = data.item, dataArr = data.dataArr;
             for(let i=0; i< dataArr.length; i++){
                 dataArr[i].active = false;
             }
             item.active = true;
-            this.$emit('someMethods', {name:'showRightMenu',data});
+            let list = this.getUtilList(item, data.clickTag);
+            let info = {
+                ...data,
+                list
+            };
+            this.$emit('someMethods', {name:'showRightMenu',data:info});
+        },
+        getUtilList(item, clickTag){ //点击文件（文件夹），获取工具栏数据（右键菜单数据）
+            var utilList = [];
+            if(item.type==='folder'){ //文件夹
+                if(clickTag === 'zhiyou'){
+                    utilList = this.folderRightZy;
+                }else if(clickTag==='mine'){
+                    utilList = this.folderRightMine;
+                }else{
+                    utilList = this.folderRight;
+                }
+            }else if(item.type==='backups'){
+                utilList = this.backupsRight;
+            }else if(item.type === 'private'){ //私密空间
+                utilList = this.privateSpaceRight;
+            }else if(item.type==='file'){  // 文件
+                utilList = this.fileRight;
+            }
+            return utilList;
         }
     },
 }

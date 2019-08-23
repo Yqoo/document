@@ -9,7 +9,7 @@
               </template>
               <div class="cards slideInRight animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in zyCloud" :class="_isClick.mineCloud.zhiyou&&c.active?'addBorder':''" :key="index" shadow="hover">
-                      <div @click.stop="activeCard({e:$event,item:c,i:index,clickTag: 'zhiyou',dataArr:zyCloud})" @contextmenu.stop.prevent="fileRightMenu({e:$event,item:c,dataArr:zyCloud,clickTag: 'zhiyou',list:folderRightZy})" @dblclick.stop="openFolder(c.component)" :title="c.name">
+                      <div @click.stop="activeCard({e:$event,item:c,i:index,clickTag: 'zhiyou',dataArr:zyCloud})" @contextmenu.stop.prevent="fileRightMenu({e:$event,item:c,dataArr:zyCloud,clickTag: 'zhiyou'})" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom">{{c.name}}</div>
                         <img :src="c.icon" class="fileIcon">
@@ -26,7 +26,7 @@
               </template>
               <div class="cards slideInLeft animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in myCloud" :class="_isClick.mineCloud.mine&&c.active?'addBorder':''" :key="index" shadow="hover">
-                      <div @click.stop="activeCard({e:$event,item:c,i:index,clickTag:'mine',dataArr:myCloud})" @contextmenu.stop.prevent="fileRightMenu({e:$event,item:c,dataArr:myCloud,clickTag:'mine',list:folderRightMine})" @dblclick.stop="openFolder(c.component)" :title="c.name">
+                      <div @click.stop="activeCard({e:$event,item:c,i:index,clickTag:'mine',dataArr:myCloud})" @contextmenu.stop.prevent="fileRightMenu({e:$event,item:c,dataArr:myCloud,clickTag:'mine'})" @dblclick.stop="openFolder(c.component)" :title="c.name">
                         <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>
@@ -96,7 +96,7 @@ export default {
     capacity
   },
   created(){
-    console.log(this.attrs)
+    // console.log(this.attrs)
   },
   data () {
     return {
@@ -105,11 +105,10 @@ export default {
         myCloud:this.attrs.mine.data,
         blankRightMine: this.attrs.mine.blankRight, //我的云端：空白处左右键
         folderRightMine: this.attrs.mine.folderRight,  //我的云端：文件夹右键
-        shareRight:this.attrs.zhiyou.shareRight, //挚友云：我的分享&&接收分享 右键
-        enjoyRight:this.attrs.zhiyou.enjoyRight, //挚友云：我的共享&&接收共享右键
         blankRightZy: this.attrs.zhiyou.blankRight, //挚友云：空白处左右键
         folderRightZy: this.attrs.zhiyou.folderRight, //挚友云：文件夹右键
         privateSpaceRight:this.attrs.zhiyou.privateSpaceRight, //挚友云：私密空间右键
+        backupsRight:this.attrs.zhiyou.backupsRight,  //挚友云：备份中心
         dialogVisible: false,  //控制弹框显示隐藏
         createForm:{  // 创建分区表单
           partitionName:'', //分区名称
