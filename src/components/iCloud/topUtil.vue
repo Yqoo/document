@@ -110,7 +110,7 @@ export default {
             text-align: left;
             padding: 0 5%;
             background: #fff;
-            & ul.threeMenu{
+            &>ul.threeMenu{
                 display: none;
                 position: absolute;
                 left: 100%;
@@ -119,7 +119,6 @@ export default {
                 background: #fff;
                 border: 1px solid #DCDFE6;
                 & > li {
-                    background: #fff;
                     & > span:nth-of-type(2){
                         position: absolute;
                         right: 3px;
