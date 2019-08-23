@@ -488,11 +488,13 @@ export default {
             this.menuList = data.list; //显示右键菜单数据
             this.lists = data.list; //切换工具栏
             this.clickTag = data.clickTag;  //切换点击的模块
+            delete this.attrs['name'];
           },
           clickFile: ()=>{ //单击文件夹（文件），切换工具栏
             let tag = msg.data;
             this.lists = tag.utilList;
             this.changeIsClick(tag.clickTag);
+            delete this.attrs['name'];  //如果不删除name,在弹框显示后，点击其他地方会一直出现弹框
           },
           clickBlock: ()=>{ // 点击空白处，切换工具栏，清除点击过的边框
             let tag = msg.data;
@@ -504,6 +506,7 @@ export default {
             for(let i=0; i< dataList.length; i++){
               dataList[i].active = false;
             }
+            delete this.attrs['name'];
           },
         };
         active[msg.name]();
@@ -543,6 +546,9 @@ export default {
           case "申请减容":
             this.applyCapacity('reduce');
             break;
+          case "创建云端":
+            // console.log(item.iconTitle)
+            break;
         }
       },
       applyCapacity( flag ){ // 申请增容减容：判断哪一块申请
@@ -559,7 +565,7 @@ export default {
       this.minWidth = document.querySelector('.myCloud').offsetWidth;
       this.minHeight = document.querySelector('.myCloud').offsetHeight;
       //工具栏初始化
-      this.lists = this.treeData[0].left;
+      this.lists = rightData.mineCloud.zhiyou.blankRight;
       //初始化右侧内容
       this.rightContentData = rightData;
       this.attrs = {
