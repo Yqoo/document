@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-19 11:49:20
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-20 16:19:04
+ * @LastEditTime: 2019-08-23 17:30:19
  * @Desc: 我的账户组件
  -->
 <template>
@@ -12,8 +12,8 @@
         <el-avatar :size="30" :src="avatar"></el-avatar>
         <div class="desc">
           <div>
-            <span>赵文嘉（女）</span>
-            <span>前端\开发部</span>
+            <span>{{titleDesc}}</span>
+            <span>{{titleRole}}</span>
           </div>
           <div>
             <span style="color:#409EFF;font-size:10px;">基本信息</span>
@@ -45,7 +45,7 @@
           <div class="info">
             <ul>
               <li v-for="(item,index) in basicInfo.personal" :key="index">
-                <span>{{item.title}}:{{item.value}}</span>
+                <span class="fontDisplay">{{item.title}}：<span>{{item.value}}</span> </span>
               </li>
             </ul>
             <div class="loadtype">
@@ -101,27 +101,27 @@
                   </el-dropdown-menu>
                 </el-dropdown>
                 <el-button size="mini" icon="el-icon-edit-outline" type="primary" @click="isdisabled = false" style="margin-left:10px;">修改</el-button>
-                <el-button size="mini" icon="el-icon-document-checked" type="success">保存</el-button>
+                <el-button size="mini" icon="el-icon-document-checked" type="success" @click="getCommunication">保存</el-button>
               </div>
             </div>
             <div class="comFormBox">
-              <el-form :model="basicInfo.communication"  label-width="80px" size="mini">
-                <el-form-item label="电子邮件">
-                  <el-input v-model="basicInfo.communication.email" :disabled="isdisabled"></el-input>
+              <el-form ref="infoForm" :model="basicInfo.communication"  label-width="80px" size="mini">
+                <el-form-item v-for="(item,index) in basicInfo.communication.basic"
+                  :key="index" 
+                  :label="item.type"
+                  :prop="'basic.'+ index + '.value'"
+                  :rules="{ required: true, message: item.key_? item.type + '不能为空或删除该联系方式':item.type + '不能为空', trigger: 'blur' }"
+                  >
+                  <el-input v-model="item.value" :disabled="isdisabled">
+                    <i slot="suffix" class="el-icon-circle-close" @click="removeCommunication(item,'old')" v-if="item.key_" title="删除该联系方式"></i>
+                  </el-input>
                 </el-form-item>
-                 <el-form-item label="办公地点">
-                  <el-input v-model="basicInfo.communication.officeLocation" :disabled="isdisabled"></el-input>
-                </el-form-item>
-                <el-form-item label="办公室">
-                  <el-input v-model="basicInfo.communication.office" :disabled="isdisabled"></el-input>
-                </el-form-item>
-                <el-form-item label="电话">
-                  <el-input v-model="basicInfo.communication.phone" :disabled="isdisabled"></el-input>
-                </el-form-item>
-                <el-form-item v-for="t in basicInfo.communication.type" 
-                  :key="t.key" :label="t.name">
+                <el-form-item v-for="(t,index) in basicInfo.communication.type" 
+                  :key="t.key" :label="t.type"
+                  :prop="'type.' + index + '.value'"
+                  :rules="{ required: true, message: t.type+'不能为空或删除该联系方式', trigger: 'blur' }">
                   <el-input v-model="t.value">
-                    <i slot="suffix" class="el-icon-circle-close" @click="removeCommunication(t)" v-if="t.key" title="删除该联系方式"></i>
+                    <i slot="suffix" class="el-icon-circle-close" @click="removeCommunication(t,'new')" v-if="t.key_" title="删除该联系方式"></i>
                   </el-input>
                 </el-form-item>                
               </el-form>
@@ -184,6 +184,8 @@
 <script>
 import tools from  "@/assets/js/utils/tools.js";
 import boxTools from "@/views/boxTools";
+import qs from 'qs';
+
 export default {
   name: 'account',
   components: {
@@ -200,19 +202,9 @@ export default {
       avatar: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
       avatarUrl: 'http://m.qpic.cn/psb?/V10vB2uw2CoNmJ/XwKpb*tX5HNfAFVwlzkbj6GUeQnPLXzUOpoFped4n6A!/b/dIMAAAAAAAAA&bo=OAQjCQAAAAARByY!&rf=viewer_4',
       basicInfo:{//基本信息
-        personal:[//个人信息
-          { value:'赵文嘉',title:'姓名' },
-          { value:'女',title:'性别' },
-          { value:'****',title:'组织' },
-          { value:'赵文嘉',title:'账号' },
-          { value:'2019-08-19',title:'创建' },
-          { value:'前端',title:'岗位' },
-          { value:'开发部前端',title:'角色' },
-        ],
+        personal:[],//个人信息
         defaultLoad:'iCloud',//默认登录
-        space:[//我的空间
-
-        ],
+        space:[],//我的空间
         msg:[
           { value:'56',title:"文档",icon:'el-icon-document',type:"primary" },
           { value:'99',title:"共享",icon:'el-icon-folder-checked',type:"warning" },
@@ -221,10 +213,7 @@ export default {
           { value:'100',title:"短信",icon:'el-icon-mobile-phone',type:"danger" },
         ],
         communication:{//通讯信息
-          email:'',
-          officeLocation:'',
-          office:'',
-          phone:'',
+          basic:[],
           type:[],
         },
         leaderMember:{//上下级关系
@@ -236,6 +225,8 @@ export default {
       isdisabled2:true,
       dialogPhone:false,
       phoneForm:{},
+      titleDesc:'',
+      titleRole:'',
     }
   },
   methods:{
@@ -252,11 +243,12 @@ export default {
       this.avatarUrl = URL.createObjectURL(file.raw);
     },
     addCommunication( command ){//新增联系方式
-      this.basicInfo.communication.type.push({ name:command,value:'',key:Date.now() });
+      this.basicInfo.communication.type.push({ type:command,value:'',key_:Date.now() });
     },
-    removeCommunication( t ){//删除联系方式
-      let index = this.basicInfo.communication.type.indexOf( t );
-      if( index !== -1 ) this.basicInfo.communication.type.splice(index,1);
+    removeCommunication( t,type ){//删除联系方式 type == new 临时新增的选项删除  type === old 历史新增的选项删除
+      let _s = type === 'new'? this.basicInfo.communication.type:this.basicInfo.communication.basic;
+      let index = _s.indexOf( t );
+      if( index !== -1 ) _s.splice(index,1);
     },
     changePwd(){//更改密码
       this.$prompt('请输入旧密码','更改密码',{
@@ -277,6 +269,21 @@ export default {
         })
       })
     },
+    getCommunication(){
+      this.$refs['infoForm'].validate( valid => {
+        if( valid ){
+          let newInfo = this.basicInfo.communication.basic.concat( this.basicInfo.communication.type );
+          let URLSearchParams = require('url-search-params');//URLSearchParams的兼容性
+          let params = new URLSearchParams();
+          params.append('contacts',JSON.stringify(newInfo))
+          this.axios.post('/user/saveAttr',params).then( res => {
+            res.data.code === 200 && ( this.$message.success('保存成功') ) || ( this.$message.error( res.data.desc ) );
+          }).catch( err => this.$message.error( err ) );
+        } else {
+          this.$message.error('请完整填写信息');
+        }
+      });
+    },
   },
   mounted(){
     this.minWidth = document.querySelector('.account').offsetWidth;
@@ -285,6 +292,27 @@ export default {
   created(){
     this.themeColorName = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).className;
     this.themeColorStyle = this._getThemeColor(this, this.themeColorName, this.themeColorStyle).style;
+    //获取账户信息
+    this.axios.get('/user/getInfo').then( res => {
+      if( res.data.code === 200 ){
+        let {user,attrList } = res.data.obj;
+        this.basicInfo.personal = [
+          { title: '姓名',value: user.name },
+          { title: '组织',value: user.org },
+          { title: '账号',value: user.account },
+          { title: '创建',value: user.createTime },
+          { title: '岗位',value: user.position },
+          { title: '角色',value: user.role }
+        ];
+        this.titleDesc = `${user.name}(${user.gender})`;
+        this.titleRole = `${user.role}/${user.position}`;
+        this.basicInfo.defaultLoad = user.defaultDesk;
+        //通讯信息
+        this.basicInfo.communication.basic = attrList;
+      } else {
+        this.$message.error( res.data.desc );
+      }
+    })
   },
   watch:{
     storeChange( val ){
@@ -320,6 +348,10 @@ export default {
         padding: 5px 10px;
         & .desc {
           padding-left: 5px;
+          & span:nth-child(2){
+            padding-left: 10px;
+            color:#409EFF;
+          }
         }
       }
       & .avatarImg{
@@ -348,6 +380,12 @@ export default {
           & li {
             padding: 3px 0px;
             border-bottom: 1px solid #ddd;
+            & .fontDisplay {
+              & span {
+                padding-left: 10px;
+                font-size: 10px;
+              }
+            }
           }
         }
         & .loadtype {
@@ -425,7 +463,7 @@ export default {
             padding: 10px 30px;
           }
           & .el-form-item {
-            margin-bottom: 3px;
+            margin-bottom: 15px;
           }
         }
       }

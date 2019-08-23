@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-23 17:42:48
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-22 11:33:42
+ * @LastEditTime: 2019-08-23 09:02:43
  -->
 <template>
   <el-container :style="bg">
