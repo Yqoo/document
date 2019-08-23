@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-23 17:54:07
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-22 17:43:37
+ * @LastEditTime: 2019-08-23 10:32:03
  * @Desc: 
  -->
 <template>
@@ -36,9 +36,10 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="" prop="code">
-                    <el-input placeholder='请输入验证码' v-model="phoneform.code">
+                    <el-input :placeholder='placeholder' v-model="phoneform.code">
                         <i slot="prefix" class="el-input__icon el-icon-lock" style="color:#409EFF"></i>
-                        <el-button slot="append" style="color:#409EFF">发送验证码</el-button>  
+                        <el-button slot="append" style="color:#409EFF" @click="getCode" v-if="isSend">{{desc}}</el-button>  
+                        <el-button slot="append" style="color:#409EFF" v-else>{{desc}}</el-button>  
                     </el-input>
                 </el-form-item>
                 <el-form-item>
@@ -66,13 +67,6 @@ export default {
                }
            }
         };
-        let checkCode = ( rule, value, callback ) => {
-            if( value === '' ){
-                callback( new Error('请输入验证码'))
-            } else {
-                //...check后端返回的code
-            }
-        };
         return {
             pwdform:{
                 username:'',
@@ -96,23 +90,25 @@ export default {
                     { validator: checkPhone,trigger:'blur' },
                 ],
                 code:[
-                    { validator: checkCode,trigger:'blur' },
+                    { required: true, message: '请输入验证码', trigger: 'blur' }
                 ]
             },
             isPwd: true,
-            screenHeight: window.innerHeight // 屏幕高度
+            screenHeight: window.innerHeight, // 屏幕高度
+            isSend:true,
+            desc:'获取验证码',
+            placeholder:'请输入验证码',
+            
         }
     },
     methods:{
         submitForm( formName ){
-            let type = formName === 'pwdform'? 'zh':'ph';
             this.$refs[formName].validate( valid => {
                 if( valid ){
-                let params = {
-                account:this.pwdform.username,
-                password:this.pwdform.pwd,
-                type,
-                }
+                let params = {};
+                let type = formName === 'pwdform'? 'zh':'ph';
+                formName === 'pwdform' && ( params = { account:this.pwdform.username,password:this.pwdform.pwd,type })
+                || ( params = { phone:this.phoneform.phone,code:this.phoneform.code,type } );
                 this.axios.post('/login',qs.stringify(params)).then( res => {
                      switch ( res.data.code ) {
                         case 200:
@@ -132,8 +128,7 @@ export default {
                     type: 'error'
                 });
                 }
-             })
-             return false;
+            })
         },
         changeLoginStyle(){
             this.isPwd = !this.isPwd;
@@ -143,7 +138,36 @@ export default {
         },
         deleteClass (val) {
             document.getElementById(val).style.color = ''
-        }
+        },
+        getCode(){
+            if( this.phoneform.phone ){
+                this.isSend = false;
+                let t = 60;
+                this.desc = t + 's后重新获取';
+                let timer = setInterval(() => {
+                    if( t === 1 ) {
+                        this.isSend = true;
+                        this.desc = '获取验证码';
+                        clearInterval( timer );
+                        return;
+                    };
+                    t --;
+                    this.desc = t + 's后重新获取';
+                }, 1000);
+                this.axios.get('/sendCode?phone='+this.phoneform.phone)
+                .then( res => {
+                    if( res.data.code === 200 ){
+                        this.placeholder = res.data.obj;
+                    } else {
+                        this.$message.error( res.data.desc );
+                    }
+                })
+                .catch( err => console.log( err ));
+            } else {
+                this.$message.error('请输入手机号');
+            }
+          
+        },
     },
     mounted () {
         let _this = this
@@ -235,7 +259,7 @@ export default {
             window.requestAnimationFrame(animation)
         }
         animation()
-  },
+    },
 }
 </script>
 <style lang="less">
@@ -250,10 +274,12 @@ export default {
         left: 50%;
         top: 50%;
         transform: translate(-50%,-50%);
-       /*  border: 1px solid @baseColor; */
         padding: 50px;
-        /* border-radius: 5px;
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); */
+        & .el-form{
+            & .el-form-item {
+                margin-top: 20px;
+            }
+        }
     }
     .formBox>div:first-child {
         margin-bottom: 30px;
