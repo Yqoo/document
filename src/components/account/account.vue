@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-19 11:49:20
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-23 17:30:19
+ * @LastEditTime: 2019-08-26 10:24:01
  * @Desc: 我的账户组件
  -->
 <template>
@@ -34,7 +34,7 @@
               </el-upload>
               <div>
                 <i class="el-icon-unlock" style="color:#207561"></i>
-                <el-button type="text" size="mini" @click="changePwd">更改密码</el-button>
+                <el-button type="text" size="mini" @click=" pwdDialog = true ">更改密码</el-button>
               </div>
               <div>
                 <i class="el-icon-mobile-phone" style="color:#ff935c"></i>
@@ -53,7 +53,7 @@
                 <i class="el-icon-s-operation"></i>
                 <span>默认登录</span>
               </p>
-              <el-radio-group v-model="basicInfo.defaultLoad">
+              <el-radio-group v-model="basicInfo.defaultLoad" @change="updateLodingShow">
                 <el-radio label="desk">桌面</el-radio>
                 <el-radio label="iCloud">我的云端</el-radio>
                 <el-radio label="sCloud">共享云端</el-radio>
@@ -158,23 +158,56 @@
           <span>绑定手机</span>
         </div>
         <div>
-          <el-form ref="phoneForm" :model="phoneForm" size="small">
-            <el-form-item>
-              <el-input >
+          <el-form
+            ref="phoneForm" 
+            :model="phoneForm"
+            size="small">
+            <el-form-item prop="phone">
+              <el-input v-model="phoneForm.phone">
                 <template slot="prepend">手机号</template>
               </el-input>
             </el-form-item>
-            <el-form-item>
-              <el-input >
+            <el-form-item prop="code">
+              <el-input v-model="phoneForm.code">
                 <template slot="prepend">验证码</template>
-                <el-button slot="append" style="color:#409EFF">发送验证码</el-button>
+                <el-button slot="append" style="color:#409EFF" @click="getCode" v-if="!isSend">获取验证码</el-button>
+                <el-button slot="append" style="color:#409EFF" v-else>{{waitTime}}</el-button>
               </el-input>
             </el-form-item>
           </el-form>
         </div>
         <div slot="footer">
-          <el-button size="mini" type="danger">取消</el-button>
-          <el-button size="mini" type="success">确认</el-button>
+          <el-button size="mini" type="danger" @click="dialogPhone = false ">取消</el-button>
+          <el-button size="mini" type="success" @click="consfirmBinding">确认</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog
+        :visible.sync="pwdDialog"
+        v-dialogDrag
+        :modal="false"
+        width="30%"
+        :close-on-click-modal="false">
+        <div slot='title'>
+          <i class="el-icon-edit"></i>
+          <span>更改密码</span>
+        </div>
+        <div>
+          <el-form
+            ref="pwdForm"
+            :model="pwdForm"
+            :rules="pwdRules"
+            size='small'>
+            <el-form-item label="旧密码" prop="oldPwd">
+              <el-input type="password" v-model="pwdForm.oldPwd"></el-input>
+            </el-form-item>
+            <el-form-item label="新密码" prop='newPwd' v-if="isSuccess">
+              <el-input type="password" v-model='pwdForm.newPwd'></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div slot="footer">
+          <el-button type="warning" size='mini' @click=" pwdDialog = false ">取消</el-button>
+          <el-button type="success" size='mini' @click="changePwd">确认</el-button>
         </div>
       </el-dialog>
     </div>
@@ -192,6 +225,17 @@ export default {
     boxTools
   },
   data() {
+    let checkPwd = ( rule, value, fn ) => {
+      if( value ){
+        this.axios.post('/user/validatePwd',qs.stringify({password:value})).then( res => {
+          if( res.data.code !== 200) {
+            fn( new Error('密码错误'));
+          } else {
+            this.isSuccess = true;
+          }
+        }) 
+      }
+    };
     return {
       info:{ className:'.account',name:'account',icon:'icon-account' },
       themeColorName:'',
@@ -224,7 +268,23 @@ export default {
       isdisabled:true,
       isdisabled2:true,
       dialogPhone:false,
-      phoneForm:{},
+      phoneForm:{
+        phone:'',
+        code:''
+      },
+      pwdDialog:false,
+      isSuccess:false,
+      pwdForm:{
+        oldPwd:'',
+        newPwd:''
+      },
+      pwdRules:{
+        oldPwd:[
+          { validator: checkPwd, trigger: 'blur' }
+        ],
+      },
+      isSend:false,//是否发送验证码
+      waitTime:'60s后重新获取',//发送验证码后的提示
       titleDesc:'',
       titleRole:'',
     }
@@ -251,25 +311,22 @@ export default {
       if( index !== -1 ) _s.splice(index,1);
     },
     changePwd(){//更改密码
-      this.$prompt('请输入旧密码','更改密码',{
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        beforeClose:(action, instance, done) => {
-          if( action === 'confirm' ){
-            //判断旧密码是否正确 错误不进行done()
-            done();
-          } else {
-            done();
-          }
+      if( this.isSuccess ){
+        if( this.pwdForm.newPwd ){
+           this.axios.post('/user/updatePwd',qs.stringify({password:this.pwdForm.newPwd})).then( res => {
+            if( res.data.code === 200 ){
+              this.$message.success('修改成功');
+              this.pwdDialog = false;
+            } else this.$message.error( res.data.desc );
+          })
+        } else {
+          this.$message.error('请输入新密码');
         }
-      }).then(( {value} ) => {
-        this.$prompt('请输入新密码','更改密码',{
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-        })
-      })
+      } else {
+        this.$message.error('请输入正确的旧密码');
+      }
     },
-    getCommunication(){
+    getCommunication(){//保存个人信息
       this.$refs['infoForm'].validate( valid => {
         if( valid ){
           let newInfo = this.basicInfo.communication.basic.concat( this.basicInfo.communication.type );
@@ -283,6 +340,44 @@ export default {
           this.$message.error('请完整填写信息');
         }
       });
+    },
+    getCode(){//获取验证码
+      let reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+      if( reg.test( this.phoneForm.phone )){
+        this.isSend = true;
+        let t = 60;
+        this.waitTime = '60s后重新获取';
+        let timer = setInterval(() => {
+          if( t === 1 ){
+            this.isSend = false;
+            clearInterval( timer );
+          }
+          t --;
+          this.waitTime = t + 's后重新获取';
+        }, 1000);
+        this.axios.get('/user/sendCode?phone='+this.phoneForm.phone).then( res => {
+          res.data.code === 200 && ( this.$message.success( res.data.obj )) || ( this.$message.error( res.data.desc ));
+        })
+      } else {
+        this.$message.error('请输入正确的手机号');
+      }
+    },
+    consfirmBinding(){//确认绑定手机
+      if( this.phoneForm.code ){
+        let params = {
+          phone: this.phoneForm.phone,
+          code:this.phoneForm.code
+        };
+        this.axios.post('/user/bindingTel',qs.stringify(params)).then( res => {
+          res.data.code === 200 && ( this.$message.success('绑定成功') ) || ( this.$message.error( res.data.desc ));
+           this.dialogPhone = false;
+        }).catch( err => console.log(err));
+      } else {
+        this.$message.error('请完整填写表单！');
+      }
+    },
+    updateLodingShow( label ){
+      this.axios.post('/user/updateDesk',qs.stringify({desk:label})).then( res => true).catch( err => this.$message.error( res.data.desc ));
     },
   },
   mounted(){
@@ -318,7 +413,17 @@ export default {
     storeChange( val ){
       this.themeColorName = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).className;
       this.themeColorStyle = this._getThemeColor(this, val.themeColorName, val.themeColorStyle).style;
-    }
+    },
+    pwdDialog() {
+      this.isSuccess = false;
+      this.pwdForm.newPwd = '';
+      this.pwdForm.oldPwd = '';
+    },
+    dialogPhone(){
+      this.phoneForm.phone = '';
+      this.phoneForm.code = '';
+    },
+
   },
   computed:{
     storeChange(){
