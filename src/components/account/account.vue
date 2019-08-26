@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-19 11:49:20
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-23 17:30:19
+ * @LastEditTime: 2019-08-23 18:17:21
  * @Desc: 我的账户组件
  -->
 <template>
@@ -158,16 +158,20 @@
           <span>绑定手机</span>
         </div>
         <div>
-          <el-form ref="phoneForm" :model="phoneForm" size="small">
-            <el-form-item>
-              <el-input >
+          <el-form
+            ref="phoneForm" 
+            :model="phoneForm"
+            size="small">
+            <el-form-item prop="phone">
+              <el-input v-model="phoneForm.phone">
                 <template slot="prepend">手机号</template>
               </el-input>
             </el-form-item>
             <el-form-item>
               <el-input >
                 <template slot="prepend">验证码</template>
-                <el-button slot="append" style="color:#409EFF">发送验证码</el-button>
+                <el-button slot="append" style="color:#409EFF" @click="getCode" v-if="!isSend">获取验证码</el-button>
+                <el-button slot="append" style="color:#409EFF" @click="getCode" v-else>{{waitTime}}</el-button>
               </el-input>
             </el-form-item>
           </el-form>
@@ -224,7 +228,11 @@ export default {
       isdisabled:true,
       isdisabled2:true,
       dialogPhone:false,
-      phoneForm:{},
+      phoneForm:{
+        phone:'',
+      },
+      isSend:false,//是否发送验证码
+      waitTime:'',//发送验证码后的提示
       titleDesc:'',
       titleRole:'',
     }
@@ -269,7 +277,7 @@ export default {
         })
       })
     },
-    getCommunication(){
+    getCommunication(){//保存个人信息
       this.$refs['infoForm'].validate( valid => {
         if( valid ){
           let newInfo = this.basicInfo.communication.basic.concat( this.basicInfo.communication.type );
@@ -283,6 +291,23 @@ export default {
           this.$message.error('请完整填写信息');
         }
       });
+    },
+    getCode(){//获取验证码
+      let reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+      if( reg.test( this.phoneForm.phone )){
+        this.isSend = true;
+        let t = 60;
+        let timer = setInterval(() => {
+          if( t === 1 ){
+            this.isSend = false;
+            clearInterval( timer );
+          }
+          t --;
+          this.waitTime = t + 's后重新获取';
+        }, 1000);
+      } else {
+        this.$message.error('请输入正确的手机号');
+      }
     },
   },
   mounted(){
