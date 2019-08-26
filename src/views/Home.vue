@@ -4,7 +4,7 @@
  * @LastEditTime: 2019-08-23 09:02:43
  -->
 <template>
-  <el-container :style="bg">
+  <el-container :style="bg" class="container">
     <el-main ref="main">
       <div class="screenImg"  :style="isOpenScreenLock">
         <img :src="userSettingImg" alt="" class="fadeInDown animated">
@@ -45,6 +45,7 @@
                 @layout-updated="layoutUpdatedEvent"
               >
                 <grid-item v-for="item in defaultApps"
+                  ref="gridItem"
                   :key="item.i"
                   :i='item.i'
                   :x='item.x'
@@ -60,6 +61,10 @@
                 </grid-item>
               </grid-layout>
             </div>
+          </div>
+          <div v-if='newFile.show' class="newFileBox" :style="newFile.position">
+            <img :src="newFile.icon"/>
+            <el-input v-model="newFile.name" size='mini' autofocus @blur="createNewfile"></el-input>
           </div>
           <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus" @rightMouseClick="rightMouseClick"></rightMenus>
         </div>
@@ -175,6 +180,18 @@
         @barChangePosition="barChangePosition" 
         @lockScreen="lockScreen"></bottomBar>
     </el-footer>
+    <el-upload
+      ref='upload'
+      class="upload-demo"
+      v-show="uploadShow"
+      drag
+      action="https://jsonplaceholder.typicode.com/posts/"
+      :on-success='uploadSuccess'
+      :on-error="uploadErr"
+      :auto-upload="true"
+      :show-file-list="false"
+      multiple>
+    </el-upload>
   </el-container>
 </template>
 
@@ -218,6 +235,7 @@ export default {
   },
   data() {
     return {
+      uploadShow:false,
       groundGlass: {
         background: `hsla(0,0%,100%,.25) border-box`,
         overflow: `hidden`,
@@ -283,6 +301,12 @@ export default {
         {"x":1,'y':3,'w':1,'h':1,'i':'9',type: '0'},
       ],
       rowHeight: 80,  //图标的高度
+      newFile:{ //新建文件夹、新建文件盒子
+        show:false,
+        position: {top: 0, left: 0},
+        icon: '',
+        name: ''
+      },
     };
   },
   computed:{
@@ -348,6 +372,21 @@ export default {
         this.isShowBox[params.path].display = true;//最小化状态下为隐藏，还原显示
         this.index = params.index;//选中系统设置具体项
       }
+      //新建文件夹、新建文件
+      if( params.new ){
+        let gridWidth = this.$refs.gridItem[0].$el.clientWidth + 'px';
+        let p = this.position;
+        Object.assign(this.newFile, {
+          show: true,
+          position: {top: p.top+'px',  left: p.left+'px', width: gridWidth},
+          icon: require('@/assets/image/icons/deskIcons/'+params.icon),
+          name: params.name
+        });
+      }
+    },
+    createNewfile( ){ // 新建文件夹：失去焦点时创建
+      this.newFile.show = false;
+      let p = this.newFile.position;
     },
     closeItem( param ){//右上角工具栏关闭弹出层组件
       this.isShowBox[param].show = false;
@@ -449,7 +488,27 @@ export default {
     applications({component,open}){//system组件下的程序应用下的menus菜单的操作集合
       this.isShowBox[component].show = open;
       this.isShowBox[component].display = open;
+    },
+    uploadSuccess(res, file, fileList){ //拖拽上传文件成功
+      console.log(fileList);
+      this.$refs.upload.clearFiles();
+      document.querySelector('.upload-demo').style='display:none';
+    },
+    uploadErr(err, file, fileList){
+      this.$message('上传失败！');
+      this.$refs.upload.clearFiles();
+      document.querySelector('.upload-demo').style='display:none';
     }
+  },
+  created(){
+    // 获取桌面图标
+    let clientWidth = Math.floor(document.body.clientHeight);
+    let clientHeight = Math.floor(document.body.clientHeight);
+    let row = Math.floor((clientWidth - 80) / this.rowHeight);
+    // this.axios.get('', {row, col: this.colNumber, clientWidth, clientHeight})
+    //   .then(( res ) => {
+    //     console.log(res)
+    //   });
   },
   mounted(){
     this.footerClass = this.$store.state.footerPosition;
@@ -461,6 +520,26 @@ export default {
       this.lock_time = tools._time().split(' ')[1];
     }, 1000);
     if( this.$store.state.isLockScreen === 'true') document.onmouseup = () => this.countTime(this.alertLockScreen,this.userSettingLockTime);
+  
+    //====  拖拽文件到桌面  上传文件  ====
+    var dropbox = document.querySelector('.container');
+      dropbox.addEventListener("drop",(e)=>{
+        e.preventDefault();
+        this.$forceUpdate();
+      },false);
+      dropbox.addEventListener("dragleave",function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      })
+      dropbox.addEventListener("dragenter",function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        document.querySelector('.upload-demo').style='display:block';
+      })
+      dropbox.addEventListener("dragover",function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      });
   },
   watch:{
     userSettingLockTime( val,oldval ){//监听锁屏时间的改变
@@ -599,6 +678,32 @@ html,body,#app,.el-container {
     & .vue-resizable-handle{
       display: none;
     }
+  }
+}
+.el-upload{
+  position: fixed;
+  top: 0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  opacity: 0;
+  & .el-upload-dragger{
+    width: 100%;
+    height: 100%;
+  }
+}
+.newFileBox{
+  position: fixed;
+  text-align: center;
+  & img{
+    display: inline-block;
+    width: 60%;
+  }
+  & input{
+    font-size: 12px;
+    padding: 0;
+    text-align: center;
   }
 }
 </style>

@@ -29,7 +29,7 @@ Vue.use(ElementUI);
 Vue.use(VXETable);
 Vue.config.productionTip = false;
 Vue.prototype.axios = axios;
-axios.defaults.baseURL = "http://192.168.0.181:8080";//配置axios默认基础地址
+axios.defaults.baseURL = "http://192.168.0.102:8080";//配置axios默认基础地址
 axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;//运行携带cookie
 Vue.prototype._ = _;

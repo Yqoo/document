@@ -71,7 +71,7 @@ export default {
                 this.$emit('closeMenus',true);
               }},
               {title:'新建文件夹',icon:'el-icon-folder-add',color:{ color:'#ff5722' },fn:() => {
-                this.$emit('closeMenus',true);
+                this.$emit('closeMenus',{new: 'folder', icon: 'tree-folder.png', name:'新建文件夹'});
               }},
               {title:'新建文件',icon:'el-icon-document-add',color:{ color:'#95e1d3' },fn:() => {
                 this.$emit('closeMenus',true);
