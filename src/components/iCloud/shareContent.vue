@@ -85,7 +85,44 @@
 </template>
 
 <script>
+import { setTimeout } from 'timers';
+var share = {
+  shareRight:[
+        {iconImg: require('@/assets/image/icons/fileIcons/preview.png'),iconTitle: '在线预览',isRightBorder: false},
+        {iconImg: require('@/assets/image/icons/fileIcons/dailyO.png'),iconTitle: '分享操作',isRightBorder: false,flag: false,children:[{iconImg: require('@/assets/image/icons/fileIcons/myshare.png'),iconTitle: '访问分享'},{iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '修改分享'},{iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '取消分享'}]},
+        {iconImg: require('@/assets/image/icons/fileIcons/link.png'),iconTitle: '复制链接',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/lock.png'),iconTitle: '复制提取码',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/limit.png'),iconTitle: '分享权限',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/edit.png'),iconTitle: '更改提取码',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/log.png'),iconTitle: '分享日志',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/diagram.png'),iconTitle: '关系图',isRightBorder: true,},
+        {iconImg: require('@/assets/image/icons/fileIcons/approval-submit.png'),iconTitle: '审批',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/approval-submit.png'),iconTitle: '提交审批'},{iconImg: require('@/assets/image/icons/fileIcons/approval-progress.png'),iconTitle: '审批进度'},{iconImg: require('@/assets/image/icons/fileIcons/flowpath.png'),iconTitle: '审批流程'}]},
+        {iconImg: require('@/assets/image/icons/fileIcons/print.png'),iconTitle: '打印',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '显示字段',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/export.png'),iconTitle: '导出excel',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),iconTitle: '发送',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},{iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},{iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},{iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},{iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},]},
+        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
+        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
+      ],
+      enjoyRight:[
+        {iconImg: require('@/assets/image/icons/fileIcons/preview.png'),iconTitle: '在线预览',isRightBorder: false},
+        {iconImg: require('@/assets/image/icons/fileIcons/dailyO.png'),iconTitle: '共享操作',isRightBorder: false,flag: false,children:[{iconImg: require('@/assets/image/icons/fileIcons/enjoyTo.png'),iconTitle: '访问共享'},{iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '修改共享'},{iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '取消共享'}]},
+        {iconImg: require('@/assets/image/icons/fileIcons/limit.png'),iconTitle: '共享权限',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/calendar.png'),iconTitle: '共享期限',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/edit.png'),iconTitle: '更改密码',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/log.png'),iconTitle: '共享日志',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/diagram.png'),iconTitle: '关系图',isRightBorder: true,},
+        {iconImg: require('@/assets/image/icons/fileIcons/approval-submit.png'),iconTitle: '审批',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/approval-submit.png'),iconTitle: '提交审批'},{iconImg: require('@/assets/image/icons/fileIcons/approval-progress.png'),iconTitle: '审批进度'},{iconImg: require('@/assets/image/icons/fileIcons/flowpath.png'),iconTitle: '审批流程'}]},
+        {iconImg: require('@/assets/image/icons/fileIcons/print.png'),iconTitle: '打印',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '显示字段',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/export.png'),iconTitle: '导出excel',isRightBorder: false,},
+        {iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),iconTitle: '发送',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},{iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},{iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},{iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},{iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},]},
+        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
+        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
+      ],
+};
 export default {
+  props:['attrs'],
   data () {
     return {
       activeIndex: '1', // 默认显示
@@ -114,7 +151,17 @@ export default {
     diagram(data) {  //关系图
       console.log(data)
     }
-  }
+  },
+  mounted() {
+    let name = this.attrs.name;
+    if(name === '我的共享' ||name==='接收共享'){
+      setTimeout(()=>{
+        this.$emit('someMethods', {name:'getContentUtils',data:share.enjoyRight});
+      },400);
+    }else{
+      this.$emit('someMethods', {name:'getContentUtils',data:share.shareRight});
+    }
+  },
 }
 
 </script>

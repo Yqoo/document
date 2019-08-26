@@ -9,7 +9,7 @@
               </template>
               <div class="cards slideInRight animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in zyCloud" :class="_isClick.mineCloud.zhiyou&&c.active?'addBorder':''" :key="index" shadow="hover">
-                      <div @click.stop="activeCard({e:$event,item:c,i:index,clickTag: 'zhiyou',dataArr:zyCloud})" @contextmenu.stop.prevent="fileRightMenu({e:$event,item:c,dataArr:zyCloud,clickTag: 'zhiyou'})" @dblclick.stop="openFolder(c.component)" :title="c.name">
+                      <div @click.stop="activeCard({e:$event,item:c,i:index,clickTag: 'zhiyou',dataArr:zyCloud})" @contextmenu.stop.prevent="fileRightMenu({e:$event,item:c,dataArr:zyCloud,clickTag: 'zhiyou'})" @dblclick.stop="openFolder({component:c.component,name:c.name})" :title="c.name">
                         <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom">{{c.name}}</div>
                         <img :src="c.icon" class="fileIcon">
@@ -26,7 +26,7 @@
               </template>
               <div class="cards slideInLeft animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in myCloud" :class="_isClick.mineCloud.mine&&c.active?'addBorder':''" :key="index" shadow="hover">
-                      <div @click.stop="activeCard({e:$event,item:c,i:index,clickTag:'mine',dataArr:myCloud})" @contextmenu.stop.prevent="fileRightMenu({e:$event,item:c,dataArr:myCloud,clickTag:'mine'})" @dblclick.stop="openFolder(c.component)" :title="c.name">
+                      <div @click.stop="activeCard({e:$event,item:c,i:index,clickTag:'mine',dataArr:myCloud})" @contextmenu.stop.prevent="fileRightMenu({e:$event,item:c,dataArr:myCloud,clickTag:'mine'})" @dblclick.stop="openFolder({component:c.component,name:c.name})" :title="c.name">
                         <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>
