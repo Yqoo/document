@@ -24,6 +24,77 @@
         :info="capacityData"
         @closeCapacityForm="closeCapacityForm">
       </capacity>
+      <el-dialog
+        v-dialogDrag
+        :visible.sync="dialogVisible"
+        :append-to-body="true"
+        :close-on-click-modal="false"
+        width="50%">
+        <div slot="title" class="messageBox-title">
+          <img :src="require('@/assets/image/icons/fileIcons/partition.png')">
+          <span>创建云端</span>
+        </div>
+        <!-- <el-form :model="cloudForm1" :rules="rules1" label-width="100px" class="cloudForm1" ref="cloudForm1">
+          <el-form-item label="云端名称" prop="name">
+            <el-input v-model="cloudForm1.name" size="small"></el-input>
+            <el-switch
+              v-model="cloudForm1.selectSource"
+              active-text="新建资源"
+              inactive-text="已有资源">
+            </el-switch>
+          </el-form-item> 
+          <el-form-item v-if="cloudForm1.selectSource" label="选择资源" prop="source" class="fadeInLeft animated">
+            <el-input v-model="cloudForm1.source" size="small" suffix-icon="el-icon-more"></el-input>
+          </el-form-item>
+          <el-form-item label="数据中心" prop="dataCenter">
+            <el-input v-model="cloudForm1.dataCenter" size="small" suffix-icon="el-icon-more"></el-input>
+          </el-form-item>
+        </el-form> -->
+        <div>
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane :disabled='true'>
+              <span slot='label' class="tab-title"><img src="@/assets/image/icons/fileIcons/pepole.png">权限维度</span>
+            </el-tab-pane>
+            <el-tab-pane label="内部组织" name="inside">
+              <el-menu :default-active="insideActive" mode="horizontal" @select="handleSelect">
+                <el-menu-item :disabled='true'><img src="@/assets/image/icons/fileIcons/seal.png"/>组织维度</el-menu-item>
+                <el-menu-item index="organization">组织</el-menu-item>
+                <el-menu-item index="post">岗位</el-menu-item>
+                <el-menu-item index="role">角色</el-menu-item>
+                <el-menu-item index="user">用户</el-menu-item>
+                <el-menu-item index="userGroup">用户组</el-menu-item>
+              </el-menu>
+              <el-row class="middleSearch">
+                <el-col :span="3">
+                  <el-checkbox v-model="checkAll">所有</el-checkbox>
+                </el-col>
+                <el-col :span="11">
+                  <el-input
+                    placeholder="请输入内容"
+                    suffix-icon="el-icon-search"
+                    size="small"
+                    v-model="searchValue">
+                  </el-input>
+                </el-col>
+                <el-col :span="10">
+                  <span class="empowerTitle">授权方式：</span>
+                  <el-switch
+                    v-model="empower"
+                    active-text="分项"
+                    inactive-text="统一">
+                  </el-switch>
+                </el-col>
+              </el-row>
+              <div class="treeContent">11</div>
+            </el-tab-pane>
+            <el-tab-pane label="外部组织" name="outside">外部组织</el-tab-pane>
+          </el-tabs>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="nextStep('cloudForm1')" size="small">下一步</el-button>
+          <el-button @click="closeDialog('cloudForm1')" size="small">关闭</el-button>
+        </div>
+      </el-dialog>
   </div>
 </template>
 
@@ -39,10 +110,50 @@ export default {
   data () {
     return {
         activeNames: ['1'],
+        activeName:'inside', //创建云端标签页（默认展示）
+        insideActive:'organization', //组织维度默认展示
+        checkAll: false, //组织维度中 勾选所有
+        searchValue:'', //组织维度中  搜索的内容
+        empower:true, //授权方式
         shareCloud: this.attrs.data,
+        dialogVisible:false, //用于控制创建云端弹框的显示隐藏
+        cloudForm1:{  //创建云端表单1
+          name:'', //云端名称
+          selectSource: false, //新建资源  true:已有资源
+          source: '', //选择资源
+          dataCenter: '',  //数据中心
+        },
+        rules1:{
+          name: {required:true,message:'请输入云端名称',trigger:'blur'},
+          source: {required:true,message:'请选择已有资源',trigger:'change'},
+          dataCenter:{required:true,message:'请选择数据中心',trigger:'change'}
+        },
     };
   },
   methods: {
+    closeDialog(formName){ //关闭弹框
+      this.$refs[formName].resetFields();
+      this.dialogVisible = false;
+    },
+    createCloud(){ //创建云端弹框显示
+      this.dialogVisible = true;
+    },
+    nextStep(formName){
+      this.$refs[formName].validate((valid) => {
+          if (valid) {
+            console.log(this.cloudForm1)
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+    },
+    handleClick(){ //创建云端：权限维度标签页点击
+      //
+    },
+    handleSelect(){ //组织维度标签页点击
+      //
+    }
   }
 }
 
@@ -54,5 +165,54 @@ export default {
   & /deep/ .el-collapse-item__wrap{
     border: none;
   }
+}
+.cloudForm1{
+  & .el-form-item:nth-of-type(1){
+    & /deep/ .el-input{
+      width: 60%;
+      margin-right: 4%;
+    }
+  }
+}
+.el-tabs{
+  & .tab-title{
+    color: #303133;
+    & > img{
+      display: inline-block;
+      width: 20px;
+      vertical-align: text-bottom;
+    }
+  }
+}
+
+.el-menu-item{
+  font-size: 12px;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 12px;
+  & img{
+    display: inline-block;
+    width: 20px;
+    vertical-align: middle;
+  }
+}
+.el-menu-item.is-disabled{
+  opacity: 1;
+  color: #303133;
+}
+.middleSearch{
+  text-align: center;
+  line-height: 30px;
+  font-size: 12px;
+  margin: 2% 0;
+  & .empowerTitle{
+    margin-right: 5%;
+  }
+}
+.treeContent{
+  border: 1px solid #ddd;
+  height: 150px;
+  box-sizing: border-box;
+  overflow: auto;
 }
 </style>
