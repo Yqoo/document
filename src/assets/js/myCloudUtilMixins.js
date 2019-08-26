@@ -76,44 +76,43 @@ export const myCloudUtilMixin = {
     },
     methods: {
         activeCard( data ) { // 单击（文件夹），多选，添加一个边框表示选中
-            let start = this.startIndex;
-            let i = data.i, e = data.e, item = data.item, dataArr=data.dataArr;
-            this.startIndex = i;
-            let end = i;
-            if(e.ctrlKey){ // ctrl + 左键 多选
-                item.active = true;
-            }else if(e.shiftKey){ //  shift + 左键多选
-                if( start > end ){
-                    let middle = start;
-                    start = end;
-                    end = middle;
-                }
-                for(let j=start; j<=end; j++){
-                    dataArr[j].active = true;
-                }
-            }else { // 单击选中
-                clearTimeout(timer);
-                timer = setTimeout(() => {
+            setTimeout(() => {
+                let start = this.startIndex;
+                let i = data.i, e = data.e, item = data.item, dataArr=data.dataArr;
+                this.startIndex = i;
+                let end = i;
+                if(e.ctrlKey){ // ctrl + 左键 多选
+                    item.active = true;
+                }else if(e.shiftKey){ //  shift + 左键多选
+                    if( start > end ){
+                        let middle = start;
+                        start = end;
+                        end = middle;
+                    }
+                    for(let j=start; j<=end; j++){
+                        dataArr[j].active = true;
+                    }
+                }else { // 单击选中
                     for(let i=0; i< dataArr.length; i++){
                         dataArr[i].active = false;
                     }
                     item.active = true;
-                }, 200); 
-            }
-            let utilList = this.getUtilList(item, data.clickTag);
-            let info = {
-                ...data,
-                utilList
-            };
-            this.$emit('someMethods',{name:'clickFile',data:info});//点中文件（文件夹），改变工具栏
+                }
+                let utilList = this.getUtilList(item, data.clickTag);
+                let info = {
+                    ...data,
+                    utilList
+                };
+                this.$emit('someMethods',{name:'clickFile',data:info});//点中文件（文件夹），改变工具栏
+            }, 300);
         },
         changeDidplay(name, current){ //修改展示方式
             this.displayName = name;
             this.$store.commit('changeDidplay', {name, current});
         },
-        openFolder(component) { // 双击文件
+        openFolder(data) { // 双击文件
             clearTimeout(timer);
-            this.$emit('someMethods', {name:'openFolder',data:component});
+            this.$emit('someMethods', {name:'openFolder',data});
         },
         showRightMenu(data) { // 点击空白，显示右键菜单
             let dataArr = data.dataArr;
