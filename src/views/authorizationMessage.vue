@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-10 11:12:36
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-26 11:40:18
+ * @LastEditTime: 2019-08-26 15:23:16
  * @Desc: 授权信息组件
  -->
 <template>
@@ -18,7 +18,7 @@
         <el-button type="success" size='mini' icon='el-icon-refresh'>刷新</el-button>
         <el-button type="primary" size='mini' icon='el-icon-s-promotion'>云注册</el-button>
         <el-button type="info" size='mini' icon='el-icon-s-marketing'>特征码</el-button>
-        <el-button type="normal" size='mini' icon='el-icon-search'>搜索</el-button>
+        <el-button type="warning" size='mini' icon='el-icon-search'>搜索</el-button>
         <el-button type="success" size='mini' icon='el-icon-question'>帮助</el-button>
       </el-button-group>
     </div>
@@ -35,10 +35,12 @@
           wdith='50'></el-table-column>
         <el-table-column
           prop="serialNumber"
-          label="产品序列号"></el-table-column>
+          label="产品序列号"
+          :show-overflow-tooltip='true'></el-table-column>
         <el-table-column
           prop="name"
-          label="名称"></el-table-column>
+          label="名称"
+          :show-overflow-tooltip='true'></el-table-column>
         <el-table-column
           prop="status"
           label="启用状态"
@@ -56,14 +58,17 @@
           label="许可证类型"></el-table-column>
         <el-table-column
           prop="activeTime"
-          label="激活时间"></el-table-column>
+          label="激活时间"
+          :show-overflow-tooltip='true'></el-table-column>
         <el-table-column
           prop="overdueTime"
-          label="过期时间"></el-table-column>
+          label="过期时间"
+          :show-overflow-tooltip='true'></el-table-column>
         <el-table-column
           prop="standardTime"
           label="标准服务过期时间"
-          width='150'></el-table-column>
+          width='150'
+          :show-overflow-tooltip='true'></el-table-column>
         <el-table-column
           fixed='right'
           label='关联操作'
@@ -87,13 +92,20 @@
           width='50'></el-table-column>
         <el-table-column
           prop='productNumber'
-          label='产品序列号'></el-table-column>
+          label='产品序列号'
+          :show-overflow-tooltip='true'></el-table-column>
         <el-table-column
           prop='systemCoding'
-          label='系统编码'></el-table-column>
+          label='系统编码'
+          :show-overflow-tooltip='true'></el-table-column>
         <el-table-column
           prop='modulName'
-          label='模块或功能名称'></el-table-column>
+          label='模块或功能名称'
+          :show-overflow-tooltip='true'></el-table-column>
+        <el-table-column
+          prop='version'
+          label='版本号'
+          :show-overflow-tooltip='true'></el-table-column>
         <el-table-column
           prop='licences'
           label='授权许可证数目'></el-table-column>
@@ -102,10 +114,12 @@
           label='许可证类型'></el-table-column>
         <el-table-column
           prop='activeDay'
-          label='激活日期'></el-table-column>
+          label='激活日期'
+          :show-overflow-tooltip='true'></el-table-column>
         <el-table-column
           prop='overdueDay'
-          label='过期时间'></el-table-column>
+          label='过期时间'
+          :show-overflow-tooltip='true'></el-table-column>
       </el-table>
     </div>
   </div>
@@ -170,6 +184,7 @@ export default {
           productNumber:'ZYFC1001',
           systemCoding:'FC',
           modulName:'挚友iCloud基础版',
+          version:'v1.0-20190812',
           licences:'300',
           type:'试用',
           activeDay:'2019-08-12',
@@ -180,6 +195,7 @@ export default {
           productNumber:'ZYFC1001',
           systemCoding:'FC',
           modulName:'挚友iCloud基础版',
+          version:'v1.0-20190812',
           licences:'300',
           type:'试用',
           activeDay:'2019-08-12',
@@ -190,6 +206,7 @@ export default {
           productNumber:'ZYFC1001',
           systemCoding:'FC',
           modulName:'挚友iCloud基础版',
+          version:'v1.0-20190812',
           licences:'300',
           type:'试用',
           activeDay:'2019-08-12',
@@ -200,6 +217,7 @@ export default {
           productNumber:'ZYFC1001',
           systemCoding:'FC',
           modulName:'挚友iCloud基础版',
+          version:'v1.0-20190812',
           licences:'300',
           type:'试用',
           activeDay:'2019-08-12',
@@ -210,6 +228,7 @@ export default {
           productNumber:'ZYFC1001',
           systemCoding:'FC',
           modulName:'挚友iCloud基础版',
+          version:'v1.0-20190812',
           licences:'300',
           type:'试用',
           activeDay:'2019-08-12',
@@ -220,6 +239,7 @@ export default {
           productNumber:'ZYFC1001',
           systemCoding:'FC',
           modulName:'挚友iCloud基础版',
+          version:'v1.0-20190812',
           licences:'300',
           type:'试用',
           activeDay:'2019-08-12',
@@ -230,6 +250,7 @@ export default {
           productNumber:'ZYFC1001',
           systemCoding:'FC',
           modulName:'挚友iCloud基础版',
+          version:'v1.0-20190812',
           licences:'300',
           type:'试用',
           activeDay:'2019-08-12',
