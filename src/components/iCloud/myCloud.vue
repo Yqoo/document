@@ -477,11 +477,8 @@ export default {
             }
             delete this.attrs['name'];
           },
-          getContentUtils(){ //双击后获取子级内容的工具栏
-            // this.listChange = msg.data;
+          getContentUtils: ()=>{ //双击后获取子级内容的工具栏
             this.lists = msg.data;
-            console.log(this.lists);
-            this.$forceUpdate();
           },
         };
         active[msg.name]();
