@@ -54,7 +54,7 @@
                   :h='item.h'
                   @moved="movedEvent"
                 >
-                <div :type="item.type" @dblclick="applicationHandle(item.title)">
+                <div :type="item.type" @dblclick="applicationHandle(item.title)" :title="item.name">
                   <img :type="item.type" :src="item.img" :alt="item.title" :style="iconStyle">
                   <p :type="item.type">{{item.name}}</p>
                 </div>
@@ -686,6 +686,11 @@ html,body,#app,.el-container {
     cursor: default;
     & img{
       display: inline-block;
+    }
+    & p{
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     & .vue-resizable-handle{
       display: none;
