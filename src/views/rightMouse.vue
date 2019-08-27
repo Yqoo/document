@@ -133,6 +133,44 @@ export default {
                 this.$emit('rightMouseClick',{name:'systemProperties'});
               }},
             ],
+            system:[
+              {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
+              {title:'属性',icon:'el-icon-warning',color:{ color:'#00a79d' },fn:() => {console.log('属性')}},
+            ],
+            file:[
+              {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
+              {title:'剪切',icon:'el-icon-scissors',color:{color:'#587850'},fn:()=>{console.log('剪切')}},
+              {title:'复制',icon:'el-icon-crop',color:{ color:'#08d9d6' },fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{console.log('分享')}},
+              {title:'共享',icon:'el-icon-attract',color:{color:'#a7d129'},fn:()=>{console.log('共享')}},
+              {title:'在线压缩',icon:'el-icon-film',color:{color:'#e36488'},fn:()=>{console.log('在线压缩')}},
+              {title:'下载',icon:'el-icon-download',color:{color:'#8559a5'},fn:()=>{console.log('下载')}},
+              {title:'属性',icon:'el-icon-warning',color:{ color:'#00a79d' },fn:() => {console.log('属性')}},
+            ],
+            zip:[
+              {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
+              {title:'剪切',icon:'el-icon-scissors',color:{color:'#587850'},fn:()=>{console.log('剪切')}},
+              {title:'复制',icon:'el-icon-crop',color:{ color:'#08d9d6' },fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },fn:() => {
+                this.$emit('closeMenus',true);
+              }},
+              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{console.log('分享')}},
+              {title:'共享',icon:'el-icon-attract',color:{color:'#a7d129'},fn:()=>{console.log('共享')}},
+              {title:'在线解压',icon:'el-icon-collection',color:{color:'#f6c523'},fn:()=>{console.log('在线解压')}},
+              {title:'下载',icon:'el-icon-download',color:{color:'#8559a5'},fn:()=>{console.log('下载')}},
+              {title:'属性',icon:'el-icon-warning',color:{ color:'#00a79d' },fn:() => {console.log('属性')}},
+            ]
           },
           
         };

@@ -98,7 +98,8 @@ export const myCloudUtilMixin = {
                     }
                     item.active = true;
                 }
-                let utilList = this.getUtilList(item, data.clickTag);
+                let clickTag = data.clickTag == null ? '': data.clickTag;
+                let utilList = this.getUtilList(item, clickTag);
                 let info = {
                     ...data,
                     utilList
@@ -132,7 +133,8 @@ export const myCloudUtilMixin = {
                 dataArr[i].active = false;
             }
             item.active = true;
-            let list = this.getUtilList(item, data.clickTag);
+            let clickTag = data.clickTag == null ? '': data.clickTag;
+            let list = this.getUtilList(item, clickTag);
             let info = {
                 ...data,
                 list
