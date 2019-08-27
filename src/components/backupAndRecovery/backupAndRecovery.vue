@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-10 11:10:02
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-26 18:34:22
+ * @LastEditTime: 2019-08-27 09:20:09
  * @Desc: 备份恢复组件
  -->
 <template>
@@ -193,6 +193,7 @@
               </el-form-item>
               <el-form-item label='执行间隔（M）'  v-if=" addForm.execute === 'month'">
                 <el-input-number v-model="addForm.month"  :min="1" :max="12" @change='changeMonth'></el-input-number>
+                <span style="font-size:12px;padding-right:15px;">月</span>
                 <el-radio-group v-model='monthday'>
                   <el-radio label='day'>
                     <span>在每月</span><el-input-number v-model="addForm.monthDay"  :min="1" :max="moreOne"></el-input-number><span>天</span>
@@ -217,7 +218,7 @@
             <div class="typeVisible">
               <div class="desc"><i class="el-icon-s-operation"></i><span>每天频率</span></div>
             </div>
-            <el-form-item label='执行时间'>
+            <el-form-item label='执行时间' prop='time'>
               <el-time-select
                 v-model="addForm.time"
                 :picker-options="{
@@ -229,7 +230,31 @@
                 prop='time'>
               </el-time-select>
             </el-form-item>
+            <el-form-item label='失败间隔重启'>
+              <el-input-number v-model="addForm.reStart"  :min="1" :max="24"></el-input-number>
+              <span style="font-size:12px;">小时</span>
+            </el-form-item>
+            <div class="typeVisible">
+              <div class="desc"><i class="el-icon-s-operation"></i><span>持续说明</span></div>
+            </div>
+            <el-form-item label='开始时间'>
+              <el-date-picker
+                v-model="addForm.continueStartTime"
+                type="date"
+                placeholder="选择日期"
+                size='small'>
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label='保留备份'>
+              <el-input-number v-model="addForm.copies"  :min="1" :max="100"></el-input-number>
+              <span style="font-size:12px;">份</span>
+              <el-checkbox v-model="checked1" :border='true' size='small' style="margin-left:20px;">已启用</el-checkbox>
+            </el-form-item>
           </div>
+          <div class="typeVisible">
+            <div class="desc"><i class="el-icon-s-operation"></i><span>计划说明</span></div>
+          </div>
+          <el-input type='textarea' v-model='addForm.desc'></el-input>
         </el-form>
       </div>
       <div slot="footer">
@@ -326,6 +351,10 @@ export default {
         monthDay:'1',//第几月下的第几天
         monthWeek:'1',//第几天下的第几周
         monthWeekDay:'1',//每月下的周下面的星期几
+        reStart:2,//失败间隔重启
+        continueStartTime:'',//持续说明开始时间
+        copies:1,//保留备份
+        desc:'',//计划说明
       },
       addRules:{
         name:[
@@ -343,9 +372,13 @@ export default {
         day:[
           { required: true, message: '请选择日期', trigger: 'blur' }
         ],
+        time:[
+          { required: true, message: '请选择执行时间', trigger: 'blur' }
+        ],
        
       },
       checked:false,
+      checked1:true,//持续说明下的已启用
       confirm:'confirmAndclose',
       interval:5,//执行间隔
       monthday:'week',
@@ -372,7 +405,7 @@ export default {
       if( month.indexOf( v ) > 0 ) this.moreOne = 31;// 多一天
       else {
         this.moreOne = 30;
-        if( this.addForm.monthDay > 30 ) this.addForm.monthDay = 30
+        if( this.addForm.monthDay > 30 ) this.addForm.monthDay = 30;
       }
     },
   },
