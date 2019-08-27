@@ -148,8 +148,12 @@ export default {
               }},
               {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
               {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
-              {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{console.log('分享')}},
-              {title:'共享',icon:'el-icon-attract',color:{color:'#a7d129'},fn:()=>{console.log('共享')}},
+              {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{
+                this.$emit('closeMenus',{name:'share'});
+              }},
+              {title:'共享',icon:'el-icon-attract',color:{color:'#a7d129'},fn:()=>{
+                this.$emit('closeMenus',{name:'enjoy'});
+              }},
               {title:'在线压缩',icon:'el-icon-film',color:{color:'#e36488'},fn:()=>{console.log('在线压缩')}},
               {title:'下载',icon:'el-icon-download',color:{color:'#8559a5'},fn:()=>{console.log('下载')}},
               {title:'属性',icon:'el-icon-warning',color:{ color:'#00a79d' },fn:() => {console.log('属性')}},
