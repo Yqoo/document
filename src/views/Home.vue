@@ -384,7 +384,7 @@ export default {
         });
       }
     },
-    createNewfile( ){ // 新建文件夹：失去焦点时创建
+    createNewfile( ){ // 新建文件夹（新建文件）：失去焦点时创建
       let p = this.newFile.position;
       let x = (p.left.slice(0,p.left.length-2)*1 / p.width.slice(0, p.width.length-2)*1).toFixed(0);
       let y = (p.top.slice(0,p.top.length-2)*1 / 80).toFixed(0);
