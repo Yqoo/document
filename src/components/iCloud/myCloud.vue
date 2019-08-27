@@ -10,7 +10,6 @@
         <i class="el-icon-arrow-down" v-show="isShowUtils" @click="utilCollapse" title="收起工具栏"></i>
         <div class="utilLists" :class="hideUtil">
           <topUtil @utilClick="utilClick" :lists="lists"></topUtil>
-          {{lists}}
         </div>
         <el-row class="searchContent">
           <el-col :span="2">
@@ -482,6 +481,7 @@ export default {
             // this.listChange = msg.data;
             this.lists = msg.data;
             console.log(this.lists);
+            this.$forceUpdate();
           },
         };
         active[msg.name]();
