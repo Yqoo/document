@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-06 10:40:02
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-20 18:01:22
+ * @LastEditTime: 2019-08-27 16:35:14
  * @Desc: 组织与用户组件外部容器
  -->
 /** 
@@ -58,7 +58,7 @@ export default {
   .organization {
     background: #fff;
     width: 60%;
-    height: 70%;
+    min-height: 550px;
     position: absolute;
     top: 10%;
     left:20%;
