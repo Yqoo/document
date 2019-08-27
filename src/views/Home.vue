@@ -385,8 +385,15 @@ export default {
       }
     },
     createNewfile( ){ // 新建文件夹：失去焦点时创建
-      this.newFile.show = false;
       let p = this.newFile.position;
+      let x = (p.left.slice(0,p.left.length-2)*1 / p.width.slice(0, p.width.length-2)*1).toFixed(0);
+      let y = (p.top.slice(0,p.top.length-2)*1 / 80).toFixed(0);
+      Object.assign(this.newFile, {
+        show: false,
+        position: {top:0,left:0,width:0},
+        icon: '',
+        name:''
+      });
     },
     closeItem( param ){//右上角工具栏关闭弹出层组件
       this.isShowBox[param].show = false;

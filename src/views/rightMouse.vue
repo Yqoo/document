@@ -76,10 +76,10 @@ export default {
               {title:'新建文件',icon:'el-icon-document-add',color:{ color:'#95e1d3' },fn:() => {
                 this.$emit('closeMenus',true);
               },children:[
-                { title:'word',icon:require('@/assets/image/icons/deskIcons/icon-word.png'),fn:() => { console.log('word')}},
-                { title:'excel',icon:require('@/assets/image/icons/deskIcons/icon-excel.png'),fn:() => { console.log('excel')}},
-                { title:'ppt',icon:require('@/assets/image/icons/deskIcons/icon-ppt.png'),fn:() => { console.log('ppt')}},
-                { title:'txt',icon:require('@/assets/image/icons/deskIcons/icon-txt.png'),fn:() => { console.log('txt')}},
+                { title:'word',icon:require('@/assets/image/icons/deskIcons/icon-word.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'icon-word.png', name:'新建word'})}},
+                { title:'excel',icon:require('@/assets/image/icons/deskIcons/icon-excel.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'icon-excel.png', name:'新建Excel'})}},
+                { title:'ppt',icon:require('@/assets/image/icons/deskIcons/icon-ppt.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'icon-ppt.png', name:'新建PPT'})}},
+                { title:'txt',icon:require('@/assets/image/icons/deskIcons/icon-txt.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'icon-txt.png', name:'新建Txt'})}},
               ]},
               {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },fn:() => {
                 this.$emit('closeMenus',true);
@@ -189,6 +189,7 @@ export default {
     color: #000;
     & li img {
       vertical-align: sub;
+      width: 18px;
     }
   }
 </style>
