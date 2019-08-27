@@ -3,7 +3,7 @@
   <div class='myCloudContent'>
       <div class="cards flipInX animated" :class="displayName==='行展示'?'row':'col'">
           <el-card v-for="(c,index) in dataList" :class="c.active?'addBorder':''" :key="index" shadow="hover">
-              <div @click="activeCard(c, dataList)" @dblclick.stop="openFolder" :title="c.name">
+              <div @click="activeCard({e:$event,item:c,i:index,dataArr:dataList})" @dblclick.stop="openFolder" :title="c.name">
                 <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                 <div class="bottom">{{c.name}}</div>
                 <img :src="c.icon" class="fileIcon">
@@ -37,8 +37,8 @@ export default {
   data () {
     return {
       dataList: [
-        {name:'文件夹1',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-        {name:'文件夹2',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),active:false},
+        {name:'文件夹1',type:'folder',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
+        {name:'文件夹2',type:'folder',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),active:false},
       ],
     };
   },

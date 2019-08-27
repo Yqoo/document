@@ -462,7 +462,7 @@ export default {
           clickFile: ()=>{ //单击文件夹（文件），切换工具栏
             let tag = msg.data;
             this.lists = tag.utilList;
-            this.changeIsClick(tag.clickTag);
+            tag.clickTag != '' && this.changeIsClick(tag.clickTag);
             delete this.attrs['name'];  //如果不删除name,在弹框显示后，点击其他地方会一直出现弹框
           },
           clickBlock: ()=>{ // 点击空白处，切换工具栏，清除点击过的边框
