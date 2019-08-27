@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-24 11:37:02
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-21 15:41:24
+ * @LastEditTime: 2019-08-27 11:11:04
  -->
 <template>
     <el-row>
@@ -143,8 +143,34 @@
             <div class="grid-content5">
                 <i class="el-icon-chat-dot-square hvr-buzz" @click="drawer = true "></i>
             </div>  
-            <el-drawer title='messageBox' :visible.sync="drawer" :direction="direction" size="400px" custom-class="rightMessageBox">
-                <div>messageBox</div>
+            <el-drawer :visible.sync="drawer" :direction="direction" size="400px" custom-class="rightMessageBox">
+                <div slot="title">
+                    <span class="myFont">信息服务</span>
+                </div>
+                <div class="messageBoxTitle">
+                    <div>学习中心</div>
+                    <div>查看更多<i class="el-icon-more"></i> </div>
+                </div>
+                <div class="messageBoxMain">
+                    <div v-for=" (video,index) in videos" :key='index' class="slideInRight animated">
+                        <p>{{ video.title }}</p>
+                        <video :src="video.src" style="width:320px;height:130px;margin-top:10px;" controls="controls">
+                            您的浏览器不支持播放此视频。
+                        </video>
+                    </div>
+                </div>
+                <div class="messageBoxBottom">
+                    <div class="bottomHeader">
+                        <div @click="isCollapse = !isCollapse" style="cursor:pointer;color:#3fc1c9">{{ collapse }}</div>
+                        <div>清楚所有通知</div>
+                    </div>
+                    <div class="bottomBody slideInUp animated">
+                        <div v-for="(b,i) in fns" :key='i'>
+                            <i :class="b.icon"></i>
+                            <p>{{b.title}}</p>
+                        </div>
+                    </div>
+                </div>
             </el-drawer>  
         </el-col>
     </el-row> 
@@ -178,6 +204,64 @@ export default {
             searchDirection:'ltr',
             innerDrawer:false,
             searchType:'web',//默认绑定显示的search tabs标签
+            videos:[
+                {
+                    title:'如何轻松分发资料？',
+                    src:require('@/assets/video/a.mp4'),
+                },
+                {
+                    title:'如何便捷共享文件？',
+                    src:require('@/assets/video/a.mp4'),
+                },
+                /* {
+                    title:'如何编辑文件？',
+                    src:require('@/assets/video/a.mp4'),
+                }, */
+            ],
+            bottomFns:[
+                {
+                    icon:'el-icon-phone',
+                    title:'即时通讯',
+                    type:'im'
+                },
+                {
+                    icon:'el-icon-info',
+                    title:'代办通知',
+                    type:'inform'
+                },
+                {
+                    icon:'el-icon-chat-dot-round',
+                    title:'消息中心',
+                    type:'message'
+                },
+                {
+                    icon:'el-icon-message',
+                    title:'邮件消息',
+                    type:'email'
+                },
+                {
+                    icon:'el-icon-edit-outline',
+                    title:'学习中心',
+                    type:'laearn'
+                },
+                {
+                    icon:'el-icon-service',
+                    title:'我要服务',
+                    type:'server'
+                },
+                {
+                    icon:'el-icon-question',
+                    title:'需求建议',
+                    type:'advise'
+                },
+                {
+                    icon:'el-icon-phone-outline',
+                    title:'我要投诉',
+                    type:'complain'
+
+                },
+            ],
+            isCollapse:false,
         }
     },
     created(){
@@ -239,7 +323,7 @@ export default {
         barChangePosition( position ){  //记录底部菜单的位置
             this.$emit('barChangePosition', position);
             this.$store.commit('changeFooterPosition', position);
-        }
+        },
     },
     computed:{
         tabsFilter(){
@@ -258,6 +342,15 @@ export default {
                 }
                 return tabs
             }
+        },
+        collapse(){
+            let msg = ''
+            this.isCollapse && ( msg  = '展开') || ( msg  = '折叠')
+            return msg
+        },
+        fns(){
+            if( this.isCollapse ) return this.bottomFns.slice(0,4);
+            else return this.bottomFns;
         }
     },
 }
@@ -331,6 +424,74 @@ export default {
         box-shadow:0 0 0 1px hsla(0,0%,100%,.3) inset,0 .5em 1em rgba(0,0,0,0.6)!important;
         text-shadow:0 1px 1px hsla(0,0%,100%,.3)!important;
         color:#fff!important;
+        position: relative;
+        & .myFont {
+            font-size: 13px;
+            color: #fff;
+        }
+        & .el-drawer__header{
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            & .el-dialog__close{
+                font-size: 13px;
+                color:#fff;
+            }
+        }
+        & .messageBoxTitle {
+            display: flex;
+            flex-flow: row wrap;
+            font-size: 12px;
+            color: #fff;
+            justify-content: space-around;
+            & div:nth-child(2){
+                cursor: pointer;
+            }
+        }
+        & .messageBoxMain {
+            padding: 0px 30px;
+            font-size: 12px;
+            display: flex;
+            flex-flow: column;
+            & div {
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                margin-top: 10px;
+                padding: 3px;
+            }
+        }
+        & .messageBoxBottom{
+            font-size: 12px;
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            & .bottomHeader {
+                display: flex;
+                flex-flow: row wrap;
+                justify-content: space-around;
+            }
+            & .bottomBody {
+                display: flex;
+                flex-flow: row wrap;
+                padding: 10px 10px 0px 30px;
+                & div {
+                    width: 80px;
+                    height: 50px;
+                    margin: 3px;
+                    background-color:rgba(0,0,0,0.7);
+                    border-radius: 5px;
+                    cursor: pointer;
+                    text-align: center;
+                    & i {
+                        font-size: 20px;
+                        padding-top: 5px;
+                    }
+                    & p {
+                        font-size: 10px;
+                    }
+                }
+            }
+        }
     }
     .searchDrawer {
         height: 500px!important;
@@ -431,5 +592,8 @@ export default {
                 width: 90%!important;
             }
         }
+    }
+    .videoPlay{
+        width: 320px;
     }
 </style>
