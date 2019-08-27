@@ -54,7 +54,7 @@
                   :h='item.h'
                   @moved="movedEvent"
                 >
-                <div :type="item.type" @dblclick="applicationHandle(item.title)" :title="item.name">
+                <div :type="item.type" @contextmenu.prevent.stop="rightMouse($event, item)" @dblclick="applicationHandle(item.title)" :title="item.name">
                   <img :type="item.type" :src="item.img" :alt="item.title" :style="iconStyle">
                   <p :type="item.type">{{item.name}}</p>
                 </div>
@@ -198,6 +198,8 @@
       <el-button type="info" icon="el-icon-caret-top" class="hvr-bob" circle></el-button>
       <el-button type="info" icon="el-icon-caret-bottom" class='hvr-hang' circle></el-button>
     </div>
+    <createShare v-if="showShare" :show='showShare' :info='clickItem'></createShare>
+    <createEnjoy v-if="showEnjoy" :show="showEnjoy" :info='clickItem'></createEnjoy>
   </el-container>
 </template>
 
@@ -218,6 +220,8 @@ import taskManager from "@/components/taskManager/taskManager.vue";
 import domainConsole from "@/components/domainConsole/domainConsole.vue";
 import note from "@/components/note/note.vue";
 import tools from  "@/assets/js/utils/tools.js";
+import createEnjoy from '@/components/share/createEnjoy.vue'; //创建共享
+import createShare from '@/components/share/createShare.vue'; //创建分享
 import { GridLayout, GridItem } from 'vue-grid-layout';
 export default {
   name: "home",
@@ -237,11 +241,16 @@ export default {
     account,
     taskManager,
     domainConsole,
-    note
+    note,
+    createEnjoy,
+    createShare
   },
   data() {
     return {
       uploadShow:false,
+      showShare: false, // 控制创建分享弹框显示隐藏
+      showEnjoy:false,  //  控制创建共享弹框显示隐藏
+      clickItem:{}, //桌面点中的图标数据
       groundGlass: {
         background: `hsla(0,0%,100%,.25) border-box`,
         overflow: `hidden`,
@@ -340,33 +349,38 @@ export default {
     }
   },
   methods: {
-    rightMouse( e ) {
-      //右键事件
+    rightMouse( e, item ) {
       this.isRightMouseClick = true;
-      let type = e.target.getAttribute('type');
-      //桌面下右键弹出层 desktop 应用下右键弹出层 app  设置|| 我的电脑等下弹出层 recycle 回收站下弹出层 recycle
-      switch ( type ) {
-        case '1':
-          this.rules = 'app';//应用
-          break;
-        case 'iCloud':
-          this.rules = 'iCloud';//我的云端
-          break;
-        case 'recycle':
-          this.rules = 'recycle';//回收站
-          break;
-        case 'system':
-          this.rules = 'system'; //系统设置
-          break;
-        case 'file':
-          this.rules = 'file'; //文件、文件夹
-          break;
-        case 'zip':
-          this.rules = 'zip'; //压缩文件
-          break;
-        default:
-          this.rules = 'desktop';//桌面
-          break;
+      //右键事件
+      if(item){
+        let type = item.type;
+        this.clickItem = item;
+        //桌面下右键弹出层 desktop 应用下右键弹出层 app  设置|| 我的电脑等下弹出层 recycle 回收站下弹出层 recycle
+        switch ( type ) {
+          case '1':
+            this.rules = 'app';//应用
+            break;
+          case 'iCloud':
+            this.rules = 'iCloud';//我的云端
+            break;
+          case 'recycle':
+            this.rules = 'recycle';//回收站
+            break;
+          case 'system':
+            this.rules = 'system'; //系统设置
+            break;
+          case 'file':
+            this.rules = 'file'; //文件、文件夹
+            break;
+          case 'zip':
+            this.rules = 'zip'; //压缩文件
+            break;
+          default:
+            this.rules = 'desktop';//桌面
+            break;
+        }
+      } else{
+        this.rules = 'desktop';
       }
       this.position = Object.assign({
         mainHeight: this.$refs.main.$el.clientHeight,
@@ -381,6 +395,7 @@ export default {
     },
     hideRightMenus(){
       this.isRightMouseClick = false;
+      this.clickItem = {};
     },
     closeMenus( params ){
       this.isRightMouseClick = false;//关闭右键菜单
@@ -404,6 +419,14 @@ export default {
       if(params.name === 'upload'){
         this.uploadShow = true;
         document.querySelector('.upload-demo').querySelector('.el-upload').click();
+      }
+      //创建分享
+      if(params.name === 'share'){
+        this.showShare = true;
+      }
+      //创建共享
+      if(params.name === 'enjoy'){
+        this.showEnjoy = true;
       }
     },
     createNewfile( ){ // 新建文件夹（新建文件）：失去焦点时创建
@@ -534,8 +557,8 @@ export default {
     let clientWidth = Math.floor(document.body.clientHeight);
     let clientHeight = Math.floor(document.body.clientHeight);
     let row = Math.floor((clientWidth - 80) / this.rowHeight);
-    // this.axios.get('', {row, col: this.colNumber, clientWidth, clientHeight})
-    //   .then(( res ) => {
+    // this.axios.get(`/userDesktop/getUserDesktop?row=${row}&col=${this.colNumber}&clientWidth=${clientWidth}&clientHeight=${clientHeight}`)
+    //   .then((res)=>{
     //     console.log(res)
     //   });
   },
