@@ -180,6 +180,7 @@
         @barChangePosition="barChangePosition" 
         @lockScreen="lockScreen"></bottomBar>
     </el-footer>
+    <!-- 上传组件 -->
     <el-upload
       ref='upload'
       class="upload-demo"
@@ -192,6 +193,11 @@
       :show-file-list="false"
       multiple>
     </el-upload>
+    <!-- 图标翻页 -->
+    <div class="pageBtn clearfix">
+      <el-button type="info" icon="el-icon-caret-top" class="hvr-bob" circle></el-button>
+      <el-button type="info" icon="el-icon-caret-bottom" class='hvr-hang' circle></el-button>
+    </div>
   </el-container>
 </template>
 
@@ -296,9 +302,11 @@ export default {
         {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',name:'系统设置',title:'system',img:require('../assets/image/icons/deskIcons/icon-setting.png')},
         {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',name:'新闻',title:'news',img:require('../assets/image/icons/deskIcons/icon-news.png')},
         {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',name:'回收站',title:'recycle',img:require('../assets/image/icons/deskIcons/icon-recycle.png')},
-        {"x":1,'y':1,'w':1,'h':1,'i':'7',type: '0'},
-        {"x":1,'y':2,'w':1,'h':1,'i':'8',type: '0'},
-        {"x":1,'y':3,'w':1,'h':1,'i':'9',type: '0'},
+        {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',name:'文件夹',title:'folder',img:require('../assets/image/icons/deskIcons/tree-folder.png')},
+        {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',name:'word文档',title:'file',img:require('../assets/image/icons/deskIcons/icon-word.png')},
+        {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',name:'压缩文件',title:'zip',img:require('../assets/image/icons/deskIcons/zip.png')},
+        {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0'},
+        {"x":1,'y':5,'w':1,'h':1,'i':'11',type: '0'},
       ],
       rowHeight: 80,  //图标的高度
       newFile:{ //新建文件夹、新建文件盒子
@@ -346,6 +354,15 @@ export default {
           break;
         case 'recycle':
           this.rules = 'recycle';//回收站
+          break;
+        case 'system':
+          this.rules = 'system'; //系统设置
+          break;
+        case 'file':
+          this.rules = 'file'; //文件、文件夹
+          break;
+        case 'zip':
+          this.rules = 'zip'; //压缩文件
           break;
         default:
           this.rules = 'desktop';//桌面
@@ -721,6 +738,20 @@ html,body,#app,.el-container {
     font-size: 12px;
     padding: 0;
     text-align: center;
+  }
+}
+.pageBtn{
+  position: fixed;
+  right: 0;
+  width: 40px;
+  overflow: visible !important;
+  right: 1%;
+  bottom: 5%;
+  & button{
+    float: left;
+    margin-left: 0px !important;
+    margin-top: 10%;
+    opacity: 0.6;
   }
 }
 </style>
