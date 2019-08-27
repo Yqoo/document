@@ -383,6 +383,11 @@ export default {
           name: params.name
         });
       }
+      //上传
+      if(params.name === 'upload'){
+        this.uploadShow = true;
+        document.querySelector('.upload-demo').querySelector('.el-upload').click();
+      }
     },
     createNewfile( ){ // 新建文件夹（新建文件）：失去焦点时创建
       let p = this.newFile.position;
@@ -496,12 +501,12 @@ export default {
       this.isShowBox[component].show = open;
       this.isShowBox[component].display = open;
     },
-    uploadSuccess(res, file, fileList){ //拖拽上传文件成功
+    uploadSuccess(res, file, fileList){ //拖拽、右键点击上传文件成功
       console.log(fileList);
       this.$refs.upload.clearFiles();
       document.querySelector('.upload-demo').style='display:none';
     },
-    uploadErr(err, file, fileList){
+    uploadErr(err, file, fileList){ //拖拽、右键点击上传文件失败
       this.$message('上传失败！');
       this.$refs.upload.clearFiles();
       document.querySelector('.upload-demo').style='display:none';
