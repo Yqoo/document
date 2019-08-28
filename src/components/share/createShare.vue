@@ -6,6 +6,7 @@
     :append-to-body="true"
     :close-on-click-modal="false"
     :modal="false"
+    :before-close="closeDialog"
     width="50%">
     <div slot="title" class="messageBox-title">
         <img src="@/assets/image/icons/fileIcons/myshare.png">
@@ -15,7 +16,7 @@
         <img src="@/assets/image/icons/fileIcons/attribute.png">
         <span>分享资源</span>
         <span class="name">
-            <img :src="info.img">
+            <img :src="require(`@/assets/image/icons/${info.img}`)">
             {{info.name}}
         </span>
     </div>
@@ -28,13 +29,14 @@
     </div>
     <el-menu mode="horizontal">
         <el-menu-item :disabled='true'><img src="@/assets/image/icons/fileIcons/power.png"/>分享权限</el-menu-item>
-        <el-menu-item><el-checkbox :indeterminate="isIndeterminate" v-model="checkAllLimit" @change="handleAllLimitChange">所有</el-checkbox></el-menu-item>
-        <el-menu-item><el-checkbox>日常操作</el-checkbox></el-menu-item>
-        <el-menu-item><el-checkbox>在线操作</el-checkbox></el-menu-item>
-        <el-menu-item><el-checkbox>转发操作</el-checkbox></el-menu-item>
+        <el-menu-item><el-checkbox v-model="checkAllLimit" @change="handleAllLimitChange">所有</el-checkbox></el-menu-item>
+        <el-menu-item><el-checkbox v-model="checkDialy" @change="handleDailyChange">日常操作</el-checkbox></el-menu-item>
+        <el-menu-item><el-checkbox v-model="checkOnline" @change="handleOnlineChange">在线操作</el-checkbox></el-menu-item>
+        <el-menu-item><el-checkbox v-model="checkForward" @change="handleForwardChange">转发操作</el-checkbox></el-menu-item>
     </el-menu>
+        {{checkLimits}}
     <el-checkbox-group v-model="checkLimits">
-        <el-checkbox v-for="item in shareLimits" :label="item" :key="item">{{item}}</el-checkbox>
+        <el-checkbox v-for="item in shareLimits" :label="item" :key="item.name">{{item.label}}</el-checkbox>
     </el-checkbox-group>
     <el-menu mode="horizontal">
         <el-menu-item :disabled='true'><img src="@/assets/image/icons/fileIcons/calendar.png"/>分享期限</el-menu-item>
@@ -58,7 +60,7 @@
     </div>
     <div slot="footer" class="dialog-footer">
         <el-button type='primary' size='small'>创建链接</el-button>
-        <el-button @click="closeDialog('cloudForm1')" size="small">关闭</el-button>
+        <el-button @click="closeDialog" size="small">关闭</el-button>
     </div>
   </el-dialog>
 </template>
@@ -74,18 +76,43 @@ export default {
         dialogVisible: this.show,
         shareType: '1',
         checkAllLimit: false, //创建分享  勾选所有
+        checkDialy: false, // 勾选所有日常操作
+        checkOnline:false, // 勾选所有在线操作
+        checkForward:false, // 勾选所有转发操作
         checkLimits:[], //已勾选的权限
         shareDate:'1', //分享期限
         visitTime:'10', //访问次数
-        shareLimits:['新建','预览','复制','剪切','命名','删除','加密','解密','上传','下载','在线编辑','协同编辑','压缩','解压','打印','共享','分享','发送','分级授权','管理者','回收站'],
+        shareLimits:[
+            {id:1,name:'new',label:'新建',type:'daily'},{id:2,name:'preview',label:'剪切',type:'daily'},{name:'copy',label:'复制',type:'daily'},{name:'paste',label:'粘贴',type:'daily'},{name:'rename',label:'重命名',type:'daily'},{name:'del',label:'删除',type:'daily'},
+            {name:'preview',label:'在线预览',type:'online'},{name:'edit',label:'在线编辑',type:'online'},{name:'collaborative',label:'协同编辑',type:'online'},{name:'compress',label:'在线压缩',type:'online'},{name:'decompress',label:'在线解压',type:'online'},{name:'encryption',label:'文件加密',type:'online'},{name:'deciphering',label:'文件解密',type:'online'},
+            {name:'upload',label:'上传',type:'forward'},{name:'down',label:'下载',type:'forward'},{name:'print',label:'打印',type:'forward'},{name:'save',label:'保存我的云端',type:'forward'}
+        ],
     };
   },
+  computed: {
+      dailyLimits(){ //日常操作
+          return this.shareLimits.filter((e)=>{
+              return e.type === 'daily';
+          });
+      },
+      onlineLimits(){ // 在线操作
+          return this.shareLimits.filter((e) => {
+              return e.type === 'online';
+          });
+      },
+      forwardLimits(){ // 转发操作
+          return this.shareLimits.filter((e) => {
+              return e.type === 'forward';
+          });
+      }
+  },
   methods: {
-      handleAllLimitChange(){ //创建分享：勾选所有分享权限
-          //
+      handleAllLimitChange( val ){ //创建分享：勾选所有分享权限
+        //   console.log(val)
+          this.checkLimits = val ? shareLimits : [];
       },
       closeDialog(){ //关闭弹框
-          //
+          this.$emit('closeDialog','showShare');
       }
   },
   mounted(){
