@@ -6,6 +6,7 @@
     :append-to-body="true"
     :close-on-click-modal="false"
     :modal="false"
+    :before-close="closeDialog"
     width="50%">
       <div slot="title" class="messageBox-title">
         <img src="@/assets/image/icons/fileIcons/person.png">
@@ -79,7 +80,7 @@
     </el-tabs>
     <div slot="footer" class="dialog-footer">
         <el-button type='primary' size='small'>确定</el-button>
-        <el-button @click="closeDialog('cloudForm1')" size="small">关闭</el-button>
+        <el-button @click="closeDialog" size="small">关闭</el-button>
     </div>
   </el-dialog>
 </template>
@@ -102,6 +103,9 @@ export default {
   methods: {
       handleSelect(){ //选择共享范围：内部组织 || 外部组织
           //
+      },
+      closeDialog(){
+          this.$emit('closeDialog', 'showEnjoy');
       }
   }
 }

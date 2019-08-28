@@ -6,6 +6,7 @@
     :append-to-body="true"
     :close-on-click-modal="false"
     :modal="false"
+    :before-close="closeDialog"
     width="50%">
     <div slot="title" class="messageBox-title">
         <img src="@/assets/image/icons/fileIcons/myshare.png">
@@ -58,7 +59,7 @@
     </div>
     <div slot="footer" class="dialog-footer">
         <el-button type='primary' size='small'>创建链接</el-button>
-        <el-button @click="closeDialog('cloudForm1')" size="small">关闭</el-button>
+        <el-button @click="closeDialog" size="small">关闭</el-button>
     </div>
   </el-dialog>
 </template>
@@ -85,7 +86,7 @@ export default {
           //
       },
       closeDialog(){ //关闭弹框
-          //
+          this.$emit('closeDialog','showShare');
       }
   },
   mounted(){

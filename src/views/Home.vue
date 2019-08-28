@@ -198,8 +198,8 @@
       <el-button type="info" icon="el-icon-caret-top" class="hvr-bob" circle></el-button>
       <el-button type="info" icon="el-icon-caret-bottom" class='hvr-hang' circle></el-button>
     </div>
-    <createShare v-if="showShare" :show='showShare' :info='clickItem'></createShare>
-    <createEnjoy v-if="showEnjoy" :show="showEnjoy" :info='clickItem'></createEnjoy>
+    <createShare v-if="showShare" :show='showShare' :info='clickItem' @closeDialog="closeDialog"></createShare>
+    <createEnjoy v-if="showEnjoy" :show="showEnjoy" :info='clickItem' @closeDialog="closeDialog"></createEnjoy>
   </el-container>
 </template>
 
@@ -550,6 +550,9 @@ export default {
       this.$message('上传失败！');
       this.$refs.upload.clearFiles();
       document.querySelector('.upload-demo').style='display:none';
+    },
+    closeDialog( tag ){ //关闭 创建分享，创建共享弹框
+      this[tag] = false;
     }
   },
   created(){
