@@ -353,10 +353,14 @@ export default {
       return gridItemsList;
     },
     existingIcons:{ // 桌面已有图标
-      // get: ()=>{},
-      // return this.gridItemDatas.filter((e) => {
-      //   return e.name != null;
-      // });
+      get: ()=>{
+        return this.gridItemDatas.filter((e) => {
+          return e.name != null;
+        });
+      },
+      set: ( val )=>{
+        return val;
+      }
     },
   },
   methods: {
@@ -556,7 +560,6 @@ export default {
       let layout = newLayout.filter((e) => {
         return e.name != null
       });
-      this.existingIcons = layout;
       let params = new URLSearchParams();
       params.append('layouts', JSON.stringify(layout));
       params.set('clientWidth',this.clientWidth);
