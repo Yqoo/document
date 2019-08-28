@@ -183,7 +183,7 @@
     <!-- 上传组件 -->
     <el-upload
       ref='upload'
-      class="deskUpload"
+      id="deskUpload"
       v-show="uploadShow"
       drag
       action="https://jsonplaceholder.typicode.com/posts/"
@@ -435,7 +435,7 @@ export default {
       //上传
       if(params.name === 'upload'){
         this.uploadShow = true;
-        document.querySelector('.deskUpload').querySelector('.el-upload').click();
+        document.querySelector('#deskUpload').querySelector('.el-upload').click();
       }
       //创建分享
       if(params.name === 'share'){
@@ -572,12 +572,12 @@ export default {
     uploadSuccess(res, file, fileList){ //拖拽、右键点击上传文件成功
       console.log(fileList);
       this.$refs.upload.clearFiles();
-      document.querySelector('.deskUpload').style='display:none';
+      document.querySelector('#deskUpload').style='display:none';
     },
     uploadErr(err, file, fileList){ //拖拽、右键点击上传文件失败
       this.$message('上传失败！');
       this.$refs.upload.clearFiles();
-      document.querySelector('.deskUpload').style='display:none';
+      document.querySelector('#deskUpload').style='display:none';
     },
     closeDialog( tag ){ //关闭 创建分享，创建共享弹框
       this[tag] = false;
@@ -650,8 +650,8 @@ export default {
       })
       dropbox.addEventListener("dragenter",function (e) {
         e.stopPropagation();
-        e.preventDefault();debugger
-        document.querySelector('.deskUpload').style='display:block';
+        e.preventDefault();
+        document.querySelector('#deskUpload').style='display:block';
       })
       dropbox.addEventListener("dragover",function (e) {
         e.stopPropagation();
@@ -802,13 +802,12 @@ html,body,#app,.el-container {
     }
   }
 }
-.deskUpload .el-upload{
+#deskUpload .el-upload{
   position: fixed;
   top: 0;
   left:0;
   width: 100%;
   height: 100%;
-  display: none;
   opacity: 0;
   & .el-upload-dragger{
     width: 100%;
