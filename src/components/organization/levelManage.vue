@@ -1,18 +1,20 @@
 <!--
  * @Date: 2019-08-16 09:18:16
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-27 18:35:32
+ * @LastEditTime: 2019-08-28 16:33:56
  * @Desc: 组织与用户下的等级管理组件
  -->
 <template>
   <div class='levelManage'>
     <div class="topBtns">
-      <el-button size='mini' icon="el-icon-circle-plus-outline" type="primary" plain @click="dialogAddvisible = true ">新建</el-button>
-      <el-button size='mini' icon="el-icon-edit" type="success" plain @click='edit'>编辑</el-button>
-      <el-button size='mini' icon="el-icon-delete" type="danger" plain @click="del">删除</el-button>
-      <el-button size='mini' icon="el-icon-refresh" type="warning" plain>刷新</el-button>
-      <el-button size='mini' icon="el-icon-search" type="normal" plain @click="search">搜索</el-button>
-      <el-button size='mini' icon="el-icon-warning-outline" type="info" plain>帮助</el-button>
+      <el-button-group>
+        <el-button size='mini' icon="el-icon-circle-plus-outline" type="primary"  @click="dialogAddvisible = true ">新建</el-button>
+        <el-button size='mini' icon="el-icon-edit" type="success"  @click='edit'>编辑</el-button>
+        <el-button size='mini' icon="el-icon-delete" type="danger"  @click="del">删除</el-button>
+        <el-button size='mini' icon="el-icon-refresh" type="warning"  @click="refresh">刷新</el-button>
+        <el-button size='mini' icon="el-icon-search" type="normal"  @click="search">搜索</el-button>
+        <el-button size='mini' icon="el-icon-warning-outline" type="info" >帮助</el-button>
+      </el-button-group>
     </div>
     <el-table
       :data='tableData'
@@ -23,6 +25,7 @@
       ref='levelTable'
       @selection-change='selectRow'
       @row-click='rowClick'
+      :highlight-current-row='true'
       >
       <el-table-column
         fixed='left'
@@ -76,7 +79,8 @@
       :modal="true"
       :modal-append-to-body="false"
       :close-on-click-modal="false"
-      :visible.sync="dialogAddvisible">
+      :visible.sync="dialogAddvisible"
+      @close="closeDialog">
       <div slot="title" class="msgTitle">
         <img :src="require('@/assets/image/icons/table/table-add.png')">
         <span v-if='isAdd'>新建</span>
@@ -160,7 +164,7 @@ export default {
           fn( new Error('请输入正整数'));
         } else fn();
       } else fn( new Error('请输入级别值'));
-    }
+    };
     return {
       tableData:[],
       dialogAddvisible:false,//控制显示新建框
@@ -195,13 +199,14 @@ export default {
       iconName:'',
       chooseList:[],//被选中的行数据
       isAdd:true,//是否是新增
-
+      recordAdmin:'',//临时保存创建人
     };
   },
   created(){
     this.axios.get('/partyLevel/getType').then( res => {
       if( res.data.code === 200 ){
         this.addForm.createBy = res.data.obj.createBy;
+        this.recordAdmin = res.data.obj.createBy;
         delete res.data.obj.createBy;
         Object.assign( this.options,res.data.obj );
       }
@@ -258,10 +263,10 @@ export default {
       }).then( () => {
         this.axios.post('/partyLevel/deleteById',qs.stringify({id:row[index].id})).then( res => {
           res.data.code === 200 && ( row.splice(index,1) );
-        }).catch( err => this.$message.error( err ));
+        }).catch( err => this.$message.error( 'err' ));
       }).catch( () => this.$message.info('已取消删除'))
     },
-    del(){
+    del(){//顶部工具栏下的删除
       let list = this.chooseList;
       if( list.length === 0 )  this.$message.warning('请至少选择一行数据进行删除');
       else {
@@ -270,28 +275,43 @@ export default {
           cancelButtonText:'取消',
           type:'warning'
         }).then( () => {
-          let ids = [];
-          ids = list.map( ( item,v ) => {
+          let ids = list.map( ( item,v ) => {
             return item.id;
           });
           this.axios.post('/partyLevel/deleteById',qs.stringify({id:ids.join(',')})).then( res => {
-            res.data.code === 200 && ( row.splice(index,1) );
-          }).catch( err => this.$message.error( err ));
+            if( res.data.code === 200 ){
+              let _tableData = [];//临时保存表数据
+              this.tableData.forEach( (item,index) => {// 多删情况下先保存不需要被删的项，然后再替换回去
+                if( ids.indexOf( item.id ) === -1){
+                  _tableData.push( item );
+                }
+              });
+              this.tableData = _tableData;
+              if( this.tableData.length === 0 ){
+                this.getPage( this.currentPage -= 1,this.size);
+              }else {
+                this.getPage(this.currentPage,this.size);
+              };
+            } else this.$message.error( res.data.desc );
+          }).catch( err => this.$message.error( 'err' ));
         }).catch( () => this.$message.info('已取消删除'))
       }
     },
-    selectRow( selection ){
+    selectRow( selection ){//所选择行的数组
       this.chooseList = selection;
     },
-    rowClick( row ){
+    refresh(){//顶部工具栏下的刷新
+      this.getPage( 1,this.size );
+    },
+    rowClick( row ){//table行点击事件
       this.$refs.levelTable.toggleRowSelection( row );
     },
     search(){
-      this.$prompt('请输入关键词','搜索',{
+      this.$prompt('请输入关键词(名称、级别值、创建人)','搜索',{
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then( ({value} ) => {
-        console.log( value )
+        this.getPage( 1, this.size, value?value:'' );
       }).catch( () => {
         this.$message({
           type: 'warning',
@@ -332,14 +352,17 @@ export default {
     handleCurrentChange( val ){//当前页改变的回调
       this.currentPage = val;
       this.getPage(val,this.size);
-    }
-  },
-  watch:{
-    dialogAddvisible( newV,oldV ){
-      if( !newV ){
-        this.$refs.addForm.resetFields();
-        this.isAdd = true;
-      }
+    },
+    closeDialog(){
+      Object.assign(this.addForm,{
+        name:'',
+        type:'',
+        level:'',
+        icon:'',
+        createBy:this.recordAdmin,
+        createTime:tools._time()
+      });
+      this.isAdd = true;
     },
   },
 }
