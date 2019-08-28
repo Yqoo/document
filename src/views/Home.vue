@@ -20,7 +20,7 @@
           <span style="font-size:12px;color:red">{{lockTips}}</span>
         </div>
       </div>
-      <vue-drawer-layout  ref="drawerLayout" :drawer-width="400" :reverse="true" :enable="isMoveDrawer" :backdrop="false">       
+      <vue-drawer-layout v-if="defaultApps!=[]"  ref="drawerLayout" :drawer-width="400" :reverse="true" :enable="isMoveDrawer" :backdrop="false">       
         <div slot="content" @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
           <div class="appList">
             <div class="defaultApp">
@@ -55,7 +55,7 @@
                   @moved="movedEvent"
                 >
                 <div :type="item.type" @contextmenu.prevent.stop="rightMouse($event, item)" @dblclick="applicationHandle(item.title)" :title="item.name">
-                  <img :type="item.type" :src="item.img" :alt="item.title" :style="iconStyle">
+                  <img :type="item.type" :src="item.img!=null&&require(`@/assets/image/icons/${item.img}`)" :alt="item.title" :style="iconStyle">
                   <p :type="item.type">{{item.name}}</p>
                 </div>
                 </grid-item>
@@ -194,9 +194,9 @@
       multiple>
     </el-upload>
     <!-- 图标翻页 -->
-    <div class="pageBtn clearfix">
-      <el-button type="info" icon="el-icon-caret-top" class="hvr-bob" circle></el-button>
-      <el-button type="info" icon="el-icon-caret-bottom" class='hvr-hang' circle></el-button>
+    <div v-if="pageNumber > 1" class="pageBtn clearfix">
+      <el-button type="info" icon="el-icon-caret-top" class="hvr-bob" @click="pageTurning('prev')" circle title="上一页"></el-button>
+      <el-button type="info" icon="el-icon-caret-bottom" class='hvr-hang' @click="pageTurning('next')" circle title="下一页"></el-button>
     </div>
     <createShare v-if="showShare" :show='showShare' :info='clickItem' @closeDialog="closeDialog"></createShare>
     <createEnjoy v-if="showEnjoy" :show="showEnjoy" :info='clickItem' @closeDialog="closeDialog"></createEnjoy>
@@ -305,18 +305,8 @@ export default {
       lPwd:'',//锁屏密码
       lockTips:'',//解锁密码错误时的提醒信息
       userSettingLockTime:this.$store.state.lockTime,//锁屏时间
-      defaultApps:[  // 桌面默认展示的list
-        {"x":0,'y':0,'w':1,'h':1,'i':'1',type: 'iCloud',name:'我的云端',title:'myCloud',img:require('../assets/image/icons/deskIcons/icon-computer.png')},
-        {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',name:'浏览器',title:'browser',img:require('../assets/image/icons/deskIcons/icon-geogle.png')},
-        {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',name:'系统设置',title:'system',img:require('../assets/image/icons/deskIcons/icon-setting.png')},
-        {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',name:'新闻',title:'news',img:require('../assets/image/icons/deskIcons/icon-news.png')},
-        {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',name:'回收站',title:'recycle',img:require('../assets/image/icons/deskIcons/icon-recycle.png')},
-        {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',name:'文件夹',title:'folder',img:require('../assets/image/icons/deskIcons/tree-folder.png')},
-        {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',name:'word文档',title:'file',img:require('../assets/image/icons/deskIcons/icon-word.png')},
-        {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',name:'压缩文件',title:'zip',img:require('../assets/image/icons/deskIcons/zip.png')},
-        {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0'},
-        {"x":1,'y':5,'w':1,'h':1,'i':'11',type: '0'},
-      ],
+      gridItemDatas:[], //桌面图标的所有数据（过滤前总数据）
+      defaultApps:[], // 桌面默认展示的list（过滤后）
       rowHeight: 80,  //图标的高度
       newFile:{ //新建文件夹、新建文件盒子
         show:false,
@@ -324,6 +314,8 @@ export default {
         icon: '',
         name: ''
       },
+      pageNumber: 1, //桌面图标总页数
+      pageIndex:1, //桌面图标点击的页数
     };
   },
   computed:{
@@ -346,7 +338,17 @@ export default {
     colNumber() { // 图标展示的列数
       let clientWidth = document.body.clientWidth;
       return Math.floor( clientWidth / this.rowHeight );
-    }
+    },
+    gridItems(){  // 桌面图标：根据页数，确定每页的图标（数组）
+      let gridItemsList = {};
+      for(let i=1; i<=this.pageNumber; i++){
+        var list = 'list'+i;
+        gridItemsList[list] = this.gridItemDatas.filter((e)=>{
+          return e.pagerNumber === i;
+        });
+      }
+      return gridItemsList;
+    },
   },
   methods: {
     rightMouse( e, item ) {
@@ -370,7 +372,10 @@ export default {
             this.rules = 'system'; //系统设置
             break;
           case 'file':
-            this.rules = 'file'; //文件、文件夹
+            this.rules = 'file'; //文件
+            break;
+          case 'folder':
+            this.rules = 'folder'; //文件夹
             break;
           case 'zip':
             this.rules = 'zip'; //压缩文件
@@ -553,6 +558,26 @@ export default {
     },
     closeDialog( tag ){ //关闭 创建分享，创建共享弹框
       this[tag] = false;
+    },
+    pageTurning( tag ){ //桌面图标翻页
+      switch(tag){
+        case 'prev':
+          if(this.pageIndex === 1){
+            this.defaultApps = this.gridItems['list1'];
+            return false;
+          }
+          this.pageIndex--;
+          this.defaultApps = this.gridItems['list'+this.pageIndex];
+          break;
+        case 'next':
+          if(this.pageIndex === this.pageNumber){
+            this.defaultApps = this.gridItems['list'+this.pageNumber];
+            return false;
+          }
+          this.pageIndex++;
+          this.defaultApps = this.gridItems['list'+this.pageIndex];
+          break;
+      }
     }
   },
   created(){
@@ -560,10 +585,12 @@ export default {
     let clientWidth = Math.floor(document.body.clientHeight);
     let clientHeight = Math.floor(document.body.clientHeight);
     let row = Math.floor((clientWidth - 80) / this.rowHeight);
-    // this.axios.get(`/userDesktop/getUserDesktop?row=${row}&col=${this.colNumber}&clientWidth=${clientWidth}&clientHeight=${clientHeight}`)
-    //   .then((res)=>{
-    //     console.log(res)
-    //   });
+    this.axios.get(`/userDesktop/getUserDesktop?row=${row}&col=${this.colNumber}&clientWidth=${clientWidth}&clientHeight=${clientHeight}`)
+      .then((res)=>{
+        this.gridItemDatas = res.data.obj.layout;
+        this.pageNumber = res.data.obj.pagerNumber;
+        this.defaultApps = this.gridItems['list1'];
+      });
   },
   mounted(){
     this.footerClass = this.$store.state.footerPosition;
