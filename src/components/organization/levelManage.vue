@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-16 09:18:16
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-27 18:28:27
+ * @LastEditTime: 2019-08-27 18:35:32
  * @Desc: 组织与用户下的等级管理组件
  -->
 <template>
@@ -240,8 +240,7 @@ export default {
               if( res.data.code === 200 ){
                 this.$message.success('修改成功');
                 this.getPage( this.currentPage,this.size);
-                this.dialogAddvisible = false;
-                this.isAdd = true;
+                this.dialogAddvisible = false;              
               } else this.$message.info( res.data.desc );
             }).catch( err =>this.$message.error(err));
           } else {
@@ -339,6 +338,7 @@ export default {
     dialogAddvisible( newV,oldV ){
       if( !newV ){
         this.$refs.addForm.resetFields();
+        this.isAdd = true;
       }
     },
   },
