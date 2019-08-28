@@ -34,8 +34,9 @@
         <el-menu-item><el-checkbox v-model="checkOnline" @change="handleOnlineChange">在线操作</el-checkbox></el-menu-item>
         <el-menu-item><el-checkbox v-model="checkForward" @change="handleForwardChange">转发操作</el-checkbox></el-menu-item>
     </el-menu>
+        {{checkLimits}}
     <el-checkbox-group v-model="checkLimits">
-        <el-checkbox v-for="item in shareLimits" :label="item.label" :key="item.name">{{item.label}}</el-checkbox>
+        <el-checkbox v-for="item in shareLimits" :label="item" :key="item.name">{{item.label}}</el-checkbox>
     </el-checkbox-group>
     <el-menu mode="horizontal">
         <el-menu-item :disabled='true'><img src="@/assets/image/icons/fileIcons/calendar.png"/>分享期限</el-menu-item>
@@ -82,7 +83,7 @@ export default {
         shareDate:'1', //分享期限
         visitTime:'10', //访问次数
         shareLimits:[
-            {name:'new',label:'新建',type:'daily'},{name:'preview',label:'剪切',type:'daily'},{name:'copy',label:'复制',type:'daily'},{name:'paste',label:'粘贴',type:'daily'},{name:'rename',label:'重命名',type:'daily'},{name:'del',label:'删除',type:'daily'},
+            {id:1,name:'new',label:'新建',type:'daily'},{id:2,name:'preview',label:'剪切',type:'daily'},{name:'copy',label:'复制',type:'daily'},{name:'paste',label:'粘贴',type:'daily'},{name:'rename',label:'重命名',type:'daily'},{name:'del',label:'删除',type:'daily'},
             {name:'preview',label:'在线预览',type:'online'},{name:'edit',label:'在线编辑',type:'online'},{name:'collaborative',label:'协同编辑',type:'online'},{name:'compress',label:'在线压缩',type:'online'},{name:'decompress',label:'在线解压',type:'online'},{name:'encryption',label:'文件加密',type:'online'},{name:'deciphering',label:'文件解密',type:'online'},
             {name:'upload',label:'上传',type:'forward'},{name:'down',label:'下载',type:'forward'},{name:'print',label:'打印',type:'forward'},{name:'save',label:'保存我的云端',type:'forward'}
         ],

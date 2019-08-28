@@ -54,9 +54,9 @@
                   :h='item.h'
                   @moved="movedEvent"
                 >
-                <div :type="item.type" @contextmenu.prevent.stop="rightMouse($event, item)" @dblclick="applicationHandle(item.title)" :title="item.name">
-                  <img :type="item.type" :src="item.img!=null&&require(`@/assets/image/icons/${item.img}`)" :alt="item.title" :style="iconStyle">
-                  <p :type="item.type">{{item.name}}</p>
+                <div @click="clickIcon($event,item)" @contextmenu.prevent.stop="rightMouse($event, item)" @dblclick="applicationHandle(item.title)" :title="item.name">
+                  <img :src="item.img!=null&&require(`@/assets/image/icons/${item.img}`)" :alt="item.title" :style="iconStyle">
+                  <p>{{item.name}}</p>
                 </div>
                 </grid-item>
               </grid-layout>
@@ -183,7 +183,7 @@
     <!-- 上传组件 -->
     <el-upload
       ref='upload'
-      class="upload-demo"
+      class="deskUpload"
       v-show="uploadShow"
       drag
       action="https://jsonplaceholder.typicode.com/posts/"
@@ -223,6 +223,7 @@ import tools from  "@/assets/js/utils/tools.js";
 import createEnjoy from '@/components/share/createEnjoy.vue'; //创建共享
 import createShare from '@/components/share/createShare.vue'; //创建分享
 import { GridLayout, GridItem } from 'vue-grid-layout';
+import qs from 'qs';
 export default {
   name: "home",
   components: {
@@ -316,6 +317,9 @@ export default {
       },
       pageNumber: 1, //桌面图标总页数
       pageIndex:1, //桌面图标点击的页数
+      clientWidth: '', //屏幕的宽度
+      clientHeight: '', //屏幕的高度
+      row: 0,  //桌面图标的行数
     };
   },
   computed:{
@@ -336,8 +340,7 @@ export default {
       return this.$store.state.lockImg
     },
     colNumber() { // 图标展示的列数
-      let clientWidth = document.body.clientWidth;
-      return Math.floor( clientWidth / this.rowHeight );
+      return Math.floor( this.clientWidth / this.rowHeight );
     },
     gridItems(){  // 桌面图标：根据页数，确定每页的图标（数组）
       let gridItemsList = {};
@@ -349,9 +352,15 @@ export default {
       }
       return gridItemsList;
     },
+    existingIcons:{ // 桌面已有图标
+      // get: ()=>{},
+      // return this.gridItemDatas.filter((e) => {
+      //   return e.name != null;
+      // });
+    },
   },
   methods: {
-    rightMouse( e, item ) {
+    rightMouse( e, item ) {  //桌面图标右键
       this.isRightMouseClick = true;
       //右键事件
       if(item){
@@ -394,6 +403,9 @@ export default {
         top: e.clientY
       });
     },
+    clickIcon(e, item) {  //桌面图标左键
+      //
+    },
     rightMouseClick({ name }){//非desktop下右键菜单点击回调
       this.isShowBox[name].show = true;
       this.isShowBox[name].display = true;
@@ -423,7 +435,7 @@ export default {
       //上传
       if(params.name === 'upload'){
         this.uploadShow = true;
-        document.querySelector('.upload-demo').querySelector('.el-upload').click();
+        document.querySelector('.deskUpload').querySelector('.el-upload').click();
       }
       //创建分享
       if(params.name === 'share'){
@@ -539,8 +551,19 @@ export default {
     movedEvent(i, newX, newY, e) {  // 移动图标成功
       // console.log(i, newX, newY, e)
     },
-    layoutUpdatedEvent( newLayout ){  // 移动成功后获取新的图标信息
-      // console.log(newLayout)
+    layoutUpdatedEvent( newLayout ){  // 移动成功后获取新的图标信息，更新图标位置
+      let URLSearchParams = require('url-search-params');//URLSearchParams的兼容性
+      let layout = newLayout.filter((e) => {
+        return e.name != null
+      });
+      this.existingIcons = layout;
+      let params = new URLSearchParams();
+      params.append('layouts', JSON.stringify(layout));
+      params.set('clientWidth',this.clientWidth);
+      params.set('clientHeight',this.clientHeight);
+      params.set('row',this.row);
+      params.set('col',this.colNumber);
+      this.axios.post('/userDesktop/updateUserDesktop',params);
     },
     applications({component,open}){//system组件下的程序应用下的menus菜单的操作集合
       this.isShowBox[component].show = open;
@@ -549,12 +572,12 @@ export default {
     uploadSuccess(res, file, fileList){ //拖拽、右键点击上传文件成功
       console.log(fileList);
       this.$refs.upload.clearFiles();
-      document.querySelector('.upload-demo').style='display:none';
+      document.querySelector('.deskUpload').style='display:none';
     },
     uploadErr(err, file, fileList){ //拖拽、右键点击上传文件失败
       this.$message('上传失败！');
       this.$refs.upload.clearFiles();
-      document.querySelector('.upload-demo').style='display:none';
+      document.querySelector('.deskUpload').style='display:none';
     },
     closeDialog( tag ){ //关闭 创建分享，创建共享弹框
       this[tag] = false;
@@ -582,15 +605,27 @@ export default {
   },
   created(){
     // 获取桌面图标
-    let clientWidth = Math.floor(document.body.clientHeight);
-    let clientHeight = Math.floor(document.body.clientHeight);
-    let row = Math.floor((clientWidth - 80) / this.rowHeight);
-    this.axios.get(`/userDesktop/getUserDesktop?row=${row}&col=${this.colNumber}&clientWidth=${clientWidth}&clientHeight=${clientHeight}`)
+    this.clientWidth = Math.floor(document.body.clientWidth);
+    this.clientHeight = Math.floor(document.body.clientHeight);
+    this.row = Math.floor((this.clientWidth - 80) / this.rowHeight);
+    this.axios.get(`/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`)
       .then((res)=>{
         this.gridItemDatas = res.data.obj.layout;
         this.pageNumber = res.data.obj.pagerNumber;
         this.defaultApps = this.gridItems['list1'];
       });
+    // this.gridItemDatas = [ {"x":0,'y':0,'w':1,'h':1,'i':'1',pagerNumber:1,type: 'iCloud',name:'我的云端',title:'myCloud',img:'deskIcons/icon-computer.png'},
+    //     {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',pagerNumber:1,name:'浏览器',title:'browser',img:'deskIcons/icon-geogle.png'},
+    //     {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',pagerNumber:1,name:'系统设置',title:'system',img:'deskIcons/icon-setting.png'},
+    //     {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',pagerNumber:1,name:'新闻',title:'news',img:'deskIcons/icon-news.png'},
+    //     {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',pagerNumber:1,name:'回收站',title:'recycle',img:'deskIcons/icon-recycle.png'},
+    //     {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',pagerNumber:1,name:'文件夹',title:'folder',img:'deskIcons/tree-folder.png'},
+    //     {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',pagerNumber:1,name:'word文档',title:'file',img:'deskIcons/icon-word.png'},
+    //     {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',pagerNumber:2,name:'压缩文件',title:'zip',img:'deskIcons/zip.png'},
+    //     {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0',pagerNumber:1,},
+    //     {"x":1,'y':5,'w':1,'h':1,'i':'11',type: '0',pagerNumber:1,}];
+    // this.pageNumber = 2;
+    // this.defaultApps = this.gridItems['list1'];
   },
   mounted(){
     this.footerClass = this.$store.state.footerPosition;
@@ -615,8 +650,8 @@ export default {
       })
       dropbox.addEventListener("dragenter",function (e) {
         e.stopPropagation();
-        e.preventDefault();
-        document.querySelector('.upload-demo').style='display:block';
+        e.preventDefault();debugger
+        document.querySelector('.deskUpload').style='display:block';
       })
       dropbox.addEventListener("dragover",function (e) {
         e.stopPropagation();
@@ -767,7 +802,7 @@ html,body,#app,.el-container {
     }
   }
 }
-.el-upload{
+.deskUpload .el-upload{
   position: fixed;
   top: 0;
   left:0;
