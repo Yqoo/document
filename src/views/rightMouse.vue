@@ -7,8 +7,8 @@
 <template>
   <div class='' @contextmenu.stop.prevent @click.stop>
     <ul class="menus pulse animated" :style="menuPosition" ref="ulMenu" @mouseleave="leaveMenus">
-      <li v-for="(item,index) in menus[rules]" :key="index" @click="item.fn($event)" class="fadeInUp animated">
-        <i :class="item.icon" :style="item.color"></i>
+      <li v-for="(item,index) in menus[rules]" :key="index" @click="item.fn($event)" class="fadeInUp animated" :style="(item.title==='粘贴'&&!isPaste) ? {color:'#9e9c9c'} : {color:'#333'}">
+        <i :class="item.icon" :style="(item.title==='粘贴'&&!isPaste) ? {color: '#9e9c9c'}:item.color"></i>
         {{item.title}}
         <span v-if="item.tip" class='tip'>{{item.tip}}</span>
         <div style="display:none">
@@ -53,6 +53,13 @@ export default {
           left: left + 'px'
         };
         return this._position;
+      },
+      isPaste(){
+        if(this.$store.state.copyItem.length > 0){
+          return true;
+        } else {
+          return false;
+        }
       }
     },
     data() {

@@ -415,6 +415,7 @@ export default {
           e.active = false;
         });
         item.active = true;
+        this.clickItem = item;
       }
     },
     rightMouseClick({ name }){//非desktop下右键菜单点击回调
@@ -447,32 +448,33 @@ export default {
           name: params.name
         });
       }
-      //上传
-      if(params.name === 'upload'){
-        this.uploadShow = true;
-        document.querySelector('#deskUpload').querySelector('.el-upload').click();
-      }
-      //创建分享
-      if(params.name === 'share'){
-        this.showShare = true;
-      }
-      //创建共享
-      if(params.name === 'enjoy'){
-        this.showEnjoy = true;
-      }
-      //重命名
-      if(params.name === 'rename'){
-        this.defaultApps.forEach((e, i) => {
-          e.showInput = false;
-        });
-        this.clickItem.showInput = true;
-      }
-      //文件、文件夹、压缩包 复制
-      if(params.name === 'copy'){
-        let arr = [];
-        arr.push(this.clickItem);
-        this.$store.commit('copyFile', arr);
-      }
+      params.name && this.rightMenuOperate(params.name);
+    },
+    rightMenuOperate( name ){ //桌面右键的一些操作
+      let active = {
+        'upload':()=>{ // 上传
+          this.uploadShow = true;
+          document.querySelector('#deskUpload').querySelector('.el-upload').click();
+        },
+        'share': ()=>{this.showShare = true;}, //分享
+        'enjoy':()=>{this.showEnjoy = true;}, // 共享
+        'rename':()=>{  // 重命名
+          this.defaultApps.forEach((e, i) => {
+            e.showInput = false;
+          });
+          this.clickItem.showInput = true;
+        },
+        'copy':()=>{ //文件、文件夹、压缩包 => 复制
+            let selectedArr = [];
+            this.defaultApps.forEach((e) => {
+              if((e.type==='file'||e.type==='folder') && e.active === true){
+                selectedArr.push(e);
+              }
+            });
+            this.$store.commit('copyFile', selectedArr);
+          }
+      };
+      active[name]();
     },
     handleRename(){ //重命名：当input框失去焦点时，保存修改后的名字
       if(this.rename != ''){
@@ -642,24 +644,24 @@ export default {
     this.clientWidth = Math.floor(document.body.clientWidth);
     this.clientHeight = Math.floor(document.body.clientHeight);
     this.row = Math.floor((this.clientHeight - 80) / this.rowHeight);
-    this.axios.get(`/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`)
-      .then((res)=>{
-        this.gridItemDatas = res.data.obj.layout;
-        this.pageNumber = res.data.obj.pagerNumber;
-        this.defaultApps = this.gridItems['list1'];
-      });
-    // this.gridItemDatas = [ {"x":0,'y':0,'w':1,'h':1,'i':'1',pagerNumber:1,type: 'iCloud',name:'我的云端',title:'myCloud',img:'deskIcons/icon-computer.png'},
-    //     {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',pagerNumber:1,name:'浏览器',title:'browser',img:'deskIcons/icon-geogle.png'},
-    //     {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',pagerNumber:1,name:'系统设置',title:'system',img:'deskIcons/icon-setting.png'},
-    //     {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',pagerNumber:1,name:'新闻',title:'news',img:'deskIcons/icon-news.png'},
-    //     {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',pagerNumber:1,name:'回收站',title:'recycle',img:'deskIcons/icon-recycle.png'},
-    //     {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',pagerNumber:1,name:'文件夹',title:'folder',img:'deskIcons/tree-folder.png'},
-    //     {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',pagerNumber:1,name:'word文档',title:'file',img:'deskIcons/icon-word.png'},
-    //     {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',pagerNumber:2,name:'压缩文件',title:'zip',img:'deskIcons/zip.png'},
-    //     {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0',pagerNumber:1,},
-    //     {"x":1,'y':5,'w':1,'h':1,'i':'11',type: '0',pagerNumber:1,}];
-    // this.pageNumber = 2;
-    // this.defaultApps = this.gridItems['list1'];
+    // this.axios.get(`/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`)
+    //   .then((res)=>{
+    //     this.gridItemDatas = res.data.obj.layout;
+    //     this.pageNumber = res.data.obj.pagerNumber;
+    //     this.defaultApps = this.gridItems['list1'];
+    //   });
+    this.gridItemDatas = [ {"x":0,'y':0,'w':1,'h':1,'i':'1',pagerNumber:1,type: 'iCloud',name:'我的云端',title:'myCloud',img:'deskIcons/icon-computer.png'},
+        {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',pagerNumber:1,name:'浏览器',title:'browser',img:'deskIcons/icon-geogle.png'},
+        {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',pagerNumber:1,name:'系统设置',title:'system',img:'deskIcons/icon-setting.png'},
+        {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',pagerNumber:1,name:'新闻',title:'news',img:'deskIcons/icon-news.png'},
+        {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',pagerNumber:1,name:'回收站',title:'recycle',img:'deskIcons/icon-recycle.png'},
+        {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',pagerNumber:1,name:'文件夹',title:'folder',img:'deskIcons/tree-folder.png'},
+        {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',pagerNumber:1,name:'word文档',title:'file',img:'deskIcons/icon-word.png'},
+        {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',pagerNumber:2,name:'压缩文件',title:'zip',img:'deskIcons/zip.png'},
+        {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0',pagerNumber:1,},
+        {"x":1,'y':5,'w':1,'h':1,'i':'11',type: '0',pagerNumber:1,}];
+    this.pageNumber = 2;
+    this.defaultApps = this.gridItems['list1'];
   },
   mounted(){
     this.footerClass = this.$store.state.footerPosition;
@@ -693,8 +695,15 @@ export default {
       });
 
     //======  键盘快捷键 =====
-    document.onkeydown = (e)=>{
-      let key = window.event.keyCode;
+    document.onkeydown = (event)=>{
+      let e = event || window.event || arguments.callee.caller.arguments[0];
+      if(e && e.keyCode === 113){ //重命名 F2
+        e.preventDefault();
+        this.rightMenuOperate('rename');
+      } else if(e && e.ctrlKey && e.keyCode === 67){ //复制  ctrl+c
+        e.preventDefault();
+        this.rightMenuOperate('copy');
+      }
     }
   },
   watch:{
