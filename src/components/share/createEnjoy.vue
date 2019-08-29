@@ -16,7 +16,7 @@
         <img src="@/assets/image/icons/fileIcons/attribute.png">
         <span>共享资源</span>
         <span class="name">
-            <img :src="info.img">
+            <img :src="require(`@/assets/image/icons/${info.img}`)">
             {{info.name}}
         </span>
     </div>

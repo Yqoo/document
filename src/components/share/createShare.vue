@@ -90,19 +90,31 @@ export default {
   },
   computed: {
       dailyLimits(){ //日常操作
-          return this.shareLimits.filter((e)=>{
-              return e.type === 'daily';
-          });
+        let newArr = [];
+        let arr = this.shareLimits.filter((e)=>{
+            if(e.type === 'daily'){
+                newArr.push(e.id);
+            }
+        });
+        return newArr;
       },
       onlineLimits(){ // 在线操作
-          return this.shareLimits.filter((e) => {
-              return e.type === 'online';
-          });
+        let newArr = [];
+        let arr = this.shareLimits.filter((e) => {
+            if(e.type === 'online'){
+                newArr.push(e.id);
+            }
+        });
+        return newArr;
       },
       forwardLimits(){ // 转发操作
-          return this.shareLimits.filter((e) => {
-              return e.type === 'forward';
-          });
+        let newArr = [];
+        let arr = this.shareLimits.filter((e) => {
+            if(e.type === 'forward'){
+                newArr.push(e.id);
+            }
+        });
+        return newArr;
       }
   },
   methods: {

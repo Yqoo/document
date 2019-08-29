@@ -408,7 +408,6 @@ export default {
         });
         return false;
       }
-      console.log(item);
       if(e.ctrlKey) { // 按住ctrl + 左键
         item.active = true;
       } else {  // 单击
@@ -467,6 +466,12 @@ export default {
           e.showInput = false;
         });
         this.clickItem.showInput = true;
+      }
+      //文件、文件夹、压缩包 复制
+      if(params.name === 'copy'){
+        let arr = [];
+        arr.push(this.clickItem);
+        this.$store.commit('copyFile', arr);
       }
     },
     handleRename(){ //重命名：当input框失去焦点时，保存修改后的名字
@@ -636,25 +641,26 @@ export default {
     // 获取桌面图标
     this.clientWidth = Math.floor(document.body.clientWidth);
     this.clientHeight = Math.floor(document.body.clientHeight);
-    this.row = Math.floor((this.clientWidth - 80) / this.rowHeight);
-    // this.axios.get(`/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`)
-    //   .then((res)=>{
-    //     this.gridItemDatas = res.data.obj.layout;
-    //     this.pageNumber = res.data.obj.pagerNumber;
-    //     this.defaultApps = this.gridItems['list1'];
-    //   });
-    this.gridItemDatas = [ {"x":0,'y':0,'w':1,'h':1,'i':'1',pagerNumber:1,type: 'iCloud',name:'我的云端',title:'myCloud',img:'deskIcons/icon-computer.png'},
-        {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',pagerNumber:1,name:'浏览器',title:'browser',img:'deskIcons/icon-geogle.png'},
-        {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',pagerNumber:1,name:'系统设置',title:'system',img:'deskIcons/icon-setting.png'},
-        {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',pagerNumber:1,name:'新闻',title:'news',img:'deskIcons/icon-news.png'},
-        {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',pagerNumber:1,name:'回收站',title:'recycle',img:'deskIcons/icon-recycle.png'},
-        {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',pagerNumber:1,name:'文件夹',title:'folder',img:'deskIcons/tree-folder.png'},
-        {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',pagerNumber:1,name:'word文档',title:'file',img:'deskIcons/icon-word.png'},
-        {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',pagerNumber:2,name:'压缩文件',title:'zip',img:'deskIcons/zip.png'},
-        {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0',pagerNumber:1,},
-        {"x":1,'y':5,'w':1,'h':1,'i':'11',type: '0',pagerNumber:1,}];
-    this.pageNumber = 2;
-    this.defaultApps = this.gridItems['list1'];
+    this.row = Math.floor((this.clientHeight - 80) / this.rowHeight);
+    this.axios.get(`/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`)
+      .then((res)=>{
+        this.gridItemDatas = res.data.obj.layout;
+        this.pageNumber = res.data.obj.pagerNumber;
+      console.log(this.gridItems['list1'])
+        this.defaultApps = this.gridItems['list1'];
+      });
+    // this.gridItemDatas = [ {"x":0,'y':0,'w':1,'h':1,'i':'1',pagerNumber:1,type: 'iCloud',name:'我的云端',title:'myCloud',img:'deskIcons/icon-computer.png'},
+    //     {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',pagerNumber:1,name:'浏览器',title:'browser',img:'deskIcons/icon-geogle.png'},
+    //     {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',pagerNumber:1,name:'系统设置',title:'system',img:'deskIcons/icon-setting.png'},
+    //     {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',pagerNumber:1,name:'新闻',title:'news',img:'deskIcons/icon-news.png'},
+    //     {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',pagerNumber:1,name:'回收站',title:'recycle',img:'deskIcons/icon-recycle.png'},
+    //     {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',pagerNumber:1,name:'文件夹',title:'folder',img:'deskIcons/tree-folder.png'},
+    //     {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',pagerNumber:1,name:'word文档',title:'file',img:'deskIcons/icon-word.png'},
+    //     {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',pagerNumber:2,name:'压缩文件',title:'zip',img:'deskIcons/zip.png'},
+    //     {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0',pagerNumber:1,},
+    //     {"x":1,'y':5,'w':1,'h':1,'i':'11',type: '0',pagerNumber:1,}];
+    // this.pageNumber = 2;
+    // this.defaultApps = this.gridItems['list1'];
   },
   mounted(){
     this.footerClass = this.$store.state.footerPosition;
@@ -686,6 +692,11 @@ export default {
         e.stopPropagation();
         e.preventDefault();
       });
+
+    //======  键盘快捷键 =====
+    document.onkeydown = (e)=>{
+      let key = window.event.keyCode;
+    }
   },
   watch:{
     userSettingLockTime( val,oldval ){//监听锁屏时间的改变
