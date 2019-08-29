@@ -646,7 +646,6 @@ export default {
       .then((res)=>{
         this.gridItemDatas = res.data.obj.layout;
         this.pageNumber = res.data.obj.pagerNumber;
-      console.log(this.gridItems['list1'])
         this.defaultApps = this.gridItems['list1'];
       });
     // this.gridItemDatas = [ {"x":0,'y':0,'w':1,'h':1,'i':'1',pagerNumber:1,type: 'iCloud',name:'我的云端',title:'myCloud',img:'deskIcons/icon-computer.png'},
