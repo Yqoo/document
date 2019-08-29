@@ -56,7 +56,8 @@
                 >
                 <div :class="item.active?'active':''" @click.stop="clickIcon($event,item)" @contextmenu.prevent.stop="rightMouse($event, item)" @dblclick="applicationHandle(item.title)" :title="item.name">
                   <img :src="item.img!=null&&require(`@/assets/image/icons/${item.img}`)" :alt="item.title" :style="iconStyle">
-                  <p>{{item.name}}</p>
+                  <p v-if="!item.showInput">{{item.name}}</p>
+                  <el-input v-if="item.showInput" v-model="rename" size="mini" autofocus="true" @blur="handleRename"></el-input>
                 </div>
                 </grid-item>
               </grid-layout>
@@ -320,6 +321,7 @@ export default {
       clientWidth: '', //屏幕的宽度
       clientHeight: '', //屏幕的高度
       row: 0,  //桌面图标的行数
+      rename:'', //图标重命名：输入的新名称
     };
   },
   computed:{
@@ -348,6 +350,7 @@ export default {
         var list = 'list'+i;
         gridItemsList[list] = this.gridItemDatas.filter((e)=>{
           e.active = false;
+          e.showInput = false;
           return e.pagerNumber === i;
         });
       }
@@ -405,6 +408,7 @@ export default {
         });
         return false;
       }
+      console.log(item);
       if(e.ctrlKey) { // 按住ctrl + 左键
         item.active = true;
       } else {  // 单击
@@ -457,6 +461,20 @@ export default {
       if(params.name === 'enjoy'){
         this.showEnjoy = true;
       }
+      //重命名
+      if(params.name === 'rename'){
+        this.defaultApps.forEach((e, i) => {
+          e.showInput = false;
+        });
+        this.clickItem.showInput = true;
+      }
+    },
+    handleRename(){ //重命名：当input框失去焦点时，保存修改后的名字
+      if(this.rename != ''){
+        this.clickItem.name = this.rename;
+      }
+      this.clickItem.showInput = false;
+      this.clickItem = {};
     },
     createNewfile( ){ // 新建文件夹（新建文件）：失去焦点时创建
       let p = this.newFile.position;
@@ -619,24 +637,24 @@ export default {
     this.clientWidth = Math.floor(document.body.clientWidth);
     this.clientHeight = Math.floor(document.body.clientHeight);
     this.row = Math.floor((this.clientWidth - 80) / this.rowHeight);
-    this.axios.get(`/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`)
-      .then((res)=>{
-        this.gridItemDatas = res.data.obj.layout;
-        this.pageNumber = res.data.obj.pagerNumber;
-        this.defaultApps = this.gridItems['list1'];
-      });
-    // this.gridItemDatas = [ {"x":0,'y':0,'w':1,'h':1,'i':'1',pagerNumber:1,type: 'iCloud',name:'我的云端',title:'myCloud',img:'deskIcons/icon-computer.png'},
-    //     {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',pagerNumber:1,name:'浏览器',title:'browser',img:'deskIcons/icon-geogle.png'},
-    //     {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',pagerNumber:1,name:'系统设置',title:'system',img:'deskIcons/icon-setting.png'},
-    //     {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',pagerNumber:1,name:'新闻',title:'news',img:'deskIcons/icon-news.png'},
-    //     {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',pagerNumber:1,name:'回收站',title:'recycle',img:'deskIcons/icon-recycle.png'},
-    //     {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',pagerNumber:1,name:'文件夹',title:'folder',img:'deskIcons/tree-folder.png'},
-    //     {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',pagerNumber:1,name:'word文档',title:'file',img:'deskIcons/icon-word.png'},
-    //     {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',pagerNumber:2,name:'压缩文件',title:'zip',img:'deskIcons/zip.png'},
-    //     {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0',pagerNumber:1,},
-    //     {"x":1,'y':5,'w':1,'h':1,'i':'11',type: '0',pagerNumber:1,}];
-    // this.pageNumber = 2;
-    // this.defaultApps = this.gridItems['list1'];
+    // this.axios.get(`/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`)
+    //   .then((res)=>{
+    //     this.gridItemDatas = res.data.obj.layout;
+    //     this.pageNumber = res.data.obj.pagerNumber;
+    //     this.defaultApps = this.gridItems['list1'];
+    //   });
+    this.gridItemDatas = [ {"x":0,'y':0,'w':1,'h':1,'i':'1',pagerNumber:1,type: 'iCloud',name:'我的云端',title:'myCloud',img:'deskIcons/icon-computer.png'},
+        {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',pagerNumber:1,name:'浏览器',title:'browser',img:'deskIcons/icon-geogle.png'},
+        {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',pagerNumber:1,name:'系统设置',title:'system',img:'deskIcons/icon-setting.png'},
+        {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',pagerNumber:1,name:'新闻',title:'news',img:'deskIcons/icon-news.png'},
+        {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',pagerNumber:1,name:'回收站',title:'recycle',img:'deskIcons/icon-recycle.png'},
+        {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',pagerNumber:1,name:'文件夹',title:'folder',img:'deskIcons/tree-folder.png'},
+        {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',pagerNumber:1,name:'word文档',title:'file',img:'deskIcons/icon-word.png'},
+        {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',pagerNumber:2,name:'压缩文件',title:'zip',img:'deskIcons/zip.png'},
+        {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0',pagerNumber:1,},
+        {"x":1,'y':5,'w':1,'h':1,'i':'11',type: '0',pagerNumber:1,}];
+    this.pageNumber = 2;
+    this.defaultApps = this.gridItems['list1'];
   },
   mounted(){
     this.footerClass = this.$store.state.footerPosition;
@@ -813,6 +831,11 @@ html,body,#app,.el-container {
     }
     & .vue-resizable-handle{
       display: none;
+    }
+    & .el-input{
+      & > input{
+        padding: 0 0 0 10%;
+      }
     }
   }
 }

@@ -117,7 +117,9 @@ export default {
             ],
             app:[
               {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
-              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {
+                this.$emit('closeMenus',{name:'rename'});
+              }},
               {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
             ],
             recycle:[
@@ -126,7 +128,9 @@ export default {
             ],
             iCloud:[
               {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
-              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {
+                this.$emit('closeMenus',{name:'rename'});
+              }},
               {title:'服务',icon:'el-icon-key',color:{ color:'#ec8f6a' },fn:() => {console.log(1)}},
               {title:'属性',icon:'el-icon-warning',color:{ color:'#00a79d' },fn:() => {
                 this.$emit('closeMenus',true);
@@ -147,7 +151,9 @@ export default {
                 this.$emit('closeMenus',true);
               }},
               {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
-              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {
+                this.$emit('closeMenus',{name:'rename'});
+              }},
               {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{
                 this.$emit('closeMenus',{name:'share'});
               }},
@@ -168,7 +174,9 @@ export default {
                 this.$emit('closeMenus',true);
               }},
               {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
-              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {
+                this.$emit('closeMenus',{name:'rename'});
+              }},
               {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{
                 this.$emit('closeMenus',{name:'share'});
               }},
@@ -192,7 +200,9 @@ export default {
                 this.$emit('closeMenus',true);
               }},
               {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
-              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {
+                this.$emit('closeMenus',{name:'rename'});
+              }},
               {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{console.log('分享')}},
               {title:'共享',icon:'el-icon-attract',color:{color:'#a7d129'},fn:()=>{console.log('共享')}},
               {title:'在线解压',icon:'el-icon-collection',color:{color:'#f6c523'},fn:()=>{console.log('在线解压')}},
