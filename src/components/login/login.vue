@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-23 17:54:07
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-23 10:32:03
+ * @LastEditTime: 2019-08-28 17:29:30
  * @Desc: 
  -->
 <template>
@@ -26,7 +26,7 @@
                          <i slot="prefix" class="el-input__icon el-icon-lock" style="color:#409EFF"></i>
                         <el-button slot="append" style="color:#409EFF" @click.prevent="submitForm('pwdform')"><i class="el-icon-finished"></i> 登录</el-button> 
                     </el-input>
-                    <el-button type="text"><i class="el-icon-question" style="margin-top:5px"></i><span style="font-size:12px;">忘记密码</span></el-button>
+                    <el-button type="text" @click.native.prevent="forgetPwdDiaolog = true"><i class="el-icon-question" style="margin-top:5px"></i><span style="font-size:12px;">忘记密码</span></el-button>
                 </el-form-item>
             </el-form>
             <el-form ref="phoneform" :model="phoneform" :rules="phoneRules" size="small" v-show="!isPwd" label-width="20px">
@@ -47,6 +47,37 @@
                 </el-form-item>
             </el-form>
         </div>
+        <el-dialog
+            :visible.sync="forgetPwdDiaolog"
+            v-dialogDrag
+            :modal="false"
+            width="30%"
+            :close-on-click-modal="false">
+            <div slot="title">
+                <i class="el-icon-phone"></i>
+                <span>手机验证</span>
+            </div>
+            <div style="padding:50px 20px">
+                <el-form ref="phoneform" :model="phoneform" :rules="phoneRules" size="small" label-width="20px">
+                    <el-form-item label="" prop="phone">
+                        <el-input clearable placeholder="请输入手机号" v-model="phoneform.phone">
+                            <i slot="prefix" class="el-input__icon el-icon-mobile-phone" style="color:#409EFF"></i>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="" prop="code">
+                        <el-input :placeholder='placeholder' v-model="phoneform.code">
+                            <i slot="prefix" class="el-input__icon el-icon-lock" style="color:#409EFF"></i>
+                            <el-button slot="append" style="color:#409EFF" @click="getCode" v-if="isSend">{{desc}}</el-button>  
+                            <el-button slot="append" style="color:#409EFF" v-else>{{desc}}</el-button>  
+                        </el-input>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div slot="footer">
+                <el-button type='success' size='mini'>确定</el-button>
+                <el-button type='normal' size='mini'>取消</el-button>
+            </div>
+        </el-dialog>
         <canvas id="canvas" :style="{height: screenHeight+'px'}"></canvas>
     </div>
 </template>
@@ -98,6 +129,7 @@ export default {
             isSend:true,
             desc:'获取验证码',
             placeholder:'请输入验证码',
+            forgetPwdDiaolog:false,//是否显示忘记密码后的通过手机验证获取修改密码框
             
         }
     },
