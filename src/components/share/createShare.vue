@@ -30,13 +30,12 @@
     <el-menu mode="horizontal">
         <el-menu-item :disabled='true'><img src="@/assets/image/icons/fileIcons/power.png"/>分享权限</el-menu-item>
         <el-menu-item><el-checkbox v-model="checkAllLimit" @change="handleAllLimitChange">所有</el-checkbox></el-menu-item>
-        <el-menu-item><el-checkbox v-model="checkDialy" @change="handleDailyChange">日常操作</el-checkbox></el-menu-item>
-        <el-menu-item><el-checkbox v-model="checkOnline" @change="handleOnlineChange">在线操作</el-checkbox></el-menu-item>
-        <el-menu-item><el-checkbox v-model="checkForward" @change="handleForwardChange">转发操作</el-checkbox></el-menu-item>
+        <el-menu-item><el-checkbox v-model="checkDialy" @change="(val)=>handlePartChange(val,'daily')">日常操作</el-checkbox></el-menu-item>
+        <el-menu-item><el-checkbox v-model="checkOnline" @change="(val)=>handlePartChange(val,'online')">在线操作</el-checkbox></el-menu-item>
+        <el-menu-item><el-checkbox v-model="checkForward" @change="(val)=>handlePartChange(val,'forward')">转发操作</el-checkbox></el-menu-item>
     </el-menu>
-        {{checkLimits}}
-    <el-checkbox-group v-model="checkLimits">
-        <el-checkbox v-for="item in shareLimits" :label="item" :key="item.name">{{item.label}}</el-checkbox>
+    <el-checkbox-group v-model="checkLimits" @change="handleCheckedChange">
+        <el-checkbox v-for="item in shareLimits" :label="item.id" :key="item.name">{{item.label}}</el-checkbox>
     </el-checkbox-group>
     <el-menu mode="horizontal">
         <el-menu-item :disabled='true'><img src="@/assets/image/icons/fileIcons/calendar.png"/>分享期限</el-menu-item>
@@ -83,9 +82,9 @@ export default {
         shareDate:'1', //分享期限
         visitTime:'10', //访问次数
         shareLimits:[
-            {id:1,name:'new',label:'新建',type:'daily'},{id:2,name:'preview',label:'剪切',type:'daily'},{name:'copy',label:'复制',type:'daily'},{name:'paste',label:'粘贴',type:'daily'},{name:'rename',label:'重命名',type:'daily'},{name:'del',label:'删除',type:'daily'},
-            {name:'preview',label:'在线预览',type:'online'},{name:'edit',label:'在线编辑',type:'online'},{name:'collaborative',label:'协同编辑',type:'online'},{name:'compress',label:'在线压缩',type:'online'},{name:'decompress',label:'在线解压',type:'online'},{name:'encryption',label:'文件加密',type:'online'},{name:'deciphering',label:'文件解密',type:'online'},
-            {name:'upload',label:'上传',type:'forward'},{name:'down',label:'下载',type:'forward'},{name:'print',label:'打印',type:'forward'},{name:'save',label:'保存我的云端',type:'forward'}
+            {id:1,name:'new',label:'新建',type:'daily'},{id:2,name:'cut',label:'剪切',type:'daily'},{id:3,name:'copy',label:'复制',type:'daily'},{id:4,name:'paste',label:'粘贴',type:'daily'},{id:5,name:'rename',label:'重命名',type:'daily'},{id:6,name:'del',label:'删除',type:'daily'},
+            {id:7,name:'preview',label:'在线预览',type:'online'},{id:8,name:'edit',label:'在线编辑',type:'online'},{id:9,name:'collaborative',label:'协同编辑',type:'online'},{id:10,name:'compress',label:'在线压缩',type:'online'},{id:11,name:'decompress',label:'在线解压',type:'online'},{id:12,name:'encryption',label:'文件加密',type:'online'},{id:13,name:'deciphering',label:'文件解密',type:'online'},
+            {id:14,name:'upload',label:'上传',type:'forward'},{id:15,name:'down',label:'下载',type:'forward'},{id:16,name:'print',label:'打印',type:'forward'},{id:17,name:'save',label:'保存我的云端',type:'forward'}
         ],
     };
   },
@@ -108,15 +107,55 @@ export default {
   },
   methods: {
       handleAllLimitChange( val ){ //创建分享：勾选所有分享权限
-        //   console.log(val)
-          this.checkLimits = val ? shareLimits : [];
+          this.checkAllLimit = val;
+          this.checkDialy = val;
+          this.checkOnline = val;
+          this.checkForward = val;
+          let checked = this.shareLimits.map((item) => {return item.id});
+          this.checkLimits = this.checkAllLimit ? checked : [];
+      },
+      handlePartChange(val, tag){
+          let checkBox = '';
+          switch(tag){
+              case 'daily':
+                  checkBox = this.checkDialy;break;
+              case 'online':
+                  checkBox = this.checkOnline;break;
+              case 'forward':
+                  checkBox = this.checkForward;break;
+          }
+          checkBox = val;
+          let checked = this.shareLimits.map((item) => {
+              if(item.type === tag){
+                  return item.id;
+              }
+          });
+          this.checkLimits = checkBox ? checked : [];
+      },
+      handleDailyChange(val){  //勾选全部日常操作
+          this.checkDialy = val;
+          let checked = this.shareLimits.map((item) => {
+              if(item.type === 'daily'){
+                  return item.id;
+              }
+          });
+          this.checkLimits = this.checkDialy ? checked : [];
+      },
+      handleOnlineChange(val){ //勾选全部在线操作
+          //
+      },
+      handleForwardChange(val){ //勾选全部转发操作
+          //
+      },
+      handleCheckedChange( val ){  // 单独勾选权限
+          console.log(val);
       },
       closeDialog(){ //关闭弹框
           this.$emit('closeDialog','showShare');
       }
   },
   mounted(){
-      console.log(this.info)
+    //   console.log(this.info)
   }
 }
 

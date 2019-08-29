@@ -54,7 +54,7 @@
                   :h='item.h'
                   @moved="movedEvent"
                 >
-                <div @click="clickIcon($event,item)" @contextmenu.prevent.stop="rightMouse($event, item)" @dblclick="applicationHandle(item.title)" :title="item.name">
+                <div :class="item.active?'active':''" @click.stop="clickIcon($event,item)" @contextmenu.prevent.stop="rightMouse($event, item)" @dblclick="applicationHandle(item.title)" :title="item.name">
                   <img :src="item.img!=null&&require(`@/assets/image/icons/${item.img}`)" :alt="item.title" :style="iconStyle">
                   <p>{{item.name}}</p>
                 </div>
@@ -347,20 +347,11 @@ export default {
       for(let i=1; i<=this.pageNumber; i++){
         var list = 'list'+i;
         gridItemsList[list] = this.gridItemDatas.filter((e)=>{
+          e.active = false;
           return e.pagerNumber === i;
         });
       }
       return gridItemsList;
-    },
-    existingIcons:{ // 桌面已有图标
-      get: ()=>{
-        return this.gridItemDatas.filter((e) => {
-          return e.name != null;
-        });
-      },
-      set: ( val )=>{
-        return val;
-      }
     },
   },
   methods: {
@@ -408,7 +399,20 @@ export default {
       });
     },
     clickIcon(e, item) {  //桌面图标左键
-      //
+      if(item.name == null){ //没有点击在图标上，选中样式消失
+        this.defaultApps.forEach((e, i) => {
+          e.active = false;
+        });
+        return false;
+      }
+      if(e.ctrlKey) { // 按住ctrl + 左键
+        item.active = true;
+      } else {  // 单击
+        this.defaultApps.forEach((e, i) => {
+          e.active = false;
+        });
+        item.active = true;
+      }
     },
     rightMouseClick({ name }){//非desktop下右键菜单点击回调
       this.isShowBox[name].show = true;
@@ -417,6 +421,10 @@ export default {
     hideRightMenus(){
       this.isRightMouseClick = false;
       this.clickItem = {};
+      //清除点中的图标样式
+      this.defaultApps.forEach((e, i) => {
+        e.active = false;
+      });
     },
     closeMenus( params ){
       this.isRightMouseClick = false;//关闭右键菜单
@@ -792,6 +800,9 @@ html,body,#app,.el-container {
   & .vue-grid-item{
     text-align: center;
     cursor: default;
+    & > div.active{
+      background: rgba(255,255,255,0.1);
+    }
     & img{
       display: inline-block;
     }
