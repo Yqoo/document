@@ -7,9 +7,10 @@
 <template>
   <div class='' @contextmenu.stop.prevent @click.stop>
     <ul class="menus pulse animated" :style="menuPosition" ref="ulMenu" @mouseleave="leaveMenus">
-      <li v-for="(item,index) in menus[rules]" :key="index" @click="item.fn($event)" class="fadeInUp animated">
-        <i :class="item.icon" :style="item.color"></i>
+      <li v-for="(item,index) in menus[rules]" :key="index" @click="item.fn($event)" class="fadeInUp animated" :style="(item.title==='粘贴'&&!isPaste) ? {color:'#9e9c9c'} : {color:'#333'}">
+        <i :class="item.icon" :style="(item.title==='粘贴'&&!isPaste) ? {color: '#9e9c9c'}:item.color"></i>
         {{item.title}}
+        <span v-if="item.tip" class='tip'>{{item.tip}}</span>
         <div style="display:none">
           <ul v-if="item.children" class="childUl">
             <li v-for="(child,key) in item.children" :key="key" @click="child.fn">
@@ -52,6 +53,13 @@ export default {
           left: left + 'px'
         };
         return this._position;
+      },
+      isPaste(){
+        if(this.$store.state.copyItem.length > 0){
+          return true;
+        } else {
+          return false;
+        }
       }
     },
     data() {
@@ -84,9 +92,6 @@ export default {
               {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },fn:() => {
                 this.$emit('closeMenus',true);
               }},
-              {title:'复制',icon:'el-icon-crop',color:{ color:'#08d9d6' },fn:() => {
-                this.$emit('closeMenus',true);
-              }},
                {title:'图标大小',icon:'el-icon-star-off',color:{ color:'#aa96da' },fn:() => {
                 // this.$emit('closeMenus',true);
               },children:[
@@ -117,7 +122,9 @@ export default {
             ],
             app:[
               {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
-              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {
+                this.$emit('closeMenus',{name:'rename'});
+              }},
               {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
             ],
             recycle:[
@@ -126,7 +133,9 @@ export default {
             ],
             iCloud:[
               {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
-              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {
+                this.$emit('closeMenus',{name:'rename'});
+              }},
               {title:'服务',icon:'el-icon-key',color:{ color:'#ec8f6a' },fn:() => {console.log(1)}},
               {title:'属性',icon:'el-icon-warning',color:{ color:'#00a79d' },fn:() => {
                 this.$emit('closeMenus',true);
@@ -141,13 +150,15 @@ export default {
               {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
               {title:'剪切',icon:'el-icon-scissors',color:{color:'#587850'},fn:()=>{console.log('剪切')}},
               {title:'复制',icon:'el-icon-crop',color:{ color:'#08d9d6' },fn:() => {
-                this.$emit('closeMenus',true);
+                this.$emit('closeMenus',{name:'copy'});
               }},
               {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },fn:() => {
                 this.$emit('closeMenus',true);
               }},
               {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
-              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {
+                this.$emit('closeMenus',{name:'rename'});
+              }},
               {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{
                 this.$emit('closeMenus',{name:'share'});
               }},
@@ -160,15 +171,17 @@ export default {
             ],
             file:[
               {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
-              {title:'剪切',icon:'el-icon-scissors',color:{color:'#587850'},fn:()=>{console.log('剪切')}},
-              {title:'复制',icon:'el-icon-crop',color:{ color:'#08d9d6' },fn:() => {
+              {title:'剪切',icon:'el-icon-scissors',color:{color:'#587850'},tip:'ctrl+x',fn:()=>{console.log('剪切')}},
+              {title:'复制',icon:'el-icon-crop',color:{ color:'#08d9d6' },tip:'ctrl+c',fn:() => {
+                this.$emit('closeMenus',{name:'copy'});
+              }},
+              {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },tip:'ctrl+v',fn:() => {
                 this.$emit('closeMenus',true);
               }},
-              {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },fn:() => {
-                this.$emit('closeMenus',true);
+              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },tip:'Del',fn:() => {console.log(8)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },tip:'F2',fn:() => {
+                this.$emit('closeMenus',{name:'rename'});
               }},
-              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
-              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
               {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{
                 this.$emit('closeMenus',{name:'share'});
               }},
@@ -184,15 +197,17 @@ export default {
             ],
             zip:[
               {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
-              {title:'剪切',icon:'el-icon-scissors',color:{color:'#587850'},fn:()=>{console.log('剪切')}},
-              {title:'复制',icon:'el-icon-crop',color:{ color:'#08d9d6' },fn:() => {
+              {title:'剪切',icon:'el-icon-scissors',color:{color:'#587850'},tip:'ctrl+x',fn:()=>{console.log('剪切')}},
+              {title:'复制',icon:'el-icon-crop',color:{ color:'#08d9d6' },tip:'ctrl+c',fn:() => {
+                this.$emit('closeMenus',{name:'copy'});
+              }},
+              {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },tip:'ctrl+v',fn:() => {
                 this.$emit('closeMenus',true);
               }},
-              {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },fn:() => {
-                this.$emit('closeMenus',true);
+              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },tip:'Del',fn:() => {console.log(8)}},
+              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },tip:'F2',fn:() => {
+                this.$emit('closeMenus',{name:'rename'});
               }},
-              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
-              {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {console.log(7)}},
               {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{console.log('分享')}},
               {title:'共享',icon:'el-icon-attract',color:{color:'#a7d129'},fn:()=>{console.log('共享')}},
               {title:'在线解压',icon:'el-icon-collection',color:{color:'#f6c523'},fn:()=>{console.log('在线解压')}},
@@ -233,8 +248,13 @@ export default {
     box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, .3);
     transition: box-shadow 0.5s, transform 0.5s;
     & li {
+      position: relative;
       padding: 5px 20px;
       cursor: pointer;
+      & .tip{
+        position: absolute;
+        right:7%;
+      }
     };
     & li:hover {
       background: @color;
