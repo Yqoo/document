@@ -22,11 +22,13 @@ import vcolorpicker from 'vcolorpicker';
 import tools from '@/assets/js/utils/tools.js';
 import DrawerLayout from 'vue-drawer-layout';
 import VXETable from 'vxe-table'
+import VueClipboard from 'vue-clipboard2';
 import 'vxe-table/lib/index.css'
 Vue.use(DrawerLayout)
 Vue.use(vcolorpicker);
 Vue.use(ElementUI);
 Vue.use(VXETable);
+Vue.use(VueClipboard);
 Vue.config.productionTip = false;
 Vue.prototype.axios = axios;
 axios.defaults.baseURL = "http://192.168.0.102:8080";//配置axios默认基础地址
