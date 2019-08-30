@@ -35,8 +35,8 @@
             <el-menu-item><el-checkbox v-model="checkOnline" @change="(val)=>handlePartChange(val,'online')">在线操作</el-checkbox></el-menu-item>
             <el-menu-item><el-checkbox v-model="checkForward" @change="(val)=>handlePartChange(val,'forward')">转发操作</el-checkbox></el-menu-item>
         </el-menu>
-        <el-checkbox-group v-model="checkLimits" @change="handleCheckedChange">
-            <el-checkbox v-for="item in shareLimits" :label="item.id" :key="item.name">{{item.label}}</el-checkbox>
+        <el-checkbox-group v-model="checkLimits">
+            <el-checkbox v-for="item in shareLimits" :label="item.id" @change="(val)=>handleCheckedChange(val,item)" :key="item.name">{{item.label}}</el-checkbox>
         </el-checkbox-group>
         <el-menu mode="horizontal">
             <el-menu-item :disabled='true'><img src="@/assets/image/icons/fileIcons/calendar.png"/>分享期限</el-menu-item>
@@ -59,10 +59,26 @@
             <el-radio v-model="visitTime" label="custom">自定义</el-radio>
         </div>
     </div>
-    <div v-if="showLink"></div>
+    <div v-if="showLink">
+        <el-row>
+            <el-col :span="6"><img src="@/assets/image/icons/fileIcons/link.png"><span>链接</span></el-col>
+            <el-col :span="18"><el-input size="small" v-model="linkForm.link" :readonly="true"></el-input></el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="18" :offset="6">
+                <span class="linkDate">链接失效时间：{{linkForm.date}}天</span>
+                <span>访问次数：{{linkForm.times}}</span>
+                <!-- <input type="text" class="copyLink" ref='copyLink' :value="`${this.linkForm.link}，提取码：${this.linkForm.code}`"> -->
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="6"><img src="@/assets/image/icons/fileIcons/T.png"><span>提取码</span></el-col>
+            <el-col :span="18"><el-input size="small" :readonly="true" v-model="linkForm.code"></el-input></el-col>
+        </el-row>
+    </div>
     <div slot="footer" class="dialog-footer">
         <el-button v-if='!showLink' type='primary' size='small' @click="createLink">创建链接</el-button>
-        <el-button v-if="showLink" type='primary' size='small'>复制链接与提取码</el-button>
+        <el-button v-if="showLink" type='primary' size='small' v-clipboard:copy="this.linkForm.link+'，提取码：' + this.linkForm.code" v-clipboard:success="onCopy">复制链接与提取码</el-button>
         <el-button @click="closeDialog" size="small">关闭</el-button>
     </div>
   </el-dialog>
@@ -91,6 +107,12 @@ export default {
             {id:7,name:'preview',label:'在线预览',type:'online'},{id:8,name:'edit',label:'在线编辑',type:'online'},{id:9,name:'collaborative',label:'协同编辑',type:'online'},{id:10,name:'compress',label:'在线压缩',type:'online'},{id:11,name:'decompress',label:'在线解压',type:'online'},{id:12,name:'encryption',label:'文件加密',type:'online'},{id:13,name:'deciphering',label:'文件解密',type:'online'},
             {id:14,name:'upload',label:'上传',type:'forward'},{id:15,name:'down',label:'下载',type:'forward'},{id:16,name:'print',label:'打印',type:'forward'},{id:17,name:'save',label:'保存我的云端',type:'forward'}
         ],
+        linkForm:{
+            link: 'http://xxxxxxxxxxxxxxxxxxxxxxx',
+            date: 7,
+            times: '不限次数',
+            code: 'yAbR'
+        },
     };
   },
   computed: {
@@ -131,47 +153,70 @@ export default {
           let checked = this.shareLimits.map((item) => {return item.id});
           this.checkLimits = this.checkAllLimit ? checked : [];
       },
-      handlePartChange(val, tag){
-          let checkBox = '';
-          switch(tag){
-              case 'daily':
-                  checkBox = this.checkDialy;break;
-              case 'online':
-                  checkBox = this.checkOnline;break;
-              case 'forward':
-                  checkBox = this.checkForward;break;
-          }
-          checkBox = val;
-          let checked = this.shareLimits.map((item) => {
-              if(item.type === tag){
-                  return item.id;
-              }
-          });
-          this.checkLimits = checkBox ? checked : [];
+      handlePartChange(val, tag){ //勾选分类的全部操作（日常操作、在线操作、转发操作）
+        let checked = [];
+        this.shareLimits.map((item) => {
+            if(item.type === tag){
+                checked.push(item.id);
+            }
+        }); 
+        if( val ){
+            this.checkLimits = this.checkLimits.concat(checked);
+        } else {
+            this.checkLimits = this.checkLimits.filter((item) => {
+                return !checked.includes(item);
+            });
+        }
+        this.checkAllLimit = this.checkLimits.length === this.shareLimits.length ? true :false;
       },
-      handleDailyChange(val){  //勾选全部日常操作
-          this.checkDialy = val;
-          let checked = this.shareLimits.map((item) => {
-              if(item.type === 'daily'){
-                  return item.id;
-              }
-          });
-          this.checkLimits = this.checkDialy ? checked : [];
-      },
-      handleOnlineChange(val){ //勾选全部在线操作
-          //
-      },
-      handleForwardChange(val){ //勾选全部转发操作
-          //
-      },
-      handleCheckedChange( val ){  // 单独勾选权限
-          console.log(val);
+      handleCheckedChange( val, item ){  // 单独勾选权限
+        if(val){
+            let flag = 0;
+            switch(item.type){
+                case 'daily':
+                    for(let i = 0; i<this.dailyLimits.length; i++){
+                        if(!this.checkLimits.includes(this.dailyLimits[i])){
+                            flag = 1;
+                            break;
+                        }
+                    }
+                    flag === 0 && (this.checkDialy = true);
+                    break;
+                case 'online':
+                    for(let i = 0; i<this.onlineLimits.length; i++){
+                        if(!this.checkLimits.includes(this.onlineLimits[i])){
+                            flag = 1;
+                            break;
+                        }
+                    }
+                    flag === 0 && (this.checkOnline = true);
+                    break;
+                case 'forward':
+                    for(let i = 0; i<this.forwardLimits.length; i++){
+                        if(!this.checkLimits.includes(this.forwardLimits[i])){
+                            flag = 1;
+                            break;
+                        }
+                    }
+                    flag === 0 && (this.checkForward = true);
+                    break;
+            }
+            this.checkDialy&&this.checkOnline&&this.checkForward&&(this.checkAllLimit=true);
+        } else {
+            this.checkAllLimit = val;
+            item.type === 'daily' && (this.checkDialy = val);
+            item.type === 'online' && (this.checkOnline = val);
+            item.type === 'forward' && (this.checkForward = val);
+        }
       },
       closeDialog(){ //关闭弹框
           this.$emit('closeDialog','showShare');
       },
-      createLink(){
+      createLink(){ //创建链接
           this.showLink = true;
+      },
+      onCopy() { //复制链接和提取码
+        this.$message('复制成功！');
       }
   },
   mounted(){
@@ -182,4 +227,29 @@ export default {
 </script>
 <style lang='less' scoped>
 @import './shareStyle.less';
+.el-row:nth-of-type(1){
+    margin-top: 5%;
+}
+.el-row:nth-of-type(3){
+    margin-top: 3%;
+}
+.el-col{
+    & img{
+        display: inline-block;
+        width: 25px;
+        vertical-align: middle;
+        margin-right: 5%;
+    }
+    & .copyLink{
+        opacity: 0;
+    }
+    & .linkDate{
+        color:#c3c3c3;
+        margin-right: 5%;
+    }
+}
+.el-col.el-col-6{
+    text-align: right;
+    padding-right: 2%;
+}
 </style>
