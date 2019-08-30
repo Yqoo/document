@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-07-24 11:37:02
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-27 11:11:04
+ * @LastEditTime: 2019-08-30 09:14:13
  -->
 <template>
     <el-row>
@@ -129,7 +129,15 @@
                 <span style="opacity:0">.</span>
                 <el-tag v-for="(tab,index) in tabsFilter" :key="index" :class="index"  effect="plain" type="info" @close="closeTab(index)" @click="showTab(index,tab.isLocal)"> <img :src="tab.icon" style="vertical-align:middle;position:relative;top:-2px;width:23px;">{{tab.name}}</el-tag>
                 <el-popover placement="top-start" width="100" trigger="click" popper-class="taskMenuPop" @hide="hideTask">
-                    <taskBarMenus @close="closeTab" @showDesk="open" v-if="isShowTask" :isFix="isFix" @barChangePosition="barChangePosition" @lockScreen="lockScreen"></taskBarMenus>
+                    <taskBarMenus 
+                        @close="closeTab" 
+                        @showDesk="open" 
+                        v-if="isShowTask" 
+                        :isFix="isFix" 
+                        @barChangePosition="barChangePosition" 
+                        @lockScreen="lockScreen"
+                        @reloadTabs='isReloadTabs'
+                        ></taskBarMenus>
                     <i slot="reference" class="el-icon-location-outline taskBarPosition" style="position:absolute;opacity:0;"></i>
                 </el-popover>
             </div>    
@@ -262,6 +270,7 @@ export default {
                 },
             ],
             isCollapse:false,
+            taskBarList:[],
         }
     },
     created(){
@@ -269,6 +278,11 @@ export default {
         time = setInterval(() => {
             this.localTime = tools._time();
         }, 1000);
+        this.axios.get('/userDesktop/getUserTaskbar').then( res => {
+            if( res.data.code === 200 ){
+                this.taskBarList = res.data.obj.map( item => item.functionalTypes );
+            }
+        })
     },
     methods:{
         searchTypeOpen( type ){//动态显示选择要搜索的tabs
@@ -294,13 +308,7 @@ export default {
                 obj[name] = {show:false,name:e.target.innerText,display:true,isLocal:true,icon:icon}; 
                 this.$store.commit('getTabName',obj);
             }
-            let keys = Object.keys(this.$store.state.fixTabs);
-            if( keys.indexOf( name ) > -1 ){
-                this.isFix = true
-            } else {
-                if( name ) this.isFix = false;
-                else this.isFix = null;
-            }
+            
             let footerPostion = this.$store.state.footerPosition;
             let left = 0;
             if(footerPostion === 'left') {
@@ -311,8 +319,14 @@ export default {
                 left = e.clientX;
             }
             document.querySelector('.taskBarPosition').style.left = left - 25 + 'px';
-            this.isShowTask = true;
-            document.querySelector('.el-icon-location-outline').click();
+            this.axios.get('/userDesktop/getUserTaskbar').then( res => {
+                if( res.data.code === 200 ){
+                    let keys = res.data.obj.map( item => item.functionalTypes );
+                    keys.indexOf( name ) !== -1 ?this.isFix = true:( name?this.isFix = false:this.isFix = null );
+                }
+                this.isShowTask = true;
+                document.querySelector('.el-icon-location-outline').click();
+            })
         },
         hideTask(){//重新渲染taskBarMenus组件 计算下一个tab点击时时显示固定到任务栏还是取消固定
             this.isShowTask = false;
@@ -324,24 +338,44 @@ export default {
             this.$emit('barChangePosition', position);
             this.$store.commit('changeFooterPosition', position);
         },
+        isReloadTabs(){//重新渲染tabs
+            this.axios.get('/userDesktop/getUserTaskbar').then( res => {
+                if( res.data.code === 200 ){
+                    this.taskBarList = res.data.obj.map( item => item.functionalTypes );
+                }
+            })
+        },
     },
     computed:{
         tabsFilter(){
-            let fixTabs = this.$store.state.fixTabs;
+            let fix = this.taskBarList;
             let tabs = {};
             for( let key in this.tabs ){
                 if( this.tabs[key].show  ){
                     tabs[key] = this.tabs[key]
                 }
             };
-            if( JSON.stringify(fixTabs) === "{}"  ){
-                return tabs;
-            } else {
-                for( let key in fixTabs ){
-                    tabs[key] = fixTabs[key]
+            if( Array.isArray( fix ) ){//组件加载时从后端获得的历史存储tabs
+                if( fix.length === 0 ){
+                    return tabs;
+                } else {
+                    let obj = {};
+                    fix.forEach( item => {
+                        obj[item] = {
+                            show:false,
+                            name:this.tabs[item].name,
+                            display:false,
+                            isLocal:true,
+                            icon:this.tabs[item].icon
+                        }
+                    });
+                    for( let key in obj ){
+                        tabs[key] = obj[key]
+                    }
+                    return tabs
                 }
-                return tabs
             }
+           
         },
         collapse(){
             let msg = ''
