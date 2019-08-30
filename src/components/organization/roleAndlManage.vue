@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-16 09:18:16
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-28 16:34:35
+ * @LastEditTime: 2019-08-30 16:07:28
  * @Desc: 组织与用户下的角色管理组件
  -->  
 <template>
@@ -82,8 +82,8 @@
           <el-form-item label="名称" prop="name">
             <el-input v-model="addForm.name"></el-input>
           </el-form-item>
-          <el-form-item label="角色别名" prop="roleAlias">
-            <el-input v-model="addForm.roleAlias"></el-input>
+          <el-form-item label="角色别名" prop="roleAlias" >
+            <el-input v-model="addForm.roleAlias" :disabled='!isAdd'></el-input>
           </el-form-item>
           <el-form-item label="描述" prop="roleNote">
             <el-input v-model="addForm.roleNote"></el-input>
@@ -259,6 +259,7 @@ export default {
         roleNote:''
       });
       this.isAdd = true;
+      this.$refs.addForm.resetFields()
     },
   },
 }

@@ -252,3 +252,9 @@ ol {
 .el-progress__text {
   font-size: 12px!important;
 }
+.el-tree-node__label {
+  padding-left: 4px;
+}
+.el-tree-node {
+  overflow-x: auto;
+}
