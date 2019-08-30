@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-01 09:26:31
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-20 17:56:59
+ * @LastEditTime: 2019-08-30 09:14:09
  -->
 <template>
   <div class='taskBarMenus fadeInUp animated'>
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import qs from 'qs';
 export default {
     name:'taskBarMenus',
     props:['isFix'],
@@ -88,24 +89,59 @@ export default {
             this.$emit('barChangePosition', 'bottom');
           },
           fix: () => { 
-            if( localStorage.getItem('fixTabs')  === null ){//在local里尚未存或已清除key => fixTabs
+           /*  if( localStorage.getItem('fixTabs')  === null ){//在local里尚未存或已清除key => fixTabs
               localStorage.setItem('fixTabs',JSON.stringify( this.$store.state.chooseTabName ));
               this.$store.commit('addFixTabs');
             } else {
               this.$store.commit('addFixTabs');
               localStorage.setItem('fixTabs',JSON.stringify(this.$store.state.fixTabs))
-            }
+            } */
+            this.getTabs( 'fix' );
           },
           unFix: () => {
-            if( localStorage.getItem('fixTabs')  !== null ){
+            /* if( localStorage.getItem('fixTabs')  !== null ){
               this.$store.commit('reduceFixTabs',JSON.stringify( this.$store.state.chooseTabName ))
-            } 
+            }  */
+            this.getTabs( 'unfix' );
           },
           close: () => { this.$emit('close',Object.keys(this.$store.state.chooseTabName)) },
           taskManage: () => this.$emit('showDesk','taskManager'),
         });
         active[type]();
-      }
+      },
+      getTabs( type ){
+        this.axios.get('/userDesktop/getUserTaskbar').then( res => {
+            if( res.data.code === 200 ){
+              let hasFixed = res.data.obj;//先获取历史固定的
+              let hasFixedName = hasFixed.map( item => item.functionalTypes );
+              let nowFixed = this.$store.state.chooseTabName;//正要固定的
+              let fixedAll;
+              if( type === 'fix'){
+                fixedAll = hasFixedName.concat( Object.keys( nowFixed ));
+              } else {
+                let index = hasFixedName.indexOf( Object.keys( nowFixed )[0] );
+                hasFixedName.splice( index,1 );
+                fixedAll = hasFixedName;
+              }
+              let obj = fixedAll.map( item => {
+                return {
+                  functionalTypes:item,
+                  fileUrl:'',
+                }
+              });
+         
+              let URLSearchParams = require('url-search-params');
+              let _params = new URLSearchParams();
+              _params.append('userTaskbar',JSON.stringify(obj));
+              this.axios.post('/userDesktop/updateUserTaskbar',_params).then( res => {
+                res.data.code === 200 && ( this.reloadTabs())
+              })
+            }
+        })
+      },
+      reloadTabs(){
+        this.$emit('reloadTabs');
+      },
     },
    mounted() {
      let footerPosition = this.$store.state.footerPosition;
