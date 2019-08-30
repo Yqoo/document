@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-16 09:18:16
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-29 15:40:05
+ * @LastEditTime: 2019-08-30 18:38:56
  * @Desc: 组织与用户下的员工用户组件
  -->
 <template>
@@ -11,7 +11,7 @@
         <el-button type='primary' size='mini' icon='el-icon-plus' @click=" addDialog = true ">添加</el-button>
         <el-button type='warning' size='mini' icon='el-icon-edit' @click="edit">编辑</el-button>
         <el-button type='danger' size='mini' icon='el-icon-delete' @click="del">删除</el-button>
-        <el-button type='info' size='mini' icon='el-icon-search'>搜索</el-button>
+        <el-button type='info' size='mini' icon='el-icon-search' @click='searchDialog = true'>搜索</el-button>
         <el-button type='success' size='mini' icon='el-icon-refresh'>重置密码</el-button>
       </el-button-group>
     </div>
@@ -24,6 +24,7 @@
       @selection-change='selectRow'
       @row-click='rowClick'
       :highlight-current-row='true'
+      height='400'
       >
       <el-table-column fixed='left' type='selection' width='50'></el-table-column>
       <el-table-column prop='name' label='姓名'></el-table-column>
@@ -101,8 +102,8 @@
                     </el-form-item>
                   </div>
                   <div class="flexBox">
-                    <el-form-item label='是否是管理员' prop='isAdmin'>
-                      <el-radio-group v-model='basicInfoForm.isAdmin'>
+                    <el-form-item label='是否是管理员' prop='isSuper'>
+                      <el-radio-group v-model='basicInfoForm.isSuper'>
                         <el-radio label='Y'>是</el-radio>
                         <el-radio label='N'>否</el-radio>
                       </el-radio-group>
@@ -150,29 +151,237 @@
             </el-row>
           </el-tab-pane>
           <el-tab-pane label='扩展属性' name='extendAttr'>extendAttr</el-tab-pane>
-          <el-tab-pane label='组织信息' name='organizeInfo'>organizeInfo</el-tab-pane>
-          <el-tab-pane label='岗位信息' name='postInfo'>postInfo</el-tab-pane>
-          <el-tab-pane label='角色信息' name='roleInfo'>
-            <el-row>
-              <el-col :span='5'>
-               <!--  <el-tree
-                  :data="data"
-                  show-checkbox
+          <el-tab-pane label='组织信息' name='organizeInfo' style="padding:10px 0px">
+             <el-row>
+              <el-col :span='6'>
+                <el-tree
+                  :data="orgTreeData"
                   node-key="id"
-                  default-expand-all
                   :expand-on-click-node="false"
-                  :render-content="renderContent">
-                </el-tree> -->
+                  ref='orgTree'
+                  highlight-current
+                  @node-click='orgTreeClick'
+                  >
+                </el-tree>
               </el-col>
-              <el-col :span='1'></el-col>
-              <el-col :span='18'></el-col>
+              <el-col :span='3'>
+                <div class="treeBtns">
+                  <el-button type='text' size='mini' icon="el-icon-back" disabled>属于<i class="el-icon-right el-icon--right"></i></el-button>
+                  <el-button type='danger' size='mini' icon='el-icon-delete' @click="empty('org')">清空</el-button>
+                </div>
+              </el-col>
+              <el-col :span='15'>
+                <el-input size='small' v-model='orgName' disabled>
+                  <template slot="prepend">
+                    组织名称
+                  </template>
+                </el-input>
+                <el-input size='small' style="margin-top:10px;" v-model='orgPath' disabled>
+                  <template slot="prepend">
+                    组织路径
+                  </template>
+                </el-input>
+              </el-col>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label='用户组信息' name='userGroupInfo'>userGroupInfo</el-tab-pane>
+          <el-tab-pane label='岗位信息' name='postInfo' style="padding:10px 0px">
+           <el-row>
+             <el-col :span='6'>
+               <el-tree
+                  :data="postTreeData"
+                  show-checkbox
+                  node-key="id"
+                  :expand-on-click-node="false"
+                  ref='postTree'
+                  @check-change="getChecked('post')"
+                  check-strictly
+                  >
+                </el-tree>
+             </el-col>
+             <el-col :span='3'>
+                <div class="treeBtns">
+                  <el-button type='text' size='mini' icon="el-icon-back" disabled>分配组织<i class="el-icon-right el-icon--right"></i></el-button>
+                  <el-button type='danger' size='mini' icon='el-icon-delete'>清空所有</el-button>
+                </div>
+             </el-col>
+             <el-col :span='15'>
+               <el-table
+                :data='postTableData'
+                style="width: 100%"
+                stripe
+                size='mini'
+                height='300'
+                >
+                <el-table-column prop='label' label='岗位名称'></el-table-column>
+                <el-table-column prop='isMainPost' label='主岗位'>
+                  <template slot-scope="scope">
+                    <el-radio-group v-model='isMainPost'>
+                      <el-radio :label='scope.row.id'><span style="opacity:0">.</span></el-radio>
+                    </el-radio-group>
+                  </template>
+                </el-table-column>
+                <el-table-column prop='isPrincipal' label='主负责人'>
+                  <template slot-scope="scope">
+                    <el-checkbox v-model="isPrincipal" :label='scope.row.id'>
+                      <span style="opacity:0;">.</span>
+                    </el-checkbox>
+                  </template>
+                </el-table-column>
+                <el-table-column label='关联操作'>
+                  <template slot-scope="scope">
+                    <el-button type='text' icon='el-icon-delete' title='删除' @click='deletePostTableRow(scope.$index,postTableData)'></el-button>
+                  </template>
+                </el-table-column>
+               </el-table>
+             </el-col>
+           </el-row>
+          </el-tab-pane>
+          <el-tab-pane label='角色信息' name='roleInfo' style="padding:10px 0px;">
+            <el-row>
+              <el-col :span='6'>
+                <el-tree
+                  :data="roleTreeData"
+                  show-checkbox
+                  node-key="id"
+                  :expand-on-click-node="false"
+                  ref='roleTree'
+                  @check-change="getChecked('role')"
+                  check-strictly
+                  >
+                </el-tree>
+              </el-col>
+              <el-col :span='3'>
+                <div class="treeBtns">
+                  <el-button type='text' size='mini' icon="el-icon-back" disabled>分配角色<i class="el-icon-right el-icon--right"></i></el-button>
+                  <el-button type='danger' size='mini' icon='el-icon-delete' @click="empty('role')">清空所有</el-button>
+                </div>
+              </el-col>
+              <el-col :span='15'>
+                <el-table
+                  :data="roleTableData"
+                  style="width: 100%"
+                  stripe
+                  size='mini'
+                  height='300'
+                  >
+                  <el-table-column prop='label' label='角色名称'></el-table-column>
+                  <el-table-column prop='name' label='角色来源'>
+                    <template slot-scope="scope">
+                      {{ scope.row.name?scope.row.name:'自有'}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column label='关联操作'>
+                    <template slot-scope="scope">
+                      <el-button type='text' icon='el-icon-delete' title='删除' @click='delRoleTableRow( scope.$index,roleTableData )'></el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-col>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane label='用户组信息' name='userGroupInfo'>
+            <el-row>
+              <el-col :span='10'>
+                <el-table
+                  :data="groupTableData"
+                  style="width:100%"
+                  stripe
+                  size='mini'
+                  ref='groupTable'
+                  @selection-change='selectGroup'
+                  :highlight-current-row='true'
+                  height='300'
+                  >
+                  <el-table-column fixed='left' type='selection' width='50'></el-table-column>
+                  <el-table-column prop='groupAlias' label='组别名'></el-table-column>
+                  <el-table-column prop='name' label='组名称'></el-table-column>
+                </el-table>
+                 <el-pagination
+                  @size-change="groupSizeChange"
+                  @current-change="groupCurrentChange"
+                  :current-page="groupCurrentPage"
+                  :hide-on-single-page="false"
+                  :page-sizes="[10, 20, 30, 40, 50]"
+                  :page-size="10"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="groupTotal"
+                  small
+                  style="margin:10px 0px">
+                </el-pagination>
+              </el-col>
+              <el-col :span='3'>
+                <div class="treeBtns">
+                  <el-button type='text' size='mini' icon="el-icon-back" disabled>添加<i class="el-icon-right el-icon--right"></i></el-button>
+                  <el-button type='danger' size='mini' icon='el-icon-delete' @click='cancelSelection'>清空</el-button>
+                </div>
+              </el-col>
+              <el-col :span='11'>
+                <el-table
+                  :data='addGroupTableData'
+                  style="width:100%"
+                  stripe
+                  size='mini'
+                  :highlight-current-row='true'
+                  height='300'
+                  >
+                  <el-table-column prop='name' label='组名称'></el-table-column>
+                  <el-table-column label='关联操作'>
+                    <template slot-scope="scope">
+                      <el-button type='text' icon='el-icon-delete' title='删除' @click='deleteGroupRow( scope.$index,addGroupTableData,scope.row )'></el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-col>
+            </el-row>
+          </el-tab-pane>
         </el-tabs>
       </div>
       <div slot="footer">
         <el-button type='success' size='mini' @click='confirm'>确定</el-button>
+        <el-button type='info' size='mini'>取消</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      :visible.sync='searchDialog'
+      v-dialogDrag
+      :modal="false"
+      width="30%"
+      :close-on-click-modal="false"  
+      >
+      <div slot="title">
+        <i class="el-icon-search"></i>
+        <span>搜索选项</span>
+      </div>
+      <div>
+        <el-form
+          :model='searchForm'
+          ref='searchForm'
+          label-width="80px"
+          :inline='true'
+          size='small'
+          :rules='searchRules'
+          >
+          <el-form-item label='姓名'>
+            <el-input v-model='searchForm.name' suffix-icon="el-icon-edit"></el-input>
+          </el-form-item>
+          <el-form-item label='用户名'>
+            <el-input v-model='searchForm.account' suffix-icon="el-icon-edit"></el-input>
+          </el-form-item>
+          <el-form-item label='状态'>
+            <el-select v-model='searchForm.status'>
+              <el-option v-for='(op,key) in options' :label='op' :value='key' :key="key"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="创建时间" prop='date1'>
+            <el-date-picker type="date" placeholder="选择日期" v-model="searchForm.date1" style="width: 100%;"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="结束时间" prop='date2'>
+            <el-date-picker type="date" placeholder="选择日期" v-model="searchForm.date2" style="width: 100%;"></el-date-picker>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer">
+        <el-button type='success' size='mini'>确定</el-button>
         <el-button type='info' size='mini'>取消</el-button>
       </div>
     </el-dialog>
@@ -197,6 +406,14 @@ export default {
         reg.test( value ) && fn() || fn( new Error('请输入正确的邮箱地址'));
       } else fn( new Error('请输入邮箱地址'));
     };
+    let checckDate1 = ( rule, value, fn ) => {
+      if (this.searchForm.date2 !== '') {
+        console.log(  this.searchForm.date2 )
+      }
+      fn();
+    };
+    let checckDate2 = ( rule, value, fn ) => {};
+
     return {
       addDialog:false,//控制新建个人信息框的显示
       active:'basicInfo',//新建框下默认展示的tab
@@ -210,7 +427,7 @@ export default {
       basicInfoForm:{
         account:'',
         password:'',
-        isAdmin:'N',
+        isSuper:'N',
         name:'',
         status:'',
         gender:'female',
@@ -239,15 +456,54 @@ export default {
         ],
       },
       options:{},
+      roleTreeData:[],//角色树
+      roleTableData:[],//被选中的角色信息table展示
+      orgTreeData:[],//组织树
+      orgName:'',//组织名称
+      orgPath:'',//组织路径
+      groupID:'',//组织Id
+      postTreeData:[],//岗位数
+      postTableData:[],//岗位表数据
+      isMainPost:'',//岗位下是主岗位的id
+      isPrincipal:[],//岗位下是否是主负责人的id集合
+      groupTableData:[],//用户组数据
+      groupTotal:0,
+      groupSize:10,
+      groupCurrentPage:1,
+      addGroupTableData:[],//被添加的分组信息数据表
+      searchDialog:false,//搜索dialog
+      searchForm:{
+        name:'',
+        account:'',
+        status:'',
+        date1:'',
+        date2:''
+      },
+      searchRules:{
+        date1:[
+          { validator: checckDate1, trigger: 'blur' }
+        ],
+        date2:[
+          { validator: checckDate2, trigger: 'blur' }
+        ],
+      },
     };
   },
   created(){
     this.axios.get('/employee/userStatus').then( res => {//获取用户状态options
       res.data.code === 200 && ( Object.assign( this.options,res.data.obj ));
     });
-    this.axios.get('/role/roleTree').then( res => {
-      console.log( res )
-    })
+    let getRoleTree = () => this.axios.get('/role/roleTree');
+    let getOrgTree = () =>  this.axios.get('/org/orgTree');
+    let getPostTree = () => this.axios.get('/position/positionTree');
+    let getGroupTableData = () => this.axios.get('/group/pager?page=1&size=10');
+    this.axios.all([getRoleTree(),getOrgTree(),getPostTree(),getGroupTableData()]).then( this.axios.spread( ( role, org, post,group ) => {
+      this.roleTreeData.push( role.data.obj );
+      this.orgTreeData.push( org.data.obj );
+      this.postTreeData.push( post.data.obj );
+      this.groupTableData = group.data.obj && group.data.obj.records;
+      this.groupTotal = group.data.obj && group.data.obj.total;
+    })).catch( err => this.$message.error('系统错误'));
     this.getPage();
   },
   methods:{
@@ -259,14 +515,51 @@ export default {
         }
       })
     },
+    getGroupPage( page = 1,size = 10, s = '' ){//获取用户组分页信息
+      this.axios.get(`/group/pager?page=${page}&size=${size}&s=${s}`).then( res => {
+        if( res.data.code === 200 ){
+          this.groupTableData = res.data.obj && res.data.obj.records;
+          this.groupTotal = res.data.obj && res.data.obj.total;
+        }
+      })
+    },
     handleAvatarSuccess(){},
     beforeAvatarUpload(){},
     confirm(){//表单提交
       this.$refs.basicInfoForm.validate( valid => {
         if( valid ) {
           let url = this.isAdd?'/employee/add':'/employee/update';
-          this.axios.post(url,qs.stringify( this.basicInfoForm)).then( res => {
-            console.log( res )
+           /* 岗位信息 */
+          let posList = [];
+          this.postTableData.forEach( item => {
+            let obj = {};
+            item.id === this.isMainPost && ( obj['isMainPost'] = true ) || ( obj['isMainPost'] = false );
+            this.isPrincipal.indexOf( item.id ) !== -1 && ( obj['isPrincipal'] = true ) || ( obj['isPrincipal'] = false );
+            obj['posId'] = item.id;
+            posList.push( obj );
+          });
+          /* 用户组信息 */
+          let groupIds = [];
+          groupIds = this.addGroupTableData.map( g => g.id );
+          /* 组织信息 */
+          let groupID = this.groupID;
+          /* 角色信息 */
+          let roleIds = this.roleTableData.map( r => r.id );
+          let URLSearchParams = require('url-search-params');//URLSearchParams的兼容性
+          let params = new URLSearchParams();
+          for ( let key in this.basicInfoForm ){
+            params.append(key,this.basicInfoForm[key]);
+          }
+          params.append('posList',JSON.stringify(posList));
+          params.append('groupIds',JSON.stringify(groupIds));
+          params.append('groupID',groupID);
+          params.append('roleIds',JSON.stringify(roleIds));
+          this.axios.post(url,params).then( res => {
+            if( res.data.code === 200 ){
+              this.$message.success('添加成功');
+              this.addDialog = false;
+              this.getPage();
+            } else this.$message.error( res.data.desc );
           }).catch( err => console.log( err ));
         }
       })
@@ -343,7 +636,62 @@ export default {
     dialogClose(){
       this.isAdd = true;
     },
-  }
+    getChecked( type ){//获取角色树被选中的节点数据
+      let _s = {
+        role: () => this.roleTableData = this.$refs.roleTree.getCheckedNodes(),
+        post: () => this.postTableData = this.$refs.postTree.getCheckedNodes(),
+      };
+      _s[type]();
+    },
+    delRoleTableRow( index, row ){
+      row.splice(index,1)
+      this.$refs.roleTree.setCheckedNodes(row);
+    },
+    deletePostTableRow( index, row ){
+      row.splice(index,1)
+      this.$refs.postTree.setCheckedNodes(row);
+    },
+    empty( type ){
+      let active = {
+        role: () => this.$refs.roleTree.setCheckedKeys([]),
+        org: () => { this.groupID = '',this.orgName = '',this.orgPath = ''},
+
+      }
+      active[type]();
+    },
+    orgTreeClick( data, node, self ){//组织树节点被点击后的回调
+      if( node.data.id === '0') {
+        this.$message.warning('根节点不是组织机构')
+      } else {
+        let parent = node.parent.data;//父节点数据
+        if( parent.id === '0'){//父节点为根节点
+          this.orgPath = this.orgName = node.data.label;
+        } else {
+          this.orgName = node.data.label;
+          this.orgPath = parent.label + '/' + this.orgName;
+        }
+        this.groupID = node.data.id;
+      }
+    },
+    groupCurrentChange( val ){
+      this.groupCurrentPage = val;
+      this.getGroupPage( val,this.groupSize );
+    },
+    groupSizeChange( val ){
+      this.groupSize = val;
+      this.getGroupPage( this.groupCurrentPage,val );
+    },
+    selectGroup( selection ){
+      this.addGroupTableData = selection;
+    },
+    cancelSelection( rows ) {//分组信息清空所选
+      this.$refs.groupTable.clearSelection();
+    },
+    deleteGroupRow( index,data,row ){
+      data.splice( index,1 );
+      this.$refs.groupTable.toggleRowSelection( row );
+    },
+  },
 }
 </script>
 <style lang='less' scoped>
@@ -381,6 +729,17 @@ export default {
       display: flex;
       flex-flow: row wrap;
       justify-content: space-between;
+    }
+  }
+  .el-tree {
+    height: 300px;
+    overflow: auto;
+  }
+  .treeBtns {
+    text-align: center;
+    margin-top: 100px;
+    & .el-button+.el-button {
+      margin: 10px 0px 0px 0px;
     }
   }
 </style>
