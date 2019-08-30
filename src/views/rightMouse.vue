@@ -79,15 +79,15 @@ export default {
                 this.$emit('closeMenus',{name: 'upload'});
               }},
               {title:'新建文件夹',icon:'el-icon-folder-add',color:{ color:'#ff5722' },fn:() => {
-                this.$emit('closeMenus',{new: 'folder', icon: 'tree-folder.png', name:'新建文件夹'});
+                this.$emit('closeMenus',{new: 'folder',type:'folder', icon: 'deskIcons/tree-folder.png', name:'新建文件夹'});
               }},
               {title:'新建文件',icon:'el-icon-document-add',color:{ color:'#95e1d3' },fn:() => {
-                this.$emit('closeMenus',true);
+                // this.$emit('closeMenus',true);
               },children:[
-                { title:'word',icon:require('@/assets/image/icons/deskIcons/icon-word.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'icon-word.png', name:'新建word'})}},
-                { title:'excel',icon:require('@/assets/image/icons/deskIcons/icon-excel.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'icon-excel.png', name:'新建Excel'})}},
-                { title:'ppt',icon:require('@/assets/image/icons/deskIcons/icon-ppt.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'icon-ppt.png', name:'新建PPT'})}},
-                { title:'txt',icon:require('@/assets/image/icons/deskIcons/icon-txt.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'icon-txt.png', name:'新建Txt'})}},
+                { title:'word',icon:require('@/assets/image/icons/deskIcons/icon-word.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'deskIcons/icon-word.png',type:'doc', name:'新建word'})}},
+                { title:'excel',icon:require('@/assets/image/icons/deskIcons/icon-excel.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'deskIcons/icon-excel.png',type:'xls', name:'新建Excel'})}},
+                { title:'ppt',icon:require('@/assets/image/icons/deskIcons/icon-ppt.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'deskIcons/icon-ppt.png',type:'ppt', name:'新建PPT'})}},
+                { title:'txt',icon:require('@/assets/image/icons/deskIcons/icon-txt.png'),fn:() => { this.$emit('closeMenus',{new: 'file', icon: 'deskIcons/icon-txt.png',type:'txt', name:'新建Txt'})}},
               ]},
               {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },fn:() => {
                 this.$emit('closeMenus',true);
@@ -125,7 +125,9 @@ export default {
               {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {
                 this.$emit('closeMenus',{name:'rename'});
               }},
-              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
+              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {
+                this.$emit('closeMenus',{name:'delete'});
+              }},
             ],
             recycle:[
               {title:'打开',icon:'el-icon-open',color:{ color:'#3490de' },fn:() => {console.log(1)}},
@@ -155,7 +157,9 @@ export default {
               {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },fn:() => {
                 this.$emit('closeMenus',true);
               }},
-              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {console.log(8)}},
+              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },fn:() => {
+                this.$emit('closeMenus',{name:'delete'});
+              }},
               {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },fn:() => {
                 this.$emit('closeMenus',{name:'rename'});
               }},
@@ -178,7 +182,9 @@ export default {
               {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },tip:'ctrl+v',fn:() => {
                 this.$emit('closeMenus',true);
               }},
-              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },tip:'Del',fn:() => {console.log(8)}},
+              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },tip:'Del',fn:() => {
+                this.$emit('closeMenus',{name:'delete'});
+              }},
               {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },tip:'F2',fn:() => {
                 this.$emit('closeMenus',{name:'rename'});
               }},
@@ -204,7 +210,9 @@ export default {
               {title:'粘贴',icon:'el-icon-files',color:{ color:'#ff2e63' },tip:'ctrl+v',fn:() => {
                 this.$emit('closeMenus',true);
               }},
-              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },tip:'Del',fn:() => {console.log(8)}},
+              {title:'删除',icon:'el-icon-delete',color:{ color:'#ea5455' },tip:'Del',fn:() => {
+                this.$emit('closeMenus',{name:'delete'});
+              }},
               {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },tip:'F2',fn:() => {
                 this.$emit('closeMenus',{name:'rename'});
               }},

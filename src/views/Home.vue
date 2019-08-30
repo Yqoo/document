@@ -52,20 +52,19 @@
                   :y='item.y'
                   :w='item.w'
                   :h='item.h'
-                  @moved="movedEvent"
                 >
                 <div :class="item.active?'active':''" @click.stop="clickIcon($event,item)" @contextmenu.prevent.stop="rightMouse($event, item)" @dblclick="applicationHandle(item.title)" :title="item.name">
                   <img :src="item.img!=null&&require(`@/assets/image/icons/${item.img}`)" :alt="item.title" :style="iconStyle">
                   <p v-if="!item.showInput">{{item.name}}</p>
-                  <el-input v-if="item.showInput" v-model="rename" size="mini" autofocus="true" @blur="handleRename"></el-input>
+                  <el-input v-if="item.showInput" v-model="rename" ref='nameInput' size="mini" autofocus="true" @blur="handleRename"></el-input>
                 </div>
                 </grid-item>
               </grid-layout>
             </div>
           </div>
           <div v-if='newFile.show' class="newFileBox" :style="newFile.position">
-            <img :src="newFile.icon"/>
-            <el-input v-model="newFile.name" size='mini' autofocus @blur="createNewfile"></el-input>
+            <img :src="require(`@/assets/image/icons/${newFile.icon}`)"/>
+            <el-input v-model="newFile.name" size='mini' ref='nameInput' autofocus @blur="createNewfile"></el-input>
           </div>
           <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus" @rightMouseClick="rightMouseClick"></rightMenus>
         </div>
@@ -171,6 +170,11 @@
         @closeItem="closeItem" 
         @minSize="minSize" 
         v-show="isShowBox.note.display"></note>
+      <fileBox
+        v-if='isShowBox.fileBox.show'
+        @closeItem='closeItem'
+        @minSize="minSize"
+        v-show="isShowBox.fileBox.display"></fileBox>
     </el-main>
     <el-footer :class="footerClass" :style="groundGlass">
       <bottomBar 
@@ -220,6 +224,7 @@ import account from "@/components/account/account.vue";
 import taskManager from "@/components/taskManager/taskManager.vue";
 import domainConsole from "@/components/domainConsole/domainConsole.vue";
 import note from "@/components/note/note.vue";
+import fileBox from '@/components/fileBox/fileBox.vue';
 import tools from  "@/assets/js/utils/tools.js";
 import createEnjoy from '@/components/share/createEnjoy.vue'; //创建共享
 import createShare from '@/components/share/createShare.vue'; //创建分享
@@ -245,7 +250,8 @@ export default {
     domainConsole,
     note,
     createEnjoy,
-    createShare
+    createShare,
+    fileBox
   },
   data() {
     return {
@@ -282,6 +288,7 @@ export default {
         taskManager: { show:false,name:'任务管理器',sign:'taskManager',display:false,icon:require('../assets/image/icons/deskIcons/icon-taskManager.png') },
         domainConsole: { show:false,name:'域名服务管理控制台',sign:'domainConsole',display:false,icon:require('../assets/image/icons/deskIcons/icon-domainConsole.png') },
         note: { show:false,name:'手机短信管理控制台',sign:'note',display:false,icon:require('../assets/image/icons/deskIcons/icon-note.png') },
+        fileBox: {show:false,name:'查看',sign:'fileBox',display:false,icon:require('@/assets/image/icons/fileIcons/fileCheck.png')}
       },
       index:'theme',
       isMoveDrawer:false,
@@ -356,13 +363,18 @@ export default {
       }
       return gridItemsList;
     },
+    icons(){ // 桌面已展示的图标
+      return this.defaultApps.filter((item) => {
+        return item.name != null;
+      });
+    }
   },
   methods: {
     rightMouse( e, item ) {  //桌面图标右键
       this.isRightMouseClick = true;
       //右键事件
       if(item){
-        let type = item.type;
+        let type = item.title==='file' ? 'file':item.type;
         this.clickItem = item;
         //桌面下右键弹出层 desktop 应用下右键弹出层 app  设置|| 我的电脑等下弹出层 recycle 回收站下弹出层 recycle
         switch ( type ) {
@@ -430,7 +442,7 @@ export default {
         e.active = false;
       });
     },
-    closeMenus( params ){
+    closeMenus( params ){ //桌面右键菜单操作
       this.isRightMouseClick = false;//关闭右键菜单
       if( params.index){
         this.isShowBox[params.path].show = true;//开启系统设置
@@ -440,13 +452,16 @@ export default {
       //新建文件夹、新建文件
       if( params.new ){
         let gridWidth = this.$refs.gridItem[0].$el.clientWidth + 'px';
-        let p = this.position;
+        let p = this.position; 
         Object.assign(this.newFile, {
           show: true,
           position: {top: p.top+'px',  left: p.left+'px', width: gridWidth},
-          icon: require('@/assets/image/icons/deskIcons/'+params.icon),
-          name: params.name
+          icon: params.icon,
+          name: params.name,
+          type: params.type,  // doc  ppt  xls
+          title:params.new,  // file  folder
         });
+        return false;
       }
       params.name && this.rightMenuOperate(params.name);
     },
@@ -467,32 +482,87 @@ export default {
         'copy':()=>{ //文件、文件夹、压缩包 => 复制
             let selectedArr = [];
             this.defaultApps.forEach((e) => {
-              if((e.type==='file'||e.type==='folder') && e.active === true){
+              if((e.title==='file'||e.title==='folder') && e.active === true){
                 selectedArr.push(e);
               }
             });
             this.$store.commit('copyFile', selectedArr);
-          }
+          },
+        'delete': ()=>{
+          console.log(this.clickItem);
+          delete this.clickItem['createTime'];
+          delete this.clickItem['createUser'];
+          delete this.clickItem['updateTime'];
+          delete this.clickItem['updateUser'];
+          this.axios.post('/userDesktop/deleteFile',qs.stringify(this.clickItem))
+            .then((res) => {
+              console.log(res)
+            });
+        }
       };
       active[name]();
     },
     handleRename(){ //重命名：当input框失去焦点时，保存修改后的名字
       if(this.rename != ''){
         this.clickItem.name = this.rename;
+        // this.axios.post('').then((res) => {
+        //   console.log(res)
+        // });
       }
       this.clickItem.showInput = false;
       this.clickItem = {};
     },
     createNewfile( ){ // 新建文件夹（新建文件）：失去焦点时创建
       let p = this.newFile.position;
-      let x = (p.left.slice(0,p.left.length-2)*1 / p.width.slice(0, p.width.length-2)*1).toFixed(0);
+      if(this.isRename() === 1) return false; //判断是否重命名
+      let x = (p.left.slice(0,p.left.length-2)*1 / p.width.slice(0, p.width.length-2)*1).toFixed(0)*1;
       let y = (p.top.slice(0,p.top.length-2)*1 / 80).toFixed(0);
+      let json = {
+        x: x * 1,
+        y: y * 1,
+        i: this.icons.length + 1 + '',
+        w:1,
+        h:1,
+        type: this.newFile.type,
+        name: this.newFile.name,
+        title: this.newFile.title,
+        img: this.newFile.icon
+      };
+      this.axios.post('/userDesktop/addFolder',qs.stringify(json))
+        .then((res) =>{
+          let data = res.data;
+          if(data.code === 200){
+            for(let i=0;i<this.defaultApps.length;i++){
+              if(this.defaultApps[i].x === data.obj.x && this.defaultApps[i].y === data.obj.y){
+                // this.defaultApps.splice(i,1,data.obj);
+                //  this.defaultApps[i] = data.obj;
+                Object.assign(this.defaultApps[i], data.obj);
+                break;
+              }
+            }
+            // console.log(this.defaultApps.filter((e)=>{return e.i === '12'}))
+          }else {
+            this.$message('创建失败！');
+          }
+        });
       Object.assign(this.newFile, {
         show: false,
         position: {top:0,left:0,width:0},
         icon: '',
         name:''
       });
+    },
+    isRename( ){ // 新建文件 && 重命名 =》 判断是否重名
+      let flag = 0;
+      for(let i=0;i<this.icons.length;i++){
+        if(this.icons[i].type === this.newFile.type && this.icons[i].name === this.newFile.name){
+          flag = 1;
+          this.$refs.nameInput.focus();
+          this.$message('文件名称重复！');
+          break;
+        }
+      }
+      return flag;
     },
     closeItem( param ){//右上角工具栏关闭弹出层组件
       this.isShowBox[param].show = false;
@@ -585,9 +655,6 @@ export default {
         this.lockTips = '密码错误，请重新输入'
       }
     },
-    movedEvent(i, newX, newY, e) {  // 移动图标成功
-      // console.log(i, newX, newY, e)
-    },
     layoutUpdatedEvent( newLayout ){  // 移动成功后获取新的图标信息，更新图标位置
       let URLSearchParams = require('url-search-params');//URLSearchParams的兼容性
       let layout = newLayout.filter((e) => {
@@ -643,25 +710,25 @@ export default {
     // 获取桌面图标
     this.clientWidth = Math.floor(document.body.clientWidth);
     this.clientHeight = Math.floor(document.body.clientHeight);
-    this.row = Math.floor((this.clientHeight - 80) / this.rowHeight);
-    // this.axios.get(`/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`)
-    //   .then((res)=>{
-    //     this.gridItemDatas = res.data.obj.layout;
-    //     this.pageNumber = res.data.obj.pagerNumber;
-    //     this.defaultApps = this.gridItems['list1'];
-    //   });
-    this.gridItemDatas = [ {"x":0,'y':0,'w':1,'h':1,'i':'1',pagerNumber:1,type: 'iCloud',name:'我的云端',title:'myCloud',img:'deskIcons/icon-computer.png'},
-        {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',pagerNumber:1,name:'浏览器',title:'browser',img:'deskIcons/icon-geogle.png'},
-        {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',pagerNumber:1,name:'系统设置',title:'system',img:'deskIcons/icon-setting.png'},
-        {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',pagerNumber:1,name:'新闻',title:'news',img:'deskIcons/icon-news.png'},
-        {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',pagerNumber:1,name:'回收站',title:'recycle',img:'deskIcons/icon-recycle.png'},
-        {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',pagerNumber:1,name:'文件夹',title:'folder',img:'deskIcons/tree-folder.png'},
-        {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',pagerNumber:1,name:'word文档',title:'file',img:'deskIcons/icon-word.png'},
-        {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',pagerNumber:2,name:'压缩文件',title:'zip',img:'deskIcons/zip.png'},
-        {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0',pagerNumber:1,},
-        {"x":1,'y':5,'w':1,'h':1,'i':'11',type: '0',pagerNumber:1,}];
-    this.pageNumber = 2;
-    this.defaultApps = this.gridItems['list1'];
+    this.row = Math.floor((this.clientHeight - 120) / this.rowHeight);
+    this.axios.get(`/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`)
+      .then((res)=>{
+        this.gridItemDatas = res.data.obj.layout;
+        this.pageNumber = res.data.obj.pagerNumber;
+        this.defaultApps = this.gridItems['list1'];
+      });
+    // this.gridItemDatas = [ {"x":0,'y':0,'w':1,'h':1,'i':'1',pagerNumber:1,type: 'iCloud',name:'我的云端',title:'myCloud',img:'deskIcons/icon-computer.png'},
+    //     {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',pagerNumber:1,name:'浏览器',title:'browser',img:'deskIcons/icon-geogle.png'},
+    //     {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',pagerNumber:1,name:'系统设置',title:'system',img:'deskIcons/icon-setting.png'},
+    //     {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',pagerNumber:1,name:'新闻',title:'news',img:'deskIcons/icon-news.png'},
+    //     {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',pagerNumber:1,name:'回收站',title:'recycle',img:'deskIcons/icon-recycle.png'},
+    //     {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',pagerNumber:1,name:'文件夹',title:'folder',img:'deskIcons/tree-folder.png'},
+    //     {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',pagerNumber:1,name:'word文档',title:'file',img:'deskIcons/icon-word.png'},
+    //     {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',pagerNumber:2,name:'压缩文件',title:'zip',img:'deskIcons/zip.png'},
+    //     {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0',pagerNumber:1,},
+    //     {"x":1,'y':5,'w':1,'h':1,'i':'11',type: '0',pagerNumber:1,}];
+    // this.pageNumber = 2;
+    // this.defaultApps = this.gridItems['list1'];
   },
   mounted(){
     this.footerClass = this.$store.state.footerPosition;
