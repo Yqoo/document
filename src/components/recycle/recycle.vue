@@ -4,9 +4,7 @@
  * @LastEditTime: 2019-08-21 15:32:28
  * @Desc: 
  -->
-/**
-  回收站组件
- */
+<!-- 回收站组件 -->
 <template>
   <div class="recycle" v-drag :class="themeColorName">
     <boxTools class="theme-color moveBox" :style="themeColorStyle" :info="info" @windowsTools="windowsTools" :title="componentTitle"></boxTools>
