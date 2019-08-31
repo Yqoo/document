@@ -170,11 +170,12 @@
         @closeItem="closeItem" 
         @minSize="minSize" 
         v-show="isShowBox.note.display"></note>
-      <fileBox
-        v-if='isShowBox.fileBox.show'
+      <file
+        v-if='isShowBox.file.show'
         @closeItem='closeItem'
         @minSize="minSize"
-        v-show="isShowBox.fileBox.display"></fileBox>
+        v-show="isShowBox.file.display"
+        :item="clickItem"></file>
     </el-main>
     <el-footer :class="footerClass" :style="groundGlass">
       <bottomBar 
@@ -224,7 +225,7 @@ import account from "@/components/account/account.vue";
 import taskManager from "@/components/taskManager/taskManager.vue";
 import domainConsole from "@/components/domainConsole/domainConsole.vue";
 import note from "@/components/note/note.vue";
-import fileBox from '@/components/fileBox/fileBox.vue';
+import file from '@/components/fileBox/fileBox.vue';
 import tools from  "@/assets/js/utils/tools.js";
 import createEnjoy from '@/components/share/createEnjoy.vue'; //创建共享
 import createShare from '@/components/share/createShare.vue'; //创建分享
@@ -251,7 +252,7 @@ export default {
     note,
     createEnjoy,
     createShare,
-    fileBox
+    file
   },
   data() {
     return {
@@ -288,7 +289,7 @@ export default {
         taskManager: { show:false,name:'任务管理器',sign:'taskManager',display:false,icon:require('../assets/image/icons/deskIcons/icon-taskManager.png') },
         domainConsole: { show:false,name:'域名服务管理控制台',sign:'domainConsole',display:false,icon:require('../assets/image/icons/deskIcons/icon-domainConsole.png') },
         note: { show:false,name:'手机短信管理控制台',sign:'note',display:false,icon:require('../assets/image/icons/deskIcons/icon-note.png') },
-        fileBox: {show:false,name:'查看',sign:'fileBox',display:false,icon:require('@/assets/image/icons/fileIcons/fileCheck.png')}
+        file: {show:false,name:'查看',sign:'file',display:false,icon:require('@/assets/image/icons/fileIcons/fileCheck.png')}
       },
       index:'theme',
       isMoveDrawer:false,
@@ -488,7 +489,8 @@ export default {
             });
             this.$store.commit('copyFile', selectedArr);
           },
-        'delete': ()=>{
+        'delete': ()=>{ // 删除
+          let _this = this;
           console.log(this.clickItem);
           delete this.clickItem['createTime'];
           delete this.clickItem['createUser'];
@@ -496,9 +498,23 @@ export default {
           delete this.clickItem['updateUser'];
           this.axios.post('/userDesktop/deleteFile',qs.stringify(this.clickItem))
             .then((res) => {
-              console.log(res)
+              if(res.data.code === 200){
+                _this.defaultApps.splice(_this.clickItem.i*1+1,1);
+                // for(let j=0;j<this.defaultApps.length;j++){
+                //   if(this.defaultApps[j].i === this.clickItem.i){
+                    
+                //     break;
+                //   }
+                // }
+              }else{
+                this.$message(res.data.desc);
+              }
             });
-        }
+        },
+        'onlineEdit':()=>{ // 在线编辑、协同编辑
+          console.log(this.clickItem)
+          this.applicationHandle('file');
+        },
       };
       active[name]();
     },
@@ -515,11 +531,18 @@ export default {
     createNewfile( ){ // 新建文件夹（新建文件）：失去焦点时创建
       let p = this.newFile.position;
       if(this.isRename() === 1) return false; //判断是否重命名
-      let x = (p.left.slice(0,p.left.length-2)*1 / p.width.slice(0, p.width.length-2)*1).toFixed(0)*1;
+      let x = (p.left.slice(0,p.left.length-2)*1 / p.width.slice(0, p.width.length-2)*1).toFixed(0);
       let y = (p.top.slice(0,p.top.length-2)*1 / 80).toFixed(0);
+      let i ='0';
+      for(let j=0; j<this.defaultApps.length; j++){
+        if(this.defaultApps[j].x === x*1 && this.defaultApps[j].y === y*1){
+          i = this.defaultApps[j].i;
+          break;
+        }
+      }
       let json = {
-        x: x * 1,
-        y: y * 1,
+        x: x*1,
+        y: x*1,
         i: this.icons.length + 1 + '',
         w:1,
         h:1,
@@ -533,14 +556,11 @@ export default {
           let data = res.data;
           if(data.code === 200){
             for(let i=0;i<this.defaultApps.length;i++){
-              if(this.defaultApps[i].x === data.obj.x && this.defaultApps[i].y === data.obj.y){
-                // this.defaultApps.splice(i,1,data.obj);
-                //  this.defaultApps[i] = data.obj;
-                Object.assign(this.defaultApps[i], data.obj);
+              if(this.defaultApps[i].i === data.obj.i){
+                this.defaultApps[i] = data.obj;
                 break;
               }
             }
-            // console.log(this.defaultApps.filter((e)=>{return e.i === '12'}))
           }else {
             this.$message('创建失败！');
           }
@@ -722,7 +742,7 @@ export default {
     //     {"x":0,'y':2,'w':1,'h':1,'i':'3',type: 'system',pagerNumber:1,name:'系统设置',title:'system',img:'deskIcons/icon-setting.png'},
     //     {"x":0,'y':4,'w':1,'h':1,'i':'5',type: '1',pagerNumber:1,name:'新闻',title:'news',img:'deskIcons/icon-news.png'},
     //     {"x":1,'y':0,'w':1,'h':1,'i':'6',type: 'recycle',pagerNumber:1,name:'回收站',title:'recycle',img:'deskIcons/icon-recycle.png'},
-    //     {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'file',pagerNumber:1,name:'文件夹',title:'folder',img:'deskIcons/tree-folder.png'},
+    //     {"x":1,'y':1,'w':1,'h':1,'i':'7',type: 'folder',pagerNumber:1,name:'文件夹',title:'folder',img:'deskIcons/tree-folder.png'},
     //     {"x":1,'y':2,'w':1,'h':1,'i':'8',type: 'file',pagerNumber:1,name:'word文档',title:'file',img:'deskIcons/icon-word.png'},
     //     {"x":1,'y':3,'w':1,'h':1,'i':'9',type: 'zip',pagerNumber:2,name:'压缩文件',title:'zip',img:'deskIcons/zip.png'},
     //     {"x":1,'y':4,'w':1,'h':1,'i':'10',type: '0',pagerNumber:1,},
