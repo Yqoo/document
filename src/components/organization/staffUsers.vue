@@ -1,18 +1,17 @@
 <!--
  * @Date: 2019-08-16 09:18:16
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-08-30 18:38:56
+ * @LastEditTime: 2019-08-31 19:38:18
  * @Desc: 组织与用户下的员工用户组件
  -->
 <template>
-  <div class='staffUsers'>
+  <div class='staffUsers' v-loading="loading">
     <div class="topBtns">
       <el-button-group>
         <el-button type='primary' size='mini' icon='el-icon-plus' @click=" addDialog = true ">添加</el-button>
         <el-button type='warning' size='mini' icon='el-icon-edit' @click="edit">编辑</el-button>
         <el-button type='danger' size='mini' icon='el-icon-delete' @click="del">删除</el-button>
-        <el-button type='info' size='mini' icon='el-icon-search' @click='searchDialog = true'>搜索</el-button>
-        <el-button type='success' size='mini' icon='el-icon-refresh'>重置密码</el-button>
+        <el-button type='success' size='mini' icon='el-icon-search' @click='searchDialog = true'>搜索</el-button>
       </el-button-group>
     </div>
     <el-table
@@ -41,7 +40,8 @@
       <el-table-column label='关联操作'>
         <template slot-scope="scope">
           <el-button type='text' icon='el-icon-refresh' title='重置密码' @click="handleRow('reset',scope.$index,scope.row)"></el-button>
-          <el-button type='text' icon='el-icon-error' title='禁用' @click="handleRow('disabled',scope.$index,scope.row)"></el-button>
+          <el-button type='text' icon='el-icon-error' style='color:#f38181' title='禁用' v-if="scope.row.status === 'actived'" @click="handleRow('disabled',scope.$index,scope.row)"></el-button>
+          <el-button type='text' icon='el-icon-success' title='激活' v-else @click="handleRow('disabled',scope.$index,scope.row)"></el-button>
           <el-button type='text' icon='el-icon-document' title='明细' @click="handleRow('detail',scope.$index,scope.row)"></el-button>
         </template>
       </el-table-column>
@@ -97,7 +97,7 @@
                     <el-form-item prop='account' label='账号'>
                       <el-input v-model="basicInfoForm.account"></el-input>
                     </el-form-item>
-                    <el-form-item prop='password' label='密码'>
+                    <el-form-item prop='password' label='密码' v-if="isAdd">
                       <el-input type='password' v-model='basicInfoForm.password'></el-input>
                     </el-form-item>
                   </div>
@@ -195,6 +195,7 @@
                   ref='postTree'
                   @check-change="getChecked('post')"
                   check-strictly
+                  :default-checked-keys='defaultPostCheck'
                   >
                 </el-tree>
              </el-col>
@@ -247,6 +248,7 @@
                   ref='roleTree'
                   @check-change="getChecked('role')"
                   check-strictly
+                  :default-checked-keys='defaultRoleCheck'
                   >
                 </el-tree>
               </el-col>
@@ -320,8 +322,8 @@
                   :data='addGroupTableData'
                   style="width:100%"
                   stripe
-                  size='mini'
                   :highlight-current-row='true'
+                  size='mini'
                   height='300'
                   >
                   <el-table-column prop='name' label='组名称'></el-table-column>
@@ -359,7 +361,6 @@
           label-width="80px"
           :inline='true'
           size='small'
-          :rules='searchRules'
           >
           <el-form-item label='姓名'>
             <el-input v-model='searchForm.name' suffix-icon="el-icon-edit"></el-input>
@@ -368,21 +369,117 @@
             <el-input v-model='searchForm.account' suffix-icon="el-icon-edit"></el-input>
           </el-form-item>
           <el-form-item label='状态'>
-            <el-select v-model='searchForm.status'>
+            <el-select v-model='searchForm.status'> 
               <el-option v-for='(op,key) in options' :label='op' :value='key' :key="key"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="创建时间" prop='date1'>
-            <el-date-picker type="date" placeholder="选择日期" v-model="searchForm.date1" style="width: 100%;"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="结束时间" prop='date2'>
-            <el-date-picker type="date" placeholder="选择日期" v-model="searchForm.date2" style="width: 100%;"></el-date-picker>
+          <el-form-item label='日期范围' prop='date'>
+            <el-date-picker
+              v-model="searchForm.date"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy/MM/dd">
+            </el-date-picker>
           </el-form-item>
         </el-form>
       </div>
       <div slot="footer">
-        <el-button type='success' size='mini'>确定</el-button>
-        <el-button type='info' size='mini'>取消</el-button>
+        <el-button type='success' size='mini' @click='confirmSearch'>确定</el-button>
+        <el-button type='info' size='mini' @click='searchDialog = false '>取消</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      :visible.sync='viewData.viewDialog'
+      v-dialogDrag
+      :modal="false"
+      width="50%"
+      :close-on-click-modal="false"
+      @close="closeViewDialog"
+      >
+      <div slot="title">
+        <i class="el-icon-info"></i>
+        <span>个人信息明细</span>
+      </div>
+      <div>
+        <el-tabs>
+          <el-tab-pane label="基本资料" style='padding:20px;'>
+            <el-row>
+              <el-col :span='6'>
+                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              </el-col>
+              <el-col :span='18'>
+                <ul>
+                  <li v-for="( item,index) in viewData.basicInfo" :key='index'>
+                    <div class="fontDesc">
+                      <p>{{item.title}}:</p>
+                      <p>{{item.value}}</p>
+                    </div>
+                  </li>
+                </ul>
+              </el-col>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane label="扩展属性">扩展属性</el-tab-pane>
+          <el-tab-pane label="组织信息" style="padding:20px">
+            <ul>
+              <li v-for="( item,index) in viewData.orgInfo" :key='index'>
+                <div class="fontDesc">
+                  <p>{{item.title}}:</p>
+                  <p>{{item.value}}</p>
+                </div>
+              </li>
+            </ul>
+          </el-tab-pane>
+          <el-tab-pane label="岗位信息">
+            <el-table
+              :data="viewData.postTableData"
+              size='mini'
+              style='width:100%'
+              height='300'
+              >
+              <el-table-column prop='name' label='岗位名称'></el-table-column>
+              <el-table-column prop='level' label='等级值'></el-table-column>
+              <el-table-column prop='orgName' label='归属组织'></el-table-column>
+              <el-table-column prop='isMainPost' label='是否主岗位'>
+                <template slot-scope="scope">
+                  {{scope.row.isMainPost?'是':'否'}}
+                </template>
+              </el-table-column>
+              <el-table-column prop='isPrincipal' label='是否主负责人'>
+                <template slot-scope="scope">
+                  {{scope.row.isPrincipal?'是':'否'}}
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane label="角色信息">
+            <el-table
+              :data="viewData.roleTableData"
+              size='mini'
+              style='width:100%'
+              height='300'
+              >
+              <el-table-column prop='name' label='角色'></el-table-column>
+              <el-table-column prop='roleAlias' label='别名'></el-table-column>
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane label="用户组信息">
+            <el-table
+              :data="viewData.groupTableData"
+              size='mini'
+              style='width:100%'
+              height='300'
+              >
+              <el-table-column prop='groupName' label='组名称'></el-table-column>
+              <el-table-column prop='groupAlias' label='组别名'></el-table-column>
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+      <div slot="footer">
+        <el-button type='info' size='mini' @click="viewData.viewDialog = false">关闭</el-button>
       </div>
     </el-dialog>
   </div>
@@ -406,13 +503,6 @@ export default {
         reg.test( value ) && fn() || fn( new Error('请输入正确的邮箱地址'));
       } else fn( new Error('请输入邮箱地址'));
     };
-    let checckDate1 = ( rule, value, fn ) => {
-      if (this.searchForm.date2 !== '') {
-        console.log(  this.searchForm.date2 )
-      }
-      fn();
-    };
-    let checckDate2 = ( rule, value, fn ) => {};
 
     return {
       addDialog:false,//控制新建个人信息框的显示
@@ -462,7 +552,7 @@ export default {
       orgName:'',//组织名称
       orgPath:'',//组织路径
       groupID:'',//组织Id
-      postTreeData:[],//岗位数
+      postTreeData:[],//岗位树
       postTableData:[],//岗位表数据
       isMainPost:'',//岗位下是主岗位的id
       isPrincipal:[],//岗位下是否是主负责人的id集合
@@ -476,17 +566,34 @@ export default {
         name:'',
         account:'',
         status:'',
-        date1:'',
-        date2:''
+        date:'',
       },
-      searchRules:{
-        date1:[
-          { validator: checckDate1, trigger: 'blur' }
-        ],
-        date2:[
-          { validator: checckDate2, trigger: 'blur' }
-        ],
-      },
+      defaultPostCheck:[],//岗位树回显默认勾选项
+      defaultRoleCheck:[],//角色树回显默认勾选项
+      loading:false,
+      viewData:{//明细下的数据保存
+        viewDialog:false,
+        basicInfo:{
+          name:{ title:'员工姓名',value:''},
+          gender:{ title:'性别',value:''},
+          orgPath:{ title:'归属组织路径',value:''},
+          account:{ title:'登录账号',value:''},
+          isSuper:{ title:'是否超级管理员',value:''},
+          wcAccount:{ title:'微信账号',value:''},
+          createTime:{ title:'创建时间',value:''},
+          updateTime:{ title:'更新时间',value:''},
+          status:{ title:'用户状态',value:''},
+        },
+        orgInfo:{
+          orgName:{ title:'组织名称',value:''},
+          orgPath:{ title:'组织路径',value:''},
+          level:{ title:'等级数值',value:''},
+          statu:{ title:'状态',value:''},
+        },
+        postTableData:[],
+        roleTableData:[],
+        groupTableData:[],
+      }
     };
   },
   created(){
@@ -547,18 +654,36 @@ export default {
           let roleIds = this.roleTableData.map( r => r.id );
           let URLSearchParams = require('url-search-params');//URLSearchParams的兼容性
           let params = new URLSearchParams();
+          if( !this.isAdd ){//修改表单
+            delete this.basicInfoForm['password'];
+            params.append('id',this.chooseList[0].id )
+          };
           for ( let key in this.basicInfoForm ){
             params.append(key,this.basicInfoForm[key]);
           }
           params.append('posList',JSON.stringify(posList));
-          params.append('groupIds',JSON.stringify(groupIds));
+          params.append('groupIds',groupIds.join(','));
           params.append('groupID',groupID);
-          params.append('roleIds',JSON.stringify(roleIds));
+          params.append('roleIds',roleIds.join(','));
+          params.append('orgPath',this.orgPath);
           this.axios.post(url,params).then( res => {
             if( res.data.code === 200 ){
-              this.$message.success('添加成功');
+              this.$message.success( this.isAdd?'添加成功':'修改成功');
               this.addDialog = false;
               this.getPage();
+              Object.assign( this.basicInfoForm,{
+                account:'',
+                password:'',
+                isSuper:'N',
+                name:'',
+                status:'',
+                gender:'female',
+                email:'',
+                address:'',
+                mobile:'',
+                qq:'',
+                wcAccount:''
+              });
             } else this.$message.error( res.data.desc );
           }).catch( err => console.log( err ));
         }
@@ -583,13 +708,78 @@ export default {
             inputType:'password',
             inputErrorMessage: '密码长度低于6位'
           }).then( ({value}) => {
-            console.log( value )
+            let p = {
+              id:row.id,
+              password:value
+            }
+            this.axios.post('/employee/resetPwd',qs.stringify(p)).then( s => {
+              s.data.code === 200 && ( this.$message.success('重置成功')) || ( this.$message.error(s.data.desc));
+            }).catch( err => console.log( err ));
           }).catch( () => this.$message.info('取消重置'))
         },
-        disabled: () => { console.log( 'disabled ')},
-        detail: () => { console.log( 'detail ')},
+        disabled: () => {
+          let p = {
+            id:row.id,
+            status:row.status === 'actived'?'disabled':'actived'
+          };
+          this.axios.post('/employee/updateStatus',qs.stringify(p)).then( s => {
+            if(  s.data.code === 200 ) this.getPage();
+            else this.$message.error('系统错误')
+          })
+        },
+        detail: () => {
+          this.viewData.viewDialog = true;
+          this.axios.get('/employee/getById?id=' + row.id ).then( s => {
+            let { partyEmployeePo, positionVoList, roleVoList, userGroupPoList } = s.data.obj;
+            for( let key in this.viewData.basicInfo ){//明细下的基本个人信息赋值
+              if( key === 'gender') this.viewData.basicInfo[key].value = partyEmployeePo[key] === 'male'?'男':'女';
+              else if ( key === 'isSuper') this.viewData.basicInfo[key].value = partyEmployeePo[key] === 'Y'?'是':'否';
+              else this.viewData.basicInfo[key].value = partyEmployeePo[key];
+            };
+            /* 组织信息 */
+            for( let k in this.viewData.orgInfo ){
+              this.viewData.orgInfo[k].value = partyEmployeePo[k]
+            };
+            /* 岗位信息 */
+            this.viewData.postTableData = positionVoList.map( post => {
+              return {
+                name:post.name,
+                level:post.level,
+                orgName:post.orgName,
+                isMainPost:post.isMainPost,
+                isPrincipal:post.isPrincipal
+              }
+            });
+            /* 角色信息 */
+            this.viewData.roleTableData = roleVoList.map( role => {
+              return {
+                name:role.name,
+                roleAlias:role.roleAlias
+              }
+            });
+            /* 用户组信息 */
+            this.viewData.groupTableData = userGroupPoList.map( user => {
+              return {
+                groupName:user.groupName,
+                groupAlias:user.groupAlias
+              }
+            })
+          })
+        },
       };
       methods[type]();
+    },
+    closeViewDialog(){
+      /* 组织信息 */
+      for( let k in this.viewData.orgInfo ){
+        this.viewData.orgInfo[k].value = '';
+      };
+      /* 岗位信息 */
+      this.viewData.postTableData = [];
+      /* 角色信息 */
+      this.viewData.roleTableData = [];
+      /* 用户组信息 */
+      this.viewData.groupTableData = []
     },
     handleSizeChange( val ){//每页显示条数改变的回调
       this.size = val;
@@ -628,13 +818,80 @@ export default {
       if( this.chooseList.length === 1 ){
         this.isAdd = false;
         this.addDialog = true;
-        Object.assign( this.basicInfoForm,this.chooseList[0]);
+        this.loading = true;
+        let id = this.chooseList[0].id;
+        this.axios.get('/employee/getById?id=' + id).then( s => {
+          if( s.data.code === 200 ){
+            /* 回显 */
+            let { partyEmployeePo, positionVoList, roleVoList, userGroupPoList } = s.data.obj;
+            for ( let key in this.basicInfoForm ){
+              this.basicInfoForm[key] = partyEmployeePo[key]
+            };
+            /* 组织信息 */
+            this.orgName = partyEmployeePo.orgName;
+            this.orgPath = partyEmployeePo.orgPath;
+            this.groupID = partyEmployeePo.groupID;
+            /* 岗位信息 */
+            this.defaultPostCheck = positionVoList.map( pos => pos.id );
+            this.postTableData = this.defaultPostCheck.map( d => {//获取选中节点的详细信息并加载到posttable
+              let da = this.$refs.postTree.getNode(d);
+              return {
+                label:da.data.label,
+                id:da.data.id,
+              }
+            });
+            positionVoList.forEach( pos => {//posttable下的单选框喝复选框的回显
+              if( pos.isMainPost ) this.isMainPost = pos.id;
+              if( pos.isPrincipal) this.isPrincipal.push( pos.id );
+            });
+            /* 角色信息 */
+            this.defaultRoleCheck = roleVoList.map( r => r.id );
+            this.roleTableData = roleVoList.map( r => {
+              return {
+                label:r.name,
+                id:r.id,
+              }
+            });
+            /* 用户组信息 */
+            this.addGroupTableData = userGroupPoList.map( group => {
+              return {
+                name:group.groupName,
+                id:group.id,
+                groupAlias:group.groupAlias
+              }
+            });
+            this.loading = false;
+          }
+        });
       } else {
         this.$message.warning('请选择一行数据进行编辑修改');
       }
     },
     dialogClose(){
       this.isAdd = true;
+      this.roleTableData = [];
+      this.orgName = '';//组织名称
+      this.orgPath = '';//组织路径
+      this.groupID = '';//组织Id
+      this.postTableData = [];//岗位表数据
+      this.isMainPost = '';//岗位下是主岗位的id
+      this.isPrincipal = [];//岗位下是否是主负责人的id集合
+      this.addGroupTableData = [];//被添加的分组信息数据表
+      this.$refs.roleTree.setCheckedKeys([]);
+      this.$refs.postTree.setCheckedKeys([]);
+      this.basicInfoForm = {
+        account:'',
+        password:'',
+        isSuper:'N',
+        name:'',
+        status:'',
+        gender:'female',
+        email:'',
+        address:'',
+        mobile:'',
+        qq:'',
+        wcAccount:''
+      };
     },
     getChecked( type ){//获取角色树被选中的节点数据
       let _s = {
@@ -691,6 +948,24 @@ export default {
       data.splice( index,1 );
       this.$refs.groupTable.toggleRowSelection( row );
     },
+    confirmSearch(){//确认搜索
+      let endTime = '' ,startTime = '';
+      Array.isArray( this.searchForm.date ) && ( startTime = this.searchForm.date[0], endTime = this.searchForm.date[1] );
+      this.axios.get(`/employee/pager?size=${this.size}&page=${this.currentPage}&name=${this.searchForm.name}&startTime=${startTime}
+      &endTime=${endTime}&status=${this.searchForm.status}&account=${this.searchForm.account}`).then( res => {
+        if( res.data.code === 200 ){
+          this.tableData = res.data.obj && res.data.obj.records;
+          this.total = res.data.obj.total;
+          this.searchDialog = false;
+          Object.assign( this.searchForm,{
+            name:'',
+            account:'',
+            status:'',
+            date:'',
+          })
+        }
+      })
+    }
   },
 }
 </script>
@@ -740,6 +1015,15 @@ export default {
     margin-top: 100px;
     & .el-button+.el-button {
       margin: 10px 0px 0px 0px;
+    }
+  }
+  .fontDesc{
+    font-size: 12px;
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 3px 0px;
+    & p:nth-child(1){
+      width: 200px;
     }
   }
 </style>
