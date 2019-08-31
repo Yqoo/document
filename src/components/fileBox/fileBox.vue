@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-08-31 18:57:20
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-31 19:49:08
+ * @Desc: 
+ -->
 <!-- 桌面：打开文件 -->
 <template>
   <div class="file" v-drag :class="themeColorName">
@@ -17,7 +23,7 @@
         @tab-remove="removeTab"
       >
         <el-tab-pane
-          v-for="(item, index) in editableTabs"
+          v-for="item in editableTabs"
           :key="item.name"
           :label="item.title"
           :name="item.name"
