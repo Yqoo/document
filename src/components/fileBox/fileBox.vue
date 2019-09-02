@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2019-08-31 18:57:20
+ * @LastEditors: Yqoo
+ * @LastEditTime: 2019-08-31 19:49:08
+ * @Desc: 
+ -->
 <!-- 桌面：打开文件 -->
 <template>
   <div class="file" v-drag :class="themeColorName">
