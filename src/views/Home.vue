@@ -374,6 +374,12 @@ export default {
     }
   },
   methods: {
+    // openNewWindow(){
+    //   const { href } = this.$router.resolve({
+    //     name: "sharePage",
+    //   });
+    //   window.open(href, '_blank')
+    // },
     rightMouse( e, item ) {  //桌面图标右键
       this.isRightMouseClick = true;
       //右键事件
