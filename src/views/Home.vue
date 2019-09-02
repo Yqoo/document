@@ -377,6 +377,9 @@ export default {
     // openNewWindow(){
     //   const { href } = this.$router.resolve({
     //     name: "sharePage",
+    //     params: {
+    //       userId: id,
+    //     }
     //   });
     //   window.open(href, '_blank')
     // },
