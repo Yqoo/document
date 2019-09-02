@@ -17,7 +17,7 @@
         @tab-remove="removeTab"
       >
         <el-tab-pane
-          v-for="(item, index) in editableTabs"
+          v-for="item in editableTabs"
           :key="item.name"
           :label="item.title"
           :name="item.name"
@@ -49,7 +49,7 @@ export default {
       minWidth: "",
       minHeight: "",
       tabPosition: "left",
-      editableTabsValue: "2",
+      editableTabsValue: "1",
       editableTabs: [],
       tabIndex: 1
     };

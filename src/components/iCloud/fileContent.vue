@@ -1,9 +1,9 @@
 <!-- 我的云端：内容 -->
 <template>
-  <div class='myCloudContent'>
+  <div class='myCloudContent' @contextmenu.prevent="showRightMenu({e:$event,clickTag: 'zhiyou',dataArr:zyCloud,list:blankRight})">
       <div class="cards flipInX animated" :class="displayName==='行展示'?'row':'col'">
           <el-card v-for="(c,index) in dataList" :class="c.active?'addBorder':''" :key="index" shadow="hover">
-              <div @click="activeCard({e:$event,item:c,i:index,dataArr:dataList})" @dblclick.stop="openFolder" :title="c.name">
+              <div @click="activeCard({e:$event,item:c,i:index,dataArr:dataList})" @contextmenu.stop.prevent="fileRightMenu({e:$event,item:c,dataArr:dataList})" @dblclick.stop="openFolder({component:c.component,name:c.name})" :title="c.name">
                 <img :src="c.imgurl" :style="displayName==='行展示'&&size"/>
                 <div class="bottom">{{c.name}}</div>
                 <img :src="c.icon" class="fileIcon">
@@ -30,6 +30,10 @@ var folder = {
     {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
     {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
   ],
+  folderRight:[
+    {iconImg: require('@/assets/image/icons/fileIcons/down.png'),iconTitle: '下载',isRightBorder: false},
+    {iconImg: require('@/assets/image/icons/fileIcons/edit.png'),iconTitle: '在线编辑',isRightBorder: false}
+  ]
 };
 export default {
   extends: myCloudUtilMixin,
@@ -46,7 +50,7 @@ export default {
   mounted(){
     let name = this.attrs.name;
     setTimeout(()=>{
-      this.$emit('someMethods',{name:'getContentUtils',data:folder.blankRight});
+      this.$emit('someMethods',{name:'getChildUtils',data:folder.blankRight});
     }, 300);
   }
 }

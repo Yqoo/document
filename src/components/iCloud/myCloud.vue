@@ -181,6 +181,7 @@ var rightData = {
     data:[
       {name:'开发部',type:'folder',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
       {name:'学习区',type:'folder',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
+      {name:'临时共享文件夹',type:'folder',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),active:false}
     ]
   },
   organizationCloud:{
@@ -425,6 +426,19 @@ export default {
           this.$parent.$parent.$parent.applicationHandle('recycle');
           return false;
         }
+        if(this.current === 'iCloudIndex'){
+          this.attrs = {
+            ...this.attrs,
+            ...rightData,
+            clickTag: this.clickTag,
+            isClick:{
+              mineCloud: {zhiyou: false, mine: false},
+              shareCloud: false,
+              organizationCloud: false,
+            },
+          }
+          return false;
+        }
         this.attrs = {
           ...this.attrs,
           name,
@@ -477,8 +491,8 @@ export default {
             }
             delete this.attrs['name'];
           },
-          getContentUtils: ()=>{ //双击后获取子级内容的工具栏
-            this.lists = msg.data;
+          getChildUtils: ()=>{ //双击后获取子级内容的工具栏（空白菜单），文件夹、文件右键菜单
+            this.lists = msg.data.blankRight;
           },
         };
         active[msg.name]();
@@ -544,6 +558,15 @@ export default {
         ...this.attrs,
         ...this.rightContentData,
         clickTag: this.clickTag,
+      }
+      //======  键盘快捷键 =====
+      let $this = this;
+      document.onkeydown = (event)=>{
+        let e = event || window.event || arguments.callee.caller.arguments[0];
+        if(e && e.keyCode === 8){ // backSpace返回键
+          $this.current = 'iCloudIndex';  //  （临时）
+          $this.utilClick('刷新');
+        }
       }
     },
 }
