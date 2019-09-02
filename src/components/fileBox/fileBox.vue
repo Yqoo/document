@@ -55,7 +55,7 @@ export default {
       minWidth: "",
       minHeight: "",
       tabPosition: "left",
-      editableTabsValue: "2",
+      editableTabsValue: "1",
       editableTabs: [],
       tabIndex: 1
     };

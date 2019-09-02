@@ -198,9 +198,9 @@ export default {
               {title:'在线编辑',icon:'el-icon-edit',color:{color:'#fd5f00'},fn:()=>{
                 this.$emit('closeMenus', {name:'onlineEdit'});
               }},
-              {title:'协同编辑',icon:'el-icon-user',color:{color:'#260c1a'},fn:()=>{
-                this.$emit('closeMenus', {name:'onlineEdit'});
-              }},
+              // {title:'协同编辑',icon:'el-icon-user',color:{color:'#260c1a'},fn:()=>{
+              //   this.$emit('closeMenus', {name:'onlineEdit'});
+              // }},
               {title:'在线压缩',icon:'el-icon-film',color:{color:'#e36488'},fn:()=>{console.log('在线压缩')}},
               {title:'下载',icon:'el-icon-download',color:{color:'#8559a5'},fn:()=>{console.log('下载')}},
               {title:'属性',icon:'el-icon-warning',color:{ color:'#00a79d' },fn:() => {console.log('属性')}},

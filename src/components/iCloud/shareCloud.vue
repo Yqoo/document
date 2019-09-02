@@ -9,7 +9,7 @@
               </template>
               <div class="cards slideInDown animated" :class="displayName==='行展示'?'row':'col'">
                   <el-card v-for="(c,index) in shareCloud" :class="_isClick.shareCloud&&c.active?'addBorder':''" :key="index" shadow="hover">
-                      <div @click.stop="activeCard({e:$event,item:c,i:index,clickTag:'shareCloud',dataArr:shareCloud})" @contextmenu.stop.prevent="fileRightMenu({e:$event,item:c,dataArr:shareCloud,clickTag:'shareCloud'})" @dblclick.stop="openFolder(c.component)" :title="c.name">
+                      <div @click.stop="activeCard({e:$event,item:c,i:index,clickTag:'shareCloud',dataArr:shareCloud})" @contextmenu.stop.prevent="fileRightMenu({e:$event,item:c,dataArr:shareCloud,clickTag:'shareCloud'})" @dblclick.stop="openFolder({component:c.component,name:c.name})" :title="c.name">
                         <img :src="c.imgurl" :style="size"/>
                         <div class="bottom1">{{c.name}}</div>
                       </div>

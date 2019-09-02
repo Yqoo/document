@@ -39,5 +39,10 @@ export default new Router({
       name: 'theme',
       component: () => import("./views/theme")
     },
+    {
+      name:'sharePage',
+      path:'/sharePage',
+      component: () => import("./components/share/sharePage.vue")
+    }
   ]
 });

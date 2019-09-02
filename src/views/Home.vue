@@ -36,7 +36,9 @@
               <grid-layout
                 :layout.sync="defaultApps"
                 :auto-size="false"
+                :margin="[0, 0]"
                 :col-num="colNumber"
+                :max-rows='row'
                 :row-height='rowHeight'   
                 :is-draggable="true"
                 :is-resizable="true"
@@ -53,8 +55,8 @@
                   :w='item.w'
                   :h='item.h'
                 >
-                <div :class="item.active?'active':''" @click.stop="clickIcon($event,item)" @contextmenu.prevent.stop="rightMouse($event, item)" @dblclick="applicationHandle(item.title)" :title="item.name">
-                  <img :src="item.img!=null&&require(`@/assets/image/icons/${item.img}`)" :alt="item.title" :style="iconStyle">
+                <div :class="item.active?'active':''" @click.stop="clickIcon($event,item)" @contextmenu.prevent.stop="rightMouse($event, item)" @dblclick="applicationHandle(item.title)" :title="item.name" style="height:80px">
+                  <img :id="item.i" :src="item.img!=null&&require(`@/assets/image/icons/${item.img}`)" :alt="item.title" :style="iconStyle">
                   <p v-if="!item.showInput">{{item.name}}</p>
                   <el-input v-if="item.showInput" v-model="rename" ref='nameInput' size="mini" autofocus="true" @blur="handleRename"></el-input>
                 </div>
@@ -231,6 +233,7 @@ import createEnjoy from '@/components/share/createEnjoy.vue'; //创建共享
 import createShare from '@/components/share/createShare.vue'; //创建分享
 import { GridLayout, GridItem } from 'vue-grid-layout';
 import qs from 'qs';
+import { debuglog } from 'util';
 export default {
   name: "home",
   components: {
@@ -343,7 +346,7 @@ export default {
     },
     iconStyle() { // 图标的宽度
       let iconSize = this.$store.state.iconSize;
-      let size = iconSize === 'small' ? '30%':(iconSize === 'normal'?'50%':'80%');
+      let size = iconSize === 'small' ? '30%':(iconSize === 'normal'?'45%':'80%');
       return {width: size};
     },
     userSettingImg(){//获取缓存中的定义的锁屏壁纸
@@ -371,6 +374,15 @@ export default {
     }
   },
   methods: {
+    // openNewWindow(){
+    //   const { href } = this.$router.resolve({
+    //     name: "sharePage",
+    //     params: {
+    //       userId: id,
+    //     }
+    //   });
+    //   window.open(href, '_blank')
+    // },
     rightMouse( e, item ) {  //桌面图标右键
       this.isRightMouseClick = true;
       //右键事件
@@ -415,6 +427,7 @@ export default {
       });
     },
     clickIcon(e, item) {  //桌面图标左键
+      this.isRightMouseClick = false; //右键菜单隐藏
       if(item.name == null){ //没有点击在图标上，选中样式消失
         this.defaultApps.forEach((e, i) => {
           e.active = false;
@@ -490,29 +503,27 @@ export default {
             this.$store.commit('copyFile', selectedArr);
           },
         'delete': ()=>{ // 删除
-          let _this = this;
-          console.log(this.clickItem);
+          // console.log(this.clickItem);
           delete this.clickItem['createTime'];
-          delete this.clickItem['createUser'];
+          delete this .clickItem['createUser'];
           delete this.clickItem['updateTime'];
           delete this.clickItem['updateUser'];
           this.axios.post('/userDesktop/deleteFile',qs.stringify(this.clickItem))
             .then((res) => {
               if(res.data.code === 200){
-                _this.defaultApps.splice(_this.clickItem.i*1+1,1);
-                // for(let j=0;j<this.defaultApps.length;j++){
-                //   if(this.defaultApps[j].i === this.clickItem.i){
-                    
-                //     break;
-                //   }
-                // }
+                for(let j=0;j<this.defaultApps.length;j++){
+                  if(this.defaultApps[j].i === this.clickItem.i){
+                    this.defaultApps[j] = {x:this.clickItem.x,y:this.clickItem.y,i:this.clickItem.i,type:'0',w:1,h:1,pagerNumber:this.pageNumber};
+                    break;
+                  }
+                }
               }else{
                 this.$message(res.data.desc);
               }
             });
         },
         'onlineEdit':()=>{ // 在线编辑、协同编辑
-          console.log(this.clickItem)
+          // console.log(this.clickItem)
           this.applicationHandle('file');
         },
       };
@@ -521,9 +532,11 @@ export default {
     handleRename(){ //重命名：当input框失去焦点时，保存修改后的名字
       if(this.rename != ''){
         this.clickItem.name = this.rename;
-        // this.axios.post('').then((res) => {
-        //   console.log(res)
-        // });
+        delete this.clickItem['updateUser'];
+        delete this.clickItem['updateTime'];
+        delete this.clickItem['createTime'];
+        delete this.clickItem['createUser'];
+        this.axios.post('/userDesktop/updateUserDesktopIcon',qs.stringify(this.clickItem));
       }
       this.clickItem.showInput = false;
       this.clickItem = {};
@@ -531,19 +544,10 @@ export default {
     createNewfile( ){ // 新建文件夹（新建文件）：失去焦点时创建
       let p = this.newFile.position;
       if(this.isRename() === 1) return false; //判断是否重命名
-      let x = (p.left.slice(0,p.left.length-2)*1 / p.width.slice(0, p.width.length-2)*1).toFixed(0);
-      let y = (p.top.slice(0,p.top.length-2)*1 / 80).toFixed(0);
-      let i ='0';
-      for(let j=0; j<this.defaultApps.length; j++){
-        if(this.defaultApps[j].x === x*1 && this.defaultApps[j].y === y*1){
-          i = this.defaultApps[j].i;
-          break;
-        }
-      }
       let json = {
-        x: x*1,
-        y: x*1,
-        i: this.icons.length + 1 + '',
+        x: this.clickItem.x,
+        y: this.clickItem.y,
+        i:this.clickItem.i,
         w:1,
         h:1,
         type: this.newFile.type,
@@ -724,16 +728,16 @@ export default {
           this.defaultApps = this.gridItems['list'+this.pageIndex];
           break;
       }
-    }
+    },
   },
   created(){
     // 获取桌面图标
     this.clientWidth = Math.floor(document.body.clientWidth);
     this.clientHeight = Math.floor(document.body.clientHeight);
-    this.row = Math.floor((this.clientHeight - 120) / this.rowHeight);
+    this.row = Math.floor((this.clientHeight - 40) / this.rowHeight);
     this.axios.get(`/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`)
       .then((res)=>{
-        this.gridItemDatas = res.data.obj.layout;
+        this.gridItemDatas = res.data.obj.layout ? res.data.obj.layout : [];
         this.pageNumber = res.data.obj.pagerNumber;
         this.defaultApps = this.gridItems['list1'];
       });

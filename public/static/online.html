@@ -34,29 +34,14 @@
       padding: 0;
     }
   </style>
-  <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src='http://192.168.0.101:9000/web-apps/apps/api/documents/api.js'></script>
-  <script id="xxx"> 
+  <script> 
     var docEditor;
     axios.defaults.baseURL = "http://192.168.0.181:8080";//配置axios默认基础地址
     axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
     axios.defaults.withCredentials = true;//运行携带cookie
-  
-    let dataInfo = {"editorConfig":{"mode":"edit","customization":{"goback":{"url":""}},"callbackUrl":"http://192.168.0.181:8080/userDesktop/track?fileName=123.xls&userAddress=10.0.75.1&path=D%3A%5CuserDesktop%5C3a929c395832e78d7caa45f9dd2160e9%5C123.xls","lang":"zh-CN","user":{"name":"管理员","id":"10.0.75.1"}},"documentType":"spreadsheet","document":{"title":"123.xls","url":"http://192.168.0.181:8080/app_data/10.0.75.1/123.xls","fileType":"xls","key":"1701863001"},"type":"desktop"};
-    let name = getQueryString('name');
-    let type = getQueryString('type');
-    axios.get(`/userDesktop/editor?name=${name}&type=${type}`).then((res)=>{
-      console.log(res.data.obj.file);
-      // addScriptTag('http://192.168.0.101:9000/web-apps/apps/api/documents/api.js');
-      // сonnectEditor(res.data.obj.file);
-    });
-    function getQueryString(name) {
-      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-      var r = window.location.search.substr(1).match(reg);
-      if (r != null) return decodeURI(r[2]); return null;
-    } 
-
+    
     var innerAlert = function (message) {
       if (console && console.log)
         console.log(message);
@@ -85,18 +70,25 @@
     };
 
     var сonnectEditor = function () {
-      var config = dataInfo;
-      config.width = "100%";
-      config.height = "100%";
-      config.events = {
-        "onReady": onReady,
-        "onDocumentStateChange": onDocumentStateChange,
-        'onRequestEditRights': onRequestEditRights,
-        "onError": onError,
-        "onOutdatedVersion": onOutdatedVersion,
-      };
-
-      docEditor = new DocsAPI.DocEditor("iframeEditor", config);
+      let name = getQueryString('name');
+      let type = getQueryString('type');
+      async function getFile(){  //res.data.obj.file
+        return axios.get(`/userDesktop/editor?name=${name}&type=${type}`);
+      }
+      getFile().then((res) => {
+        if(res.data.code != 200) {alert(res.data.desc);return false;}
+        var config = res.data.obj.file;
+        config.width = "100%";
+        config.height = "100%";
+        config.events = {
+          "onReady": onReady,
+          "onDocumentStateChange": onDocumentStateChange,
+          'onRequestEditRights': onRequestEditRights,
+          "onError": onError,
+          "onOutdatedVersion": onOutdatedVersion,
+        };
+        docEditor = new DocsAPI.DocEditor("iframeEditor", config);
+      });
     };
 
     if (window.addEventListener) {
@@ -105,13 +97,11 @@
       window.attachEvent("load", сonnectEditor);
     }
 
-    function addScriptTag(src) { // 动态添加script标签
-      var script = document.createElement('script');
-      script.setAttribute('type', 'text/javascript');
-      script.src = src;
-      $("#xxx").before("<script src='http://192.168.0.101:9000/web-apps/apps/api/documents/api.js'><\/script>");
-      
-    }
+    function getQueryString(name) { //获取路径中的参数
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      var r = window.location.search.substr(1).match(reg);
+      if (r != null) return decodeURI(r[2]); return null;
+    } 
 
     
   </script>
@@ -119,7 +109,7 @@
 
 <body>
   <div class="form">
-    <div id="iframeEditor">11111111</div>
+    <div id="iframeEditor"></div>
   </div>
 
 </body>
