@@ -50,7 +50,7 @@
         </div>
       </aside>
       <div class="rightContent">
-        <component v-if="refreshContent && rightContentData!=''" :is="current" @someMethods="someMethods" :attrs="attrs" :current="current" ref="rightComponent"></component>
+        <component v-if="refreshContent" :is="current" @someMethods="someMethods" :attrs="attrs" :current="current" ref="rightComponent"></component>
       </div>
     </section>
     <rightMenu v-if="isShowRight" :position="menuPosition" :lists="menuList" @rightMenuClick="rightMenuClick" @hideRightMenu="hideRightMenu"></rightMenu>
@@ -69,145 +69,6 @@ import organizationCloud from '@/components/iCloud/organizationCloud';
 import fileContent from '@/components/iCloud/fileContent';
 import shareContent from "@/components/iCloud/shareContent.vue";
 import rightMenu from '@/components/iCloud/rightMenu.vue';
-
-var rightData = {
-  mineCloud: {
-    zhiyou: {
-      fileRight:[],
-      privateSpaceRight:[
-        {iconImg: require('@/assets/image/icons/fileIcons/fileO.png'),iconTitle: '文件操作',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/dailyO.png'),iconTitle: '日常操作',children: [{iconImg: require('@/assets/image/icons/fileIcons/cut.png'),iconTitle: '剪切',tip:'Ctrl+x'},{iconImg: require('@/assets/image/icons/fileIcons/copy.png'),iconTitle: '复制',tip:'Ctrl+c'},{iconImg: require('@/assets/image/icons/fileIcons/paste.png'),iconTitle: '粘贴',tip:'Ctrl+v'},{iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '重命名',tip:'F2'},{iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除',tip:'del'}],},{iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '在线操作',children: [{iconImg: require('@/assets/image/icons/fileIcons/preview.png'),iconTitle: '在线预览'},{iconImg: require('@/assets/image/icons/fileIcons/edit.png'),iconTitle: '在线编辑'},{iconImg: require('@/assets/image/icons/fileIcons/coordination.png'),iconTitle: '协同编辑'},{iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '在线压缩'},{iconImg: require('@/assets/image/icons/fileIcons/decompression.png'),iconTitle: '在线解压'}, {iconImg: require('@/assets/image/icons/fileIcons/encryption.png'),iconTitle: '文件加密'}, {iconImg: require('@/assets/image/icons/fileIcons/dsi.png'),iconTitle: '文件解密'}]},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/recycle.png'),iconTitle: '回收站',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/setpwd.png'),iconTitle: '设置密码',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/forgetpwd.png'),iconTitle: '忘记密码',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
-        {iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),iconTitle: '发送',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},{iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},{iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},{iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},{iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
-      ],
-      backupsRight:[
-        {iconImg: require('@/assets/image/icons/fileIcons/fileO.png'),iconTitle: '文件操作',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/dailyO.png'),iconTitle: '日常操作',children: [{iconImg: require('@/assets/image/icons/fileIcons/cut.png'),iconTitle: '剪切',tip:'Ctrl+x'},{iconImg: require('@/assets/image/icons/fileIcons/copy.png'),iconTitle: '复制',tip:'Ctrl+c'},{iconImg: require('@/assets/image/icons/fileIcons/paste.png'),iconTitle: '粘贴',tip:'Ctrl+v'},{iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '重命名',tip:'F2'},{iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除',tip:'del'}],},{iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '在线操作',children: [{iconImg: require('@/assets/image/icons/fileIcons/preview.png'),iconTitle: '在线预览'},{iconImg: require('@/assets/image/icons/fileIcons/edit.png'),iconTitle: '在线编辑'},{iconImg: require('@/assets/image/icons/fileIcons/coordination.png'),iconTitle: '协同编辑'},{iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '在线压缩'},{iconImg: require('@/assets/image/icons/fileIcons/decompression.png'),iconTitle: '在线解压'}, {iconImg: require('@/assets/image/icons/fileIcons/encryption.png'),iconTitle: '文件加密'}, {iconImg: require('@/assets/image/icons/fileIcons/dsi.png'),iconTitle: '文件解密'}]},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/recycle.png'),iconTitle: '回收站',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/backups.png'),iconTitle: '备份规则',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
-        {iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),iconTitle: '发送',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},{iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},{iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},{iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},{iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
-      ],
-      folderRight: [
-        {iconImg: require('@/assets/image/icons/fileIcons/fileO.png'),iconTitle: '文件操作',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/dailyO.png'),iconTitle: '日常操作',children: [{iconImg: require('@/assets/image/icons/fileIcons/cut.png'),iconTitle: '剪切',tip:'Ctrl+x'},{iconImg: require('@/assets/image/icons/fileIcons/copy.png'),iconTitle: '复制',tip:'Ctrl+c'},{iconImg: require('@/assets/image/icons/fileIcons/paste.png'),iconTitle: '粘贴',tip:'Ctrl+v'},{iconImg: require('@/assets/image/icons/fileIcons/rename.png'),iconTitle: '重命名',tip:'F2'},{iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除',tip:'del'}],},{iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '在线操作',children: [{iconImg: require('@/assets/image/icons/fileIcons/preview.png'),iconTitle: '在线预览'},{iconImg: require('@/assets/image/icons/fileIcons/edit.png'),iconTitle: '在线编辑'},{iconImg: require('@/assets/image/icons/fileIcons/coordination.png'),iconTitle: '协同编辑'},{iconImg: require('@/assets/image/icons/fileIcons/compress.png'),iconTitle: '在线压缩'},{iconImg: require('@/assets/image/icons/fileIcons/decompression.png'),iconTitle: '在线解压'}, {iconImg: require('@/assets/image/icons/fileIcons/encryption.png'),iconTitle: '文件加密'}, {iconImg: require('@/assets/image/icons/fileIcons/dsi.png'),iconTitle: '文件解密'}]},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/recycle.png'),iconTitle: '回收站',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
-        {iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),iconTitle: '发送',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},{iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},{iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},{iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},{iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
-      ],
-      blankRight:[
-        {iconImg: require('@/assets/image/icons/fileIcons/recycle.png'),iconTitle: '回收站',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/addC.png'),iconTitle: '申请增容',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/reduceC.png'),iconTitle: '申请减容',isRightBorder: true},{iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
-        {iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),iconTitle: '发送',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},{iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},{iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},{iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},{iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
-      ],
-      data:[
-        {name:'我的桌面',component:'fileContent',type:'folder',imgurl:require('@/assets/image/icons/deskIcons/desk.png'),icon:'',active:false},
-        {name:'我的文档',component:'fileContent',type:'folder',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon: '',active:false},
-        {name:'私密空间',component:'fileContent',type:'private',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/dsi.png'),active:false},
-        {name:'我的共享',component:'shareContent',type:'folder',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/user.png'),active:false},
-        {name:'接收共享',component:'shareContent',type:'folder',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/person.png'),active:false},
-        {name:'我的分享',component:'shareContent',type:'folder',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/myshare.png'),active:false},
-        {name:'接收分享',component:'shareContent',type:'folder',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/recept.png'),active:false},
-        {name:'备份中心',component:'fileContent',type:'backups',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),icon:require('@/assets/image/icons/fileIcons/backups.png'),active:false},
-      ],
-    },
-    mine: {
-      fileRight:[],
-      folderRight: [
-        {iconImg: require('@/assets/image/icons/fileIcons/partition.png'),iconTitle: '创建分区',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/parname.png'),iconTitle: '分区命名',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/format.png'),iconTitle: '格式分区',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除分区',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/attr.png'),iconTitle: '分区属性',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/addC.png'),iconTitle: '申请增容',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/reduceC.png'),iconTitle: '申请减容',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'}]},
-        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
-        {iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),iconTitle: '发送',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},{iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},{iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},{iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},{iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
-      ],
-      blankRight:[
-        {iconImg: require('@/assets/image/icons/fileIcons/partition.png'),iconTitle: '创建分区',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/attr.png'),iconTitle: '分区属性',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/addC.png'),iconTitle: '申请增容',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/reduceC.png'),iconTitle: '申请减容',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'}]},
-        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
-      ],
-      data:[
-        {name:'软件区',component:'fileContent',type:'folder',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-        {name:'文档区',component:'fileContent',type:'folder',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-        {name:'娱乐区',component:'fileContent',type:'folder',imgurl:require('@/assets/image/icons/deskIcons/tree-disk3.png'),active:false},
-      ]
-    }
-  },
-  shareCloud:{
-    fileRight:[],
-    folderRight:[
-        {iconImg: require('@/assets/image/icons/fileIcons/editCloud.png'),iconTitle: '编辑云端',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/power.png'),iconTitle: '云端权限',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/format.png'),iconTitle: '格式云端',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/pardelete.png'),iconTitle: '删除云端',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
-        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
-    ],
-    blankRight:[
-        {iconImg: require('@/assets/image/icons/fileIcons/partition.png'),iconTitle: '创建云端',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/power.png'),iconTitle: '云端权限',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/format.png'),iconTitle: '格式云端',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/addC.png'),iconTitle: '申请增容',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/reduceC.png'),iconTitle: '申请减容',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
-        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
-    ],
-    data:[
-      {name:'开发部',type:'folder',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
-      {name:'学习区',type:'folder',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-disk4.png'),active:false},
-      {name:'临时共享文件夹',type:'folder',component:'fileContent',imgurl:require('@/assets/image/icons/deskIcons/tree-folder.png'),active:false}
-    ]
-  },
-  organizationCloud:{
-    fileRight:[],
-    folderRight:[
-        {iconImg: require('@/assets/image/icons/fileIcons/attr.png'),iconTitle: '云端属性',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
-        {iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),iconTitle: '发送',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},{iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},{iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},{iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},{iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
-    ],
-    blankRight:[
-        {iconImg: require('@/assets/image/icons/fileIcons/addC.png'),iconTitle: '申请增容',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/reduceC.png'),iconTitle: '申请减容',isRightBorder: true},
-        {iconImg: require('@/assets/image/icons/fileIcons/check.png'),iconTitle: '查看',isRightBorder: false,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/little.png'),iconTitle: '小图标'},{iconImg: require('@/assets/image/icons/fileIcons/middle.png'),iconTitle: '中图标'},{iconImg: require('@/assets/image/icons/fileIcons/big.png'),iconTitle: '大图标'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/array.png'),iconTitle: '排列',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/row.png'),iconTitle: '行展示'},{iconImg: require('@/assets/image/icons/fileIcons/col.png'),iconTitle: '列展示'}]},
-        {iconImg: require('@/assets/image/icons/fileIcons/sendmsg.png'),iconTitle: '发送',isRightBorder: true,flag: false,children: [{iconImg: require('@/assets/image/icons/fileIcons/desk.png'),iconTitle: '发送桌面'},{iconImg: require('@/assets/image/icons/fileIcons/msg.png'),iconTitle: '即时通讯'},{iconImg: require('@/assets/image/icons/fileIcons/mail.png'),iconTitle: '发送邮件'},{iconImg: require('@/assets/image/icons/fileIcons/phone.png'),iconTitle: '发送短信'},{iconImg: require('@/assets/image/icons/fileIcons/message.png'),iconTitle: '发送消息'},]},
-        {iconImg: require('@/assets/image/icons/fileIcons/refresh.png'),iconTitle: '刷新',isRightBorder: false},
-        {iconImg: require('@/assets/image/icons/fileIcons/help.png'),iconTitle: '帮助',isRightBorder: false}
-    ],
-    data:[
-        {name:'四川挚友软件有限公司',type:'folder',component:'fileContent',imgurl:require('@/assets/image/icons/fileIcons/company.png'),active:false}
-      ]
-  },
-};
 export default {
     mixins: [themeMixin],
     name:'myCloud',
@@ -363,7 +224,6 @@ export default {
               ],
             }
           ],
-          rightContentData:'', //右侧内容数据
           current: 'iCloudIndex',//初始进入myCloud 默认右侧显示
           isShowUtils: true,  // 展开工具栏
           lists: [], // 工具栏中的数据
@@ -429,7 +289,6 @@ export default {
         if(this.current === 'iCloudIndex'){
           this.attrs = {
             ...this.attrs,
-            ...rightData,
             clickTag: this.clickTag,
             isClick:{
               mineCloud: {zhiyou: false, mine: false},
@@ -470,7 +329,7 @@ export default {
             });
             this.menuList = data.list; //显示右键菜单数据
             this.lists = data.list; //切换工具栏
-            this.clickTag = data.clickTag;  //切换点击的模块
+            this.current === 'iCloudIndex' && (this.clickTag = data.clickTag);  //切换点击的模块
             delete this.attrs['name'];
           },
           clickFile: ()=>{ //单击文件夹（文件），切换工具栏
@@ -479,26 +338,21 @@ export default {
             tag.clickTag != '' && this.changeIsClick(tag.clickTag);
             delete this.attrs['name'];  //如果不删除name,在弹框显示后，点击其他地方会一直出现弹框
           },
-          clickBlock: ()=>{ // 点击空白处，切换工具栏，清除点击过的边框
+          clickBlock: ()=>{ // 点击空白处，切换工具栏
             let tag = msg.data;
             this.lists = tag.list; //切换工具栏
-            this.clickTag = tag.clickTag;  // 更换点击的模块
-            this.changeIsClick(tag.clickTag);
-            //点击空白处，清除选中的文件边框
-            let dataList = (tag.clickTag === 'zhiyou' || tag.clickTag === 'mine') ? rightData.mineCloud[tag.clickTag].data : rightData[tag.clickTag].data;
-            for(let i=0; i< dataList.length; i++){
-              dataList[i].active = false;
-            }
+            this.current === 'iCloudIndex' && (this.clickTag = tag.clickTag);  // 更换点击的模块
+            this.current === 'iCloudIndex' && this.changeIsClick(tag.clickTag);
             delete this.attrs['name'];
           },
           getChildUtils: ()=>{ //双击后获取子级内容的工具栏（空白菜单），文件夹、文件右键菜单
-            this.lists = msg.data.blankRight;
+            this.lists = msg.data;
           },
         };
         active[msg.name]();
       },
       changeIsClick( clickTag ){ //初始进入时+我的云端（挚友云+我的云端），判断点击的哪个组件
-        //给点击的内容加上边框,切换模块时，清除其他模块点中的文件
+        //给点击的文件加上边框,切换模块时，清除其他模块点中的文件
         Object.assign(this.attrs,{
           isClick: {
             mineCloud: {zhiyou: false, mine: false},
@@ -551,13 +405,12 @@ export default {
       this.minWidth = document.querySelector('.myCloud').offsetWidth;
       this.minHeight = document.querySelector('.myCloud').offsetHeight;
       //工具栏初始化
-      this.lists = rightData.mineCloud.zhiyou.blankRight;
+      // this.lists = rightData.mineCloud.zhiyou.blankRight;
       //初始化右侧内容
-      this.rightContentData = rightData;
+      // this.rightContentData = rightData;
       this.attrs = {
         ...this.attrs,
-        ...this.rightContentData,
-        clickTag: this.clickTag,
+        // clickTag: this.clickTag,
       }
       //======  键盘快捷键 =====
       let $this = this;

@@ -6,9 +6,9 @@
  -->
 <template>
   <div class='iCloudIndex'>
-    <mineCloud @changeUtils='changeUtils' @someMethods="someMethods" :attrs="mineCloud"></mineCloud>
-    <shareCloud @changeUtils='changeUtils' @someMethods="someMethods" :attrs="shareCloud"></shareCloud>
-    <organizationCloud @changeUtils='changeUtils' @someMethods="someMethods" :attrs="organizationCloud"></organizationCloud>
+    <mineCloud @changeUtils='changeUtils' @someMethods="someMethods" :attrs='attrs'></mineCloud>
+    <shareCloud @changeUtils='changeUtils' @someMethods="someMethods" :attrs='attrs'></shareCloud>
+    <organizationCloud @changeUtils='changeUtils' @someMethods="someMethods" :attrs='attrs'></organizationCloud>
   </div>
 </template>
 
@@ -27,24 +27,24 @@ export default {
     capacity
   },
   props:['attrs'],
-  created(){
-    this.mine = this.attrs.mineCloud;
-    this.share = this.attrs.shareCloud;
-    this.organization = this.attrs.organizationCloud;
-    delete this.attrs['mineCloud'];
-    delete this.attrs['shareCloud'];
-    delete this.attrs['organizationCloud'];
-  },
+  // created(){
+  //   this.mine = this.attrs.mineCloud;
+  //   this.share = this.attrs.shareCloud;
+  //   this.organization = this.attrs.organizationCloud;
+  //   delete this.attrs['mineCloud'];
+  //   delete this.attrs['shareCloud'];
+  //   delete this.attrs['organizationCloud'];
+  // },
   computed:{
-    mineCloud(){
-      return {...this.attrs, ...this.mine}
-    },
-    shareCloud(){
-      return {...this.attrs, ...this.share}
-    },
-    organizationCloud(){
-      return {...this.attrs, ...this.organization}
-    },
+    // mineCloud(){
+    //   return {...this.attrs, ...this.mine}
+    // },
+    // shareCloud(){
+    //   return {...this.attrs, ...this.share}
+    // },
+    // organizationCloud(){
+    //   return {...this.attrs, ...this.organization}
+    // },
   },
   data() {
     return {

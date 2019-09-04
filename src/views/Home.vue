@@ -6,22 +6,42 @@
 <template>
   <el-container :style="bg" class="container">
     <el-main ref="main">
-      <div class="screenImg"  :style="isOpenScreenLock">
-        <img :src="userSettingImg" alt="" class="fadeInDown animated">
+      <div class="screenImg" :style="isOpenScreenLock">
+        <img :src="userSettingImg" alt class="fadeInDown animated" />
         <div class="lockDate_screen">
           <div>{{lock_time}}</div>
           <div>{{lock_date}}</div>
         </div>
         <div class="unlockPwd">
-          <el-input show-password placeholder="默认为用户登录密码" @keyup.enter.native="unlocking" v-model="lPwd" size="small">
-            <template slot="prepend"><i slot="prefix" class="el-icon-lock"></i></template>
-            <el-button slot="append" icon="el-icon-right" @click="unlocking"></el-button> 
+          <el-input
+            show-password
+            placeholder="默认为用户登录密码"
+            @keyup.enter.native="unlocking"
+            v-model="lPwd"
+            size="small"
+          >
+            <template slot="prepend">
+              <i slot="prefix" class="el-icon-lock"></i>
+            </template>
+            <el-button slot="append" icon="el-icon-right" @click="unlocking"></el-button>
           </el-input>
           <span style="font-size:12px;color:red">{{lockTips}}</span>
         </div>
       </div>
-      <vue-drawer-layout v-if="defaultApps!=[]"  ref="drawerLayout" :drawer-width="400" :reverse="true" :enable="isMoveDrawer" :backdrop="false">       
-        <div slot="content" @contextmenu.prevent.stop="rightMouse($event)" @click="hideRightMenus" class="desktop">
+      <vue-drawer-layout
+        v-if="defaultApps!=[]"
+        ref="drawerLayout"
+        :drawer-width="400"
+        :reverse="true"
+        :enable="isMoveDrawer"
+        :backdrop="false"
+      >
+        <div
+          slot="content"
+          @contextmenu.prevent.stop="rightMouse($event)"
+          @click="hideRightMenus"
+          class="desktop"
+        >
           <div class="appList">
             <div class="defaultApp">
               <!-- 
@@ -32,182 +52,269 @@
                 is-resizable：表示网格的项是否可以调整大小
                 vertical-compact：布局为垂直布局
                 use-css-transforms： 表示是否应使用 CSS transition-property: transform,否则是postion定位
-               -->
+              -->
               <grid-layout
                 :layout.sync="defaultApps"
                 :auto-size="false"
                 :margin="[0, 0]"
                 :col-num="colNumber"
-                :max-rows='row'
-                :row-height='rowHeight'   
+                :max-rows="row"
+                :row-height="rowHeight"
                 :is-draggable="true"
                 :is-resizable="true"
                 :vertical-compact="true"
-                :use-css-transforms="true" 
+                :use-css-transforms="true"
                 @layout-updated="layoutUpdatedEvent"
               >
-                <grid-item v-for="item in defaultApps"
+                <grid-item
+                  v-for="item in defaultApps"
                   ref="gridItem"
                   :key="item.i"
-                  :i='item.i'
-                  :x='item.x'
-                  :y='item.y'
-                  :w='item.w'
-                  :h='item.h'
+                  :i="item.i"
+                  :x="item.x"
+                  :y="item.y"
+                  :w="item.w"
+                  :h="item.h"
                 >
-                <div :class="item.active?'active':''" @click.stop="clickIcon($event,item)" @contextmenu.prevent.stop="rightMouse($event, item)" @dblclick="applicationHandle(item.title)" :title="item.name" style="height:80px">
-                  <img :id="item.i" :src="item.img!=null&&require(`@/assets/image/icons/${item.img}`)" :alt="item.title" :style="iconStyle">
-                  <p v-if="!item.showInput">{{item.name}}</p>
-                  <el-input v-if="item.showInput" v-model="rename" ref='nameInput' size="mini" autofocus="true" @blur="handleRename"></el-input>
-                </div>
+                  <div
+                    :class="item.active?'active':''"
+                    @click.stop="clickIcon($event,item)"
+                    @contextmenu.prevent.stop="rightMouse($event, item)"
+                    @dblclick="applicationHandle(item.title)"
+                    :title="item.name"
+                    style="height:80px"
+                  >
+                    <span :style="iconStyle">
+                      <img
+                      :id="item.i"
+                      :src="item.img!=null&&require(`@/assets/image/icons/${item.img}`)"
+                      :alt="item.title"
+                      />
+                    <img v-if="item.showLock" class="lock" src="@/assets/image/icons/deskIcons/lock.png"/>
+                    </span>
+                    <p v-if="!item.showInput">{{item.name}}</p>
+                    <el-input
+                      v-if="item.showInput"
+                      v-model="rename"
+                      ref="nameInput"
+                      size="mini"
+                      autofocus="true"
+                      @blur="handleRename"
+                    ></el-input>
+                  </div>
                 </grid-item>
               </grid-layout>
             </div>
           </div>
-          <div v-if='newFile.show' class="newFileBox" :style="newFile.position">
-            <img :src="require(`@/assets/image/icons/${newFile.icon}`)"/>
-            <el-input v-model="newFile.name" size='mini' ref='nameInput' autofocus @blur="createNewfile"></el-input>
+          <div v-if="newFile.show" class="newFileBox" :style="newFile.position">
+            <img :src="require(`@/assets/image/icons/${newFile.icon}`)" />
+            <el-input
+              v-model="newFile.name"
+              size="mini"
+              ref="nameInput"
+              autofocus
+              @blur="createNewfile"
+            ></el-input>
           </div>
-          <rightMenus v-if="isRightMouseClick" :rules="rules" :position="position" @closeMenus="closeMenus" @rightMouseClick="rightMouseClick"></rightMenus>
+          <rightMenus
+            v-if="isRightMouseClick"
+            :rules="rules"
+            :position="position"
+            @closeMenus="closeMenus"
+            @rightMouseClick="rightMouseClick"
+          ></rightMenus>
         </div>
         <div class="drawer-content lockSystem" slot="drawer">
-          <span class="myFont"><i class="el-icon-view"></i> 预览</span>
+          <span class="myFont">
+            <i class="el-icon-view"></i> 预览
+          </span>
           <div style="position:relative">
-            <img :src="checkLockImg" alt="" style="width:400px">
+            <img :src="checkLockImg" alt style="width:400px" />
             <div class="lockDate">
               <div>{{lock_time}}</div>
               <div>{{lock_date}}</div>
             </div>
           </div>
-          <span class="myFont"><i class="el-icon-picture"></i> 选择图片</span>
+          <span class="myFont">
+            <i class="el-icon-picture"></i> 选择图片
+          </span>
           <div style="display:flex;flex-flow:row wrap;">
             <el-card v-for="(img,index) in defaultLockWallpaper" :key="index" shadow="hover">
-              <img :src="img" alt="" style="width:150px;cursor:pointer;" @click="getShowimg(index,img)">
+              <img
+                :src="img"
+                alt
+                style="width:150px;cursor:pointer;"
+                @click="getShowimg(index,img)"
+              />
             </el-card>
           </div>
-          <span class="myFont"><i class="el-icon-upload2"></i> 浏览</span>
+          <span class="myFont">
+            <i class="el-icon-upload2"></i> 浏览
+          </span>
           <el-upload action="#" list-type="picture-card" :auto-upload="false">
             <i slot="default" class="el-icon-plus"></i>
           </el-upload>
           <div style="border:1px solid #ddd;padding:10px;margin:20px auto;border-radius:5px;">
-            <span class="myFont"><i class="el-icon-s-opportunity"></i> 是否开启锁屏</span>
+            <span class="myFont">
+              <i class="el-icon-s-opportunity"></i> 是否开启锁屏
+            </span>
             <template>
-              <el-radio-group v-model="isOpenLockScreen" size="mini" style="margin-left:20px;" @change="openLockScreen">
+              <el-radio-group
+                v-model="isOpenLockScreen"
+                size="mini"
+                style="margin-left:20px;"
+                @change="openLockScreen"
+              >
                 <el-radio-button label="true">开启</el-radio-button>
                 <el-radio-button label="false">关闭</el-radio-button>
               </el-radio-group>
             </template>
             <div style="margin-top:10px;border-top:1px solid #ddd;padding-top:5px">
-              <span class="myFont"><i class="el-icon-alarm-clock"></i> 锁屏时间（分）</span>
-              <template >
-                <el-input-number style="margin-left:10px;" size="mini"  :min="1" v-model="userSettingLockTime"></el-input-number>
+              <span class="myFont">
+                <i class="el-icon-alarm-clock"></i> 锁屏时间（分）
+              </span>
+              <template>
+                <el-input-number
+                  style="margin-left:10px;"
+                  size="mini"
+                  :min="1"
+                  v-model="userSettingLockTime"
+                ></el-input-number>
               </template>
             </div>
           </div>
         </div>
       </vue-drawer-layout>
-      <system 
-        @closeItem="closeItem" 
-        @minSize="minSize" 
-        v-if="isShowBox.system.show" 
-        :index="index" 
-        v-show="isShowBox.system.display" 
-        @applications="applications"></system>
-      <myCloud 
-        v-if='isShowBox.myCloud.show' 
-        @closeItem="closeItem" 
-        @minSize="minSize" 
-        v-show="isShowBox.myCloud.display"></myCloud>
-      <recycle 
-        v-if='isShowBox.recycle.show' 
-        @closeItem="closeItem" 
-        @minSize="minSize" 
-        v-show="isShowBox.recycle.display"></recycle>
-      <browser 
-        v-if='isShowBox.browser.show' 
-        @closeItem="closeItem" 
-        @minSize="minSize" 
-        v-show="isShowBox.browser.display"></browser>
-      <news 
-        v-if='isShowBox.news.show' 
+      <system
         @closeItem="closeItem"
-        @minSize="minSize" 
-        v-show="isShowBox.news.display"></news>
-      <systemProperties 
-        v-if='isShowBox.systemProperties.show' 
-        @closeItem="closeItem" 
-        @minSize="minSize" 
-        v-show="isShowBox.systemProperties.display"></systemProperties>
-      <iCloudConsole 
-        v-if='isShowBox.iCloudConsole.show' 
-        @closeItem="closeItem" 
-        @minSize="minSize" 
-        v-show="isShowBox.iCloudConsole.display"></iCloudConsole>
-      <organization 
-        v-if='isShowBox.organization.show' 
-        @closeItem="closeItem" 
-        @minSize="minSize" 
-        v-show="isShowBox.organization.display"></organization>
-      <account 
-        v-if='isShowBox.account.show' 
-        @closeItem="closeItem" 
-        @minSize="minSize" 
-        v-show="isShowBox.account.display"></account>
-      <taskManager 
-        v-if='isShowBox.taskManager.show' 
-        @closeItem="closeItem" 
-        @minSize="minSize" 
-        v-show="isShowBox.taskManager.display" 
-        :isShowBox="isShowBox" 
+        @minSize="minSize"
+        v-if="isShowBox.system.show"
+        :index="index"
+        v-show="isShowBox.system.display"
+        @applications="applications"
+      ></system>
+      <myCloud
+        v-if="isShowBox.myCloud.show"
+        @closeItem="closeItem"
+        @minSize="minSize"
+        v-show="isShowBox.myCloud.display"
+      ></myCloud>
+      <recycle
+        v-if="isShowBox.recycle.show"
+        @closeItem="closeItem"
+        @minSize="minSize"
+        v-show="isShowBox.recycle.display"
+      ></recycle>
+      <browser
+        v-if="isShowBox.browser.show"
+        @closeItem="closeItem"
+        @minSize="minSize"
+        v-show="isShowBox.browser.display"
+      ></browser>
+      <news
+        v-if="isShowBox.news.show"
+        @closeItem="closeItem"
+        @minSize="minSize"
+        v-show="isShowBox.news.display"
+      ></news>
+      <systemProperties
+        v-if="isShowBox.systemProperties.show"
+        @closeItem="closeItem"
+        @minSize="minSize"
+        v-show="isShowBox.systemProperties.display"
+      ></systemProperties>
+      <iCloudConsole
+        v-if="isShowBox.iCloudConsole.show"
+        @closeItem="closeItem"
+        @minSize="minSize"
+        v-show="isShowBox.iCloudConsole.display"
+      ></iCloudConsole>
+      <organization
+        v-if="isShowBox.organization.show"
+        @closeItem="closeItem"
+        @minSize="minSize"
+        v-show="isShowBox.organization.display"
+      ></organization>
+      <account
+        v-if="isShowBox.account.show"
+        @closeItem="closeItem"
+        @minSize="minSize"
+        v-show="isShowBox.account.display"
+      ></account>
+      <taskManager
+        v-if="isShowBox.taskManager.show"
+        @closeItem="closeItem"
+        @minSize="minSize"
+        v-show="isShowBox.taskManager.display"
+        :isShowBox="isShowBox"
         @showTab="showChild"
         @closeTab="closeChild"
-        @start="openChild"></taskManager>
-      <domainConsole 
-        v-if='isShowBox.domainConsole.show' 
-        @closeItem="closeItem" 
-        @minSize="minSize" 
-        v-show="isShowBox.domainConsole.display"></domainConsole>
-      <note 
-        v-if='isShowBox.note.show' 
-        @closeItem="closeItem" 
-        @minSize="minSize" 
-        v-show="isShowBox.note.display"></note>
+        @start="openChild"
+      ></taskManager>
+      <domainConsole
+        v-if="isShowBox.domainConsole.show"
+        @closeItem="closeItem"
+        @minSize="minSize"
+        v-show="isShowBox.domainConsole.display"
+      ></domainConsole>
+      <note
+        v-if="isShowBox.note.show"
+        @closeItem="closeItem"
+        @minSize="minSize"
+        v-show="isShowBox.note.display"
+      ></note>
       <file
-        v-if='isShowBox.file.show'
-        @closeItem='closeItem'
+        v-if="isShowBox.file.show"
+        @closeItem="closeItem"
         @minSize="minSize"
         v-show="isShowBox.file.display"
-        :item="clickItem"></file>
+        :item="clickItem"
+      ></file>
     </el-main>
     <el-footer :class="footerClass" :style="groundGlass">
-      <bottomBar 
-        :tabs="isShowBox" 
-        @open="openChild" 
+      <bottomBar
+        :tabs="isShowBox"
+        @open="openChild"
         @closeTab="closeChild"
-        @showTab="showChild" 
-        @barChangePosition="barChangePosition" 
-        @lockScreen="lockScreen"></bottomBar>
+        @showTab="showChild"
+        @barChangePosition="barChangePosition"
+        @lockScreen="lockScreen"
+      ></bottomBar>
     </el-footer>
-    <!-- 上传组件 -->
+    <!-- 上传组件  :before-upload="beforeUpload"  --> 
     <el-upload
-      ref='upload'
+      ref="upload"
       id="deskUpload"
       v-show="uploadShow"
       drag
-      action="https://jsonplaceholder.typicode.com/posts/"
-      :on-success='uploadSuccess'
-      :on-error="uploadErr"
+      action="string"
+      :http-request="beforeUpload"
+      :on-success="uploadSuccess"
       :auto-upload="true"
       :show-file-list="false"
-      multiple>
-    </el-upload>
-    <!-- 图标翻页 -->
+      multiple
+    ></el-upload> 
+    <!-- 图标翻页  -->
     <div v-if="pageNumber > 1" class="pageBtn clearfix">
-      <el-button type="info" icon="el-icon-caret-top" class="hvr-bob" @click="pageTurning('prev')" circle title="上一页"></el-button>
-      <el-button type="info" icon="el-icon-caret-bottom" class='hvr-hang' @click="pageTurning('next')" circle title="下一页"></el-button>
+      <el-button
+        type="info"
+        icon="el-icon-caret-top"
+        class="hvr-bob"
+        @click="pageTurning('prev')"
+        circle
+        title="上一页"
+      ></el-button>
+      <el-button
+        type="info"
+        icon="el-icon-caret-bottom"
+        class="hvr-hang"
+        @click="pageTurning('next')"
+        circle
+        title="下一页"
+      ></el-button>
     </div>
-    <createShare v-if="showShare" :show='showShare' :info='clickItem' @closeDialog="closeDialog"></createShare>
-    <createEnjoy v-if="showEnjoy" :show="showEnjoy" :info='clickItem' @closeDialog="closeDialog"></createEnjoy>
+    <createShare v-if="showShare" :show="showShare" :info="clickItem" @closeDialog="closeDialog"></createShare>
+    <createEnjoy v-if="showEnjoy" :show="showEnjoy" :info="clickItem" @closeDialog="closeDialog"></createEnjoy>
   </el-container>
 </template>
 
@@ -227,13 +334,13 @@ import account from "@/components/account/account.vue";
 import taskManager from "@/components/taskManager/taskManager.vue";
 import domainConsole from "@/components/domainConsole/domainConsole.vue";
 import note from "@/components/note/note.vue";
-import file from '@/components/fileBox/fileBox.vue';
-import tools from  "@/assets/js/utils/tools.js";
-import createEnjoy from '@/components/share/createEnjoy.vue'; //创建共享
-import createShare from '@/components/share/createShare.vue'; //创建分享
-import { GridLayout, GridItem } from 'vue-grid-layout';
-import qs from 'qs';
-import { debuglog } from 'util';
+import file from "@/components/fileBox/fileBox.vue";
+import tools from "@/assets/js/utils/tools.js";
+import createEnjoy from "@/components/share/createEnjoy.vue"; //创建共享
+import createShare from "@/components/share/createShare.vue"; //创建分享
+import { GridLayout, GridItem } from "vue-grid-layout";
+import qs from "qs";
+import { debuglog } from "util";
 export default {
   name: "home",
   components: {
@@ -259,165 +366,245 @@ export default {
   },
   data() {
     return {
-      uploadShow:false,
+      uploadShow: false, // 显示上传组件
+      isClickUpload: false, // 是否为 右键菜单点击上传
       showShare: false, // 控制创建分享弹框显示隐藏
-      showEnjoy:false,  //  控制创建共享弹框显示隐藏
-      clickItem:{}, //桌面点中的图标数据
+      showEnjoy: false, //  控制创建共享弹框显示隐藏
+      clickItem: {}, //桌面点中的图标数据
       groundGlass: {
         background: `hsla(0,0%,100%,.25) border-box`,
         overflow: `hidden`,
         boxShadow: `0 0 0 1px hsla(0,0%,100%,.3) inset,0 .5em 1em rgba(0,0,0,0.6)`,
         textShadow: `0 1px 1px hsla(0,0%,100%,.3)`,
         color: `#fff`,
-        width:`100%`,
+        width: `100%`
       },
-      isRightMouseClick:false,
-      rules:'',//右键菜单规则
-      position:{
-        left: '',  //鼠标点击的位置
-        right: '',
-        mainHeight: '',  //主页面的宽高
-        mainWidth: '',
+      isRightMouseClick: false,
+      rules: "", //右键菜单规则
+      position: {
+        left: "", //鼠标点击的位置
+        right: "",
+        mainHeight: "", //主页面的宽高
+        mainWidth: ""
       },
-      isShowBox:{
-        system: { show:false,name:'系统设置',sign:'system',display:false,icon:require('@/assets/image/icons/deskIcons/icon-system.png') },
-        myCloud: { show:false,name:'我的云端',sign:'myCloud',display:false,icon:require('@/assets/image/icons/deskIcons/icon-myCloud.png') },
-        recycle: { show:false,name:'回收站',sign:'recycle',display:false,icon:require('../assets/image/icons/deskIcons/icon-recycle.png') },
-        browser: { show:false,name:'浏览器',sign:'browser',display:false,icon:require('../assets/image/icons/deskIcons/icon-browser.png') },
-        news: { show:false,name:'新闻',sign:'news',display:false,icon:require('../assets/image/icons/deskIcons/icon-news.png') },
-        systemProperties: { show:false,name:'系统属性',sign:'systemProperties',display:false,icon:require('../assets/image/icons/deskIcons/icon-systemProperties.png') },
-        iCloudConsole: { show:false,name:'iCloud控制台',sign:'iCloudConsole',display:false,icon:require('../assets/image/icons/deskIcons/icon-ad.png') },
-        organization: { show:false,name:'组织与用户',sign:'organization',display:false,icon:require('../assets/image/icons/deskIcons/icon-organization.png') },
-        account: { show:false,name:'我的账户',sign:'account',display:false,icon:require('../assets/image/icons/deskIcons/icon-account.png') },
-        taskManager: { show:false,name:'任务管理器',sign:'taskManager',display:false,icon:require('../assets/image/icons/deskIcons/icon-taskManager.png') },
-        domainConsole: { show:false,name:'域名服务管理控制台',sign:'domainConsole',display:false,icon:require('../assets/image/icons/deskIcons/icon-domainConsole.png') },
-        note: { show:false,name:'手机短信管理控制台',sign:'note',display:false,icon:require('../assets/image/icons/deskIcons/icon-note.png') },
-        file: {show:false,name:'查看',sign:'file',display:false,icon:require('@/assets/image/icons/fileIcons/fileCheck.png')}
+      isShowBox: {
+        system: {
+          show: false,
+          name: "系统设置",
+          sign: "system",
+          display: false,
+          icon: require("@/assets/image/icons/deskIcons/icon-system.png")
+        },
+        myCloud: {
+          show: false,
+          name: "我的云端",
+          sign: "myCloud",
+          display: false,
+          icon: require("@/assets/image/icons/deskIcons/icon-myCloud.png")
+        },
+        recycle: {
+          show: false,
+          name: "回收站",
+          sign: "recycle",
+          display: false,
+          icon: require("../assets/image/icons/deskIcons/icon-recycle.png")
+        },
+        browser: {
+          show: false,
+          name: "浏览器",
+          sign: "browser",
+          display: false,
+          icon: require("../assets/image/icons/deskIcons/icon-browser.png")
+        },
+        news: {
+          show: false,
+          name: "新闻",
+          sign: "news",
+          display: false,
+          icon: require("../assets/image/icons/deskIcons/icon-news.png")
+        },
+        systemProperties: {
+          show: false,
+          name: "系统属性",
+          sign: "systemProperties",
+          display: false,
+          icon: require("../assets/image/icons/deskIcons/icon-systemProperties.png")
+        },
+        iCloudConsole: {
+          show: false,
+          name: "iCloud控制台",
+          sign: "iCloudConsole",
+          display: false,
+          icon: require("../assets/image/icons/deskIcons/icon-ad.png")
+        },
+        organization: {
+          show: false,
+          name: "组织与用户",
+          sign: "organization",
+          display: false,
+          icon: require("../assets/image/icons/deskIcons/icon-organization.png")
+        },
+        account: {
+          show: false,
+          name: "我的账户",
+          sign: "account",
+          display: false,
+          icon: require("../assets/image/icons/deskIcons/icon-account.png")
+        },
+        taskManager: {
+          show: false,
+          name: "任务管理器",
+          sign: "taskManager",
+          display: false,
+          icon: require("../assets/image/icons/deskIcons/icon-taskManager.png")
+        },
+        domainConsole: {
+          show: false,
+          name: "域名服务管理控制台",
+          sign: "domainConsole",
+          display: false,
+          icon: require("../assets/image/icons/deskIcons/icon-domainConsole.png")
+        },
+        note: {
+          show: false,
+          name: "手机短信管理控制台",
+          sign: "note",
+          display: false,
+          icon: require("../assets/image/icons/deskIcons/icon-note.png")
+        },
+        file: {
+          show: false,
+          name: "查看",
+          sign: "file",
+          display: false,
+          icon: require("@/assets/image/icons/fileIcons/fileCheck.png")
+        }
       },
-      index:'theme',
-      isMoveDrawer:false,
-      footerClass: 'bottom',  // 底部类名
-      defaultLockWallpaper:[//默认锁屏界面壁纸
-        require('@/assets/image/bg/defaultLockScreen/defaultLockScreen_1.jpg'),
-        require('@/assets/image/bg/defaultLockScreen/defaultLockScreen_2.jpg'),
-        require('@/assets/image/bg/defaultLockScreen/defaultLockScreen_3.jpg'),
-        require('@/assets/image/bg/defaultLockScreen/defaultLockScreen_4.jpg'),
+      index: "theme",
+      isMoveDrawer: false,
+      footerClass: "bottom", // 底部类名
+      defaultLockWallpaper: [
+        //默认锁屏界面壁纸
+        require("@/assets/image/bg/defaultLockScreen/defaultLockScreen_1.jpg"),
+        require("@/assets/image/bg/defaultLockScreen/defaultLockScreen_2.jpg"),
+        require("@/assets/image/bg/defaultLockScreen/defaultLockScreen_3.jpg"),
+        require("@/assets/image/bg/defaultLockScreen/defaultLockScreen_4.jpg")
       ],
-      checkLockImg:null,//默认放在预览位置的img
-      lock_time:null,//预览位置上的时间显示
-      lock_date:null,
-      isOpenLockScreen:localStorage.getItem('lockScreen') || 'false',
-      timer:null,//定时器触发锁屏
-      isOpenScreenLock:{
-        display:'none',
-        position:'absolute',
-        zIndex:'10000009',
-        width:'100%',
-        height:'100%',
+      checkLockImg: null, //默认放在预览位置的img
+      lock_time: null, //预览位置上的时间显示
+      lock_date: null,
+      isOpenLockScreen: localStorage.getItem("lockScreen") || "false",
+      timer: null, //定时器触发锁屏
+      isOpenScreenLock: {
+        display: "none",
+        position: "absolute",
+        zIndex: "10000009",
+        width: "100%",
+        height: "100%"
       },
-      lPwd:'',//锁屏密码
-      lockTips:'',//解锁密码错误时的提醒信息
-      userSettingLockTime:this.$store.state.lockTime,//锁屏时间
-      gridItemDatas:[], //桌面图标的所有数据（过滤前总数据）
-      defaultApps:[], // 桌面默认展示的list（过滤后）
-      rowHeight: 80,  //图标的高度
-      newFile:{ //新建文件夹、新建文件盒子
-        show:false,
-        position: {top: 0, left: 0},
-        icon: '',
-        name: ''
+      lPwd: "", //锁屏密码
+      lockTips: "", //解锁密码错误时的提醒信息
+      userSettingLockTime: this.$store.state.lockTime, //锁屏时间
+      gridItemDatas: [], //桌面图标的所有数据（过滤前总数据）
+      defaultApps: [], // 桌面默认展示的list（过滤后）
+      rowHeight: 80, //图标的高度
+      newFile: {
+        //新建文件夹、新建文件盒子
+        show: false,
+        position: { top: 0, left: 0 },
+        icon: "",
+        name: ""
       },
       pageNumber: 1, //桌面图标总页数
-      pageIndex:1, //桌面图标点击的页数
-      clientWidth: '', //屏幕的宽度
-      clientHeight: '', //屏幕的高度
-      row: 0,  //桌面图标的行数
-      rename:'', //图标重命名：输入的新名称
+      pageIndex: 1, //桌面图标点击的页数
+      clientWidth: "", //屏幕的宽度
+      clientHeight: "", //屏幕的高度
+      row: 0, //桌面图标的行数
+      rename: "" //图标重命名：输入的新名称
     };
   },
-  computed:{
+  computed: {
     bg() {
       let store = this.$store.state.desktopImg;
-      if(store === '') {
-        return {background: `url(${bg}) center center no-repeat`}
+      if (store === "") {
+        return { background: `url(${bg}) center center no-repeat` };
       } else {
-        return {background: `url(${store}) 0% 0% /cover no-repeat`}
+        return { background: `url(${store}) 0% 0% /cover no-repeat` };
       }
     },
-    iconStyle() { // 图标的宽度
+    iconStyle() {
+      // 图标的宽度
       let iconSize = this.$store.state.iconSize;
-      let size = iconSize === 'small' ? '30%':(iconSize === 'normal'?'45%':'80%');
-      return {width: size};
+      let size =
+        iconSize === "small" ? "30%" : iconSize === "normal" ? "45%" : "80%";
+      return { width: size };
     },
-    userSettingImg(){//获取缓存中的定义的锁屏壁纸
-      return this.$store.state.lockImg
+    userSettingImg() {
+      //获取缓存中的定义的锁屏壁纸
+      return this.$store.state.lockImg;
     },
-    colNumber() { // 图标展示的列数
-      return Math.floor( this.clientWidth / this.rowHeight );
+    colNumber() {
+      // 图标展示的列数
+      return Math.floor(this.clientWidth / this.rowHeight);
     },
-    gridItems(){  // 桌面图标：根据页数，确定每页的图标（数组）
+    gridItems() {
+      // 桌面图标：根据页数，确定每页的图标（数组）
       let gridItemsList = {};
-      for(let i=1; i<=this.pageNumber; i++){
-        var list = 'list'+i;
-        gridItemsList[list] = this.gridItemDatas.filter((e)=>{
+      for (let i = 1; i <= this.pageNumber; i++) {
+        var list = "list" + i;
+        gridItemsList[list] = this.gridItemDatas.filter(e => {
           e.active = false;
           e.showInput = false;
+          e.showLock = false;
           return e.pagerNumber === i;
         });
       }
       return gridItemsList;
     },
-    icons(){ // 桌面已展示的图标
-      return this.defaultApps.filter((item) => {
+    icons() {
+      // 桌面已展示的图标
+      return this.defaultApps.filter(item => {
         return item.name != null;
       });
     }
   },
   methods: {
-    // openNewWindow(){
-    //   const { href } = this.$router.resolve({
-    //     name: "sharePage",
-    //     params: {
-    //       userId: id,
-    //     }
-    //   });
-    //   window.open(href, '_blank')
-    // },
-    rightMouse( e, item ) {  //桌面图标右键
+    rightMouse(e, item) {
+      //桌面图标右键
       this.isRightMouseClick = true;
       //右键事件
-      if(item){
-        let type = item.title==='file' ? 'file':item.type;
+      if (item) {
+        let type = item.title === "file" ? "file" : item.type;
         this.clickItem = item;
         //桌面下右键弹出层 desktop 应用下右键弹出层 app  设置|| 我的电脑等下弹出层 recycle 回收站下弹出层 recycle
-        switch ( type ) {
-          case '1':
-            this.rules = 'app';//应用
+        switch (type) {
+          case "1":
+            this.rules = "app"; //应用
             break;
-          case 'iCloud':
-            this.rules = 'iCloud';//我的云端
+          case "iCloud":
+            this.rules = "iCloud"; //我的云端
             break;
-          case 'recycle':
-            this.rules = 'recycle';//回收站
+          case "recycle":
+            this.rules = "recycle"; //回收站
             break;
-          case 'system':
-            this.rules = 'system'; //系统设置
+          case "system":
+            this.rules = "system"; //系统设置
             break;
-          case 'file':
-            this.rules = 'file'; //文件
+          case "file":
+            this.rules = "file"; //文件
             break;
-          case 'folder':
-            this.rules = 'folder'; //文件夹
+          case "folder":
+            this.rules = "folder"; //文件夹
             break;
-          case 'zip':
-            this.rules = 'zip'; //压缩文件
+          case "zip":
+            this.rules = "zip"; //压缩文件
             break;
           default:
-            this.rules = 'desktop';//桌面
+            this.rules = "desktop"; //桌面
             break;
         }
-      } else{
-        this.rules = 'desktop';
+      } else {
+        this.rules = "desktop";
       }
       this.position = Object.assign({
         mainHeight: this.$refs.main.$el.clientHeight,
@@ -426,17 +613,21 @@ export default {
         top: e.clientY
       });
     },
-    clickIcon(e, item) {  //桌面图标左键
+    clickIcon(e, item) {
+      //桌面图标左键
       this.isRightMouseClick = false; //右键菜单隐藏
-      if(item.name == null){ //没有点击在图标上，选中样式消失
+      if (item.name == null) {
+        //没有点击在图标上，选中样式消失
         this.defaultApps.forEach((e, i) => {
           e.active = false;
         });
         return false;
       }
-      if(e.ctrlKey) { // 按住ctrl + 左键
+      if (e.ctrlKey) {
+        // 按住ctrl + 左键
         item.active = true;
-      } else {  // 单击
+      } else {
+        // 单击
         this.defaultApps.forEach((e, i) => {
           e.active = false;
         });
@@ -444,11 +635,12 @@ export default {
         this.clickItem = item;
       }
     },
-    rightMouseClick({ name }){//非desktop下右键菜单点击回调
+    rightMouseClick({ name }) {
+      //非desktop下右键菜单点击回调
       this.isShowBox[name].show = true;
       this.isShowBox[name].display = true;
     },
-    hideRightMenus(){
+    hideRightMenus() {
       this.isRightMouseClick = false;
       this.clickItem = {};
       //清除点中的图标样式
@@ -456,290 +648,478 @@ export default {
         e.active = false;
       });
     },
-    closeMenus( params ){ //桌面右键菜单操作
-      this.isRightMouseClick = false;//关闭右键菜单
-      if( params.index){
-        this.isShowBox[params.path].show = true;//开启系统设置
-        this.isShowBox[params.path].display = true;//最小化状态下为隐藏，还原显示
-        this.index = params.index;//选中系统设置具体项
+    closeMenus(params) {
+      //桌面右键菜单操作
+      this.isRightMouseClick = false; //关闭右键菜单
+      if (params.index) {
+        this.isShowBox[params.path].show = true; //开启系统设置
+        this.isShowBox[params.path].display = true; //最小化状态下为隐藏，还原显示
+        this.index = params.index; //选中系统设置具体项
       }
       //新建文件夹、新建文件
-      if( params.new ){
-        let gridWidth = this.$refs.gridItem[0].$el.clientWidth + 'px';
-        let p = this.position; 
+      if (params.new) {
+        let gridWidth = this.$refs.gridItem[0].$el.clientWidth + "px";
+        let p = this.position;
         Object.assign(this.newFile, {
           show: true,
-          position: {top: p.top+'px',  left: p.left+'px', width: gridWidth},
+          position: {
+            top: p.top + "px",
+            left: p.left + "px",
+            width: gridWidth
+          },
           icon: params.icon,
           name: params.name,
-          type: params.type,  // doc  ppt  xls
-          title:params.new,  // file  folder
+          type: params.type, // doc  ppt  xls
+          title: params.new // file  folder
         });
         return false;
       }
       params.name && this.rightMenuOperate(params.name);
     },
-    rightMenuOperate( name ){ //桌面右键的一些操作
+    rightMenuOperate(name) {
+      //桌面右键的一些操作
       let active = {
-        'upload':()=>{ // 上传
+        upload: () => { //点击上传
           this.uploadShow = true;
-          document.querySelector('#deskUpload').querySelector('.el-upload').click();
+          this.isClickUpload = true;
+          document.querySelector("#deskUpload").querySelector(".el-upload").click();
         },
-        'share': ()=>{this.showShare = true;}, //分享
-        'enjoy':()=>{this.showEnjoy = true;}, // 共享
-        'rename':()=>{  // 重命名
+        share: () => {
+          this.showShare = true;
+        }, //分享
+        enjoy: () => {
+          this.showEnjoy = true;
+        }, // 共享
+        rename: () => {
+          // 重命名
           this.defaultApps.forEach((e, i) => {
             e.showInput = false;
           });
           this.clickItem.showInput = true;
         },
-        'copy':()=>{ //文件、文件夹、压缩包 => 复制
-            let selectedArr = [];
-            this.defaultApps.forEach((e) => {
-              if((e.title==='file'||e.title==='folder') && e.active === true){
-                selectedArr.push(e);
-              }
-            });
-            this.$store.commit('copyFile', selectedArr);
-          },
-        'delete': ()=>{ // 删除
+        copy: () => {
+          //文件、文件夹、压缩包 => 复制
+          let selectedArr = [];
+          this.defaultApps.forEach(e => {
+            if (
+              (e.title === "file" || e.title === "folder") &&
+              e.active === true
+            ) {
+              selectedArr.push(e);
+            }
+          });
+          this.$store.commit("copyFile", selectedArr);
+        },
+        delete: () => {
+          // 删除
           // console.log(this.clickItem);
-          delete this.clickItem['createTime'];
-          delete this .clickItem['createUser'];
-          delete this.clickItem['updateTime'];
-          delete this.clickItem['updateUser'];
-          this.axios.post('/userDesktop/deleteFile',qs.stringify(this.clickItem))
-            .then((res) => {
-              if(res.data.code === 200){
-                for(let j=0;j<this.defaultApps.length;j++){
-                  if(this.defaultApps[j].i === this.clickItem.i){
-                    this.defaultApps[j] = {x:this.clickItem.x,y:this.clickItem.y,i:this.clickItem.i,type:'0',w:1,h:1,pagerNumber:this.pageNumber};
+          delete this.clickItem["createTime"];
+          delete this.clickItem["createUser"];
+          delete this.clickItem["updateTime"];
+          delete this.clickItem["updateUser"];
+          this.axios
+            .post("/userDesktop/deleteFile", qs.stringify(this.clickItem))
+            .then(res => {
+              if (res.data.code === 200) {
+                for (let j = 0; j < this.defaultApps.length; j++) {
+                  if (this.defaultApps[j].i === this.clickItem.i) {
+                    this.defaultApps[j] = {
+                      x: this.clickItem.x,
+                      y: this.clickItem.y,
+                      i: this.clickItem.i,
+                      type: "0",
+                      w: 1,
+                      h: 1,
+                      pagerNumber: this.pageNumber
+                    };
                     break;
                   }
                 }
-              }else{
+              } else {
                 this.$message(res.data.desc);
               }
             });
         },
-        'onlineEdit':()=>{ // 在线编辑、协同编辑
+        onlineEdit: () => {
+          // 在线编辑、协同编辑
           // console.log(this.clickItem)
-          this.applicationHandle('file');
+          this.applicationHandle("file");
         },
+        download: () => {
+          //文件下载 （请求成功并未下载）
+          let json = {
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0,
+            i: "",
+            type: "",
+            name: "",
+            title: "",
+            img: "",
+            id: ""
+          };
+          for (let k in json) {
+            json[k] = this.clickItem[k];
+          }
+          let link = document.createElement("a");
+          link.style.display = "none";
+          link.href ="http://192.168.0.102:8080/userDesktop/addDowloadFile?x=" +json.x +"&y=" +json.y +"&w=" +json.w + "&h=" +json.h +"&i=" +json.i +"&type=" +json.type +"&name=" +json.name +"&title=" +json.title +"&img=" +json.img +"&id=" +json.id;
+          document.body.appendChild(link);
+          link.click();
+        },
+        encryption: () => {
+          //文件加密 （返回加密错误）
+          let json = {
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0,
+            i: "",
+            type: "",
+            name: "",
+            title: "",
+            img: "",
+            id: ""
+          };
+          for (let k in json) {
+            json[k] = this.clickItem[k];
+          }
+          this.axios
+            .post("/userDesktop/updateFileEnc", qs.stringify(json))
+            .then(res => {
+              if(res.data.code === 200){
+                for (let i = 0; i < this.defaultApps.length; i++) {
+                  if (this.defaultApps[i].i === res.data.obj.i) {
+                    this.defaultApps[i] = res.data.obj;
+                    this.defaultApps[i].showLock = true;
+                    break;
+                  }
+                }
+              } else {
+                this.$message('加密失败');
+              }
+            });
+        },
+        deciphering: () => {
+          //文件解密 （返回解密错误）
+          let json = {
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0,
+            i: "",
+            type: "",
+            name: "",
+            title: "",
+            img: "",
+            id: ""
+          };
+          for (let k in json) {
+            json[k] = this.clickItem[k];
+          }
+          this.axios
+            .post("/userDesktop/updateFileDec", qs.stringify(json))
+            .then(res => {
+              console.log(res);
+            });
+        }
       };
       active[name]();
     },
-    handleRename(){ //重命名：当input框失去焦点时，保存修改后的名字
-      if(this.rename != ''){
+    handleRename() {
+      //重命名：当input框失去焦点时，保存修改后的名字
+      if (this.rename != "") {
         this.clickItem.name = this.rename;
-        delete this.clickItem['updateUser'];
-        delete this.clickItem['updateTime'];
-        delete this.clickItem['createTime'];
-        delete this.clickItem['createUser'];
-        this.axios.post('/userDesktop/updateUserDesktopIcon',qs.stringify(this.clickItem));
+        delete this.clickItem["updateUser"];
+        delete this.clickItem["updateTime"];
+        delete this.clickItem["createTime"];
+        delete this.clickItem["createUser"];
+        this.axios.post(
+          "/userDesktop/updateUserDesktopIcon",
+          qs.stringify(this.clickItem)
+        );
       }
       this.clickItem.showInput = false;
       this.clickItem = {};
     },
-    createNewfile( ){ // 新建文件夹（新建文件）：失去焦点时创建
+    createNewfile() {
+      // 新建文件夹（新建文件）：失去焦点时创建
       let p = this.newFile.position;
-      if(this.isRename() === 1) return false; //判断是否重命名
+      if (this.isRename() === 1) return false; //判断是否重命名
       let json = {
         x: this.clickItem.x,
         y: this.clickItem.y,
-        i:this.clickItem.i,
-        w:1,
-        h:1,
+        i: this.clickItem.i,
+        w: 1,
+        h: 1,
         type: this.newFile.type,
         name: this.newFile.name,
         title: this.newFile.title,
         img: this.newFile.icon
       };
-      this.axios.post('/userDesktop/addFolder',qs.stringify(json))
-        .then((res) =>{
+      this.axios
+        .post("/userDesktop/addFolder", qs.stringify(json))
+        .then(res => {
           let data = res.data;
-          if(data.code === 200){
-            for(let i=0;i<this.defaultApps.length;i++){
-              if(this.defaultApps[i].i === data.obj.i){
+          if (data.code === 200) {
+            for (let i = 0; i < this.defaultApps.length; i++) {
+              if (this.defaultApps[i].i === data.obj.i) {
                 this.defaultApps[i] = data.obj;
                 break;
               }
             }
-          }else {
-            this.$message('创建失败！');
+          } else {
+            this.$message("创建失败！");
           }
         });
       Object.assign(this.newFile, {
         show: false,
-        position: {top:0,left:0,width:0},
-        icon: '',
-        name:''
+        position: { top: 0, left: 0, width: 0 },
+        icon: "",
+        name: ""
       });
     },
-    isRename( ){ // 新建文件 && 重命名 =》 判断是否重名
+    isRename() {
+      // 新建文件 && 重命名 =》 判断是否重名
       let flag = 0;
-      for(let i=0;i<this.icons.length;i++){
-        if(this.icons[i].type === this.newFile.type && this.icons[i].name === this.newFile.name){
+      for (let i = 0; i < this.icons.length; i++) {
+        if (
+          this.icons[i].type === this.newFile.type &&
+          this.icons[i].name === this.newFile.name
+        ) {
           flag = 1;
           this.$refs.nameInput.focus();
-          this.$message('文件名称重复！');
+          this.$message("文件名称重复！");
           break;
         }
       }
       return flag;
     },
-    closeItem( param ){//右上角工具栏关闭弹出层组件
+    closeItem(param) {
+      //右上角工具栏关闭弹出层组件
       this.isShowBox[param].show = false;
       this.isShowBox[param].display = false;
     },
-    minSize( param ){
+    minSize(param) {
       this.isShowBox[param].display = false;
     },
-    openChild( payload ){//左下侧菜单点击打开具体某一项
-      if( payload === 'hidden'){//我的桌面 其余弹出层组件均隐藏
-        for( let key in this.isShowBox){
+    openChild(payload) {
+      //左下侧菜单点击打开具体某一项
+      if (payload === "hidden") {
+        //我的桌面 其余弹出层组件均隐藏
+        for (let key in this.isShowBox) {
           this.isShowBox[key].display = false;
         }
       } else {
         this.isShowBox[payload].show = !this.isShowBox[payload].show;
         this.isShowBox[payload].display = !this.isShowBox[payload].display;
-      }   
+      }
     },
-    closeChild( tab ){//关闭tab项
+    closeChild(tab) {
+      //关闭tab项
       this.isShowBox[tab].show = false;
       this.isShowBox[tab].display = false;
     },
-    showChild( tab,type ){
-      if( type ){//如果是历史固定的任务栏应先加载注册组件
+    showChild(tab, type) {
+      if (type) {
+        //如果是历史固定的任务栏应先加载注册组件
         this.isShowBox[tab].show = true;
       }
       this.isShowBox[tab].display = !this.isShowBox[tab].display;
     },
-    lockScreen(){
+    lockScreen() {
       this.isMoveDrawer = true;
       this.$refs.drawerLayout.toggle();
     },
-    barChangePosition( position ) { //改变底部菜单的位置
+    barChangePosition(position) {
+      //改变底部菜单的位置
       let active = {
         top: () => {
-          this.footerClass = 'top';
+          this.footerClass = "top";
           let width = document.body.offsetWidth;
-          this.groundGlass.width = width + 'px';
+          this.groundGlass.width = width + "px";
         },
         bottom: () => {
-          this.footerClass = 'bottom';
+          this.footerClass = "bottom";
           let width = document.body.offsetWidth;
-          this.groundGlass.width = width + 'px';
+          this.groundGlass.width = width + "px";
         },
         left: () => {
           let height = document.body.offsetHeight;
-          this.footerClass = 'left';
-          this.groundGlass.width = height + 'px';
+          this.footerClass = "left";
+          this.groundGlass.width = height + "px";
         },
         right: () => {
-          this.footerClass = 'right';
+          this.footerClass = "right";
           let height = document.body.offsetHeight;
-          this.groundGlass.width = height + 'px';
+          this.groundGlass.width = height + "px";
         }
       };
       active[position]();
     },
-    applicationHandle( title ){//桌面应用
+    applicationHandle(title) {
+      //桌面应用
       this.isShowBox[title].show = true;
       this.isShowBox[title].display = true;
     },
-    getShowimg( index,img ){//切换锁屏壁纸
-       this.checkLockImg = this.defaultLockWallpaper[index];
-       localStorage.setItem('lockImg',this.checkLockImg);//缓存壁纸
-       this.$store.commit('changelockImg',this.checkLockImg)
+    getShowimg(index, img) {
+      //切换锁屏壁纸
+      this.checkLockImg = this.defaultLockWallpaper[index];
+      localStorage.setItem("lockImg", this.checkLockImg); //缓存壁纸
+      this.$store.commit("changelockImg", this.checkLockImg);
     },
-    openLockScreen( val ){//是否开启锁屏
-      localStorage.setItem('lockScreen',val);
-      this.$store.commit('lockScreen',val);
-      if( val === 'true' ){
-        document.onmouseup = () => this.countTime(this.alertLockScreen,this.userSettingLockTime);//开启锁屏
+    openLockScreen(val) {
+      //是否开启锁屏
+      localStorage.setItem("lockScreen", val);
+      this.$store.commit("lockScreen", val);
+      if (val === "true") {
+        document.onmouseup = () =>
+          this.countTime(this.alertLockScreen, this.userSettingLockTime); //开启锁屏
       } else {
-        document.onmouseup = () => clearTimeout( this.timer );//关闭锁屏 清除定时器
+        document.onmouseup = () => clearTimeout(this.timer); //关闭锁屏 清除定时器
       }
     },
-    countTime( fn,wait ) {
-      if( this.timer ) clearTimeout( this.timer );
+    countTime(fn, wait) {
+      if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => {
-        fn()
-      }, wait*60*1000);
+        fn();
+      }, wait * 60 * 1000);
     },
-    alertLockScreen(){//弹出锁屏
-      this.isOpenScreenLock.display = 'block';
+    alertLockScreen() {
+      //弹出锁屏
+      this.isOpenScreenLock.display = "block";
     },
-    unlocking(){
-      if( this.lPwd === '123' ){
-        this.isOpenScreenLock.display = 'none';
-         this.lockTips = '';
+    unlocking() {
+      if (this.lPwd === "123") {
+        this.isOpenScreenLock.display = "none";
+        this.lockTips = "";
       } else {
-        this.lockTips = '密码错误，请重新输入'
+        this.lockTips = "密码错误，请重新输入";
       }
     },
-    layoutUpdatedEvent( newLayout ){  // 移动成功后获取新的图标信息，更新图标位置
-      let URLSearchParams = require('url-search-params');//URLSearchParams的兼容性
-      let layout = newLayout.filter((e) => {
-        return e.name != null
+    layoutUpdatedEvent(newLayout) {
+      // 移动成功后获取新的图标信息，更新图标位置
+      let URLSearchParams = require("url-search-params"); //URLSearchParams的兼容性
+      let layout = newLayout.filter(e => {
+        return e.name != null;
       });
       let params = new URLSearchParams();
-      params.append('layouts', JSON.stringify(layout));
-      params.set('clientWidth',this.clientWidth);
-      params.set('clientHeight',this.clientHeight);
-      params.set('row',this.row);
-      params.set('col',this.colNumber);
-      this.axios.post('/userDesktop/updateUserDesktop',params);
+      params.append("layouts", JSON.stringify(layout));
+      params.set("clientWidth", this.clientWidth);
+      params.set("clientHeight", this.clientHeight);
+      params.set("row", this.row);
+      params.set("col", this.colNumber);
+      this.axios.post("/userDesktop/updateUserDesktop", params);
     },
-    applications({component,open}){//system组件下的程序应用下的menus菜单的操作集合
+    applications({ component, open }) {
+      //system组件下的程序应用下的menus菜单的操作集合
       this.isShowBox[component].show = open;
       this.isShowBox[component].display = open;
     },
-    uploadSuccess(res, file, fileList){ //拖拽、右键点击上传文件成功
+    getFileInfo(file) { // 文件上传之前：获取文件的一些信息
+      let xls = 'deskIcons/icon-excel.png';
+      let doc = 'deskIcons/icon-word.png';
+      let ppt = 'deskIcons/icon-ppt.png';
+      let unknown = 'deskIcons/icon-unknown.png';
+      let txt = 'deskIcons/icon-txt.png';
+      let zip = 'deskIcons/zip.png';
+      let fileArr = file.name.split(".");
+      let name = fileArr[0];
+      let type = fileArr[1];
+      let title =(type === "rar" ||type === "zip" ||type === "arj" ||type === "tar" ||type === "iso")? "zip": "file";
+      let img = (type === "xls"||type==='xlsx')?xls:(type==='doc'||type==='docx')?doc:(type==='ppt'||type==='pptx')?ppt:(title==='zip')?zip:(type==='txt')?txt:unknown;
+      return { name, type, title, img };
+    },
+    beforeUpload(params) { // 自定义文件上传
+      let file = params.file;
+      console.log(file);
+      let info = this.getFileInfo(file);
+      var formData = new FormData();
+      formData.append("file", file);
+      if(this.isClickUpload){ // 右键点击上传
+        let json = { x: 0, y: 0, w: 0, h: 0, i: ""};
+        for (let k in json) {
+          json[k] = this.clickItem[k];
+          formData.append(k, json[k]);
+        }
+      } else {  // 拖拽上传
+        let icon = {};
+        for(let i=0;i<this.defaultApps.length;i++){
+          if(this.defaultApps[i].name == null || this.defaultApps[i].name === ''){
+            icon = this.defaultApps[i];
+            break;
+          }
+        }
+        formData.append('x',icon.x);
+        formData.append('y',icon.y);
+        formData.append('w',icon.w);
+        formData.append('h',icon.h);
+        formData.append('i',icon.i);
+      }
+      formData.append('name',info.name);
+      formData.append('type',info.type);
+      formData.append('title',info.title);
+      formData.append('img',info.img);
+      this.axios.post("/userDesktop/addUploadFile", formData).then(res => {
+        if(res.data.code === 200){
+          for (let i = 0; i < this.defaultApps.length; i++) {
+              if (this.defaultApps[i].i === res.data.obj.i) {
+                this.defaultApps[i] = res.data.obj;
+                break;
+              }
+            }
+        } else {
+          this.$message('上传失败');
+        }
+      });
+      document.querySelector("#deskUpload").style = "display:none";
+    },
+    uploadSuccess(res, file, fileList) {
+      //拖拽、右键点击上传文件成功
       console.log(fileList);
       this.$refs.upload.clearFiles();
-      document.querySelector('#deskUpload').style='display:none';
+      document.querySelector("#deskUpload").style = "display:none";
     },
-    uploadErr(err, file, fileList){ //拖拽、右键点击上传文件失败
-      this.$message('上传失败！');
-      this.$refs.upload.clearFiles();
-      document.querySelector('#deskUpload').style='display:none';
-    },
-    closeDialog( tag ){ //关闭 创建分享，创建共享弹框
+    closeDialog(tag) {
+      //关闭 创建分享，创建共享弹框
       this[tag] = false;
     },
-    pageTurning( tag ){ //桌面图标翻页
-      switch(tag){
-        case 'prev':
-          if(this.pageIndex === 1){
-            this.defaultApps = this.gridItems['list1'];
+    pageTurning(tag) {
+      //桌面图标翻页
+      switch (tag) {
+        case "prev":
+          if (this.pageIndex === 1) {
+            this.defaultApps = this.gridItems["list1"];
             return false;
           }
           this.pageIndex--;
-          this.defaultApps = this.gridItems['list'+this.pageIndex];
+          this.defaultApps = this.gridItems["list" + this.pageIndex];
           break;
-        case 'next':
-          if(this.pageIndex === this.pageNumber){
-            this.defaultApps = this.gridItems['list'+this.pageNumber];
+        case "next":
+          if (this.pageIndex === this.pageNumber) {
+            this.defaultApps = this.gridItems["list" + this.pageNumber];
             return false;
           }
           this.pageIndex++;
-          this.defaultApps = this.gridItems['list'+this.pageIndex];
+          this.defaultApps = this.gridItems["list" + this.pageIndex];
           break;
       }
-    },
+    }
   },
-  created(){
+  created() {
     // 获取桌面图标
     this.clientWidth = Math.floor(document.body.clientWidth);
     this.clientHeight = Math.floor(document.body.clientHeight);
     this.row = Math.floor((this.clientHeight - 40) / this.rowHeight);
-    this.axios.get(`/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`)
-      .then((res)=>{
+    this.axios
+      .get(
+        `/userDesktop/getUserDesktop?row=${this.row}&col=${this.colNumber}&clientWidth=${this.clientWidth}&clientHeight=${this.clientHeight}`
+      )
+      .then(res => {
         this.gridItemDatas = res.data.obj.layout ? res.data.obj.layout : [];
         this.pageNumber = res.data.obj.pagerNumber;
-        this.defaultApps = this.gridItems['list1'];
+        this.defaultApps = this.gridItems["list1"];
       });
     // this.gridItemDatas = [ {"x":0,'y':0,'w':1,'h':1,'i':'1',pagerNumber:1,type: 'iCloud',name:'我的云端',title:'myCloud',img:'deskIcons/icon-computer.png'},
     //     {"x":0,'y':1,'w':1,'h':1,'i':'2',type: '1',pagerNumber:1,name:'浏览器',title:'browser',img:'deskIcons/icon-geogle.png'},
@@ -754,59 +1134,74 @@ export default {
     // this.pageNumber = 2;
     // this.defaultApps = this.gridItems['list1'];
   },
-  mounted(){
+  mounted() {
     this.footerClass = this.$store.state.footerPosition;
     this.checkLockImg = this.defaultLockWallpaper[0];
     let a = tools._time();
-    this.lock_date = a.split(' ')[0] + ',星期' + "一二三四五六七".charAt( new Date().getDay()-1 );
-    this.lock_time = a.split(' ')[1];
+    this.lock_date =
+      a.split(" ")[0] +
+      ",星期" +
+      "一二三四五六七".charAt(new Date().getDay() - 1);
+    this.lock_time = a.split(" ")[1];
     setInterval(() => {
-      this.lock_time = tools._time().split(' ')[1];
+      this.lock_time = tools._time().split(" ")[1];
     }, 1000);
-    if( this.$store.state.isLockScreen === 'true') document.onmouseup = () => this.countTime(this.alertLockScreen,this.userSettingLockTime);
-  
+    if (this.$store.state.isLockScreen === "true")
+      document.onmouseup = () =>
+        this.countTime(this.alertLockScreen, this.userSettingLockTime);
+
     //====  拖拽文件到桌面  上传文件  ====
-    var dropbox = document.querySelector('.container');
-      dropbox.addEventListener("drop",(e)=>{
+    var dropbox = document.querySelector(".container");
+    dropbox.addEventListener(
+      "drop",
+      e => {
         e.preventDefault();
         this.$forceUpdate();
-      },false);
-      dropbox.addEventListener("dragleave",function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-      })
-      dropbox.addEventListener("dragenter",function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        document.querySelector('#deskUpload').style='display:block';
-      })
-      dropbox.addEventListener("dragover",function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-      });
+      },
+      false
+    );
+    dropbox.addEventListener("dragleave", function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    });
+    dropbox.addEventListener("dragenter", function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      document.querySelector("#deskUpload").style = "display:block";
+    });
+    dropbox.addEventListener("dragover", function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    });
 
     //======  键盘快捷键 =====
-    document.onkeydown = (event)=>{
+    document.onkeydown = event => {
       let e = event || window.event || arguments.callee.caller.arguments[0];
-      if(e && e.keyCode === 113){ //重命名 F2
+      if (e && e.keyCode === 113) {
+        //重命名 F2
         e.preventDefault();
-        this.rightMenuOperate('rename');
-      } else if(e && e.ctrlKey && e.keyCode === 67){ //复制  ctrl+c
+        this.rightMenuOperate("rename");
+      } else if (e && e.ctrlKey && e.keyCode === 67) {
+        //复制  ctrl+c
         e.preventDefault();
-        this.rightMenuOperate('copy');
+        this.rightMenuOperate("copy");
       }
-    }
+    };
   },
-  watch:{
-    userSettingLockTime( val,oldval ){//监听锁屏时间的改变
-      localStorage.setItem( 'lockTime',val );
-      this.$store.commit( 'settingLockTime',val )
+  watch: {
+    userSettingLockTime(val, oldval) {
+      //监听锁屏时间的改变
+      localStorage.setItem("lockTime", val);
+      this.$store.commit("settingLockTime", val);
     }
-  },
+  }
 };
 </script>
 <style lang="less">
-html,body,#app,.el-container {
+html,
+body,
+#app,
+.el-container {
   padding: 0px;
   margin: 0px;
   height: 100%;
@@ -820,12 +1215,12 @@ html,body,#app,.el-container {
   height: 100%;
   width: 100%;
   padding: 0 !important;
-  & .desktop{
+  & .desktop {
     height: 100%;
     width: 100%;
     text-align: left;
     & .appList {
-       color:#fff;
+      color: #fff;
     }
   }
 }
@@ -838,29 +1233,29 @@ html,body,#app,.el-container {
   background: transparent;
   position: absolute;
   width: 100%;
-  padding: 0px 10px!important;
+  padding: 0px 10px !important;
 }
-.el-footer.bottom{
+.el-footer.bottom {
   bottom: 0;
-  left:0;
+  left: 0;
 }
-.el-footer.top{
+.el-footer.top {
   top: 0;
   left: 0;
 }
-.el-footer.left{
+.el-footer.left {
   transform: rotate(90deg);
   transform-origin: left bottom;
   left: 0;
   top: -40px;
 }
-.el-footer.right{
+.el-footer.right {
   transform: rotate(-90deg);
   transform-origin: right bottom;
   right: 0;
-  top:-40px;
+  top: -40px;
 }
-.defaultApp{
+.defaultApp {
   display: flex;
   flex-flow: row wrap;
   position: relative;
@@ -873,8 +1268,8 @@ html,body,#app,.el-container {
   }
 }
 .lockSystem {
-  background:#fff;
-  height:100%;
+  background: #fff;
+  height: 100%;
   padding: 0px 0px 0px 10px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -884,104 +1279,115 @@ html,body,#app,.el-container {
   }
 }
 .lockDate {
-  position:absolute;
-  bottom:40px;
-  left:10px;
+  position: absolute;
+  bottom: 40px;
+  left: 10px;
   font-size: 20px;
   font-family: cursive;
-  color:#fff;
+  color: #fff;
 }
 .lockDate_screen {
-  position:absolute;
-  bottom:40px;
-  left:10px;
+  position: absolute;
+  bottom: 40px;
+  left: 10px;
   font-size: 40px;
   font-family: cursive;
-  color:#fff;
+  color: #fff;
 }
 .myFont {
   font-size: 12px;
 }
 .el-upload--picture-card {
-  width: 100px!important;
-  height: 100px!important;
-  line-height: 100px!important;
+  width: 100px !important;
+  height: 100px !important;
+  line-height: 100px !important;
 }
-.el-upload-list--picture-card .el-upload-list__item{
-  width: 100px!important;
-  height: 100px!important;
+.el-upload-list--picture-card .el-upload-list__item {
+  width: 100px !important;
+  height: 100px !important;
 }
-.unlockPwd{
+.unlockPwd {
   position: absolute;
-  top:50%;
-  left:50%;
-  transform: translate(-50%,-50%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-.myApp{
+.myApp {
   box-sizing: border-box;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }
-.vue-grid-layout{
+.vue-grid-layout {
   width: 100%;
-  & .vue-grid-item{
+  & .vue-grid-item {
     text-align: center;
     cursor: default;
-    & > div.active{
-      background: rgba(255,255,255,0.1);
+    & > div.active {
+      background: rgba(255, 255, 255, 0.1);
     }
-    & img{
+    & span{
+      position: relative;
       display: inline-block;
     }
-    & p{
+    & img {
+      display: inline-block;
+      width: 100%;
+    }
+    & img.lock{
+      position: absolute;
+      width: 15px;
+      right: 0;
+      bottom: 7px;
+    }
+    & p {
       white-space: nowrap;
-      overflow: hidden;
+      overflow-x: hidden;
       text-overflow: ellipsis;
     }
-    & .vue-resizable-handle{
+    & .vue-resizable-handle {
       display: none;
     }
-    & .el-input{
-      & > input{
+    & .el-input {
+      & > input {
         padding: 0 0 0 10%;
       }
     }
   }
 }
-#deskUpload .el-upload{
+#deskUpload .el-upload {
   position: fixed;
   top: 0;
-  left:0;
+  left: 0;
   width: 100%;
   height: 100%;
   opacity: 0;
-  & .el-upload-dragger{
+  & .el-upload-dragger {
     width: 100%;
     height: 100%;
   }
 }
-.newFileBox{
+.newFileBox {
   position: fixed;
   text-align: center;
-  & img{
+  & img {
     display: inline-block;
     width: 60%;
   }
-  & input{
+  & input {
     font-size: 12px;
     padding: 0;
     text-align: center;
   }
 }
-.pageBtn{
+.pageBtn {
   position: fixed;
   right: 0;
   width: 40px;
   overflow: visible !important;
   right: 1%;
   bottom: 5%;
-  & button{
+  & button {
     float: left;
     margin-left: 0px !important;
     margin-top: 10%;

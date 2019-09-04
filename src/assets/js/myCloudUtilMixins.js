@@ -10,9 +10,6 @@ export const myCloudUtilMixin = {
             size: {width: '60%'}, // 图标大小
             displayName: '行展示', // 行展示 && 列展示
             startIndex: 0, //记录选中的文件位置
-            folderRight: this.attrs.folderRight, //文件夹右键
-            fileRight: this.attrs.fileRight, //文件右键
-            blankRight:this.attrs.blankRight, //空白右键
         }
     },
     computed: {
@@ -70,6 +67,13 @@ export const myCloudUtilMixin = {
                             console.log('方法只在操作组件中');
                         }
                         break;
+                    case "访问分享":
+                        try {
+                            this.toSharePage();
+                        }catch{
+                            console.log('方法只在操作的组件中');
+                        }
+                        break;
                 }
             }
         },
@@ -125,6 +129,10 @@ export const myCloudUtilMixin = {
         clickBlock( tag ) { //点击右侧空白，切换工具栏
             if(tag.e.toElement.className.indexOf('cards') != -1){
                 this.$emit('someMethods', {name:'clickBlock',data:tag});
+            }
+            //点击空白处，清除选中的文件选中边框
+            for(let i=0;i<tag.dataArr.length;i++){
+              tag.dataArr[i].active = false;
             }
         },
         fileRightMenu( data ){ //右键文件，显示右键菜单

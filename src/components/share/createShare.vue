@@ -61,19 +61,19 @@
     </div>
     <div v-if="showLink">
         <el-row>
-            <el-col :span="6"><img src="@/assets/image/icons/fileIcons/link.png"><span>链接</span></el-col>
-            <el-col :span="18"><el-input size="small" v-model="linkForm.link" :readonly="true"></el-input></el-col>
+            <el-col :span="4"><img src="@/assets/image/icons/fileIcons/link.png"><span>链接</span></el-col>
+            <el-col :span="20"><el-input size="small" v-model="linkForm.link" :readonly="true"></el-input></el-col>
         </el-row>
         <el-row>
-            <el-col :span="18" :offset="6">
+            <el-col :span="20" :offset="4">
                 <span class="linkDate">链接失效时间：{{linkForm.date}}天</span>
                 <span>访问次数：{{linkForm.times}}</span>
                 <!-- <input type="text" class="copyLink" ref='copyLink' :value="`${this.linkForm.link}，提取码：${this.linkForm.code}`"> -->
             </el-col>
         </el-row>
         <el-row>
-            <el-col :span="6"><img src="@/assets/image/icons/fileIcons/T.png"><span>提取码</span></el-col>
-            <el-col :span="18"><el-input size="small" :readonly="true" v-model="linkForm.code"></el-input></el-col>
+            <el-col :span="4"><img src="@/assets/image/icons/fileIcons/T.png"><span>提取码</span></el-col>
+            <el-col :span="20"><el-input size="small" :readonly="true" v-model="linkForm.code"></el-input></el-col>
         </el-row>
     </div>
     <div slot="footer" class="dialog-footer">
@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import qs from 'qs';
 export default {
   props:{
       show:Boolean,
@@ -213,7 +214,22 @@ export default {
           this.$emit('closeDialog','showShare');
       },
       createLink(){ //创建链接
-          this.showLink = true;
+        let json = {x:0,y:0,w:0,h:0,i:'',type:'',name:'',title:'',img:'',id:''};
+        for(let k in json){
+            json[k] = this.info[k];
+        }
+        // console.log(json);
+        this.axios.post('/userDesktop/addShareFile', qs.stringify(json))
+          .then((res) => {
+              if(res.data.code === 200){
+                  let data = res.data.obj;
+                  this.linkForm.link = data.shareUrl;
+                  this.linkForm.code = data.sharePassword;
+                  this.showLink = true;
+              } else {
+                  this.$message(res.data.desc);
+              }
+          });
       },
       onCopy() { //复制链接和提取码
         this.$message('复制成功！');

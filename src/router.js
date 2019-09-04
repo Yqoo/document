@@ -42,7 +42,7 @@ export default new Router({
     {
       name:'sharePage',
       path:'/sharePage',
-      component: () => import("./components/share/sharePage.vue")
+      component: () => import("./components/share/sharePage/sharePage.vue")
     }
   ]
 });

@@ -170,7 +170,9 @@ export default {
                 this.$emit('closeMenus',{name:'enjoy'});
               }},
               {title:'在线压缩',icon:'el-icon-film',color:{color:'#e36488'},fn:()=>{console.log('在线压缩')}},
-              {title:'下载',icon:'el-icon-download',color:{color:'#8559a5'},fn:()=>{console.log('下载')}},
+              {title:'下载',icon:'el-icon-download',color:{color:'#8559a5'},fn:()=>{
+                this.$emit('closeMenus',{name:'download'});
+              }},
               {title:'属性',icon:'el-icon-warning',color:{ color:'#00a79d' },fn:() => {console.log('属性')}},
             ],
             file:[
@@ -201,8 +203,16 @@ export default {
               // {title:'协同编辑',icon:'el-icon-user',color:{color:'#260c1a'},fn:()=>{
               //   this.$emit('closeMenus', {name:'onlineEdit'});
               // }},
+              {title:'文件加密',icon:'el-icon-document-add',color:{color:'#ff502f'},fn:()=>{
+                this.$emit('closeMenus', {name:'encryption'});
+              }},
+              {title:'文件解密',icon:'el-icon-document-remove',color:{color:'#543864'},fn:()=>{
+                this.$emit('closeMenus', {name:'deciphering'});
+              }},
               {title:'在线压缩',icon:'el-icon-film',color:{color:'#e36488'},fn:()=>{console.log('在线压缩')}},
-              {title:'下载',icon:'el-icon-download',color:{color:'#8559a5'},fn:()=>{console.log('下载')}},
+              {title:'下载',icon:'el-icon-download',color:{color:'#8559a5'},fn:()=>{
+                this.$emit('closeMenus',{name:'download'});
+              }},
               {title:'属性',icon:'el-icon-warning',color:{ color:'#00a79d' },fn:() => {console.log('属性')}},
             ],
             zip:[
@@ -220,10 +230,16 @@ export default {
               {title:'重命名',icon:'el-icon-edit',color:{ color:'#c06c84' },tip:'F2',fn:() => {
                 this.$emit('closeMenus',{name:'rename'});
               }},
-              {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{console.log('分享')}},
-              {title:'共享',icon:'el-icon-attract',color:{color:'#a7d129'},fn:()=>{console.log('共享')}},
+              {title:'分享',icon:'el-icon-share',color:{color:'#d04925'},fn:()=>{
+                this.$emit('closeMenus',{name:'share'});
+              }},
+              {title:'共享',icon:'el-icon-attract',color:{color:'#a7d129'},fn:()=>{
+                this.$emit('closeMenus',{name:'enjoy'});
+              }},
               {title:'在线解压',icon:'el-icon-collection',color:{color:'#f6c523'},fn:()=>{console.log('在线解压')}},
-              {title:'下载',icon:'el-icon-download',color:{color:'#8559a5'},fn:()=>{console.log('下载')}},
+              {title:'下载',icon:'el-icon-download',color:{color:'#8559a5'},fn:()=>{
+                this.$emit('closeMenus',{name:'download'});
+              }},
               {title:'属性',icon:'el-icon-warning',color:{ color:'#00a79d' },fn:() => {console.log('属性')}},
             ]
           },
