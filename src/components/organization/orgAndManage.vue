@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-16 09:18:16
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-09-03 18:28:24
+ * @LastEditTime: 2019-09-04 18:40:25
  * @Desc: 组织与用户下的组织管理组件
  -->
 <template>
@@ -126,10 +126,125 @@
                 style="margin:10px 0px">
               </el-pagination>
             </el-tab-pane>
-            <el-tab-pane label='组织人员'></el-tab-pane>
+            <el-tab-pane label='组织人员'>
+              <div class="topBtns">
+                <el-button-group>
+                  <el-button type='primary' size='mini' icon='el-icon-search' @click='organizer.searchDialog = true'>搜索</el-button>
+                  <el-button type='success' size='mini' icon='el-icon-circle-plus' @click="organizerJoin">加入</el-button>
+                  <el-button type='info' size='mini' icon='el-icon-error' @click='organizerRemove'>移除</el-button>
+                </el-button-group>
+              </div>
+              <el-table
+                :data='organizer.tableData'
+                @selection-change='selectOrg'
+                size='mini'
+                style='width:100%'
+                height='300'
+                stripe
+                ref='organizerTable'
+                >
+                <el-table-column type='selection' fixed='left' width='50'></el-table-column>
+                <el-table-column prop='account' label='账号'></el-table-column>
+                <el-table-column prop='name' label='姓名'></el-table-column>
+                <el-table-column prop='account' label='归属组织'></el-table-column>
+                <el-table-column prop='gender' label='性别'></el-table-column>
+                <el-table-column prop='createTime' label='创建时间' :show-overflow-tooltip='true'></el-table-column>
+                <el-table-column prop='status' label='状态'>
+                  <template slot-scope="scope">
+                    {{organizer.options[scope.row.status]}}
+                  </template>
+                </el-table-column>
+                <el-table-column label='关联操作'>
+                  <template slot-scope="scope">
+                    <el-button type='text' icon='el-icon-error' title='移除' @click='organizerRemoveRow( scope.$index,organizer.tableData)'></el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+               <el-pagination
+                @size-change="orgSizeChange"
+                @current-change="orgCurrentChange"
+                :current-page="organizer.oPage"
+                :hide-on-single-page="false"
+                :page-sizes="[10, 20, 30, 40, 50]"
+                :page-size="organizer.oSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="organizer.oTotal"
+                small
+                style="margin:10px 0px">
+              </el-pagination>
+            </el-tab-pane>
             <el-tab-pane label='扩展属性'></el-tab-pane>
-            <el-tab-pane label='已分配角色'></el-tab-pane>
-            <el-tab-pane label='组织分级管理'></el-tab-pane>
+            <el-tab-pane label='已分配角色'>
+              <div class="topBtns">
+                <el-button type='primary' size='mini' icon='el-icon-circle-plus' @click='addRole'>添加角色</el-button>
+              </div>
+              <el-table
+                :data='assignRole.tableData'
+                size='mini'
+                style='width:100%'
+                height='300'
+                stripe
+                ref='assignRoleTable'
+                >
+                <el-table-column prop='name' label='角色'></el-table-column>
+                <el-table-column prop='roleAlias' label='别名'></el-table-column>
+                <el-table-column prop='from' label='来源'>
+                  <template slot-scope="scope">
+                    {{ scope.row.from? scope.row.from:'自有'}}
+                  </template>
+                </el-table-column>
+                <el-table-column label='关联操作'>
+                  <template slot-scope="scope">
+                    <el-button type='text' size='mini' icon='el-icon-error' title='移除'></el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label='组织分级管理'>
+              <div class="topBtns">
+                <el-button-group>
+                  <el-button type='primary' size='mini' icon='el-icon-search' @click="orgManSearch">搜索</el-button>
+                  <el-button type='success' size='mini' icon='el-icon-plus' @click="rightMenus.setDialog = true ">添加</el-button>
+                  <el-button type='danger' size='mini' icon='el-icon-delete' @click="orgManageDelete">删除</el-button>
+                </el-button-group>
+              </div>
+              <div>
+                <el-table
+                  :data="orgLevelMan.tableData"
+                  @selection-change='selectOrgManage'
+                  size='mini'
+                  style='width:100%'
+                  height='300'
+                  stripe
+                  ref='orgLevelManTable'
+                  >
+                  <el-table-column type='selection'></el-table-column>
+                  <el-table-column prop='managerName' label='用户姓名'></el-table-column>
+                  <el-table-column prop='orgName' label='组织名称' show-overflow-tooltip></el-table-column>
+                  <el-table-column prop='orgPerms' label='组织操作权限' :formatter="filterRole" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop='userPerms' label='子组织操作权限' :formatter="filterRole" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
+                  <el-table-column label='关联操作'>
+                    <template slot-scope="scope">
+                      <el-button type='text' size='mini' icon='el-icon-edit' title='编辑' @click="editManageRow( scope.$index,orgLevelMan.tableData )"></el-button>
+                      <el-button type='text' size='mini' icon='el-icon-error' style='color:red' title='删除' @click="delManageRow( scope.$index,orgLevelMan.tableData )"></el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <el-pagination
+                  @size-change="orgManSizeChange"
+                  @current-change="orgManCurrentChange"
+                  :current-page="orgLevelMan.page"
+                  :hide-on-single-page="false"
+                  :page-sizes="[10,20,30,40,50]"
+                  :page-size="orgLevelMan.size"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="orgLevelMan.total"
+                  small
+                  style="margin:10px 0px">
+                </el-pagination>
+              </div>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </el-col>
@@ -179,7 +294,7 @@
             <el-table-column  v-if='!rightMenus.setDialog' fixed='left' type='selection' width='50'></el-table-column>
             <el-table-column v-else fixed='left' width='50'>
               <template slot-scope="scope">
-                <el-radio :label='scope.row.id' v-model='rightMenus.setRadio'><span style="opacity:0;">.</span></el-radio>
+                <el-radio :label='scope.row.id + " " + scope.row.name '  v-model='rightMenus.setRadio'><span style="opacity:0;">.</span></el-radio>
               </template>
             </el-table-column>
             <el-table-column prop='name' label='姓名'></el-table-column>
@@ -286,10 +401,11 @@
       :modal="false"
       width="40%"
       :close-on-click-modal="false"
+      @close="setDialogClose"
       >
       <div slot="title">
         <i class="el-icon-setting"></i>
-        <span>设置分级节点管理员</span>
+        <span>设置分级管理员</span>
       </div>
       <div>
         <el-form
@@ -303,27 +419,27 @@
             <el-input v-model='rightMenus.setAdminFormData.account' clearable @focus='setOrgData.visibleDialog = true'></el-input>
           </el-form-item>
           <el-form-item label='被授权的组织'>
-            <el-input v-model='rightMenus.setAdminFormData.org'></el-input>
+            <el-input v-model='targetGroupName' disabled></el-input>
           </el-form-item>
           <el-form-item label='本层级组织操作授权项'>
-            <el-checkbox-group v-model='rightMenus.setAdminFormData.top'>
-              <el-checkbox label="增加" name="add"></el-checkbox>
-              <el-checkbox label="删除" name="del"></el-checkbox>
-              <el-checkbox label="修改" name="update"></el-checkbox>
+            <el-checkbox-group v-model='rightMenus.setAdminFormData.orgPerms'>
+              <el-checkbox label="add" >增加</el-checkbox>
+              <el-checkbox label="del">删除</el-checkbox>
+              <el-checkbox label="edit">修改</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label='其子级组织操作授权项'>
-            <el-checkbox-group v-model='rightMenus.setAdminFormData.bottom'>
-              <el-checkbox label="增加" name="add"></el-checkbox>
-              <el-checkbox label="删除" name="del"></el-checkbox>
-              <el-checkbox label="修改" name="update"></el-checkbox>
+            <el-checkbox-group v-model='rightMenus.setAdminFormData.userPerms'>
+              <el-checkbox label="add">增加</el-checkbox>
+              <el-checkbox label="del">删除</el-checkbox>
+              <el-checkbox label="edit">修改</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-form>
       </div>
       <div slot="footer">
-        <el-button type='success' size='mini'>确定</el-button>
-        <el-button type='info' size='mini'>取消</el-button>
+        <el-button type='success' size='mini' @click="confirmSetManagement">确定</el-button>
+        <el-button type='info' size='mini' @click="rightMenus.setDialog = false">取消</el-button>
       </div>
     </el-dialog>
     <el-dialog
@@ -397,6 +513,135 @@
         <el-button type='info' size='mini'>取消</el-button>
       </div>
     </el-dialog>
+    <el-dialog
+      :visible.sync='organizer.organizerDialog'
+      v-dialogDrag
+      :modal="false"
+      width="50%"
+      :close-on-click-modal="false"
+      >
+      <div slot="title">
+        <i class="el-icon-circle-plus"></i>
+        <span>组织人员选择</span>
+      </div>
+      <div>
+        <div class="topBtns">
+          <el-form :inline='true' size='small'>
+            <el-form-item label='状态'>
+              <el-select v-model='organizer.searchStatus' size='mini'>
+                <el-option label='全部' value=''></el-option>
+                <el-option v-for="(op,key) in organizer.options" :key="key" :label='op' :value='key'></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label='姓名'>
+              <el-input v-model='organizer.searchName' size='mini'></el-input>
+            </el-form-item>
+            <el-button type='success' size='mini' icon='el-icon-search' style="margin-top:3px;" @click="searchOrgJoin">搜索</el-button>
+          </el-form>        
+        </div>
+        <el-table
+          :data="organizer.dialogTableData"
+          @selection-change='selectOrgJoin'
+          size='mini'
+          style='width:100%'
+          height='300'
+          stripe
+          ref='organizerDialogTable'
+          >
+          <el-table-column fixed='left' type='selection' width='50'></el-table-column>
+          <el-table-column prop='name' label='名称'></el-table-column>
+          <el-table-column prop='gender' label='性别'>
+            <template slot-scope="scope">
+              {{ scope.row.gender === 'female'?'女':'男' }}
+            </template>
+          </el-table-column>
+          <el-table-column prop='status' label='状态'>
+            <template slot-scope="scope">
+              {{organizer.options[scope.row.status]}}
+            </template>
+          </el-table-column>
+          <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
+        </el-table>
+        <el-pagination
+          @size-change="orgJoinSizeChange"
+          @current-change="orgJoinCurrentChange"
+          :current-page="organizer.page"
+          :hide-on-single-page="false"
+          :page-sizes="[10, 20, 30, 40, 50]"
+          :page-size="organizer.size"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="organizer.total"
+          small
+          style="margin:10px 0px">
+        </el-pagination>
+      </div>
+      <div slot="footer">
+        <el-button type='success' size='mini' @click='confirmOrgJoin'>确认</el-button>
+        <el-button type='info' size='mini' @click="organizer.organizerDialog = false">取消</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      :visible.sync='organizer.searchDialog'
+      v-dialogDrag
+      :modal="false"
+      width="22.5%"
+      :close-on-click-modal="false"
+      @close="oSearchDialogClose"
+      >
+      <div slot="title">
+        <i class="el-icon-search"></i>
+        <span>搜索</span>
+      </div>
+      <el-form size='small'>
+        <el-form-item label='姓名'>
+          <el-input v-model='organizer.sName'></el-input>
+        </el-form-item>
+        <el-form-item label='创建时间'>
+           <el-date-picker
+            v-model="organizer.sTime"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"  
+            value-format=" yyyy/MM/dd">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button type='success' size='mini' @click='confirmOsearch'>确定</el-button>
+        <el-button type='info' size='mini' @click="organizer.searchDialog = false">取消</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      :visible.sync='assignRole.addRoleDialog'
+      v-dialogDrag
+      :modal="false"
+      width="40%"
+      :close-on-click-modal="false"
+      >
+      <div slot="title">
+        <i class="el-icon-circle-plus"></i>
+        <span>角色选择</span>
+      </div>
+      <div>
+        <el-table
+          :data="assignRole.dialogTableData"
+          size='mini'
+          style='width:100%'
+          height='300'
+          stripe
+          ref='addRoleDialogTable'
+          >
+          <el-table-column type='selection' width='50'></el-table-column>
+          <el-table-column prop='name' label='角色名称'></el-table-column>
+          <el-table-column prop='roleAlias' label='角色别名'></el-table-column>
+        </el-table>
+      </div>
+      <div slot="footer">
+        <el-button type='success' size='mini'>确认</el-button>
+        <el-button type='info' size='mini'>取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -411,6 +656,7 @@ export default {
       orgLevel:[],//组织等级
       rightMenus:{//右键菜单
         isRightClick:false,//控制组织树右键点击弹出框的显示
+        isMouse:false,//判断是右键打开的分级设置还是tab下打开的分级设置管理
         nodeId:'',//右键选中的节点的id
         isRefreshTree:1,//控制刷新orgTree
         isAdd:true,//控制显示是新增还是编辑
@@ -450,9 +696,10 @@ export default {
         setDialog:false,//控制设置分级节点弹出框显示
         setAdminFormData:{
           account:'',
-          org:'',
-          top:[],
-          bottom:[],
+          managerID:'',
+          orgID:'',
+          orgPerms:[],
+          userPerms:[],
         },
         setRadio:'',//分级管理员单选框数据
         addpost:{// 新增岗位
@@ -479,6 +726,7 @@ export default {
       },
       orgTreeData:[],//组织树
       targetGroupId:null,//被选中的组织id
+      targetGroupName:null,//被选中的组织名称
       orgBasicInfo:{
         name: { title:'机构名称',value:''},
         orgAlias: { title:'机构别名',value:''},
@@ -517,13 +765,51 @@ export default {
         checkPostTreeNode:[],//被选中的岗位树节点信息集合
         refreshTree:1,//控制刷新树
       },
+      organizer:{//组织人员下 -- 数据
+        tableData:[],
+        oTotal:0,
+        oPage:1,
+        oSize:10,
+        options:{},
+        oSelection:[],//外部表被选中项数据
+        searchDialog:false,//外部搜索框
+        sName:'',//外部搜索姓名
+        sTime:'',//外部搜索时间
+        organizerDialog:false,
+        searchStatus:'',//搜索下的状态选择
+        searchName:'',
+        dialogTableData:[],//弹出框下的table data 
+        total:0,
+        page:1,
+        size:10,
+        selection:[],//加入的被选中表数据
+      },
+      assignRole:{//已分配角色下 -- 数据
+        tableData:[],
+        total:0,
+        page:1,
+        size:10,
+        addRoleDialog:false,
+        dialogTableData:[],
+      },
+      orgLevelMan:{//组织分级管理
+        tableData:[],
+        total:0,
+        page:1,
+        size:10,
+        searchName:'',
+        isUpdate:false,//控制设置分级管理是新增还是修改状态
+        updateId:null,//修改时选择的行id
+        selection:[],
+      },
     };
   },
   created(){
     let getOrgTree = () => this.axios.get('/org/orgTree');
     let getOrgStatus = () => this.axios.get('/org/orgStatus');
     let getOrgLevel = () => this.axios.get('/partyLevel/getByType?type=org');
-    this.axios.all([ getOrgTree(),getOrgStatus(),getOrgLevel() ]).then( this.axios.spread( (orgTree, orgStatus, orgLevel ) => {
+    let getEmpStatus = () => this.axios.get('/employee/userStatus');
+    this.axios.all([ getOrgTree(),getOrgStatus(),getOrgLevel(), getEmpStatus()]).then( this.axios.spread( (orgTree, orgStatus, orgLevel, empStatus ) => {
       this.orgTreeData.push( orgTree.data.obj );
       Object.assign( this.orgStatus, orgStatus.data.obj );
       this.orgLevel = orgLevel.data.obj.map( level => {
@@ -531,7 +817,8 @@ export default {
           id:level.id,
           name:level.name
         }
-      })
+      });
+      Object.assign( this.organizer.options,empStatus.data.obj );
     })).catch( err => console.log( err ));
   },
   methods:{
@@ -560,6 +847,30 @@ export default {
               this.astJobs.total = s.data.obj && s.data.obj.total;
             }
           })     
+        },
+        organizer: () => {//组织人员分页
+          this.axios.get( url, {params} ).then( s => {
+            if( s.data.code === 200 ){
+              this.organizer.tableData = s.data.obj && s.data.obj.records;
+              this.organizer.oTotal = s.data.obj && s.data.obj.total;
+            }
+          })   
+        },
+        role: () => {//已分配角色分页信息
+          this.axios.get( url, {params} ).then( s => {
+            if( s.data.code === 200 ){
+              this.assignRole.tableData = s.data.obj && s.data.obj.records;
+              this.assignRole.Total = s.data.obj && s.data.obj.total;
+            }
+          })  
+        },
+        orgManage: () => {//组织分级管理分页信息
+          this.axios.get( url, {params} ).then( s => {
+            if( s.data.code === 200 ){
+              this.orgLevelMan.tableData = s.data.obj && s.data.obj.records;
+              this.orgLevelMan.total = s.data.obj && s.data.obj.total;
+            }
+          })  
         }
       };
       actives[type]();
@@ -568,6 +879,7 @@ export default {
       if( node.data.id === '0') this.$message.info('根节点不是组织机构')
       else {
         this.targetGroupId = node.data.id;
+        this.targetGroupName = node.data.label;
         let getOrgBasicInfo = () => this.axios.get('/org/getById?id=' + this.targetGroupId );
         this.axios.all([ getOrgBasicInfo() ]).then( this.axios.spread( ( basic ) => {
           for( let b in this.orgBasicInfo ){
@@ -582,6 +894,9 @@ export default {
         })).catch( err => console.log( err ));
         this.getPageInfo({ type : 'orgLeader',url : "/org/principalPager",params:{ orgId:node.data.id,page:1,size:10}});
         this.getPageInfo({ type : 'post',url : "/org/getPositions",params:{ orgId:node.data.id,page:1,size:10}});
+        this.getPageInfo({ type : 'organizer',url : "/employee/getEmpByOrg",params:{ orgId:node.data.id,page:1,size:10}});
+        this.getPageInfo({ type : 'role',url : "/org/getRoles",params:{ orgId:node.data.id,page:1,size:10}});
+        this.getPageInfo({ type : 'orgManage',url : "/orgAuth/pager",params:{ orgId:node.data.id,page:1,size:10}});
       };
     }, 
     orgLeaderSearch(){//组织负责人搜索
@@ -711,7 +1026,9 @@ export default {
         position:'absolute'
       });
       this.rightMenus.isRightClick = true;
+      this.rightMenus.isMouse = true;
       this.rightMenus.nodeId = data.id;
+      this.targetGroupName = data.label;
     },
     mouseActive( type ){
       if( type !== 'add' && this.rightMenus.nodeId === '0'){
@@ -843,8 +1160,11 @@ export default {
        this.rightMenus.moveOrgTree = [];//清空移动节点数的数据
        this.rightMenus.moveToNodeId = '';//清除移至的节点
     },
-    confirmSetAdmin(){
-      console.log(this.rightMenus.setRadio);
+    confirmSetAdmin(){//设置分级管理员用户的id和name
+      let data = this.rightMenus.setRadio;
+      this.rightMenus.setAdminFormData.account = data.split(' ')[1];
+      this.rightMenus.setAdminFormData.managerID = data.split(' ')[0];
+      this.setOrgData.visibleDialog = false;
     },
     confirmAddPost(){//组织节点树下新增岗位
       this.$refs.postForm.validate( valid => {
@@ -970,6 +1290,289 @@ export default {
     },
     postTreeDialogClose(){
       this.astJobs.refreshTree ++;
+    },
+    organizerRemoveRow( index, data ){
+      this.$confirm('当前操作将移除该行数据，是否继续？','提示',{
+        confirmButtonText:'确定',
+        cancelButtonText:'取消',
+        type:'warning'
+      }).then( () => {
+        this.axios.post('/org/removeUser',qs.stringify({
+          orgId:this.targetGroupId,
+          id:data[index].id
+        })).then( res => {
+          if( res.data.code === 200 ){
+            this.$message.success('移除成功');
+            data.splice( index,1 );
+          } else this.$message.error( res.data.desc );
+        }).catch( err => console.log(err));
+      }).catch( () => this.$message.info('已取消移除'));
+    },
+    selectOrg( selection){
+      this.organizer.oSelection = selection;
+    },
+    organizerRemove(){//组织人员顶部工具栏的移除
+      let selection = this.organizer.oSelection;
+      if( selection.length === 0 ){
+        this.$message.info('请至少选择一行数据进行移除');
+      } else {
+        this.$confirm('当前操作将移除所选择的数据，是否继续？','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then( () => {
+          let ids = selection.map( s => s.id );
+          this.axios.post('/org/removeUser',qs.stringify({
+            orgId:this.targetGroupId,
+            id:ids.join(',')
+          })).then( res => {
+            if( res.data.code === 200 ){
+              this.$message.success('移除成功');
+              this.getPageInfo({ type : 'organizer',url : "/employee/getEmpByOrg",params:{
+                orgId:this.targetGroupId,
+                page:this.organizer.oPage,
+                size:this.organizer.oSize,
+              }});
+            }
+          }).catch( err => console.log( err ));
+        })
+      }
+    },
+    orgCurrentChange( page ){
+      this.organizer.oPage = page;
+      this.getPageInfo({ type : 'organizer',url : "/employee/getEmpByOrg",params:{
+        orgId:this.targetGroupId,
+        page:page,
+        size:this.organizer.oSize,
+      }});
+    },
+    orgSizeChange( size ){
+      this.organizer.oSize = size;
+      this.getPageInfo({ type : 'organizer',url : "/employee/getEmpByOrg",params:{
+        orgId:this.targetGroupId,
+        page:this.organizer.oPage,
+        size:size,
+      }});
+    },
+    organizerJoin(){
+      this.getOrgWithNoOrgPage();
+      this.organizer.organizerDialog = true
+    },
+    confirmOsearch(){
+      let startTime = '',endTime = '';
+      if( Array.isArray(this.organizer.sTime)){
+        startTime = this.organizer.sTime[0];
+        endTime = this.organizer.sTime[1];
+      };
+      this.getPageInfo({ type : 'organizer',url : "/employee/getEmpByOrg",params:{
+        orgId:this.targetGroupId,
+        page:this.organizer.oPage,
+        size:this.organizer.size,
+        s:this.organizer.sName,
+        startTime,
+        endTime,
+      }});
+      this.organizer.searchDialog = false;
+    },
+    oSearchDialogClose(){
+      this.organizer.sName = '';
+      this.organizer.sTime = '';
+    },
+    getOrgWithNoOrgPage( page = 1,size = 10,s = '',status = ''){
+       this.axios.get(`/employee/getEmpWihtNoOrg?page=${page}&size=${size}&s=${s}&status=${status}`).then( res => {
+        if( res.data.code === 200 ){
+          this.organizer.dialogTableData = res.data.obj.records;
+          this.organizer.total = res.data.obj.total;
+        } else this.$message.error( res.data.desc );
+      })
+    },
+    orgJoinCurrentChange( page ){
+      this.organizer.page = page;
+      this.getOrgWithNoOrgPage( page, this.organizer.size );
+    },
+    orgJoinSizeChange( size ){
+      this.organizer.size = size;
+      this.getOrgWithNoOrgPage( this.organizer.page, size )
+    },
+    selectOrgJoin( selection ){
+      this.organizer.selection = selection;
+    },
+    confirmOrgJoin(){//组织人员下确定加入人员
+      if( this.organizer.selection.length === 0 ){
+        this.$message.info('请至少选择一行数据');
+      } else {
+        let ids = this.organizer.selection.map( s => s.id );
+        this.axios.post('/org/addUser',qs.stringify({
+          orgId:this.targetGroupId,
+          id:ids.join(',')
+        })).then( res => {
+          if( res.data.code === 200 ){
+            this.$message.success('加入成功');
+            this.getPageInfo({ type : 'organizer',url : "/employee/getEmpByOrg",params:{
+              orgId:this.targetGroupId,
+              page:this.organizer.page,
+              size:this.organizer.size,
+            }});
+            this.organizer.organizerDialog = false;
+          }
+        }).catch( err => console.log( err ));
+      }
+    },
+    searchOrgJoin(){
+      this.getOrgWithNoOrgPage( this.organizer.page,this.organizer.size,this.organizer.searchName,this.organizer.searchStatus );
+    },
+    orgManSizeChange( size ){
+      this.orgLevelMan.size = size;
+      this.getPageInfo({ type : 'orgManage',url : "/orgAuth/pager",params:{
+        orgId:this.targetGroupId,
+        page:this.orgLevelMan.page,
+        size,
+      }});
+    },
+    orgManCurrentChange( page ){
+      this.orgLevelMan.page = page;
+      this.getPageInfo({ type : 'orgManage',url : "/orgAuth/pager",params:{
+        orgId:this.targetGroupId,
+        page:page,
+        size:this.orgLevelMan.size,
+      }});
+    },
+    confirmSetManagement(){
+      let obj = Object.assign({},this.rightMenus.setAdminFormData);
+      if( obj.account  === ''){
+        this.$message.info('请选择分级管理员用户');
+        return
+      }
+      let orgId;
+      if( this.rightMenus.isMouse ) {
+        orgId = this.rightMenus.nodeId;
+      } else {
+        orgId = this.targetGroupId;
+      };
+      let params = {
+        managerID: obj.managerID,
+        orgID: orgId,
+        orgPerms: obj.orgPerms.join(','),
+        userPerms: obj.userPerms.join(',')
+      };
+      let url = '/orgAuth/add';
+      if( this.orgLevelMan.isUpdate ){//修改时
+        params.id = this.orgLevelMan.updateId;
+        url = '/orgAuth/update';
+      };
+      this.axios.post(url,qs.stringify(params)).then( res => {
+        if( res.data.code === 200 ){
+          this.$message.success('保存成功');
+          this.getPageInfo({ type : 'orgManage',url : "/orgAuth/pager",params:{
+            orgId:this.targetGroupId,
+            page:this.orgLevelMan.page,
+            size:this.orgLevelMan.size,
+          }});
+          this.rightMenus.setDialog = false;
+        } else this.$message.error( res.data.desc);
+      }).catch( err => console.log( err ));
+    },
+    setDialogClose(){
+      Object.assign( this.rightMenus.setAdminFormData,{
+        account:'',
+        managerID:'',
+        orgID:'',
+        orgPerms:[],
+        userPerms:[],
+      });
+      this.rightMenus.isMouse = false;
+      this.orgLevelMan.isUpdate = false;
+    },
+    delManageRow( index, data ){
+      this.$confirm('当前操作将删除该行数据，是否继续？','提示',{
+        confirmButtonText:'确定',
+        cancelButtonText:'取消',
+        type:'warning'
+      }).then( () => {
+        this.axios.post('/orgAuth/delete',qs.stringify({id:data[index].id})).then( res => {
+          res.data.code === 200 && ( data.splice( index,1 )) || ( this.$message.error( res.data.desc ));
+        }).catch( err => console.log( err ));
+      }).catch( () => this.$message.info('已取消删除'));
+    },
+    filterRole( row, column, cellValue, index ){//组织分页下的权限字段数据格式化
+      let obj = {
+        add: '增加',
+        del: '删除',
+        edit: '修改'
+      };
+      let arr = cellValue.split(',');
+      let _arr = arr.map( item => {
+        return obj[item];
+      });
+      return _arr.join(',');
+    },
+    editManageRow( index, data ){//组织管理分页行编辑
+      this.axios.get('/orgAuth/getById?id=' + data[index].id).then( res => {
+        if( res.data.code === 200 ){
+          let rowData = res.data.obj;
+          this.targetGroupName = rowData.orgName;
+          let obj = {
+            account: rowData.managerName,
+            managerID: rowData.managerID,
+            orgID: rowData.orgID,
+            orgPerms: rowData.orgPerms.split(','),
+            userPerms: rowData.userPerms.split(',')
+          };
+          this.orgLevelMan.updateId = data[index].id;
+          this.orgLevelMan.isUpdate = true;
+          Object.assign( this.rightMenus.setAdminFormData, obj );
+          this.rightMenus.setDialog = true ;
+        } else this.$message.error( res.data.desc);
+      })
+    },
+    selectOrgManage( selection ){
+      this.orgLevelMan.selection = selection;
+    },
+    orgManageDelete(){//组织分级管理下顶部工具栏删除
+      let selection = this.orgLevelMan.selection;
+      if( selection.length === 0 ){
+        this.$message.info('至少选择一行数据进行删除');
+      } else {
+        this.$confirm('当前操作将删除所选数据，是否继续？','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'danger'
+        }).then( () => {
+          let ids = selection.map( s => s.id );
+          this.axios.post('/orgAuth/delete',qs.stringify({ id: ids.join(',')})).then( res => {
+            if( res.data.code === 200 ){
+              this.$message.success('删除成功');
+              this.getPageInfo({ type : 'orgManage',url : "/orgAuth/pager",params:{
+                orgId:this.targetGroupId,
+                page:this.orgLevelMan.page,
+                size:this.orgLevelMan.size,
+              }});
+            } else this.$message.error(res.data.desc);
+          }).catch( err => console.log( err ));
+        }).catch( () => this.$message.info('已取消删除'));
+      }
+    },
+    orgManSearch(){
+      this.$prompt('请输入姓名','搜索',{
+        confirmButtonText:'确定',
+        cancelButtonText:'取消',
+      }).then( ({value}) => {
+         this.getPageInfo({ type : 'orgManage',url : "/orgAuth/pager",params:{
+            orgId:this.targetGroupId,
+            page:this.orgLevelMan.page,
+            size:this.orgLevelMan.size,
+            s: value
+          }});
+      }).catch( () => this.$message.info('取消搜索'));
+    },
+    addRole(){//添加角色
+      this.axios.get(`/role/getOtherRoles?type=org&id=${this.targetGroupId}&page=1&size=10`).then( res => {
+        if( res.data.code === 200 ){
+          this.assignRole.dialogTableData = res.data.obj.records;
+        }
+        this.assignRole.addRoleDialog = true
+      })
+      
     },
   },
 }
