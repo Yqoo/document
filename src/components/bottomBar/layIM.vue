@@ -1,9 +1,10 @@
-<!-- 分享页面 -->
+<!-- 即时通讯 -->
 <template>
-  <div class='shagePage'>分享页面</div>
+  <div class='layIM'></div>
 </template>
 
 <script>
+// import '@/assets/layIM/layIM/js/layui.js';
 export default {
   data () {
     return {

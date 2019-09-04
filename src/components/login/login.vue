@@ -146,7 +146,7 @@ export default {
                         case 200:
                             this.$message({ message:res.data.desc,type:'success' });
                             let curTime = new Date().getTime();
-                            localStorage.setItem('loginToken',JSON.stringify({is:true,time:curTime}));
+                            localStorage.setItem('loginToken',JSON.stringify({is:true,time:curTime,name:params.account}));
                             this.$router.push({ path:'/' })
                             break;
                         default:

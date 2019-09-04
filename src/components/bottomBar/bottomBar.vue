@@ -173,7 +173,7 @@
                         <div>清楚所有通知</div>
                     </div>
                     <div class="bottomBody slideInUp animated">
-                        <div v-for="(b,i) in fns" :key='i'>
+                        <div v-for="(b,i) in fns" :key='i' @click="clickIcons(b)">
                             <i :class="b.icon"></i>
                             <p>{{b.title}}</p>
                         </div>
@@ -181,6 +181,7 @@
                 </div>
             </el-drawer>  
         </el-col>
+        <layIM v-if="showLayIM"></layIM>
     </el-row> 
 </template>
 <script>
@@ -188,6 +189,7 @@ import tools from  "@/assets/js/utils/tools.js";
 import siderBar from "@/components/siderBar/siderBar.vue"
 import rightSiderBar from "@/components/siderBar/rightSiderBar.vue";
 import taskBarMenus from "@/components/bottomBar/taskBarMenus";
+import layIM from '@/components/bottomBar/layIM.vue';
 import { setTimeout } from 'timers';
 export default {
     name:'bottomBar',
@@ -211,6 +213,7 @@ export default {
             searchDrawer: false,
             searchDirection:'ltr',
             innerDrawer:false,
+            showLayIM:false, // 即时通讯：显示隐藏
             searchType:'web',//默认绑定显示的search tabs标签
             videos:[
                 {
@@ -345,6 +348,14 @@ export default {
                 }
             })
         },
+        clickIcons( item ){ //点击抽屉底部的按钮
+            console.log(item);
+            switch(item.title){
+                case '即时通讯':
+                    this.showLayIM = true;
+                    break;
+            }
+        }
     },
     computed:{
         tabsFilter(){
