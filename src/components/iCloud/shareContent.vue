@@ -115,7 +115,7 @@
             label="共享资源"
             width="250">
             <template slot-scope="scope">
-              <img :src="require(`@/assets/image/icons/${scope.row.iconImg}`)">
+              <img :src="require(`@/assets/image/icons/${scope.row.iconImg?scope.row.iconImg:'deskIcons/icon-unknown.png'}`)">
               <span>{{scope.row.resourceName}}</span>
             </template>
           </el-table-column>

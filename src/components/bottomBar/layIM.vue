@@ -1,12 +1,7 @@
 <!-- 即时通讯 -->
 <template>
-  <el-dialog 
-    title="即时通讯" 
-    :visible.sync="showIM" 
-    width="80%" 
-    :append-to-body='true'
-    :before-close="handleClose">
-  </el-dialog>
+    <div class="layIM">
+    </div>
 </template>
 
 <script>
@@ -21,7 +16,7 @@ export default {
   mounted() {
     let baseUrl = 'http://192.168.0.101:8080';
     layui.extend({
-        'socket':'./static/layui/mods/socket'
+        'socket':'/static/layui/mods/socket'
     });
     layui.use(["layim","socket"], function(layim, socket) {
         //先来个客服模式压压精
@@ -31,8 +26,8 @@ export default {
         var cache =  layui.layim.cache();
         socket.config({
             log:true,
-            server:'http://192.168.0.101:8889',
-            token:'/account/token'
+            server:'ws://192.168.0.101:8889',
+            token:baseUrl + '/account/token'
         });
         socket.on('msg',function (d) {
             layim.getMessage(d);
@@ -40,17 +35,17 @@ export default {
         //基础配置
         layim.config({
             init: {
-                url: '/layim/init'
+                url: baseUrl+'/layim/init'
             }
             ,members: {
-                url: '/layim/member'
+                url: baseUrl+'/layim/member'
             }
             ,uploadImage: {
-                url: '/upload/image' //（返回的数据格式见下文）
+                url:baseUrl+ '/upload/image' //（返回的数据格式见下文）
                 ,type: '' //默认post
             }
             ,uploadFile: {
-                url: '/upload/file' //（返回的数据格式见下文）
+                url: baseUrl+'/upload/file' //（返回的数据格式见下文）
                 ,type: '' //默认post
             }
             ,isAudio: true //开启聊天工具栏音频
@@ -59,7 +54,7 @@ export default {
             ,notice: true //是否开启桌面消息提醒，默认false
             ,msgbox: layui.cache.dir + 'css/modules/layim/html/msgbox.html' //消息盒子页面地址，若不开启，剔除该项即可
             ,find: layui.cache.dir + 'css/modules/layim/html/find.html' //发现页面地址，若不开启，剔除该项即可
-            ,chatLog: '/chatlog' //聊天记录页面地址，若不开启，剔除该项即可
+            ,chatLog: layui.cache.dir +'css/modules/layim/html/chatlog.html' //聊天记录页面地址，若不开启，剔除该项即可
         });
         //监听在线状态的切换事件
         layim.on('online', function(data){
@@ -100,7 +95,7 @@ export default {
              var offLineMsg;
 		if(firstView.indexOf(targetId)<0){//登陆后第一次打开窗口 才请求历史记录
              $.ajax({
-                 url:"/layim/getOffLineMsg",
+                 url:baseUrl+"/layim/getOffLineMsg",
                  data:{'mineId':initData.mine.id,'targetId':targetId,'type':type},
                  type:"Post",
                  dataType:"json",

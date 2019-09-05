@@ -3,14 +3,22 @@
  * @create 2017-11-21
  * @remark websocket 模块化封装
  * */
-
+$.ajaxSetup({
+    headers: {
+        'Access-Control-Allow-Headers' : 'X-Requested-With',
+    },
+    crossDomain: true,
+    xhrFields: {
+	    withCredentials: true//带上cookie
+    },
+});
 layui.define(['jquery','layer'],function (exports) {
     var $ = layui.jquery;
     var layer = layui.layer;
     var reconnectInterval = null;
     var defaultOptions = {
         log:true,
-        server:'http://192.168.0.181:8080',
+        server:'ws://127.0.0.1:8887',
         token:'/layim/token',
         reconn:false
     };
