@@ -31,7 +31,7 @@ Vue.use(VXETable);
 Vue.use(VueClipboard);
 Vue.config.productionTip = false;
 Vue.prototype.axios = axios;
-axios.defaults.baseURL = "http://192.168.0.102:8080";//配置axios默认基础地址 //http://govnk.com:9005/zydoc http://192.168.0.181:8080
+axios.defaults.baseURL = "http://192.168.0.101:8080";//配置axios默认基础地址 //http://govnk.com:9005/zydoc http://192.168.0.181:8080
 axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;//运行携带cookie
 Vue.prototype._ = _;
