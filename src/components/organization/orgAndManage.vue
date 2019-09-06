@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-16 09:18:16
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-09-05 18:36:23
+ * @LastEditTime: 2019-09-06 08:56:55
  * @Desc: 组织与用户下的组织管理组件
  -->
 <template>
@@ -191,8 +191,7 @@
                       v-model="item.value"
                       type="date"
                       placeholder="选择日期">
-                    </el-date-picker>
-                  </div>
+                    </el-date-picker>                  </div>
                   <div v-else-if=" item.type === 'boolean' ">
                     <el-radio-group v-model='item.value'>
                       <el-radio v-for="( r,i ) in item.data" :key="i" :label="r.label" :value="r.value"></el-radio>
