@@ -90,7 +90,7 @@
                       :src="item.img!=null&&require(`@/assets/image/icons/${item.img}`)"
                       :alt="item.title"
                       />
-                    <img v-if="item.showLock" class="lock" src="@/assets/image/icons/deskIcons/lock.png"/>
+                    <img v-if="item.type==='zylock'" class="lock" src="@/assets/image/icons/deskIcons/lock.png"/>
                     </span>
                     <p v-if="!item.showInput">{{item.name}}</p>
                     <el-input
@@ -555,7 +555,6 @@ export default {
         gridItemsList[list] = this.gridItemDatas.filter(e => {
           e.active = false;
           e.showInput = false;
-          e.showLock = false;
           return e.pagerNumber === i;
         });
       }
@@ -591,7 +590,8 @@ export default {
             this.rules = "system"; //系统设置
             break;
           case "file":
-            this.rules = "file"; //文件
+            let rule = item.type === 'zylock' ? 'file-zylock' : 'file';
+            this.rules = rule; //文件
             break;
           case "folder":
             this.rules = "folder"; //文件夹
@@ -746,19 +746,8 @@ export default {
           this.applicationHandle("file");
         },
         download: () => {
-          //文件下载 （请求成功并未下载）
-          let json = {
-            x: 0,
-            y: 0,
-            w: 0,
-            h: 0,
-            i: "",
-            type: "",
-            name: "",
-            title: "",
-            img: "",
-            id: ""
-          };
+          //文件下载
+          let json = {x: 0,y: 0,w: 0,h: 0,i: "",type: "",name: "",title: "",img: "",id: ""};
           for (let k in json) {
             json[k] = this.clickItem[k];
           }
@@ -769,19 +758,8 @@ export default {
           link.click();
         },
         encryption: () => {
-          //文件加密 （返回加密错误）
-          let json = {
-            x: 0,
-            y: 0,
-            w: 0,
-            h: 0,
-            i: "",
-            type: "",
-            name: "",
-            title: "",
-            img: "",
-            id: ""
-          };
+          //文件加密 
+          let json = {x: 0,y: 0,w: 0,h: 0,i: "",type: "",name: "",title: "",img: "",id: ""};
           for (let k in json) {
             json[k] = this.clickItem[k];
           }
@@ -792,7 +770,7 @@ export default {
                 for (let i = 0; i < this.defaultApps.length; i++) {
                   if (this.defaultApps[i].i === res.data.obj.i) {
                     this.defaultApps[i] = res.data.obj;
-                    this.defaultApps[i].showLock = true;
+                    this.defaultApps[i].type = res.data.obj.type;
                     break;
                   }
                 }
@@ -802,26 +780,25 @@ export default {
             });
         },
         deciphering: () => {
-          //文件解密 （返回解密错误）
-          let json = {
-            x: 0,
-            y: 0,
-            w: 0,
-            h: 0,
-            i: "",
-            type: "",
-            name: "",
-            title: "",
-            img: "",
-            id: ""
-          };
+          //文件解密 
+          let json = {x: 0,y: 0,w: 0,h: 0,i: "",type: "",name: "",title: "",img: "",id: ""};
           for (let k in json) {
             json[k] = this.clickItem[k];
           }
           this.axios
             .post("/userDesktop/updateFileDec", qs.stringify(json))
             .then(res => {
-              console.log(res);
+              if(res.data.code === 200){
+                for (let i = 0; i < this.defaultApps.length; i++) {
+                  if (this.defaultApps[i].i === res.data.obj.i) {
+                    this.defaultApps[i] = res.data.obj;
+                    this.defaultApps[i].type = res.data.obj.type;
+                    break;
+                  }
+                }
+              } else {
+                this.$message('解密失败');
+              }
             });
         }
       };

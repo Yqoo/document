@@ -118,6 +118,10 @@ export default {
       dialogVisible:false,  //保存到个人文区弹框 显示和隐藏
       checkedLatestPath:false,  // 勾选最近保存的路径
       isLogin: true, // 是否登录
+      json:{  //文件下载信息
+        userId: this.$route.query.userId,
+        fileId: this.$route.query.fileId,
+      },
     };
   },
   created(){
@@ -134,14 +138,9 @@ export default {
   },
   methods: {
     getFileList(){
-      let json = {
-        userId: this.$route.query.userId,
-        fileId: this.$route.query.fileId,
-        sharePassword: this.sharePassword
-      };
-      this.axios.get(`/temp/selectShareFile?userId=${json.userId}&fileId=${json.fileId}&sharePassword=${json.sharePassword}`)
+      this.axios.get(`/temp/selectShareFile?userId=${this.json.userId}&fileId=${this.json.fileId}&sharePassword=${this.sharePassword}`)
         .then((res) => {
-          console.log(res)
+          console.log(res.data.obj)
         });
     },
     pwdSuccess(){ //确定输入验证码
@@ -160,7 +159,12 @@ export default {
       //
     },
     uploadFile(index, row){ //下载
-      //
+      // console.log(row)
+      // let link = document.createElement("a");
+      // link.style.display = "none";
+      // link.href ="http://192.168.0.102:8080/temp/addDowloadFile?userId="+this.json.userId+'&sharePassword='+this.sharePassword+'&fileId='+this.json.fileId;
+      // document.body.appendChild(link);
+      // link.click();
     },
     saveFile(index, row){ //点击保存到个人文区，弹框弹出
       // console.log(index)

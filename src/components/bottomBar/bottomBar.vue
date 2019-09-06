@@ -181,7 +181,7 @@
                 </div>
             </el-drawer>  
         </el-col>
-        <layIM v-if="showLayIM"></layIM>
+        <layIM :show="showIM"></layIM>
     </el-row> 
 </template>
 <script>
@@ -189,20 +189,22 @@ import tools from  "@/assets/js/utils/tools.js";
 import siderBar from "@/components/siderBar/siderBar.vue"
 import rightSiderBar from "@/components/siderBar/rightSiderBar.vue";
 import taskBarMenus from "@/components/bottomBar/taskBarMenus";
-import layIM from '@/components/bottomBar/layIM.vue';
+import layIM from '@/components/bottomBar/layIM.vue'
 import { setTimeout } from 'timers';
 export default {
     name:'bottomBar',
     components:{
         siderBar,
         rightSiderBar,
-        taskBarMenus
+        taskBarMenus,
+        layIM
     },
     props:{
         tabs:Object,
     },
     data(){
         return {
+            showIM:false, //即时通讯弹框显示隐藏
             searchText: '',
             localTime:'',
             isFix:false,
@@ -213,7 +215,6 @@ export default {
             searchDrawer: false,
             searchDirection:'ltr',
             innerDrawer:false,
-            showLayIM:false, // 即时通讯：显示隐藏
             searchType:'web',//默认绑定显示的search tabs标签
             videos:[
                 {
@@ -352,7 +353,7 @@ export default {
             console.log(item);
             switch(item.title){
                 case '即时通讯':
-                    this.showLayIM = true;
+                    this.showIM = true;
                     break;
             }
         }
