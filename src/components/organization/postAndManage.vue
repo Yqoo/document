@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-16 09:18:16
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-09-05 14:48:52
+ * @LastEditTime: 2019-09-06 11:17:15
  * @Desc: 组织与用户下的岗位管理组件
  -->
 <template>
@@ -40,8 +40,74 @@
                 </li>
               </ul>
             </el-tab-pane>
-            <el-tab-pane label="归属组织">用户管理</el-tab-pane>
-            <el-tab-pane label="岗位人员">用户管理</el-tab-pane>
+            <el-tab-pane label="归属组织">
+              <ul class="postDetail">
+                <li>
+                  <div>组织名称：</div>
+                  <div>{{ownerGroupInfo.name}}</div>
+                </li>
+                <li>
+                  <div>等级：</div>
+                  <div>{{ownerGroupInfo.levelID}}</div>
+                </li>
+                <li>
+                  <div>状态：</div>
+                  <div>{{orgStatus[ownerGroupInfo.status]}}</div>
+                </li>
+              </ul>
+            </el-tab-pane>
+            <el-tab-pane label="岗位人员">
+              <div class="topBtns">
+                <el-button-group>
+                  <el-button type='primary' icon='el-icon-search' size='mini' @click="staffBtnsHandler('search')">搜索</el-button>
+                  <el-button type='success' icon='el-icon-circle-plus' size='mini' @click="staffBtnsHandler('join')">加入</el-button>
+                  <el-button type='danger' icon='el-icon-error' size='mini' @click="staffBtnsHandler('isDel')">移除</el-button>
+                </el-button-group>
+              </div>
+              <el-table
+                :data="staffsPosition.tableData"
+                @selection-change='selectStaffs'
+                size='mini'
+                style='width:100%'
+                height='300'
+                stripe
+                ref='staffsTable'
+                >
+                <el-table-column fixed type='selection' width='50'></el-table-column>
+                <el-table-column prop='name' label='姓名'></el-table-column>
+                <el-table-column prop='orgName' label='归属组织'></el-table-column>
+                <el-table-column prop='gender' label='性别'>
+                  <template slot-scope="scope">
+                    {{ scope.row.gender === 'female'? '女':'男' }}
+                  </template>
+                </el-table-column>
+                <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
+                <el-table-column prop='status' label='状态'>
+                  <template slot-scope="scope">
+                    {{ staffStatus[scope.row.status] }}
+                  </template>
+                </el-table-column>
+                <el-table-column fixed='right' label='关联操作'>
+                  <template slot-scope="scope">
+                    <el-button type='text' icon='el-icon-refresh-right' title='撤销主岗位' @click="tableColumnTools(scope.$index,staffsPosition.tableData,'isMain')"></el-button>
+                    <el-button type='text' icon='el-icon-s-custom' title='撤销主负责人' @click="tableColumnTools(scope.$index,staffsPosition.tableData,'isPrin')"></el-button>
+                    <el-button type='text' icon='el-icon-error' title='移除' @click="tableColumnTools(scope.$index,staffsPosition.tableData,'isDel')"></el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-pagination
+                @size-change="staffSizeChange"
+                @current-change="staffCurrentChange"
+                :current-page="staffsPosition.page"
+                :hide-on-single-page="true"
+                :page-sizes="[10,20,30,40]"
+                :page-size="staffsPosition.size"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="staffsPosition.total"
+                small
+                style="margin:10px 0px">
+              </el-pagination>
+            </el-tab-pane>
             <el-tab-pane label="扩展属性">用户管理</el-tab-pane>
             <el-tab-pane label="已分配角色">用户管理</el-tab-pane>
           </el-tabs>
@@ -96,6 +162,57 @@
         <el-button type='info' size='mini'>取消</el-button>
       </div>
     </el-dialog>
+    <!-- 员工搜索 -->
+    <el-dialog
+      :visible.sync='staffsPosition.search.dialogVisible'
+      v-dialogDrag
+      :modal="false"
+      width="30%"
+      :close-on-click-modal="false"
+      >
+      <div slot="title">
+        <i class="el-icon-search"></i>
+        <span>员工搜索</span>
+      </div>
+      <div>
+        <el-form :data="staffsPosition.search" size='small' label-width='100px' style='padding:20px 0px;'>
+          <el-form-item label='姓名'>
+            <el-input v-model='staffsPosition.search.name'></el-input>
+          </el-form-item>
+          <el-form-item label='创建时间'>
+            <el-date-picker
+              v-model="staffsPosition.search.time"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy/MM/dd">
+            </el-date-picker>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer">
+        <el-button type='success' size='mini' @click="confirmStaffSearch">确认</el-button>
+        <el-button type='info' size='mini' @click='staffsPosition.search.dialogVisible = false'>取消</el-button>
+      </div>
+    </el-dialog>
+    <!-- 人员选择框 -->
+    <el-dialog
+      :visible.sync='staffsPosition.personalSelection.dialogVisible'
+      v-dialogDrag
+      :modal="false"
+      width="50%"
+      :close-on-click-modal="false"
+      >
+      <div slot="title">
+        <i class="el-icon-user"></i>
+        <span>人员选择</span>
+      </div>
+      <div slot="footer">
+        <el-button type='success' size='mini'>确认</el-button>
+        <el-button type='info' size='mini'>取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -118,7 +235,7 @@ export default {
         createTime: { desc:'创建时间',value: ''},
         updateTime: { desc:'更新时间',value: ''},
       },
-      targetPostId:null,//组织id
+      targetPostId:null,//岗位id
       postLevelOption:[],//岗位等级下拉
       filterOptions:{},//格式化后的岗位等级下拉
       rightMenus:{
@@ -153,23 +270,69 @@ export default {
           ],
         },
       },
+      orgStatus:{},//组织状态类型
+      staffStatus:{},//员工状态
+      ownerGroupInfo:{//归属组织信息
+        name: '',
+        levelID: '',
+        status: '',
+      },
+      staffsPosition:{//岗位人员信息
+        tableData:[],
+        total:0,
+        page:1,
+        size:10,
+        selection:[],
+        search:{
+          dialogVisible:false,
+          name: '',
+          time: ''
+        },
+        personalSelection:{//人员选择框数据
+          dialogVisible: false,
+          tableData:[],
+          total:0,
+          page:1,
+          size:10,
+          selection:[],
+        },
+      },
     };
   },
   created(){
     let getPostTree = () => this.axios.get('/position/positionTree');//获取岗位树
     let getPostLevel = () => this.axios.get('/partyLevel/getByType?type=position');//获取岗位等级
-    this.axios.all([getPostTree(),getPostLevel()]).then( this.axios.spread( ( postTree, postLevel ) => {
+    let getOrgStatus = () => this.axios.get('/org/orgStatus');//获取组织状态类型
+    let getStaffStatus = () => this.axios.get('/employee/userStatus');//获取员工的状态类型
+    this.axios.all([getPostTree(),getPostLevel(),getOrgStatus(),getStaffStatus()]).then( this.axios.spread( ( postTree, postLevel,orgStatus,staffStatus ) => {
       this.postTreeData.treeNode.push(postTree.data.obj) ;
       this.postLevelOption = postLevel.data.obj;
+      Object.assign( this.orgStatus,orgStatus.data.obj );
+      Object.assign( this.staffStatus,staffStatus.data.obj );
     })).catch( err => console.log(err ));
   },
   methods:{
+    getPage( { type, url ,params } ){
+      let methods = {
+        staff: () => {//员工分页
+          this.axios.get( url, {params} ).then( s => {
+            if( s.data.code === 200 ){
+              this.staffsPosition.tableData = s.data.obj && s.data.obj.records;
+              this.staffsPosition.total = s.data.obj && s.data.obj.total;
+            }
+          })    
+        }
+      };
+      methods[type]();
+    },
     postTreeClick( data, node, self ){
       if( node.data.id === '0') this.$message.info('根节点不是岗位');
       else {
         this.targetPostId = node.data.id;
         let getPostDetail = () => this.axios.get('/position/getById?id=' + node.data.id );
-        this.axios.all([getPostDetail()]).then( this.axios.spread( ( detail ) => {
+        let getOrgInfo = () => this.axios.get('/position/getOrg?id=' + node.data.id );//获取岗位归属组织详细信息
+        let getStaffsTableData = () => this.axios.get(`/position/getEmployees?pid=${node.data.id}&page=1&size=10`);//获取岗位人员分页信息
+        this.axios.all([getPostDetail(),getOrgInfo(),getStaffsTableData()]).then( this.axios.spread( ( detail,orgInfo,staffsTable ) => {
           let detailObj = detail.data.obj;
           for( let dKey in this.postDetail ){
             if( dKey === 'levelID'){
@@ -177,7 +340,16 @@ export default {
               this.postDetail[dKey].value = this.filterOptions[val];
             } else this.postDetail[dKey].value = detailObj[dKey];
             
-          }
+          };
+          for( let oKey in this.ownerGroupInfo ){
+            try {
+              this.ownerGroupInfo[oKey] = orgInfo.data.obj[oKey];
+            } catch (error) {
+              this.ownerGroupInfo[oKey] = '';
+            }
+          };
+          this.staffsPosition.tableData = staffsTable.data.obj.records;
+          this.staffsPosition.total = staffsTable.data.obj.total;
         }))
       }
     },
@@ -254,6 +426,93 @@ export default {
       });
       this.$refs.rightMenusAddForm.resetFields();
     },
+    staffCurrentChange( page ){//员工分页当前页改变的回调
+      this.staffsPosition.page = page;
+      this.getPage({ type : 'staff',url : "/position/getEmployees",params:{
+        pid: this.targetPostId,
+        page: page,
+        size: this.staffsPosition.size
+      }});
+    },
+    staffSizeChange( size ){
+      this.staffsPosition.size = size;
+      this.getPage({ type : 'staff',url : "/position/getEmployees",params:{
+        pid: this.targetPostId,
+        page: this.staffsPosition.page,
+        size: size
+      }});
+    },
+    selectStaffs( selection ){
+      this.staffsPosition.selection = selection;
+    },
+    tableColumnTools( index, data ,type ){
+      let actives = {
+        isDel: () => {
+          this.$confirm('当前操作将移除该行数据，是否继续？','提示',{
+            confirmButtonText:'确定',
+            cancalButtonText:'取消',
+            type:'warning'
+          }).then( () => {
+            this.axios.post('/position/removeEmp',qs.stringify({ pid: this.targetPostId, id: data[index].id })).then( res => {
+              if( res.data.code === 200 ){
+                data.splice( index,1 );
+                this.staffsPosition.total --;
+                this.$message.success('成功移除');
+              } else this.$message.error( res.data.desc );
+            })
+          }).catch( () => this.$message.info('已取消移除'));
+        },
+      };
+      actives[type]();
+    },
+    staffBtnsHandler( type ){
+      let methods = {
+        isDel: () => {
+          if( this.staffsPosition.selection.length === 0 ){
+            this.$message.info('请至少选择一条数据进行移除');
+          } else {
+            this.$confirm('当前操作将移除所选择的数据，是否继续？','提示',{
+              confirmButtonText: '确定',
+              cancalButtonText: '取消',
+              type: 'warning'
+            }).then( () => {
+              let ids = this.staffsPosition.selection.map( s => s.id );
+              this.axios.post('/position/removeEmp',qs.stringify({ pid: this.targetPostId, id: ids.join(',')})).then( res => {
+                if( res.data.code === 200 ){
+                  this.getPage({ type : 'staff',url : "/position/getEmployees",params:{
+                    pid: this.targetPostId,
+                    page: this.staffsPosition.page,
+                    size: this.staffsPosition.size
+                  }});
+                  this.$message.success('成功移除');
+                } else this.$message.error( res.data.desc);
+              }).catch( err => this.$message.error('系统错误'));
+            }).catch( () => this.$message.info('已取消移除'));
+          }
+        },
+        search: () => {
+          this.staffsPosition.search.dialogVisible = true;
+        },
+        join: () => this.staffsPosition.personalSelection.dialogVisible = true,
+      };
+      methods[type]();
+    },
+    confirmStaffSearch(){//员工搜索
+      let sTime = '',eTime = '';
+      if( Array.isArray( this.staffsPosition.search.time )){
+        sTime = this.staffsPosition.search.time[0];
+        eTime = this.staffsPosition.search.time[1];
+      };
+      this.getPage({ type : 'staff',url : "/position/getEmployees",params:{
+        pid: this.targetPostId,
+        page: this.staffsPosition.page,
+        size: this.staffsPosition.size,
+        s: this.staffsPosition.search.name,
+        startTime: sTime,
+        endTime: eTime
+      }});
+      this.staffsPosition.search.dialogVisible = false;
+    },
   },
   computed:{
     levelOption(){//岗位等级下拉数据过滤
@@ -307,5 +566,9 @@ export default {
         width: 150px;
       }
     }
+  }
+  .topBtns {
+    padding: 5px 10px;
+    text-align: right;
   }
 </style>
