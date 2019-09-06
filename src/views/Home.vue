@@ -1315,7 +1315,7 @@ body,
       position: absolute;
       width: 15px;
       right: 0;
-      bottom: 7px;
+      bottom: 0px;
     }
     & p {
       white-space: nowrap;

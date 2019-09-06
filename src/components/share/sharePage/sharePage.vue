@@ -57,11 +57,11 @@
             prop="fileName"
             label="文件名">
             <template slot-scope="scope">
-              <img src="@/assets/image/icons/deskIcons/tree-folder.png">
-              <span style="margin-left:5px">{{ scope.row.fileName }}</span>
+              <img :src="require('@/assets/image/icons/'+scope.row.img)">
+              <span style="margin-left:5px">{{ scope.row.name }}</span>
               <div class="fileBths">
                 <el-button circle size="mini" icon="el-icon-folder-checked" title="保存到个人文区" @click="saveFile(scope.$index, scope.row)"></el-button>
-                <el-button circle size="mini" icon="el-icon-download" title="下载" @click="uploadFile(scope.$index, scope.row)"></el-button>
+                <el-button circle size="mini" icon="el-icon-download" title="下载" @click="downloadFile(scope.$index, scope.row)"></el-button>
               </div>
             </template>
           </el-table-column>
@@ -70,7 +70,7 @@
             label="大小">
           </el-table-column>
           <el-table-column
-            prop="updateTime"
+            prop="updateDate"
             label="修改日期">
           </el-table-column>
         </el-table>
@@ -112,9 +112,7 @@ export default {
       userName:'系统管理员', //登录人
       pwdInput:'', //输入的分享密码
       showPwdBox: true, // true：显示输入密码  false：显示文件列表
-      tableData:[
-        {fileName:'文件名',size:'300b',updateTime:'2019-09-01'},
-      ],
+      tableData:[],
       dialogVisible:false,  //保存到个人文区弹框 显示和隐藏
       checkedLatestPath:false,  // 勾选最近保存的路径
       isLogin: true, // 是否登录
@@ -140,7 +138,11 @@ export default {
     getFileList(){
       this.axios.get(`/temp/selectShareFile?userId=${this.json.userId}&fileId=${this.json.fileId}&sharePassword=${this.sharePassword}`)
         .then((res) => {
-          console.log(res.data.obj)
+          if(res.data.code === 200){
+            this.tableData.push(res.data.obj)
+          }else{
+            this.$message('获取分享文件失败');
+          }
         });
     },
     pwdSuccess(){ //确定输入验证码
@@ -158,13 +160,13 @@ export default {
     handleSelectionChange( val ){
       //
     },
-    uploadFile(index, row){ //下载
-      // console.log(row)
-      // let link = document.createElement("a");
-      // link.style.display = "none";
-      // link.href ="http://192.168.0.102:8080/temp/addDowloadFile?userId="+this.json.userId+'&sharePassword='+this.sharePassword+'&fileId='+this.json.fileId;
-      // document.body.appendChild(link);
-      // link.click();
+    downloadFile(index, row){ //下载
+      console.log(row)
+      let link = document.createElement("a");
+      link.style.display = "none";
+      link.href ="http://192.168.0.102:8080/temp/addDowloadFile?userId="+this.json.userId+'&sharePassword='+this.sharePassword+'&fileId='+this.json.fileId;
+      document.body.appendChild(link);
+      link.click();
     },
     saveFile(index, row){ //点击保存到个人文区，弹框弹出
       // console.log(index)
