@@ -1,7 +1,7 @@
 <!--
  * @Date: 2019-08-16 09:18:16
  * @LastEditors: Yqoo
- * @LastEditTime: 2019-09-04 18:40:25
+ * @LastEditTime: 2019-09-05 18:36:23
  * @Desc: 组织与用户下的组织管理组件
  -->
 <template>
@@ -173,7 +173,37 @@
                 style="margin:10px 0px">
               </el-pagination>
             </el-tab-pane>
-            <el-tab-pane label='扩展属性'></el-tab-pane>
+            <el-tab-pane label='扩展属性'>
+              <el-form :data="extendsFormData" size="small" label-width="150px">
+                <el-form-item v-for="( item,key ) in extendsFormData" :key='key' :label='item.label'>
+                  <div v-if="item.type === 'radio' ">
+                    <el-radio-group v-model='item.value'>
+                      <el-radio v-for="( r,i ) in item.data" :key="i" :label="r.label" :value="r.value"></el-radio>
+                    </el-radio-group>
+                  </div>
+                  <div v-else-if=" item.type === 'checkbox'">
+                    <el-checkbox-group v-model="item.value">
+                      <el-checkbox v-for="(c,i) in item.data" :key='i' :value="c.value" :label="c.label"></el-checkbox>
+                    </el-checkbox-group>
+                  </div>
+                  <div v-else-if=" item.type === 'date'">
+                     <el-date-picker
+                      v-model="item.value"
+                      type="date"
+                      placeholder="选择日期">
+                    </el-date-picker>
+                  </div>
+                  <div v-else-if=" item.type === 'boolean' ">
+                    <el-radio-group v-model='item.value'>
+                      <el-radio v-for="( r,i ) in item.data" :key="i" :label="r.label" :value="r.value"></el-radio>
+                    </el-radio-group>
+                  </div>
+                  <div v-else>
+                    <el-input v-model='item.value'></el-input>
+                  </div>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
             <el-tab-pane label='已分配角色'>
               <div class="topBtns">
                 <el-button type='primary' size='mini' icon='el-icon-circle-plus' @click='addRole'>添加角色</el-button>
@@ -195,10 +225,22 @@
                 </el-table-column>
                 <el-table-column label='关联操作'>
                   <template slot-scope="scope">
-                    <el-button type='text' size='mini' icon='el-icon-error' title='移除'></el-button>
+                    <el-button type='text' size='mini' icon='el-icon-error' title='移除' @click='delAssignRoleRow( scope.$index, assignRole.tableData)'></el-button>
                   </template>
                 </el-table-column>
               </el-table>
+              <el-pagination
+                @size-change="roleSizeChange"
+                @current-change="roleCurrentChange"
+                :current-page="assignRole.page"
+                :hide-on-single-page="true"
+                :page-sizes="[10, 20, 30, 40, 50]"
+                :page-size="assignRole.size"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="assignRole.total"
+                small
+                style="margin:10px 0px">
+              </el-pagination>
             </el-tab-pane>
             <el-tab-pane label='组织分级管理'>
               <div class="topBtns">
@@ -624,6 +666,11 @@
         <span>角色选择</span>
       </div>
       <div>
+        <div class="topBtns">
+          <el-input v-model='assignRole.searchName' size='mini' placeholder='请输入角色名称'>
+            <el-button slot="append" icon="el-icon-search" @click='addRoleSearch'></el-button>
+          </el-input>
+        </div>
         <el-table
           :data="assignRole.dialogTableData"
           size='mini'
@@ -631,15 +678,29 @@
           height='300'
           stripe
           ref='addRoleDialogTable'
+          @selection-change='selectRoleJoin'
           >
           <el-table-column type='selection' width='50'></el-table-column>
           <el-table-column prop='name' label='角色名称'></el-table-column>
           <el-table-column prop='roleAlias' label='角色别名'></el-table-column>
         </el-table>
+        <el-pagination
+          @size-change="addroleSizeChange"
+          @current-change="addroleCurrentChange"
+          :current-page="assignRole.aPage"
+          :hide-on-single-page="true"
+          :page-sizes="[10, 20, 30, 40, 50]"
+          :page-size="assignRole.aSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="assignRole.aTotal"
+          small
+          style="margin:10px 0px">
+        </el-pagination>
       </div>
       <div slot="footer">
-        <el-button type='success' size='mini'>确认</el-button>
-        <el-button type='info' size='mini'>取消</el-button>
+        <el-button type='success' size='mini' @click="confirmAddRole">确认</el-button>
+        <el-button type='danger' size='mini' @click="resetChooseRoles">清空</el-button>
+        <el-button type='info' size='mini' @click=" assignRole.addRoleDialog = false ">取消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -791,6 +852,11 @@ export default {
         size:10,
         addRoleDialog:false,
         dialogTableData:[],
+        aTotal:0,
+        aPage:1,
+        aSize:10,
+        searchName:'',
+        selection:[],
       },
       orgLevelMan:{//组织分级管理
         tableData:[],
@@ -802,6 +868,8 @@ export default {
         updateId:null,//修改时选择的行id
         selection:[],
       },
+      orgEextends:[],//扩展属性
+      extendsFormData:{},
     };
   },
   created(){
@@ -860,7 +928,7 @@ export default {
           this.axios.get( url, {params} ).then( s => {
             if( s.data.code === 200 ){
               this.assignRole.tableData = s.data.obj && s.data.obj.records;
-              this.assignRole.Total = s.data.obj && s.data.obj.total;
+              this.assignRole.total = s.data.obj && s.data.obj.total;
             }
           })  
         },
@@ -881,7 +949,9 @@ export default {
         this.targetGroupId = node.data.id;
         this.targetGroupName = node.data.label;
         let getOrgBasicInfo = () => this.axios.get('/org/getById?id=' + this.targetGroupId );
-        this.axios.all([ getOrgBasicInfo() ]).then( this.axios.spread( ( basic ) => {
+        let getExtends = () => this.axios.get('/partyAttr/getByTypeAndId?type=org&id='+ node.data.id);
+        this.axios.all([ getOrgBasicInfo(),getExtends() ]).then( this.axios.spread( ( basic,orgEextends ) => {
+          this.orgEextends = orgEextends.data.obj;
           for( let b in this.orgBasicInfo ){
             if( b === 'status'){
               for( let key in this.orgStatus ){
@@ -1569,10 +1639,191 @@ export default {
       this.axios.get(`/role/getOtherRoles?type=org&id=${this.targetGroupId}&page=1&size=10`).then( res => {
         if( res.data.code === 200 ){
           this.assignRole.dialogTableData = res.data.obj.records;
-        }
-        this.assignRole.addRoleDialog = true
+          this.assignRole.aTotal = res.data.obj.total;
+          this.assignRole.addRoleDialog = true
+        } else this.$message.error( res.data.desc );
       })
-      
+    },
+    selectRoleJoin( selection ){
+      this.assignRole.selection = selection;
+    },
+    roleSizeChange( size ){
+      this.assignRole.size = size;
+      this.getPageInfo({ type : 'role',url : "/org/getRoles",params:{
+        orgId: this.targetGroupId,
+        page: this.assignRole.page,
+        size: size
+      }});
+    },
+    roleCurrentChange( page ){
+      this.assignRole.page = page;
+      this.getPageInfo({ type : 'role',url : "/org/getRoles",params:{
+        orgId: this.targetGroupId,
+        page: page,
+        size: this.assignRole.size
+      }});
+    },
+    confirmAddRole(){
+      let selection = this.assignRole.selection;
+      if( selection.length === 0 ){
+        this.$message.info('至少选择一条数据加入');
+      } else {
+        let ids = selection.map( s => s.id);
+        this.axios.post('/org/addRole',qs.stringify({
+          orgId: this.targetGroupId,
+          id: ids.join(',')
+        })).then( res => {
+          if( res.data.code === 200 ){
+            this.$message.success('添加成功');
+            this.getPageInfo({ type : 'role',url : "/org/getRoles",params:{
+              orgId: this.targetGroupId,
+              page: this.assignRole.page,
+              size: this.assignRole.size
+            }});
+            this.assignRole.addRoleDialog = false;
+          } else this.$message.error( res.data.desc );
+        }).catch( err => console.log( err ));
+      }
+    },
+    addroleSizeChange( size ){
+      this.assignRole.aSize = size;
+      this.axios.get(`/role/getOtherRoles?type=org&id=${this.targetGroupId}&page=${this.assignRole.aPage}&size=${size}`).then( res => {
+        if( res.data.code === 200 ){
+          this.assignRole.dialogTableData = res.data.obj.records;
+          this.assignRole.aTotal = res.data.obj.total;
+        } else this.$message.error( res.data.desc );
+      });
+    },
+    addroleCurrentChange( page ){
+      this.assignRole.aPage = page;
+      this.axios.get(`/role/getOtherRoles?type=org&id=${this.targetGroupId}&page=${page}&size=${this.assignRole.aSize}`).then( res => {
+        if( res.data.code === 200 ){
+          this.assignRole.dialogTableData = res.data.obj.records;
+          this.assignRole.aTotal = res.data.obj.total;
+        } else this.$message.error( res.data.desc );
+      })
+    },
+    delAssignRoleRow( index, data ){
+      this.$confirm('当前操作将移除该行数据，是否继续？','提示',{
+        confirmButtonText:'确定',
+        cancelButtonText:'取消',
+        type:'warning'
+      }).then( () => {
+        this.axios.post('/org/removeRole',qs.stringify({
+          orgId: this.targetGroupId,
+          id: data[index].id
+        })).then( res => {
+          if( res.data.code === 200 ){
+            this.$message.success('成功移除');
+            data.splice( index,1 );
+            this.assignRole.total --;
+          }
+        }).catch( err => console.log( err ));
+      }).catch( () => this.$message.info('已取消移除'));
+    },
+    resetChooseRoles(){//清空添加角色下所选择的项
+      this.$refs.addRoleDialogTable.clearSelection();
+    },
+    addRoleSearch(){
+      this.axios.get(`/role/getOtherRoles?type=org&id=${this.targetGroupId}
+        &page=${this.assignRole.aPage}&size=${this.assignRole.size}&s=${this.assignRole.searchName}`).then( res => {
+        if( res.data.code === 200 ){
+          this.assignRole.dialogTableData = res.data.obj.records;
+          this.assignRole.aTotal = res.data.obj.total;
+        } else this.$message.error( res.data.desc );
+      });
+    },
+  },
+  watch:{
+    orgEextends:{
+      deep: true,
+      handler( newV,oldV ){
+        let obj = {};
+        newV.forEach( item => {
+          switch ( item.dataType ) {
+            case 'OPTION'://生成单选框或多选框
+              if( item.isMulti === 'N'){//单选
+                obj[item.id] = {
+                  label: item.name,
+                  type: 'radio',
+                  attrId:item.id,
+                  data:[],
+                  value: item.values.length > 0?item.values[0].value:'',
+                };
+                obj[item.id].data = item.options.map( op => {
+                  return {
+                    label: op.groupName,
+                    value: op.value
+                  }
+                })
+              } else {//多选
+                let _value = [];
+                if( item.values.length > 0 ){
+                  _value = item.values.map( s => s.value )
+                };
+                obj[item.id] = {
+                  label: item.name,
+                  type: 'checkbox',
+                  attrId: item.id,
+                  data:[],
+                  value: _value
+                };
+                obj[item.id].data = item.options.map( op => {
+                  return {
+                    label: op.groupName,
+                    value: op.value
+                  }
+                })
+              }
+              break;
+            case "STRING":
+              obj[item.id] = {
+                label: item.name,
+                type: 'string',
+                attrId: item.id,
+                value: item.values.length > 0?item.values[0].value:''
+              };
+              break;
+            case "DOUBLE":
+              obj[item.id] = {
+                label: item.name,
+                type: 'double',
+                attrId: item.id,
+                value: item.values.length > 0?item.values[0].value:''
+              };
+              break;
+            case "INT":
+              obj[item.id] = {
+                label: item.name,
+                type: 'int',
+                attrId: item.id,
+                value: item.values.length > 0?item.values[0].value:''
+              };
+              break;
+            case "DATE":
+              
+              obj[item.id] = {
+                label: item.name,
+                type: 'date',
+                attrId: item.id,
+                value: item.values.length > 0?item.values[0].value:''
+              };
+              break;
+            case "BOOLEAN":
+
+              obj[item.id] = {
+                label: item.name,
+                type: 'boolean',
+                attrId: item.id,
+                data:[{ label:'是',value:'Y'},{ label:'否',value:'N'}],
+                value: item.values.length > 0?item.values[0].value:''
+              };
+              break;
+          };
+        });   
+        Object.assign( this.extendsFormData, obj );
+        console.log(this.extendsFormData)
+      }
     },
   },
 }
@@ -1588,6 +1839,14 @@ export default {
     & .el-tree {
       height: 300px;
       overflow-y: auto;
+    }
+    & .el-form {
+      padding: 20px;
+      height:400px;
+      overflow-y:auto;
+      & .el-form-item {
+        margin-bottom: 8px;
+      }
     }
   }
   .fontDesc{
